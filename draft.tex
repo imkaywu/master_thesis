@@ -1,0 +1,88 @@
+% 3D reconstruction definition
+\subsection{Basic notations}
+We use the following notations: $\{C_n\}_{n=0}^{N-1}$ represents the camera set, which include both the intrinsic and extrinsic parameters; $\{L_n\}_{n=0}^{N-1}$ represents the set of light sources; and $\{I_n\}_{n=0}^{N-1}$ represents the set of all images.
+
+\textbf{Definition 1 (Scene)} The scene $S$ is the four-dimensional joint spatio-temporal target of interest.
+
+\textbf{Definition 2 (Image)} The transformation of the scene $S$ onto the image plane of camera $C_i$ at time $t_0$, which can be modelled as: $I_i = T(S, C_i, L_0, t_0)$, or the transformation of the scene $S$ onto the image plane of $C_0$  under the light source $L_i$ at time $t_i$, $I_i= T(S, C_0, L_i, t_i)$, where $T$ is the transformation.
+
+The transformation can be a perspective projection which determines the 2D coordinates from a depth, or the BRDF function which determines the intensity/irradiance information from the information of illumination, viewing direction and surface orientation.
+
+\subsection{Segments}
+Segments are the lowest level component we actively work with.
+
+\textbf{Definition 3 (Segment)} A segment is a distinct region in the image.
+
+A segment can be a pixel, a window area, or a region of arbitrary shape and size.
+
+\textbf{Definition 4 (Attribute)} Attributes are the visual or geometric characteristics of the segments that can be used for reconstruction.
+
+For instance , the attribute can be texture, intensity value, or object contour, etc.
+
+% \textbf{Definition (Scexel)} A scexel (scene element) is a distinct volume in the scene which corresponds to at least one segment.
+
+\textbf{Definition 5 (Segment Relations)} Let $S_i$ and $S_j$ be the set of all attributes observed in $C_i$ and $C_j$ respectively. Then we have the following relations applied to segments:
+\begin{itemize}
+\item Equality: any two segments $s_m \in S_i, s_n \in S_j$ are equal ($s_m \doteq s_n$) if and only if their corresponding attributes are equal.
+\item Inequality: any two segments $s_m \in S_i, s_n \in S_j$ are inequal ($s_m \not \doteq s_n$) if and only if their corresponding attributes are inequal.
+\end{itemize}
+
+\textbf{Photo-consistency} Every photograph of a 3D scene taken from a camera $C_i$ partitions the set of all possible shape-radiane scene descriptions into two families, those that reproduce the photograph and those that do not. We characterize this constraint for a given shape and a given radiance assignment by the notion of \textit{photo-consistency}.
+
+\subsection{Shape photo consistency}
+Suppose we have a reconstructed scene $R$.
+
+\textbf{Definition 6 (Re-generation)} The process of image re-generation is similar to that of image formation, which is modelled as: $I_i' = T(R, C_i, L_0, t_0)$, or $I_i' = T(R, C_0, L_i, t_i)$.
+
+\textbf{Definition 7 (Consistency Measure)} The consistency $\mathit{c}$ of two segments computes the equality of the attribute of the segment $s_m \in S_i$ of the real-world image $I_i$ and that of the re-generated image $I_i'$, denoted as $s_n\in S_i'$. \ie
+$$\mathit{c}^{i,j}(s_m, s_n)$$
+and $\mathit{c}^{i,j}(\cdot, \cdot)=1$ if two segments are equal, and 0 otherwise.
+
+The consistency of the two images is measured by summing up the consistency scores of all segments
+$$\sum_{s_m\in S_i, s_n\in S_i'}\mathit{c}(s_m, s_n)$$
+
+\subsection{Formal Definition}
+\textbf{Definition 8 (3D Reconstruction)} Given a set of images $\{I_n\}_{n=0}^{N-1}$
+captured from a set of camera $\{C_n\}_{n=0}^{N-1}$ at the same time or from a single fixed camera $C_0$ under a set of light sources $\{L_n\}_{n=0}^{N-1}$ at different time. The goal is to find a reconstructed scene $R$, of which the consistency measure to the real scene $S$ is maximized, \ie
+$$\mbox{maximize}\quad \sum_{i=0}^{i=N-1}\sum_{s_m\in S_i, s_n\in S_i'}\mathit{c}(s_m, s_n)$$
+
+\subsection{Applied Definition}
+While the definition presented above gives an definitive definition of the problem of 3D reconstruction, it does so in a purely theoretical way which is not necessarily applicable in a practical setting. We extend in this section this formal definition to an approximate, but more applied version.
+
+\subsubsection{Applied Segment}
+Following directly from our representation of segment specified above, we provide two new equations which allow for the comparison of segments using a metric other than equivalency. While a theoretical function may provide a perfect mechanism for determining whether two segments from different images are equivalent, within the applied space the equivalence of segments is approximated by measuring their similarity. A segment is determined to match another if this similarity exceeds some threshold.
+
+\textbf{Definition 9 (Segment Consistency)} Given two segments $s_m\in S_i$, and $s_n\in S_j$, their consistency is defined as the function $\mathit{c}: S_i\times S_j\rightarrow[0, 1]$ such that
+
+\begin{align*}
+\mathit{c}(s_m, s_n) &\in [0, 1]
+\mathit{c}(s_m, s_n) &= 0 \leftrightarrow s_m \not\doteq s_n\\
+\mathit{c}(s_m, s_n) &= 1 \leftrightarrow s_m \doteq s_n\\
+\end{align*}
+
+and $\mathit{c}(s_m, s_n)\in (0, 1)$ is a measure of similarity of the attributes of of $s_m$, and $s_n$, such that larger values indicate more similarity.
+
+\textbf{Definition 10 (Consistency Measure)} The consistency $\mathit{c}$ of two segments computes the similarity of the attribute of the segment $s_m \in S_i$ of the real-world image $I_i$ and that of the re-generated image $I_i'$, denoted as $s_n\in S_i'$. \ie
+$$\mathit{c}^{i,j}(s_m, s_n)$$
+and $\mathit{c}^{i,j}(\cdot, \cdot)=1$ if two segments are equal, and 0 otherwise.
+
+The consistency of the two images is measured by summing up the consistency scores of all segments
+$$\sum_{s_m\in S_i, s_n\in S_i'}\mathit{c}(s_m, s_n)$$
+
+\textbf{Definition (Applied 3D reconstruction)} Given 
+
+#######################
+\section{Expression}
+\label{sec:3DRecon_Express}
+In Section~\ref{sec:3DRecon_Def}, we have provided a formal definition of 3D reconstruction problem. In order to provide an interpretable model of 3D reconstruction we must provide a means of specifying both the desired representation of the problem, as well as the properties of the object.
+
+\subsection{Properties}
+In order to describe the problem space, we must be able to express the representations and conditions of the problem. In our case, the representations and conditions are expressed through \textit{properties}. Each property has a specific unit and scale which can be compared across different objects.
+
+Properties are aspects of the object that can be expressed using a numerical value. It is possible that a developer will not know the exact value of given properties, we created an interactive UI for the developers to manipulate these properties and find the ones that is most close to the real object.
+
+\subsection{Model of 3D reconstruction}
+From the representations and conditions specified above, we have developed a model to express 3D reconstruction problems. In the problem of 3D reconstruction, the visual and geometric properties of the object provide the context through which appropriate algorithms can be selected. Table~\ref{tab:} provides the model for the expression of the properties of an object of 3D reconstruction problem.
+
+\section{Example 3D Reconstruction Problems}
+In this section, we explore the expression of common 3D reconstruction problems using the proposed model, including: 

@@ -56,9 +56,9 @@
 \usepackage[scaled=.92]{helvet}
 
 %% Math or theory people may want to include the handy AMS macros
-%\usepackage{amssymb}
-%\usepackage{amsmath}
-%\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsfonts}
 
 %% The pifont package provides access to the elements in the dingbat font.   
 %% Use \ding{##} for a particular dingbat (see p7 of psnfss2e.pdf)
@@ -197,6 +197,15 @@
 
 %% graph: provides capabilities to draw graphs
 \usepackage{tikz}
+\usetikzlibrary{shapes.geometric, arrows, fit, positioning, calc}
+\tikzstyle{data} = [rectangle, rounded corners, minimum width=3cm, minimum height=1cm, text centered, text width=3cm, draw=black, fill=blue!30]
+\tikzstyle{data_fix} = [rectangle, rounded corners, minimum width=1.5cm, minimum height=1cm, text centered, draw=black, fill=blue!30]
+\tikzstyle{io} = [trapezium, trapezium left angle=70, trapezium right angle=110, minimum width=3cm, minimum height=1cm, text centered, text width=3cm, draw=black, fill=blue!30]
+\tikzstyle{process} = [rectangle, minimum width=3cm, minimum height=1cm, text centered, text width=3cm, draw=black, fill=green!30]
+\tikzstyle{model} = [ellipse, minimum width=3cm, minimum height=1cm, text centered, text width=2cm, draw=black, fill=red!20]
+\tikzstyle{decision} = [diamond, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=green!30]
+\tikzstyle{arrow} = [thick,->,>=stealth]
+
 
 %% ragged2e: provides several new new commands \Centering, \RaggedLeft,
 %% \RaggedRight and \justifying and new environments Center, FlushLeft,
@@ -289,7 +298,7 @@
 %% Document meta-data: be sure to also change the \hypersetup information
 %%
 
-\title{3D Reconstruction for Everyday Things}
+\title{Thesis}
 %\subtitle{If you want a subtitle}
 
 \author{Kai Wu}
