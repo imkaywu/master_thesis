@@ -7,7 +7,7 @@ In Chapter~\ref{ch:3DRecon_Taxo}, we introduce a taxonomy of 3D reconstruction w
 
 The goal when providing an abstraction to 3D reconstruction is that with better description should lead to better result. To order to achieve this, the visual and geometric properties of an object that can affect the visual cues should be examined in depth so that important aspects of the problem can be described.
 
-A key requirement of the 3D reconstruction model is that it should be interpretable. Thus the components of this model must be well defined. We first propose a formal definition of the 3D reconstruction problem in Section~\ref{sec:3DRecon_Def}. Section~\ref{sec:3DRecon_Rep} explores the inputs and outputs used in 3D reconstruction problems. Section~\ref{sec:3DRecon_desc} discusses various \textit{properties} that can be used to describe the appearance of the object. Section~\ref{sec:3DRecon_Express} provides the mapping of the representations and properties into a formal model via which 3D reconstruction problem can be expressed. These layers: Definition, Representation, Conditions, and Expression represent out framework of accessible 3D reconstruction.
+A key requirement of the 3D reconstruction model is that it should be interpretable. Thus the components of this model must be well defined. We first propose a formal definition of the 3D reconstruction problem in Section~\ref{sec:3DRecon_Def}. Section~\ref{sec:3DRecon_Rep} explores the inputs and outputs used in 3D reconstruction problems. Section~\ref{sec:3DRecon_Desc} discusses various \textit{properties} that can be used to describe the appearance of the object. Section~\ref{sec:3DRecon_Exp} provides the mapping of the representations and properties into a formal model via which 3D reconstruction problem can be expressed. These layers: Definition, Representation, Conditions, and Expression represent out framework of accessible 3D reconstruction.
 
 \section{Definition}
 \label{sec:3DRecon_Def}
@@ -22,46 +22,81 @@ We use the following notations: $\{C_n\}_{n=0}^{N-1}$ represents the camera set,
 
 The transformation can be a perspective projection which determines the 2D coordinates from a depth, or the BRDF function which determines the intensity/irradiance information from the information of illumination, viewing direction and surface orientation.
 
-\subsection{Segment and Scexel}
+\subsection{Segment and Scelement}
 Segments are the lowest level component we actively work with.
 
-\textbf{Definition 3 (Segment)} A segment is a distinct region in the image.
+\textbf{Definition 3 (Segment)} A segment is a distinct region in the image, can be thought of as a generalization of pixel.
 
 For instance, a segment can be a pixel, a window area, an edge, a contour, or a region of arbitrary size and shape.
 
-\textbf{Definition 4 (Attribute)} Attributes are the visual or geometric characteristics of the segments that can be used for reconstruction.
+\textbf{Definition 4 (Cue)} cues are the visual or geometric characteristics of the segments $seg$ that can be used for reconstruction, denoted as $cue(seg)$.
 
-For instance, the attribute can be texture within a window area, intensity/colour value of a pixel, or object contour, etc.
+For instance, the cue can be texture within a window area, intensity/colour value of a pixel, or object contour, etc.
 
-\textbf{Definition (Scexel)} A scexel (scene element) is a distinct volume in the scene which corresponds to at least one segment.
+\textbf{Definition (Scelement)} A Scelement (scene element) is a distinct volume in the scene which corresponds to at least one segment, can be thought of as a generalization of a voxel.
 
-\textbf{Definition (Property)} Properties are the visual and geometric characteristics of the scexel, which would influence the attributes of a segment.
+\textbf{Definition (Scelement property)} Properties are the visual and geometric characteristics of the scelement $slmt$, which would influence the cues of a segment, denoted as $prop(slmt)$.
+
+The property of the scelment can be the visual texture, diffuse albedo, surface orientation, roughness, convacity, etc.
+
+\textbf{Definition (Scelement representation)} The scelement can be represented by voxels, depth, 3D coordinates, or surface orientation, etc, which is denoted as $rep(slmt)$.
 
 \subsection{Photo-consistency}
 Every photograph of a 3D scene taken from a camera $C_i$ partitions the set of all possible shape-radiance scene descriptions into two families, those that reproduce the photograph and those that do not. We characterize this constraint for a given shape and a given radiance assignment by the notion of \textit{photo-consistency}.
 
-\textbf{Definition (Photo-consistency check)} The property of a scexel can produce the attribute of the corresponding segment. 
+\textbf{Definition (Photo-consistency check)} The property of a scelement can produce the cue of the corresponding segment. $consist(rep(slmt), prop(slmt), cue(seg)).$
+\begin{align*}
+consist(rep(slmt), prop(slmt), cue(seg)) = 1 &\Rightarrow \textit{photo consistent}\\
+consist(rep(slmt), prop(slmt), cue(seg)) = 0 &\Rightarrow \textit{not photo consistent}
+\end{align*}
+where $seg$ is the corresponding segment of scelement $slmt$.
 
-\textbf{Definition (Segment photo-consistency)} Let $S$ be an arbitrary subset of $\mathbb{R}^3$. A scexel $p\in S$ that is visible from $C_i$ is photo-consistent with the image $I_i$ if and only if the photo-consistency check is true.
+\textbf{Definition (Segment photo-consistency)} Let $S$ be an arbitrary subset of $\mathbb{R}^3$. A scelement $p\in S$ that is visible from $C_i$ is photo-consistent with the image $I_i$ if and only if the photo-consistency check is true.
 
-\textbf{Definition (Shape photo-consistency)} A scene $S$ is photo-consistent with image $I_i$ if all scexels visible from the camera $C_i$ are segment photo-consistent.
+\textbf{Definition (Shape photo-consistency)} A scene $S$ is photo-consistent with image $I_i$ if all scelements visible from the camera $C_i$ are segment photo-consistent.
 
 \textbf{Definition (Scene photo-consistency)} A scene $S$ is photo-consistent with a set of images $\{I_n\}_{n=0}^{N-1}$ if it's shape photo-consistency with each image in the set.
 
 \subsection{Formal Definition}
-\textbf{Definition (3D reconstruction)} Find a scene $S$ that is scene photo-consistent with a image set $\{I_n\}_{n=0}^{N-1}$.
+\textbf{Definition (3D reconstruction)} Given a set of images $\{I_n\}_{n=0}^{N-1}$ captured by cameras $\{C_n\}_{n=0}^{N-1}$, or under a set of light sources $\{L_n\}_{n=0}^{N-1}$, find a set of scelements $\{slmt_n\}_{n=0}^{M-1}$ such that any scelement is photo-consistent with the image set $\{I_n\}_{n=0}^{N-1}$, \ie $\forall slmt_i\in \{slmt_n\}_{n=0}^{M-1}$, we have $consist(rep(slmt_i), prop(slmt_i), cue(seg_{(i, n)})) = 1$.
+
+where $seg_{(i, n)}$ is the corresponding segment of $slmt_i$ in camera $C_n$. Alternatively, 3D reconstruction tries to find a set of scelments $\{slmt_n\}_{n=0}^{M-1}$ that are scene photo-consistent with the image set $\{I_n\}_{n=0}^{N-1}$
 
 \subsection{Applied Definition}
 While the definition presented above gives an definitive definition of the problem of 3D reconstruction, it does so in a purely theoretical way which is not necessarily applicable in a practical setting. We extend in this section this formal definition to an approximate, but more applied version.
 
 \subsection{Applied photo-consistency}
+\textbf{Definition (Photo-consistency check)} The property of a scelement can produce the cue of the corresponding segment. $consist(rep(slmt), prop(slmt), cue(seg))$.
+\begin{align*}
+consist(rep(slmt), prop(slmt), cue(seg)) = x
+\end{align*}
+where $x\in[0, 1]$, is a measure of similarity between the scelement and the corresponding segment, and
+\begin{align*}
+consist(rep(slmt), prop(slmt), cue(seg)) = 1 &\Rightarrow \textit{photo consistent}\\
+consist(rep(slmt), prop(slmt), cue(seg)) = 0 &\Rightarrow \textit{not photo consistent}
+\end{align*}
 
+\subsection{Definition (Applied 3D Reconstruction)} Given a set of images $\{I_n\}_{n=0}^{N-1}$ captured by cameras $\{C_n\}_{n=0}^{N-1}$, or under a set of light sources $\{L_n\}_{n=0}^{N-1}$, find a set of scelements $\{slmt_n\}_{n=0}^{M-1}$ such that the photo-consistency measure between the set of scelements and their corresponding segments are maximized.
+
+$$\mbox{maximize} \quad \sum_{n=0}^{N-1}\sum_{slmt_i\in \{slmt_j\}_{j=0}^{M-1}} consist(rep(slmt_i), prop(slmt_i), cue(seg_{(i, n)}))$$
+
+where $seg_{(i, n)}$ is the corresponding segment of scelement $slmt_i$ in camera $C_n$.
 
 \section{Representation}
-Based on my proposed formal and applied definition of 3D reconstruction, we need to further define the representations so that any developers can express their problem based on our proposed model. We look at the attributes that are utilized by 3D reconstruction techniques and their contributing properties. In Chapter~\ref{ch:3DRecon_Taxo}, we explored a new taxonomy of 3D reconstruction based visual cues. Now we need to investigate the visual and geometric properties of the object that can affect those visual cues.
+\label{sec:3DRecon_Rep}
+Based on the proposed definitions of 3D reconstruction problem, we need to further define the representations so that any developers can express their problem based on our proposed model. We look at the \textit{cues} that are utilized by 3D reconstruction techniques and their corresponding contributing properties. In Chapter~\ref{ch:3DRecon_Taxo}, we explored a new taxonomy of 3D reconstruction based visual/geometric cues. Now we need to investigate the visual and geometric properties of the object that can affect those cues. This section is organized by the visual/geomtric cues, and the visual/geomtric properties are investigated in each section.
 
 \subsection{Texture}
-Texture is one of the most important attributes for many computer vision algorithms. It is generally divided into two categories, namely \textit{tactile} and \textit{visual} textures. Tactile textures refer to the immediate tangible feel of a surface whereas visual textures refer to the visual impression that textures produce to human observer, which are related to local spatial variations of simple stimuli like colour, orientation and intensity in an image. We focus only on visual textures as it's the most widely used ones in the stereo vision research, thus the term `texture' thereafter is exclusively referred to `visual texture' unless mentioned otherwise.
+\subsubsection{Segment and Scelement rerepsentation}
+The segment is mostly a window area of pixels with varying window size. The scelement is typically a 3D point represented by a depth value along a line of sight, 3D coordinates, or a surface patch parametrized by depth and orientation.
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.8\textwidth]{model/tex_rep}
+\caption{scelement and segment representation}
+\end{figure}
+
+\subsubsection{Scelement property}
+Texture is one of the most important cues for many computer vision algorithms. It is generally divided into two categories, namely \textit{tactile} and \textit{visual} textures. Tactile textures refer to the immediate tangible feel of a surface whereas visual textures refer to the visual impression that textures produce to human observer, which are related to local spatial variations of simple stimuli like colour, orientation and intensity in an image. We focus only on visual textures as it's the most widely used ones in the stereo vision research, thus the term `texture' thereafter is exclusively referred to `visual texture' unless mentioned otherwise.
 
 Although texture is an important component in computer vision, there is no precise definition of the notion texture. The main reason is that natural textures often exhibit different yet contradicting properties, such as regularity versus randomness, uniformity versus distortion, which can hardly be described in a unified manner. Haralick considers a texture as an ``organized area phenomenon'' which can be decomposed into `primitives' having specific spatial distributions~\cite{haralick1979statistical}. This definition, also known as structural approach, comes directly from human visual experience of texture. These primitives are organized in a particular spatial structure indicating certain underlying palcement rules. Alternatively, as Cross and Jain suggested, a texture is ``a stochastic, possibly periodic, two-dimensional image field''~\cite{cross1983markov}, which is also known as \textit{stochastic approach}.
 
@@ -98,6 +133,12 @@ $\mathbf{E^{surface}(\theta_i, \phi_i)}$: irradiance at surface in direction $(\
 $\mathbf{L^{surface}(\theta_r, \phi_r)}$: irradiance at surface in direction $(\theta_r, \phi_r)$.
 
 \textbf{Definition (BRDF)} the ratio of the radiance of the outgoing direction to the incident irradiance, \ie $f(\theta_i, \phi_i, \theta_r, \phi_r)=\frac{E^{surface}(\theta_i, \phi_i)}{L^{surface}(\theta_r, \phi_r)}$.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.6\textwidth]{model/int_rep}
+\caption{scelement and segment representation}
+\end{figure}
 
 \subsubsection{Diffuse Albedo}
 Surface lightness or albedo is the proportion of incident light that is reflected by the surface. It should be noted that albedo is not an intrinsic property of a surface. Instead, for any surface, the albedo depends on the spectral and angular distributions of the incident light. 
@@ -208,3 +249,11 @@ Concavity can cause self-shadow or inter-reflection effect, which can severely i
 % \subsubsection{Depth/Height Map}
 % \subsubsection{Normal Map}
 
+\section{Expression}
+\label{sec:3DRecon_Exp}
+
+\subsection{MVS}
+
+\subsection{PS}
+
+\subsection{SL}
