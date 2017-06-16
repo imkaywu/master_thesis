@@ -74,10 +74,9 @@ We use both synthetic and real-world datasets to evaluate the proposed abstracti
 \node [data, draw=none, fill=none, below of=abstract, yshift=0.4cm] {Chapter~\ref{ch:3DRecon_Interp}: 3D Interpretation};
 
 % 3D model
-\node (def) [data, left of=abstract, xshift=-3cm, yshift=6cm)] {Definition};
+\node (def) [data, left of=abstract, xshift=-3cm, yshift=4cm)] {Definition};
 \node (rep) [data, below of=def] {Representation};
-\node (cond) [data, below of=rep] {Conditions};
-\node (exp) [data, below of=cond] {Expressions};
+\node (exp) [data, below of=rep] {Expressions};
 \node [data, draw=none, fill=none, above of=def, yshift=-0.5cm] {Chapter~\ref{ch:3DRecon_Model}: 3D Model};
 
 % depend_check, and training
@@ -106,8 +105,7 @@ We use both synthetic and real-world datasets to evaluate the proposed abstracti
 
 % 3D model
 \draw [arrow] (def) -- (rep);
-\draw [arrow] (rep) -- (cond);
-\draw [arrow] (cond) -- (exp);
+\draw [arrow] (rep) -- (exp);
 \draw [arrow] (exp) -- (abstract);
 \draw[red,thick,dotted] ($(def.north west)+(-0.3,0.3)$)  rectangle ($(exp.south east)+(0.3,-0.3)$);
 

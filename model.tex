@@ -39,7 +39,7 @@ For instance, the cue can be texture within a window area, intensity/colour valu
 
 The property of the scelment can be the visual texture, diffuse albedo, surface orientation, roughness, convacity, etc.
 
-The relation between these notions is shown in Figure~\ref{seg_scelement}
+The relation between these notions is shown in Figure~\ref{seg_scelement}.
 \begin{figure}[h]
 \centering
 \includegraphics[width=0.5\textwidth]{model/seg_scelement}
@@ -157,7 +157,6 @@ $\mathbf{L^{surface}(\theta_r, \phi_r)}$: irradiance at surface in direction $(\
 \textbf{Diffuse Albedo} or surface lightness is the proportion of incident light that is reflected by the surface. It should be noted that albedo is not an intrinsic property of a surface. Instead, for any surface, the albedo depends on the spectral and angular distributions of the incident light. 
 
 The reflectance of light is dependent on the spectrum of the light, which means that the reflectance of the light is dependent on the light frequency, see Figure~\ref{fig:alb_freq}. We consider the reflectance across all spectrum, meaning only intensity albedo is considered.
-
 \begin{figure}[h]
 \centering
 \includegraphics[width=0.5\textwidth]{model/reflectance_frequency}
@@ -166,7 +165,6 @@ The reflectance of light is dependent on the spectrum of the light, which means 
 \end{figure}
 
 The reflectance of light also depends on the incident direction. Specifically, light that lands on a surface at a grazing angle will be much more likely to reflect, see Figure~\ref{fig:alb_ang}. We take into account the Fresnel effect in the synthetic stage, thus we consider the albedo with small incident angle.
-
 \begin{figure}[h]
 \centering
 \includegraphics[width=0.5\textwidth]{model/reflectance_angle}
@@ -179,7 +177,6 @@ It ranges from `black' to `white' in the grey scale axis. Colour is a superset i
 In order to understand the contributing factor of pixel intensity/colour, we need a in-depth understanding of reflection, \ie how light is reflected off of a surface patch, and the relation between incident light and intensity value.
 
 \textbf{Specular} surfaces reflect light in almost a single direction when the microscopic surface irregularities is small compared to light wavelength, and no subsurface scattering present~\cite{nayar1989surface}. Unlike diffuse reflections, which we experience the lightness and colour of an object, specular reflections carry information about the structure, intensity, and spectral content of the illumination field. In other word, specular reflections are simply images of the environment, or the illumination field, distorted by the geometry of the reflecting surface. See Figure~\ref{fig:lake_spec}, the image no long reflect the original colour of the surface (red), instead it shows a distorted image of the environment. A purely specular surface is a mirror. Purely specular surfaces are rare in nature. Most natural materials exhibit a mix of specular and diffuse reflection. Variations in microscopic surface geometry can cause specular reflections to be scattered, blurring the image of the environment in an amount proportional to surface roughness.
-
 \begin{figure}[h]
 \centering
 \includegraphics[width=0.5\textwidth]{model/lake_spec}
@@ -193,7 +190,6 @@ Another observation is that from the image changes as the viewer changes. This c
 The possible surface models are divided into 2 categories: surface with exactly known profiles and surfaces with random irregularities. An exact profile may be determined by measuring the height at each point on the surface by means of a sensor such as the stylus profilometer. This method is cumbersome and impractical. Hence, it’s more reasonable to model the surface as a random process, where it is described by a statistical distribution of either its height above a certain mean level, or its slope w.r.t its mean (macroscopic) slope. The section only discusses these second statistical approach.
 
 % \textit{Height Distribution Model} The height coordinate of the surface is expressed as random function of the coordinates $x$ and $y$.
-
 % \begin{figure}[h]
 % \centering
 % \includegraphics[width=0.5\textwidth]{model/surface_representation_1}
@@ -201,7 +197,6 @@ The possible surface models are divided into 2 categories: surface with exactly 
 % \end{figure}
 
 % The shape of the surface is determined by the probability distribution of $h$. For instance, let $h$ be normally distributed, with mean value $\bar{h}=0$ and standard deviation $\sigma_h$. Then, the distribution of $h$ is given by:
-
 % $$
 % p_h(h)=\frac{1}{\sqrt{2\pi}\sigma_h}e^{-\frac{h^2}{2\sigma_h^2}}
 % $$
@@ -209,7 +204,6 @@ The possible surface models are divided into 2 categories: surface with exactly 
 % The $\sigma_h$ is the root-mean-square of $h$ and represents the roughness of the surface. The surface is not uniquely described by the distribution of $h$, as it does not tell us anything about the distance between the hills and valleys of the surface.
 
 % The surfaces below have the same height distribution function, i.e., the same mean value and standard deviation. However, they don't resemble each other in appearance.
-
 % \begin{figure}[h]
 % \centering
 % \includegraphics[width=8cm]{model/same_mean_sd}
@@ -217,7 +211,6 @@ The possible surface models are divided into 2 categories: surface with exactly 
 % \end{figure}
 
 % An autocorrelation coefficient $C(\tau)$ is introduced, that determines the correlation (or lack of independence) between the random values assumed by the height $h$ at two surface points $(x_1, y_1)$ and $(x_2, y_2)$, separated by a distance $\tau$. The autocorrelation coefficient can be:
-
 % $$
 % C(\tau)=e^{-\frac{\tau^2}{T^2}}
 % $$
@@ -225,7 +218,6 @@ The possible surface models are divided into 2 categories: surface with exactly 
 % where $T$ is the *correlation distance*. Therefore, the above surfaces have small and large correlation distances respectively.
 
 \textit{Slope Distribution Model} We can also think of a surface as a collection of planar micro-facets.
-
 \begin{figure}[h]
 \centering
 \includegraphics[width=0.7\textwidth]{model/surface_representation_2}
@@ -235,7 +227,6 @@ The possible surface models are divided into 2 categories: surface with exactly 
 A large set of micro-facets constitutes an infinitesimal surface patch that has a mean surface orientation $\vec{n}$. Each micro-facet has its own orientation, which may deviate from the mean surface orientation by an angle $\alpha$. 
 
 We will use the parameter $\alpha$ to represent the slope of individual facets. Surfaces can be modeled by a statistical distribution of the micro-facet slopes. If the surface is isotropic, the probability distribution of the micro-facet slopes can be assumed to be rotationally symmetric w.r.t the mean surface normal $\vec{n}$.  Therefore, facet slopes can be described by a one-dimensional probability distribution function. For instance, the surface may be modeled by assuming a normal distribution for the facet slope $\alpha$, with mean value $\bar{\alpha}=0$ and standard deviation $\sigma_\alpha$:
-
 $$
 p_\alpha(\alpha)=\frac{1}{\sqrt{2\pi}\sigma_\alpha}e^{-\frac{\alpha^2}{2\sigma_\alpha^2}}
 $$
@@ -255,4 +246,80 @@ The surface model is determined by a single parameter $\sigma_\alpha$, and large
 \section{Expression}
 \label{sec:3DRecon_Exp}
 Now with the proposed definition and representation of 3D reconstruction problem, we can express some existing 3D reconstruction algorithms under this framework.
+\begin{figure}[h!]
+\centering
+\begin{tabular}{cc}
+\includegraphics[width=0.5\textwidth]{model/temple}&
+\includegraphics[width=0.5\textwidth]{model/dino}\\
+Temple & Dino\\
+\end{tabular}
+\caption{Image of ``temple'' and ``dino'' datasets}
+\label{fig:temple_dino}
+\end{figure}
 
+We start with the middlebury dataset. For the ``temple'' dataset, the expression of the reconstruction problem is shown in table~\ref{tab:exp_temple}.
+\begin{table}[h]
+  \centering
+  \begin{tabular}{*{5}{c}}
+  \hline
+  Texture coverage & Albedo & Specular & Roughness & Concavity\\
+  \hline
+  0.8 & 0.8 & 0.2 & 0.8 & 0.5\\
+  \hline
+  \end{tabular}
+  \label{tab:exp_temple}
+  \caption{Expression of the reconstruction problem for the ``temple'' dataset.}
+\end{table}
+
+The second example is the ``dino'' dataset.
+\begin{table}[h]
+  \centering
+  \begin{tabular}{*{5}{c}}
+  \hline
+  Texture coverage & Albedo & Specular & Roughness & Concavity\\
+  \hline
+  0.2 & 0.8 & 0.2 & 0.2 & 0.2\\
+  \hline
+  \end{tabular}
+  \label{tab:exp_dino}
+  \caption{Expression of the reconstruction problem for the ``dino'' dataset.}
+\end{table}
+
+The third example is ``cat'' dataset from the ``DiLiGenT'' photometric stereo dataset, see Figure~\ref{fig:cat_statue}.
+\begin{figure}[h!]
+\centering
+\begin{tabular}{cc}
+\includegraphics[width=0.5\textwidth]{model/cat}&
+\includegraphics[width=0.5\textwidth]{model/statue}\\
+Cat & Statue\\
+\end{tabular}
+\caption{Image of ``cat'' and ``statue'' datasets}
+\label{fig:cat_statue}
+\end{figure}
+
+\begin{table}[h]
+  \centering
+  \begin{tabular}{*{5}{c}}
+  \hline
+  Texture coverage & Albedo & Specular & Roughness & Concavity\\
+  \hline
+  0.2 & 0.8 & 0.2 & 0.2 & 0.2\\
+  \hline
+  \end{tabular}
+  \label{tab:exp_cat}
+  \caption{Expression of the reconstruction problem for the ``cat'' dataset.}
+\end{table}
+
+The last example is the ``statue'' dataset from the 
+\begin{table}[h]
+  \centering
+  \begin{tabular}{*{5}{c}}
+  \hline
+  Texture coverage & Albedo & Specular & Roughness & Concavity\\
+  \hline
+  0.2 & 0.8 & 0.2 & 0.2 & 0.2\\
+  \hline
+  \end{tabular}
+  \label{tab:exp_statue}
+  \caption{Expression of the reconstruction problem for the ``statue'' dataset.}
+\end{table}
