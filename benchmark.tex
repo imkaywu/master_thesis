@@ -19,6 +19,9 @@ Due to the number of properties and number of levels for each property, it would
 
 The camera/projector intrinsic and extrinsic parameters are computed directly from the positions and orientations of the synthetic setup, and the ground truth including the 3D model and normal map are generated directly from Blender.
 
+\section{Selected methods}
+We have selected three algorithms: the PMVS proposed by~\citeauthor{furukawa2010accurate} ($C_n-S-T-P-P$), the example-based photometric stereo proposed by~\citeauthor{hertzmann2005example} ($C_1L_n-T-I-MDS-N$), and the Gray-encoded structured light technique ($C_1P-T-I-B-P$).
+
 \section{Evaluation metrics}
 We use the metric proposed by \citeauthor{seitz2006comparison} to evaluate MVS and SL. More specifically, we compute the accuracy and completeness of the reconstruction. For accuracy, the distance between the points in the reconstruction $R$ and the nearest points on ground truth $G$ is computed, and the distance $d$ such that $X\%$ of the points on $R$ are within distance $d$ of $G$ is considered as accuracy. Thus the lower the accuracy value, the better the reconstruction result. The completeness measures the fraction of points of $G$ that are within an allowable distance $d$ of $R$.
 
@@ -27,7 +30,7 @@ For photometric stereo, we employ another evaluation criteria, which is based on
 \section{Dependency Check}
 Part of the difficulty in establishing a comprehensive set of experiments for such an evaluation is the large variability of shapes and material properties.
 
-\subsection{MVS}
+\subsection{$C_n-S-T-P-P$}
 We evaluate the performance of MVS in terms of accuracy and completeness under varied combination of properties.
 \begin{table}[h]
   \centering
@@ -86,7 +89,7 @@ Therefore, specularity has an impact on MVS, but its effect won't be interfered 
 \label{fig:depend_check_mvs}
 \end{figure}
 
-\subsection{PS}
+\subsection{$C_1L_n-T-I-MDS-N$}
 We evaluate the performance of PS in terms of angle difference under varied combinations of properties. The statistical measures that we used include median, mean, first and third quartile. We investigate two properties at a time.
 
 \begin{table}[h]
@@ -148,7 +151,7 @@ Therefore, the specularity and roughness cancels each other's effect, thus they 
 \label{fig:depend_check_ps}
 \end{figure}
 
-\subsection{SL}
+\subsection{$C_1P-T-I-B-P$}
 We evaluate the performance of SL in terms of accuracy and completeness under varied combination of properties.
 
 \begin{table}[h]
@@ -206,8 +209,6 @@ For each technique, we generate the synthetic dataset using only the dependent p
 \caption{Performance of MVS, SL and PS with varied properties. Each each column, we fix one property while changing the others, thus the second and the third columns are essentially the same as the first column, they are just different point of views of looking at those relations. Each line/boxplot represents a different combinations of property values: 0202, 0205, 0208, 0502, ..., 0808. Beware that we consider \{tex, alb, spec\} for MVS and SL, and \{alb, spec, rough\} for SL.}
 \label{fig:training}
 \end{figure}
-
-\section{Iterpretation}
 
 \section{Summary}
 
