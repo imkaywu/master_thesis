@@ -245,81 +245,34 @@ The surface model is determined by a single parameter $\sigma_\alpha$, and large
 
 \section{Expression}
 \label{sec:3DRecon_Exp}
-Now with the proposed definition and representation of 3D reconstruction problem, we can express some existing 3D reconstruction algorithms under this framework.
-\begin{figure}[h!]
+Now with the proposed definition and representation of 3D reconstruction problem, we can express some existing 3D reconstruction algorithms under this framework. We present four examples as shown in Figure~\ref{fig:express}.
+\begin{figure}[h]
 \centering
 \begin{tabular}{cc}
 \includegraphics[width=0.5\textwidth]{model/temple}&
 \includegraphics[width=0.5\textwidth]{model/dino}\\
 Temple & Dino\\
-\end{tabular}
-\caption{Image of ``temple'' and ``dino'' datasets}
-\label{fig:temple_dino}
-\end{figure}
-
-We start with the middlebury dataset. For the ``temple'' dataset, the expression of the reconstruction problem is shown in table~\ref{tab:exp_temple}.
-\begin{table}[h]
-  \centering
-  \begin{tabular}{*{5}{c}}
-  \hline
-  Texture coverage & Albedo & Specular & Roughness & Concavity\\
-  \hline
-  0.8 & 0.8 & 0.2 & 0.8 & 0.5\\
-  \hline
-  \end{tabular}
-  \label{tab:exp_temple}
-  \caption{Expression of the reconstruction problem for the ``temple'' dataset.}
-\end{table}
-
-The second example is the ``dino'' dataset.
-\begin{table}[h]
-  \centering
-  \begin{tabular}{*{5}{c}}
-  \hline
-  Texture coverage & Albedo & Specular & Roughness & Concavity\\
-  \hline
-  0.2 & 0.8 & 0.2 & 0.2 & 0.2\\
-  \hline
-  \end{tabular}
-  \label{tab:exp_dino}
-  \caption{Expression of the reconstruction problem for the ``dino'' dataset.}
-\end{table}
-
-The third example is ``cat'' dataset from the ``DiLiGenT'' photometric stereo dataset, see Figure~\ref{fig:cat_statue}.
-\begin{figure}[h!]
-\centering
-\begin{tabular}{cc}
 \includegraphics[width=0.5\textwidth]{model/cat}&
 \includegraphics[width=0.5\textwidth]{model/statue}\\
 Cat & Statue\\
 \end{tabular}
-\caption{Image of ``cat'' and ``statue'' datasets}
-\label{fig:cat_statue}
+\caption{Image of ``temple'', ``dino'', ``cat'', and ``statue'' datasets}
+\label{fig:express}
 \end{figure}
 
+The expression of the reconstruction problem is shown in table~\ref{tab:express}.
 \begin{table}[h]
   \centering
-  \begin{tabular}{*{5}{c}}
+  \begin{tabular}{l*{5}{c}}
   \hline
-  Texture coverage & Albedo & Specular & Roughness & Concavity\\
+  \textbf{object} & Texture coverage & Albedo & Specular & Roughness & Concavity\\
   \hline
-  0.2 & 0.8 & 0.2 & 0.2 & 0.2\\
-  \hline
-  \end{tabular}
-  \label{tab:exp_cat}
-  \caption{Expression of the reconstruction problem for the ``cat'' dataset.}
-\end{table}
-
-The last example is the ``statue'' dataset from the 
-\begin{table}[h]
-  \centering
-  \begin{tabular}{*{5}{c}}
-  \hline
-  Texture coverage & Albedo & Specular & Roughness & Concavity\\
-  \hline
-  0.2 & 0.8 & 0.2 & 0.2 & 0.2\\
+  Temple & 0.8 & 0.8 & 0.2 & 0.8 & 0.5\\
+  Dino & 0.2 & 0.8 & 0.2 & 0.2 & 0.2\\
+  Cat & 0.2 & 0.8 & 0.2 & 0.2 & 0.2\\
+  Statue & 0.2 & 0.8 & 0.2 & 0.2 & 0.2\\
   \hline
   \end{tabular}
-  \label{tab:exp_statue}
-  \caption{Expression of the reconstruction problem for the ``statue'' dataset.}
+  \label{tab:express}
+  \caption{Expression of the reconstruction problem for the ``temple'', ``dino'', ``cat'', and ``statue'' datasets.}
 \end{table}
