@@ -3,51 +3,10 @@
 
 \chapter{Related Work}
 \label{ch:RelatedWork}
+Section~\ref{sec:Toolbox} discuss the existing toolboxes for 3D reconstruction. Section~\ref{sec:3DRecon_Tech} presents a comprehensive review of the field of image-based 3D reconstruction based on varied visual cues, which include \textit{stereo correspondence}, \textit{shading}, \textit{silhouette}, \textit{texture}, and \textit{(de)focus}.
 
-We present in this chapter the related work on appearance modelling and 3D reconstruction techniques. In section \ref{sec:3DReconTech}, we provide a comprehensive review of the field of image-based 3D reconstruction based on varied visual cues. In section \ref{sec:VisProp}, we investigate the contributing factors to object appearance, which serves to choose the best-suited appearance model and reconstruction technique.
-
-% The structure of the related work: the first subsection will focus on various kinds of 3D reconstruction techniques; the second subsection will focus on description and characterization of visual properties, which partly came from the WACV paper, but I think we need to expand on that (maybe a more quantitative way of describing these properties, for instance, BxDF for reflectance, etc, and the chapter correponding to this part of review would be derivation of algorithm-related parameters from those quantitative description.)
-
-% \begin{itemize}
-% \item 3D reconstruction techniques (use the survey I did). Instead of organize the methods based on static-dynamic techniques which is widely used in the literature, or the spatial-temporal framework, we decide to categorize the methods based on the visual cues used to reconstruct.
-% 	\begin{itemize}
-% 	\item Shading: shape from shading, photometric stereo
-% 	\item Stereo cue: MVS, structured light
-% 	\begin{itemize}
-% 	\item voxel occupancy based methods
-% 	\item surface evolution based methods
-% 	\item region growing based methods
-% 	\item depth-maps mergi{}ng based methods
-% 	\end{itemize}
-% 	\item Silhouette: shape from silhouette
-% 	\item Texture: shape from texture variation
-% 	\item Defocus: shape from defocus
-% 	\end{itemize}
-% \item Visual Properties and Characterization
-% 	\begin{itemize}
-% 	\item Reflectance
-% 		\begin{itemize}
-% 		\item Lightness (albedo)
-% 		\item Diffusion/Specularity
-% 		\item Texture:
-% 		\end{itemize}
-% 	\item Transparency: Ihrke's paper
-% 		\begin{itemize}
-% 		\item Transparent
-% 		\item Translucent
-% 		\item Opaque
-% 		\end{itemize}
-% 	\item Geometry
-% 		\begin{itemize}
-% 		\item microscopic: Shree Nayar's paper on physicics-based vision
-% 		\item Mesoscopic/medium-scale:
-% 		\item macroscopic: convexity, 
-% 		\end{itemize}
-% 	\end{itemize}
-% \end{itemize}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Software}
+\section{ToolBoxes}
+\label{sec:Toolbox}
 There have been many attempts in developing computer vision or image processing frameworks that support rapid development of vision applications. There are multiple general vision libraries in the field including OpenCV~\cite{bradski2008learning}, VLFeat~\cite{vedaldi08vlfeat}, and multiple Matlab libraries~\cite{KovesiMATLABCode, MariottiniPr_RAM05}. These libraries often provide tools to multiple image processing and computer vision problems, including low-vision tasks such as feature detection and matching, middle-level vision tasks such as segmentation, tracking, and high-level vision problems such as classification and recognition. All of these software frameworks and libraries provide vision components and algorithms without any context of how and when they should be applied, and so often require expert vision knowledge for effective use.
 % \begin{itemize}
 % \item PMVS+Bundler+Poisson Recon
@@ -57,8 +16,7 @@ There have been many attempts in developing computer vision or image processing 
 % \end{itemize}
 
 \section{3D Reconstruction Techniques}
-\label{sec:3DReconTech}
-
+\label{sec:3DRecon_Tech}
 Image-based 3D reconstruction attempts to recover the geometry of the object or scene from images under different viewpoints or illuminations. The goal of image-based 3D reconstruction can be described as ``given a set of images of an object or a scene, estimate the most likely 3D shape that explains those images, under the assumption of known materials, viewpoints, and lighting conditions''. This definition reveals that if those assumptions are invaild, this becomes an ill-posed problem since multiple combinations of geometry, viewpoint and illumination can produce exactly the same images~\cite{poggio1985computational}. Traditionally, the most common way of dealing with this ambiguity has been to apply smoothness heuristics and regularization techniques~\cite{poggio1985computational} to obtain reconstructions that are as smooth as possible. A drawback of this type of approach is that it typically penalizes discontinuities and sharp edges, features that are very common in real scenes.
 
 The 3D reconstruction techniques are typically categorized as passive and active methods depending on whether the controlled illumination is required. Passive methods do not require controlled light and can work with ambient light whereas active methods require some form of temporal or spatial modulation of the illumination. We can approach the categorization based on the image cues used to reconstruct the geometry: stereo, shading, contours, texture, defocus, etc. We present different techniques based on the cues exploited in this review.
