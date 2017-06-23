@@ -24,6 +24,8 @@ Since the majority of reconstruciton techniques rely on observing light reflecte
 \subsubsection{Simplified geometric model}
 It's a challenging task to model geometry using mathematical descriptions. For geometric primitives such as cube, sphere, or cone, etc, it's possible to describe the shape using concise descriptions. However, the task becomes prohibitive when it comes to shapes with varied characteristics. Furthermore it becomes more ambiguous when natural language is employed. Thus we only consider the microscopic roughness of the surface, which has a direct relation with the reflection. Other prominent geometric properties such as \textit{concavity}, which affects self-shadow, inter-reflection, \textit{depth-discontinuity}, which affects the depth estimation, are ignored.
 
+\subsubsection{Simplified object class}
+
 \subsubsection{Possibly more???}
 
 \subsection{Data}
@@ -49,7 +51,7 @@ We use synthetic datasets to achieve this goal. Part of the challenge in establi
 \subsubsection{Interpretation of 3D Reconstruction}
 We use both synthetic and real-world datasets to evaluate the proposed abstraction. We used three synthetic objects: a cup, a pot, and a vase. For the real-world dataset, we use the similar setups and captured the images for 11 objects with various shape and material properties.
 
-\begin{figure}[h]
+\begin{figure}[ht]
 \centering
 \begin{tikzpicture}[node distance=2cm, auto]
 % depend_check, and training

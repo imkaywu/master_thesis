@@ -124,13 +124,49 @@ Structured light is considered one of the most accurate reconstruction technique
 \subsection{Shading cue}
 The shading variations can reveal the surface normal orientation, which can be further integrated into a 2.5D height map. Shading variation depends on the shape (surface normal orientation), reflectance (material), and lighting (illumination), therefore is generally a ill-posed problem because difference shapes illuminated under different light conditions might produce the same image. This leads to a novel technique called Photometric Stereo in which surface orientaiton is determined from two or more images. The idea of Photometric Stereo is to vary the direction of the incident illumination between successive views while holding the viewing direction constant. This provides enough information to determine surface orientation at each pixel~\cite{woodham1979photometric}. This technique can produce a surface normal map with the same resolution of the input image, \ie to produce the pixel-wise surface normal map. Since the coefficients of the normal are continous, the integrated height map can reach an accuracy that cannot be achieve by any triangulation methods. Therefore, photometric stereo is more desirable if the intrisic geometric details are of great importance.
 
+\subsubsection{Shape from Shading}
+The problem of recovering the shape of a surface from the intensity variation is first proposed by~\citeauthor{horn1989shape}. It assumes that the surface under consideration is of a uniform albedo and reflectance, and that the light source directions are either known or can be calibrated by the use of a reference object. Under the assumption of distant light sources and viewer, the variation in intensity (irradiance equation) become purely a function of the local surface orientation
+$$
+I(x, y) = R(p(x, y), q(x, y))
+$$
+where $(p, q) = (z_x, z_y)$ are the depth map derivatives, and $R(p, q)$ is the reflectance map, which is often obtained from measuring or theoretical analysis.
+
+Assume Lambertian reflectance, the Irradiance equation can be rewritten as
+$$
+I(x, y) = \rho(\vec{n},\vec{l})\vec{n}^\top\vec{l}
+$$
+
+Since there are more unknowns, additional constraints such as smoothness or integrability is required to estimate $(p, q)$.
+
+The height map, gradients, and surface normals are related to each other by,
+\begin{align*}
+\text{Height map: } & z=f(x,y)\\
+\text{Surface gradient: } & (p,q)=(z_x,z_y)=(\frac{\partial z}{\partial x}, \frac{\partial z}{\partial y})\\
+\text{Surface normal: } & n = \frac{(-p, -q, 1)^\top}{\sqrt{p^2+q^2+1}}
+\end{align*}
+
 \subsubsection{Photometric Stereo}
-Despite the superior results achieved by Photometric Stereo,  traditional photometric stereo generally makes the following assumptions:
+% Despite the superior results achieved by Photometric Stereo,  traditional photometric stereo generally makes the following assumptions:
+% \begin{itemize}
+% \item Camera: orthographic projection, linear radiometric response
+% \item Reflectance: known reflectance properties, \eg Lambertian in \cite{woodham1980photometric}, specular in.
+% \item Illumination: the lighting conditions are parallel rays with known directions and intensities.
+% \item Others: shadow, interreflection, and other global light transportation are neglected
+% \end{itemize}
+
+The original Photometric Stereo, proposed by~\citeauthor{woodham1980photometric}, utilised multiple illumination from different directions to overcome the ambiguity faced by SfS. Assume there are $P$ pixels per image, and $Q$ illumination directions, the intensity of the $i$th pixel under $j$th illumination would be
+$$
+I_{i,j}=\rho_i\vec{n}_i^\top \vec{l}_j
+$$
+To simplify the analysis, a matrix form is used
+$$
+\mathbf{I} = \mathbf{N}^\top \mathbf{L}
+$$
+where
 \begin{itemize}
-\item Camera: orthographic projection, linear radiometric response
-\item Reflectance: known reflectance properties, \eg Lambertian in \cite{woodham1980photometric}, specular in \cite{}.
-\item Illumination: the lighting conditions are parallel rays with known directions and intensities.
-\item Others: shadow, interreflection, and other global light transportation are neglected
+\item $\mathbf{I}\in \mathbb{R}^{P\times Q} $stores the pixel intensity from all images. Each column contains pixels from each image while each rows contains intensity of each pixel under all illumination conditions
+\item $\mathbf{N}\in \mathbb{R}^{P\times3}$ encodes the surface for each pixel, \ie $N_{i, :} = \rho_i\vec{n}_i^\top$
+\item $\mathbf{L} \in \mathbb{R}^{3\times Q}$ encodes the light source directions, \ie $L_{:, j} = \vec{l_j}$
 \end{itemize}
 
 The key problem is how to generalize the assumptions of photometric stereo. For the camera assumption, orthographic projection can be achieved by using a lens with long focus and placing the objects far from the camera. The nonlinear response can be solved by performing radiometric calibration. The shadow and other global light transportation are one of the sources of errors, some approaches consider them as outliers and remove them before normal estimation. The reflectance and lighting assumptions, however, are the most complicated ones since the reflectance properties depends on material property and the microscopic structure, and the lighting can have arbitray or fixed position, orientation, and intensity. Therefore the research on Photometric Stereo are generally on three directions: 1). traditional photometric stereo with known reflectance and lighting conditions; 2). generalization of reflectance; 3). generalization of lighting conditions.
@@ -140,7 +176,7 @@ The key problem is how to generalize the assumptions of photometric stereo. For 
 \textbf{Generalization of Reflectance}
 refer to \cite{alldrin2008photometric}
 
-\textit{Parametric reflectance model} The reflectance is characterized by Bidirectinoal Reflectance Distribution Function (BRDF). Most BRDFs are more complicated than the Lambertian since relative few objects are either ideal diffuse or perfectly specular. The BRDF of many surfaces can be approximated as a combination of a Lambertian component and a specular component. This reflectance model has motiva{}ted a line of research~\cite{barsky20034,coleman1982obtaining,nayar1990determining}. \citeauthor{coleman1982obtaining} and \citeauthor{barsky20034} who treat specular pixels as outliers, and \citeauthor{schluns1993photometric}, \citeauthor{sato1994temporal}, and \citeauthor{mallick2005beyond} who assume the color of the specular lobe differs from the color of the diffuse lobe, allowing separation of the specular and diffuse components.
+\textit{Parametric reflectance model} The reflectance is characterized by Bidirectinoal Reflectance Distribution Function (BRDF). Most BRDFs are more complicated than the Lambertian since relative few objects are either ideal diffuse or perfectly specular. The BRDF of many surfaces can be approximated as a combination of a Lambertian component and a specular component. This reflectance model has motivated a line of research~\cite{barsky20034,coleman1982obtaining,nayar1990determining}. \citeauthor{coleman1982obtaining} and \citeauthor{barsky20034} who treat specular pixels as outliers, and \citeauthor{schluns1993photometric}, \citeauthor{sato1994temporal}, and \citeauthor{mallick2005beyond} who assume the color of the specular lobe differs from the color of the diffuse lobe, allowing separation of the specular and diffuse components.
 
 \textit{Non-parametric reflectance model} While parametric reflectance models are very good at reducing the complexity of BRDFs, they are usually only vaid for a imited class of materials. An alternative is to exploit physical properties common to a large classes of BRDFs. Typical properties include energy conservation, non-negativity, Helmholtz reciprocity, isotropy, etc. Helmholtz stereopsis, introduced by \citeauthor{zickler2002helmholtz}, is on such technique, exploiting reciprocity to obtain surface reconstruction with no dependence to the BRDF. Isotropy is another physical property which holds for material without ``grain''. \citeauthor{tan2007isotropy} use both symmetry and reciprocity present in isotropic BRDFs to resolve the generalized bas-relief ambiguity. \citeauthor{alldrin2007toward} show that isotropy, with no further assumptions on surface shape or BRDF, can be utilized to recover the surface normal at each surface point up to a plane.
 
@@ -166,15 +202,6 @@ The generalized lighting condition is anything other than the the ideal case of 
 % - A.HertzmannandS.Seitz.Shapeandmaterialsbyexample: a photometric stereo approach.\\
 % - A. Hertzmann and S. Seitz. Example-based photometric stereo: shape reconstruction with general, varying BRDFs.\\
 % - W. M. Silver. Determining shape and reflectance using mul- tiple images. Master’s thesis, MIT, 1980.\\
-
-\subsubsection{Shape from Shading}
-The problem of recovering the shape of a surface from the intensity variation is first proposed by Horn. Most shape from shading algorithms assume that the surface under consideration is of a uniform albedo and reflectance, and that the light source directions are either known or can be calibrated by the use of a reference object. Under the assumption of distant light sources and viewer, the variation in intensity (irradiance equation) become purely a function of the local surface orientation
-$$
-I(x, y) = R(p(x, y), q(x, y))
-$$
-where $(p, q) = (z_x, z_y)$ are the depth map derivatives, and $R(p, q)$ is the reflectance map, which is often obtained from measuring or theoretical analysis.
-
-Since there are more unknowns, additional constraints such as smoothness or integrability is required to estimate $(p, q)$.
 
 \subsection{Silhouette}
 In some cases, it's an easy task to perform a foreground segmentation of the object of interest, which leads to a class of techniques that reconstructs a 3D volumetric model from the intersection of the binary silhouettes projected into 3D. The resulting model is called a \textit{visual hull}.
