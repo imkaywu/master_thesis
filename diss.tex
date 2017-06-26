@@ -190,10 +190,11 @@
 %% rotating: provides two environments, sidewaystable and sidewaysfigure,
 %% for typesetting tables and figures in landscape mode.  
 \usepackage{rotating}
+\usepackage{lscape}
 
 %% subfig: provides for including subfigures within a figure,
 %% and includes being able to separately reference the subfigures.
-%\usepackage{subfig}
+% \usepackage{subfig}
 
 %% graph: provides capabilities to draw graphs
 \usepackage{tikz}
@@ -205,7 +206,6 @@
 \tikzstyle{model} = [ellipse, minimum width=3cm, minimum height=1cm, text centered, text width=2cm, draw=black, fill=red!20]
 \tikzstyle{decision} = [diamond, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=green!30]
 \tikzstyle{arrow} = [thick,->,>=stealth]
-
 
 %% ragged2e: provides several new new commands \Centering, \RaggedLeft,
 %% \RaggedRight and \justifying and new environments Center, FlushLeft,
@@ -393,7 +393,6 @@
 %    2. Main body
 % Generally recommended to put each chapter into a separate file
 \include{relatedwork}
-% \include{paper}
 \include{taxonomy}
 \include{model}
 \include{benchmark}

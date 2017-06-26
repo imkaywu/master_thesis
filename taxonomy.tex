@@ -3,89 +3,79 @@
 
 \chapter{A new taxonomy of 3D Reconstruction}
 \label{ch:3DRecon_Taxo}
-Existing taxonomies of 3D reconstruction techniques generally only focus on one category of techniques: ~\citeauthor{seitz2006comparison} proposed  multiple means to classify Multi-view Stereo algorithms from various perspectives. Reviews \cite{geng2011structured, salvi2004pattern} of Structured Light techniques generally classify techniques based on the type of projection pattern used. Photometric Stereo algorithms are classified by the assumptions or generalizations made, for instance, calibrated/uncalibrated, unknown/known reflectance, unknown/known light conditions, etc. This framework provides a means to categorize intra-category algorithms, but is unsuitable to evaluate the performance of each technique across object with a range of attributes.
-
-To have a more comprehensive understanding of the strengths and weaknesses of different techniques, a more general taxonomy is need, and one of the most popular framework categorizes 3D reconstruction techniques into active and passive methods: if the controlled light condition is used, then it's active, otherwise, it's passive. Other notable taxonomy is the spacetime framework proposed in \cite{davis2003spacetime}, which categorizes depth from triangulation techniques based on the sources of information: temporal or spatial information. Though widely adopted, the mapping of the algorithm to the conditions that works the best is generally empirical.
-
-In the previous taxonomies, algorithms of a certain category generally work well on limited conditions, and a it's crucial to understand where algorithms perform well and where they fail. Under the previous framework, this knowledge is largely empirical, with each algorithm roughly maps to a problem domain that is poorly defined.
+Existing taxonomies of 3D reconstruction techniques generally focus on one category of techniques: the Multi-view Stereo taxonomy in~\cite{seitz2006comparison} proposed classification of MVS algorithms from various perspectives. Reviews of Structured Light techniques generally classify techniques based on the type of projection pattern used~\cite{geng2011structured, salvi2004pattern}. Photometric Stereo algorithms are classified by the assumptions or generalizations made, for instance, unknown/known reflectance, unknown/known light conditions (uncalibrated/calibrated), etc~\cite{shi2016benchmark}. These frameworks provide a way to categorize intra-category algorithms, but is unsuitable to evaluate the performance of inter-category algorithms. Furthermore, the algorithms under consideration are targeted at a limited categories of objects. It's well known that these algorithms are highly likely to fail on other categories of objects, and this knowledge of algorithmic applicability is largely empirical, with each algorithm roughly maps to a problem domain that is poorly defined. Thus we need a more object-centered approach to the taxonomy so that a more precise mapping is available.
 
 The taxonomy proposed in this chapter defines the 3D reconstruction techniques from a object-centered viewpoint, \ie categorize algorithm based on object class. This taxonomy transforms the 3D reconstruction problem from one requiring knowledge and expertise of specific algorithms in terms of how and when to use them, to one requiring knowledge of the visual and geometric properties of the target object.
 
-We need to way general/univeral enough that incorporates any between-class methods, and distinctive enough that distinguish with-class methods.
-
 \section{Object class}
-In Figure~\ref{fig:obj_class}, we show a taxonomy of object classes with different material and shape properties. There are in total $3\times 3\times 4\times 2\times 5 = 360$ classes of objects, which still don't fully capture the variations exhibited by real world objects, for instance, effects such as emission are not considered. Most techniques that have been developed over the past decades have focused on opaque objects with diffuse reflectance. However, the majority of currently available techniques can only tackle a subset of all possible classes. For instance, MVS algorithms typically work well for diffuse texture objects, while there are universally effective algorithms for specular, refractive objects~\cite{ihrke2010transparent}.
-\begin{figure}[h]
+In Figure~\ref{fig:obj_class} (a), we show a taxonomy of object classes with different material and shape properties. There are in total $3\times 3\times 2\times4\times 2\times 5 = 720$ classes of objects, which still don't fully capture the variations exhibited by real world objects, for instance, effects such as occlusion, discontinuity, emission, etc are not considered. Most techniques that have been developed over the past decades can only tackle a subset of all possible object classes, with a focus on opaque, diffuse objects. For specular, refractive, and translucent or transparent objects, only very specialized algorithms are applicable for reconstruction~\cite{ihrke2010transparent}.
+
+To make the problem tackleable, only six classes of objects are being investigated in depth. The reasoning behind the selected object classes is solely based on the [popularity] of the class. See Figure~\ref{fig:obj_class} (b) for the six classes of objects.
+\begin{figure}[!htbp]
 \centering
-\includegraphics[width=\textwidth]{taxo/obj_class}
-\caption{Object class}
+\includegraphics[width=0.8\textwidth]{taxo/obj_class}\\
+\includegraphics[width=0.8\textwidth]{taxo/six_class}\\
+\caption{\textit{Top}: A list of properties for object classes. \textit{Bottom}: Six object classes of interest. Only texture, lightness, and reflectance are consider. Properties not consider are set as follows: opaque, rough (for Lambertian)/smooth (for Non-Lambertian), low concavity.}
 \label{fig:obj_class}
 \end{figure}
 
-To make the problem tackleable, only four classes of objects are being investigated in depth. The reasoning behind the selected object classes is solely based on the [popularity] of the class. See Figure~\ref{fig:class_of_interest} for the five classes of objects.
-
-\begin{figure}[ht]
-\centering
-\includegraphics[width=0.6\textwidth]{taxo/six_class}
-\caption{Five classes of interest}
-\label{fig:class_of_interest}
-\end{figure}
-
-Chapter~\ref{ch:RelatedWork} provides an overview of the state-of-the-art techniques in 3D reconstruction based visual/geometric cues used. However, this fails to provide a context as where the algorithm should be used.
-
-\section{Class 1}
-In this section, we discuss techniques for reconstructing textureless, diffuse, and bright surfaces. The reconstruction of surface is complicated by the fact that there is no spatial information available for stereo correpondence searching due to lack of texture. Furthermore, for specular surfaces reflect light in a single direction which follows the law of reflection, thus the appearance changes as the viewpoint changes, which makes the correspondence search in these regions unreliable.
-
-\begin{table}[h]
+Here is a list of algorithms we will look into in depth, a summary is list in Table\ref{tab:class_algo}.
+\begin{table}[!ht]
   \centering
-  \begin{tabular}{l*{2}{c}}
+  \begin{tabular}{l||l}
   \hline
-  \textbf{Reference} & Reflectance & Calibrated \\
+  \textbf{Class} & \textbf{Technique}\\
   \hline
-  Horn~\cite{horn1989shape} & Lambertian & Yes\\
-  Woodham~\cite{woodham1980photometric} & Lambertian & Yes\\
+  SfS & Horn~\cite{horn1970shape}\\
+  MVS & Furukawa~\cite{furukawa2010accurate}, Goesele~\cite{goesele2006multi}, Vogiatzis~\cite{vogiatzis2007multiview}, \\
+      & Hern{\'a}ndez~\cite{esteban2004silhouette}, Faugeras~\cite{faugeras2002variational}\\
+  Lamberian PS & Woodham~\cite{woodham1980photometric}, Hayakawa~\cite{hayakawa1994photometric}, Belhumeur~\cite{belhumeur1999bas}, \\
+      & Alldrin~\cite{alldrin2007resolving}\\
+  Non Lambertian PS & Coleman~\cite{coleman1982obtaining}, Barsky~\cite{barsky20034}, Schluns~\cite{schluns1993photometric}, Sato~\cite{sato1994temporal}, \\
+      & Mallick~\cite{mallick2005beyond}, Alldrain~\cite{alldrin2008photometric}, Goldman~\cite{goldman2010shape}, Silver~\cite{silver1980determining}, \\
+      & Hertzmann~\cite{hertzmann2005example}, Zickler~\cite{zickler2002helmholtz}\\
+  % MVPS & \checkmark & \\
+  SL & Inokuchi~\cite{inokuchi1984range}\\
+  VH & Szeliski~\cite{szeliski1993rapid}, Matusik~\cite{matusik2002efficient}, Tarini~\cite{tarini2002marching}\\
   \hline
   \end{tabular}
-  \caption{Summary of Lambertian Photometric Stereo assumptions and formulations}
+  \caption{Algorithms}
+  \label{tab:class_algo}
+\end{table}
+
+\section{Class 1}
+\label{sec:class_1}
+In this section, we discuss techniques for reconstructing bright, textureless, and diffuse surfaces. The reconstruction of this type of surfaces is complicated by the fact that there is no spatial information available for stereo correpondence searching due to the lack of texture, thus making passive stereo based methods unavailable. Textureless and diffuse surface also indicates that uniform diffuse albedo. The conditions under which each categories of algorithms would work or fail are listed in Table~\ref{tab:class_1}.
+\begin{table}[!ht]
+  \centering
+  \begin{tabular}{l*{3}{c}}
+  \hline
+  \textbf{Technique} & Textureless & Bright & Lambertian\\
+  \hline
+  SfS & \checkmark & \checkmark & \checkmark\\
+  MVS & \ding{55} & \checkmark & \checkmark\\
+  Lamberian PS & \checkmark & \checkmark & \checkmark\\
+  Non Lambertian PS & \checkmark & \checkmark & \ding{55}\\
+  MVPS & \checkmark & \checkmark & \checkmark\\
+  SL & \checkmark & \checkmark & \checkmark\\
+  VH & \checkmark & \checkmark & \checkmark\\
+  \hline
+  \end{tabular}
+  \caption{Categories of algorithm that are applicable for object class 1.}
   \label{tab:class_1}
 \end{table}
 
-\subsection{Shape from Shading}
-The technique of shape from shading estimates surface orientation from shading variations. As discussed in Chapter~\ref{ch:RelatedWork}, the radiance depends on the reflectance, lighting and viewing direction, and surface orientation. By assuming known, isotropic surface reflectance, orthographic projection, and known magnitude and direction of the light source, pixel intensity $I(x, y)$ is directly related to surface orientation. This relation is encoded by the reflectance map $R(p, q)$, \ie iso-intensity curves in the gradient space. The problem thus becomes:
-$$
-I(x, y) = R(p, q)
-$$
+\subsection{SfS}
+Shape from Shading, first proposed by~\citeauthor{horn1970shape} is designed specifically for known isotropic Lambertian surfaces. By assuming orthographic projection, and known light source intensity and direction, surface orientation can be estimated from the shading variations.
 
-Unfortunately, measurements of the brightness at a single pixel only provide one constraint whereas surface orientation requires two. All we know is that the surface orientation that has produced $I(x, y)$ lies somewhere on a contour of $R(p, q)$. Additional constaints are needed to estimate the surface orientations.
+To obtain a reflectance map, the system is calibrated using a sphere having a constant surface reflectance factor. Shape can be determined for only those objects having reflectacne properties identical to the calibration sphere.
 
-\subsection{Lambertian Photometric Stereo}
-Lambertian Photometric Stereo deals with surfaces with Lambertian reflectance, \ie the emittant radiance in all directions are the same, thus leading to the brightness/colour constancy.
+\subsection{Lambertian PS}
+Textureless surface indicates \textit{uniform albedo}.
 
-\subsubsection{Calibrated Photometric Stereo}
-The original Photometric Stereo, introduced by \citeauthor{woodham1980photometric} overcame the challenges faced by Shape from Shading techniques by adding multiple light sources with different directions. The proposed method deals with Lambertian surfaces, and assumes that the light intensity and direction are known.
+The traditional Photometric Stereo can be considered as an extenstion of the original Shape from Shading, which incorporates additional light sources to eliminate ambiguity~\cite{woodham1980photometric}. The surface orientation can be retrieved from using only two images.
 
-This approach not only can estimate surface orientation, but also surface reflectance, \ie spatially varying albedo. Recall the albedo-scaled normal matrix $N_{P\times 3}$ from Chapter~\ref{ch:RelatedWork}, the albedo and surface normal are estimated by
-% $$
-% I=N^\top L
-% $$
-% thus the surface normals can be estimated as
-% $$
-% N = IL^+
-% $$
-% where $L^+$ is the pseduo-inverse of $L$. The per-pixel albedo and surface normal are
-\begin{align*}
-\rho_i &= \|N_{i,:}\|\\
-n_i &= \frac{N_{i,:}^\top}{\|N_{i,:}\|}
-\end{align*}
-
-\subsection{Uncalibrated Photometric Stereo}
-It's possible to estimate the surface orientation without knowing the light directions, a case known as \textit{uncalibrated Photometric Stereo}. Most such techniques assume Lambertian techniques and are based on factorization technique proposed in \cite{hayakawa1994photometric}. Recall the Irradiance equation from Chapter~\ref{ch:RelatedWork}
-$$
-I=N^\top L
-$$
-However, an infinite number of candidates $\hat{N}$ and $\hat{L}$ make the above equality met. In fact, any invertible $3\times 3$ matrix $W$ defines a candidate pair $\hat{N} = N\cdot W, \hat{L}=W^{-1}L$. Thus the normal $N$ and light source direction $L$ can only be recovered up to a linear transformation.
-
-\citeauthor{hayakawa1994photometric} proposed to use six or more pixels with the same albedo, and was able to solve for normals up to a rotation ambiguity. It can be further proved that a 3-parameter subset of these transformations, known as the Generalized Bas-Relief (GBR) ambiguity, preserve surface integrability~\cite{belhumeur1999bas}. Thus, given three or more imges of a Lambertian object acquired under light sources of unknown direction and strength, the surface can be reconstructed up to GBR transformation by enforcing surface integrability, see Figure~\ref{fig:gbr} for the effect of GBR-ambiguity.
+To avoid the tedious process of light calibration, \textit{uncalibrated photometric stereo} has been proposed. One approach used six or more pixels with the same albedo, and was able to solve for normals up to a rotation ambiguity\cite{hayakawa1994photometric}. It can be further proved that a 3-parameter subset of these transformations, known as the Generalized Bas-Relief (GBR) ambiguity, preserve surface integrability~\cite{belhumeur1999bas}. Thus, given three or more imges of a Lambertian object acquired under light sources of unknown direction and strength, the surface can be reconstructed up to GBR transformation by enforcing surface integrability, see Figure~\ref{fig:gbr} for the effect of GBR-ambiguity.
 \begin{figure}[!htbp]
 \centering
 \includegraphics[width=0.6\textwidth]{taxo/gbr.png}
@@ -93,89 +83,258 @@ However, an infinite number of candidates $\hat{N}$ and $\hat{L}$ make the above
 \label{fig:gbr}
 \end{figure}
 
-\subsection{Structured Light}
-TBW
+\subsection{SL}
+For stereo correspondence based methods, actively projected patterns have to be used for the lack of surface texture. Since the surface is diffuse, there is no specular reflection to cause severe noise.
+% The constraints and formulations of algorithms for object class 1 are summarised in Table~\ref{tab:summary_class_1}.
+% \begin{table}[h]
+%   \centering
+%   \begin{tabular}{l*{3}{c}}
+%   \hline
+%   \textbf{Technique} & Calibrated & Reflectance & Algorithm\\
+%   \hline
+%   Horn~\cite{horn1970shape} & Yes & Lambertian & Characteristic strips\\
+%   Woodham~\cite{woodham1980photometric} & Yes & Lambertian & $N = IL^{+}$\\
+%   Hayakawa~\cite{hayakawa1994photometric} & No & Lambertian & \\
+%   Belhumeur~\cite{belhumeur1999bas} & No & Lambertian & \\
+%   Alldrin~\cite{alldrin2007resolving} & No & Lambertian & resolve the GBR ambiguity based on minimization of the entropy of the recovered albedos\\
+%   Inokuchi~\cite{inokuchi1984range} & Yes & Lambertian & Triangulation\\
+%   \hline
+%   \end{tabular}
+%   \caption{Summary of constraints and formulations of algorithms for object class 1.}
+%   \label{tab:summary_class_1}
+% \end{table}
 
 \section{Class 2}
-This section discusses the reconstruction of non-Lambertian, textureless, and bright surfaces. 
+\label{sec:class_2}
+This section discusses the reconstruction of bright, textureless, non-Lambertian surfaces. The specular surfaces reflect light in a single direction which follows the law of reflection, thus the appearance changes as the viewpoint changes, which makes the correspondence search in these regions unreliable. Thus textureless and non-Lambertian properties rule out stereo based techniques.  Textureless also indicates that the surface is composed of the same material thus the albedo is uniform across the surface. The conditions under which each categories of algorithms would work or fail are listed in Table~\ref{tab:class_2}.
+\begin{table}[h]
+  \centering
+  \begin{tabular}{l*{3}{c}}
+  \hline
+  \textbf{Technique} & Textureless & Bright & Non-Lambertian\\
+  \hline
+  SfS & \checkmark & \checkmark & \ding{55}\\
+  MVS & \ding{55} & \checkmark & \ding{55}\\
+  Lambertian PS & \checkmark & \checkmark & \ding{55}\\
+  Non-Lambertian PS & \checkmark & \checkmark & \checkmark\\
+  MVPS & \checkmark & \checkmark & \checkmark\\
+  SL & \checkmark & \checkmark & \ding{55}\\
+  VH & \checkmark & \checkmark & \checkmark\\
+  \hline
+  \end{tabular}
+  \caption{Categories of algorithm that are applicable for object class 2.}
+  \label{tab:class_2}
+\end{table}
 
+\subsection{Non-Lambertian PS}
+This section considers techniques that deal with surfaces composed of the same material, \ie \textit{uniform albedo}. Techniques that can deal with spatially-varying reflectance are discussed in Section~\ref{sec:class_5}.
+
+One approach exploits the fact that the reflectance of non-Lambertian surfaces can be approximated by \textbf{diffuse component and specular lobe}. \citeauthor{coleman1982obtaining} and \citeauthor{barsky20034} who treat specular pixels as outliers, and \citeauthor{schluns1993photometric}, \citeauthor{sato1994temporal}, and \citeauthor{mallick2005beyond} who assume the color of the specular lobe differs from the color of the diffuse lobe, allowing separation of the specular and diffuse components.
+
+Another approach uses \textbf{reference objects}. The method is first proposed by~\citeauthor{silver1980determining} and later by~\citeauthor{hertzmann2005example}.
+
+Due to the high complexity of the BRDF, some methods utilize {analytical reflectance models}. \citeauthor{goldman2010shape} uses an isotropic Ward model for each basis BRDF, and the surface orientation and parameters of the reflectance models are estimated iteratively. \citeauthor{alldrin2008photometric} proposed a data-driven approach that got rid of the parametric reflectance model, and employed an novel bi-variate approaximations of isotropic reflectance functions. By combining this approximation with the weighted basis BRDFs, a per-pixel surface normal, global set of non-parametric basis BRDFs, and the corresponding weights are able to be independently estimated. Though the parametric reflectance model can significantly reduce the complexity of BRDFs, they are typically restricted to a limited classes of materials.
+
+Another alternative to using BRDF models is to take advantage of the properties of BRDFs, include energy conservation, non-negativity, Helmholtz reciprocity, or isotropy. Helmholtz stereopsis introduced by~\citeauthor{zickler2002helmholtz} exploits the reciprocity to obtain the surface reconstruction. Isotropy is another physical property which holds for material without ``grain''. \citeauthor{tan2007isotropy} use both symmetry and reciprocity present in isotropic BRDFs to resolve the generalized bas-relief ambiguity. \citeauthor{alldrin2007toward} show that isotropy, with no further assumptions on surface shape or BRDF, can be utilized to recover the surface normal at each surface point up to a plane.
+
+% \begin{table}[h]
+%   \centering
+%   \begin{tabular}{l*{3}{c}}
+%   \hline
+%   \textbf{Technique} & Calibrated & Reflectance & Algorithm\\
+%   \hline
+%   Coleman~\cite{coleman1982obtaining} & Yes & specular lobe & Outlier\\
+%   Barsky~\cite{barsky20034} & Yes & specular lobe & Outlier\\
+%   Schluns~\cite{schluns1993photometric} & Yes & specular lobe & 
+%   Separate D/S\\
+%   Sato~\cite{sato1994temporal} & Yes & specular lobe & Separate D/S\\
+%   Mallick~\cite{mallick2005beyond} & Yes & specular lobe & Separate D/S\\
+%   Alldrain~\cite{alldrin2008photometric} & Yes & bi-variate function & Yes\\
+%   Goldman~\cite{goldman2010shape} & Yes & Isotropic Ward model & Yes\\
+%   Silver~\cite{silver1980determining} & No & Reference object(s) & Orientation consist\\
+%   Hertzmann~\cite{hertzmann2005example} & No & Reference object(s) & Orientation consist\\
+%   Zickler~\cite{zickler2002helmholtz} & Yes & Physical properties & Helmholtz reciprocity\\
+%   \hline
+%   \end{tabular}
+%   \caption{Summary of Non-Lambertian Photometric Stereo assumptions and formulations}
+%   \label{tab:summary_class_2}
+% \end{table}
+
+\section{Class 3}
+\label{sec:class_3}
+This section deals with bright, textured, Lamberian surfaces. Multi-view stereo can use the Lambertian, textured surface to reconstruct a (quasi-)dense model We use the following criteria to summarise the MVS algorithms. The conditions under which each categories of algorithms would work or fail are listed in Table~\ref{tab:class_3}.
+\begin{table}[h]
+  \centering
+  \begin{tabular}{l*{3}{c}}
+  \hline
+  \textbf{Technique} & Textured & Bright & Lambertian\\
+  \hline
+  SfS & \ding{55} & \checkmark & \checkmark\\
+  MVS & \checkmark & \checkmark & \checkmark\\
+  Lamberian PS & \checkmark & \checkmark & \checkmark\\
+  Non Lambertian PS & \checkmark & \checkmark & \ding{55}\\
+  MVPS & \ding{55} & \checkmark & \checkmark\\
+  SL & \ding{55} & \checkmark & \checkmark\\
+  VH & \checkmark & \checkmark & \checkmark\\
+  \hline
+  \end{tabular}
+  \caption{Categories of algorithm that are applicable for object class 3.}
+  \label{tab:class_3}
+\end{table}
+% \begin{itemize}
+% \item \textbf{Scene representation}: \textit{3D grid}, \textit{point cloud}, \textit{polygon mesh}, and \textit{depth map};
+% \item \textbf{Photo-consistency measure}: \textit{scene space}, \textit{image space};
+% \item \textbf{Visibility model}: \textit{geometric}, \textit{quasi-geometric}, and \textit{outlier-based approach};
+% \item \textbf{Shape prior}: \textit{minimal surface}, \textit{maximal surface}, and \textit{local smoothness};
+% \item \textbf{Algorithm}: \textit{extraction from a 3D volume}, \textit{surface/volume evolution}, \textit{seed point propagation}, \textit{per-view depth map reconstruction};
+% \item \textbf{Initialization}: \textit{bounding box}, \textit{range of depth/disparity}.
+% \end{itemize}
+% We summarize the conditions of these algorithms in Table~\ref{tab:class_3}
+% \begin{table}[h]
+%   \centering
+%   \begin{tabular}{l*{1}{c}}
+%   \hline
+%   \textbf{Technique} & Algorithm \\
+%   \hline
+%   Furukawa~\cite{furukawa2010accurate} & Seed propagation\\
+%   Goesele~\cite{goesele2006multi} & Depth map estimation\\
+%   Vogiatzis~\cite{vogiatzis2007multiview} & 3D grid extraction\\
+%   Hern{\'a}ndez~\cite{esteban2004silhouette} & \\
+%   Faugeras~\cite{faugeras2002variational} & Level-set evolution\\
+%   \hline
+%   \end{tabular}
+%   \caption{Summary of MVS reconstruction approach.}
+%   \label{tab:class_3}
+% \end{table}
+
+\subsection{MVS}
+The diffuse and textured surface is most suitable for MVS algorithms. However, active technique could work, but the surface texture might interfere with the encoding process thus making the reconstruction inaccurate. \citeauthor{furukawa2008high} use wide-baseline stereo matching to recover the 3D coordinates of salient feature points, then shrink a visual hull model so that the recovered points lie on its surface, then refine the result using energy minimization. \citeauthor{goesele2006multi} compute a depth map from each camera viewpoint (similar to [31]) and merge the results using VRIP [62]. \citeauthor{esteban2004silhouette} first com- pute a depth map from each camera viewpoint and merge the results into a cost volume. They then iteratively deform a mesh, initialized at the visual hull, to find a minimum cost surface in this volume, also incorporating terms to fit silhouettes. Kolmogorov and Zabih [35] compute a set of depth maps using multi-baseline stereo with graph cuts, then merge the results into a voxel volume by computing the intersections of the occluded volumes from each viewpoint. \citeauthor{faugeras2002variational} compute a minimum cost surface by evolving a surface in a level-set frame-work, using a prediction-error measure. \citeauthor{vogiatzis2007multiview} compute a correlation cost volume in the neighborhood of the visual hull. A minimum-cost surface is then computed using volumetric min-cut.
+
+\subsection{Lambertian PS}
+Visual texture can be thought of as a pattern or variance of intensity appearing on an object's surface. In this thesis, the visual texture will be considered as resulting from non-uniform surface albedo. This section discusses techniques that deal with surfaces of \textit{spatially varying albedo}.
+
+The original photometric stereo can also be used for surfaces with spatially-varying albedo. The albedo-scaled normal can be first estimated as usual, then the albedo is retrieved as the magnitude of the scaled normal~\cite{woodham1980photometric}. This method requires three instead of two images.
+
+For uncalibrated techniques, ???
+
+\section{Class 4}
+\label{sec:class_4}
+\begin{table}[h]
+  \centering
+  \begin{tabular}{l*{3}{c}}
+  \hline
+  \textbf{Technique} & Textured & Dark & Lambertian\\
+  \hline
+  SfS & \ding{55} & \ding{55} & \checkmark\\
+  MVS & \checkmark & \checkmark & \checkmark\\
+  Lamberian PS & \checkmark & \ding{55} & \checkmark\\
+  Non Lambertian PS & \checkmark & \ding{55} & \ding{55}\\
+  MVPS & \ding{55} & \ding{55} & \checkmark\\
+  SL & \ding{55} & \ding{55} & \checkmark\\
+  VH & \checkmark & \checkmark & \checkmark\\
+  \hline
+  \end{tabular}
+  \caption{Categories of algorithm that are applicable for object class 4.}
+  \label{tab:class_4}
+\end{table}
+
+\section{Class 5}
+\label{sec:class_5}
+\begin{table}[h]
+  \centering
+  \begin{tabular}{l*{3}{c}}
+  \hline
+  \textbf{Technique} & Textured & Bright & Non-Lamberian\\
+  \hline
+  SfS & \ding{55} & \checkmark & \ding{55}\\
+  MVS & \checkmark & \checkmark & \ding{55}\\
+  Lamberian PS & \checkmark & \checkmark & \ding{55}\\
+  Non Lambertian PS & \checkmark & \checkmark & \checkmark\\
+  MVPS & \ding{55} & \checkmark & \checkmark\\
+  SL & \ding{55} & \checkmark & \ding{55}\\
+  VH & \checkmark & \checkmark & \checkmark\\
+  \hline
+  \end{tabular}
+  \caption{Categories of algorithm that are applicable for object class 5.}
+  \label{tab:class_5}
+\end{table}
+
+\subsection{Non-Lambertian PS}
+This section deals with surfaces with spatially-varying albedo.
+
+A four-source photometric stereo technique uses a fourth source of illumination to detecta and remove specular reflections~\cite{coleman1982obtaining}. By adding a fourth image, it's possible to compute four sets of normals, \ie one normal for each permutation of three intensity values. If there is a greater deviation in both magnitude and direction of the normals, a method can now be developed to eliminate specular effects using a thresholding procedure.
+
+
+\section{Class 6}
+\label{sec:class_6}
+We discuss textured, mixed diffuse and specular, and bright surface, which is challenging for MVS due to the specular nature, and is difficult for any active techniques since the low amount of reflected light.
+\begin{table}[h]
+  \centering
+  \begin{tabular}{l*{3}{c}}
+  \hline
+  \textbf{Technique} & Textured & Dark & Non-Lamberian\\
+  \hline
+  SfS & \ding{55} & \ding{55} & \ding{55}\\
+  MVS & \checkmark & \checkmark & \ding{55}\\
+  Lamberian PS & \checkmark & \ding{55} & \ding{55}\\
+  Non Lambertian PS & \checkmark & \ding{55} & \checkmark\\
+  MVPS & \checkmark & \ding{55} & \checkmark\\
+  SL & \ding{55} & \ding{55} & \ding{55}\\
+  VH & \checkmark & \checkmark & \checkmark\\
+  \hline
+  \end{tabular}
+  \caption{Categories of algorithm that are applicable for object class 6.}
+  \label{tab:class_6}
+\end{table}
+
+\subsection{VH}
+Thus visual hull is a great fit in this case, the summary of VH algorithms are listed in Table~\ref{tab:class_6}.
 \begin{table}[h]
   \centering
   \begin{tabular}{l*{2}{c}}
   \hline
-  \textbf{Reference} & Reflectance & Calibrated \\
+  \textbf{Technique} & Representation & Algorithm\\
   \hline
-  Coleman~\cite{coleman1982obtaining}, \citeauthor{barsky20034} & specular lobe & Yes\\
-  Schluns~\cite{schluns1993photometric}, Sato~\cite{sato1994temporal}, and Mallick~\cite{mallick2005beyond} & specular lobe & Yes\\
-  Alldrain~\cite{alldrin2008photometric} & bi-variate function & Yes\\
-  Goldman~\cite{goldman2010shape} & Isotropic Ward model & Yes\\
-  Silver~\cite{silver1980determining}, Hertzmann~\cite{hertzmann2005example} & reference object(s) & No\\
-  Zickler~\cite{zickler2002helmholtz} & physical properties & Yes\\
+  Szeliski~\cite{szeliski1993rapid} & 3D grids & Voxel-based\\
+  Tarini~\cite{tarini2002marching} & 3D rays & MI-based\\
+  Matusik~\cite{matusik2002efficient} & Polygonal mesh & Exact polyhedral methods\\
   \hline
   \end{tabular}
-  \caption{Summary of Non-Lambertian Photometric Stereo assumptions and formulations}
-  \label{tab:class_2}
+  \caption{Summary of VH representations and reconstruction approach.}
+  \label{tab:summary_class_6}
 \end{table}
-
-\subsection{Non-Lambertian Photometric Stereo}
-\subsubsection{Outlier rejection}
-One of the research direction in Photometric Stereo is to relax the assumption of Lambertian reflectance. One approach exploits the fact that the reflectance of non-Lambertian surfaces can be approximated by diffuse component and specular lobe. \citeauthor{coleman1982obtaining} and \citeauthor{barsky20034} who treat specular pixels as outliers, and \citeauthor{schluns1993photometric}, \citeauthor{sato1994temporal}, and \citeauthor{mallick2005beyond} who assume the color of the specular lobe differs from the color of the diffuse lobe, allowing separation of the specular and diffuse components.
-
-\subsubsection{Reference objects}
-Another research direction uses a reference object that has the same material as the target object. This method is first proposed by~\citeauthor{silver1980determining} and later by~\citeauthor{hertzmann2005example}. Spatially varying BRDF can also be handled by using multiple reference objects, and assuming that the target BRDF is the non-negative linear combination of a set of basis BRDF defined by the set of reference objects.
-
-\subsubsection{Analytic reflectance models}
-The idea that BRDF is considered as a non-negative linear combination of basis BRDFs is exploited by~\citeauthor{goldman2010shape}. Their method uses an isotropic Ward model for each basis BRDF, and the surface orientation and parameters of the reflectance models are estimated iteratively. \citeauthor{alldrin2008photometric} proposed a data-driven approach that got rid of the parametric reflectance model, and employed an novel bi-variate approaximations of isotropic reflectance functions. By combining this approximation with the weighted basis BRDFs, a per-pixel surface normal, global set of non-parametric basis BRDFs, and the corresponding weights are able to be independently estimated.
-
-\subsubsection{General properties of a BRDF}
-Though the parametric reflectance model can significantly reduce the complexity of BRDFs, they are typically restricted to a limited classes of materials. An alternative is to exploit the physical properties the most materials obey, for instance, Helmholtz reciprocity or isotropy. Helmholtz stereopsis introduced by~\citeauthor{zickler2002helmholtz} exploits the reciprocity to obtain the surface reconstruction.
-
-\subsection{Multi-view Photometric Stereo}
-
-
-\section{Class 3}
-\subsection{Multi-View Stereo}
-Multi-view Stereo algorithms reconstruct a (quasi-)dense model by taking advantage of stereo correspondences. We use the following criteria to summarise the MVS algorithms.
-\begin{itemize}
-\item \textbf{Scene representation}: \textit{3D grid}, \textit{point cloud}, \textit{polygon mesh}, and \textit{depth map};
-\item \textbf{Photo-consistency measure}: \textit{scene space}, \textit{image space};
-\item \textbf{Visibility model}: \textit{geometric}, \textit{quasi-geometric}, and \textit{outlier-based approach};
-\item \textbf{Shape prior}: \textit{minimal surface}, \textit{maximal surface}, and \textit{local smoothness};
-\item \textbf{Algorithm}: \textit{extraction from a 3D volume}, \textit{surface/volume evolution}, \textit{seed point propagation}, \textit{per-view depth map reconstruction};
-\item \textbf{Initialization}: \textit{bounding box}, \textit{range of depth/disparity}.
-\end{itemize}
-the We summarize the conditions of these algorithms in Table~
-\begin{table}[h]
-  \centering
-  \begin{tabular}{l*{6}{c}}
-  \hline
-  \textbf{Technique} & Representation & Photo-consist & Visibility & Shape prior & Algo & Init\\
-  \hline
-  Furukawa~\cite{furukawa2010accurate} & Point cloud & Scene space, NCC & Quasi-geometry & Seed propagation & N/A\\
-  Goesele~\cite{goesele2006multi} & Depth map & Scene space, NCC & Quasi-geomtry & Per-view depth map estimation & Range of depth\\
-  Vogiatzis~\cite{vogiatzis2007multiview} \\
-  \hline
-  \end{tabular}
-  \caption{Summary of MVS assumptions and formulations}
-  \label{tab:class_3}
-\end{table}
-
-\section{Class 4}
-\subsection{Visual Hull}
 
 \section{Summary}
 Our taxonomy focuses on the visual cues detected in images, which is utilized by various techniques. Conceptualize these visual cues as dimension of the 3D reconstruction problem, we have an abstraction which allow us to think of algorithms as volumes within a $n-$dimensional problem space. Existing algorithms can be introduced into this framework based on the main visual cue used for reconstruction. Instances where these algorithms have been reported as supporting other forms of variation have been outlined, providing an initial mapping of the space that is summarized below in Table~\ref{tab:algo_taxo}.
 \begin{sidewaystable}[h]
   \centering
-  \begin{tabular}{l*{6}{c}}
+  \begin{tabular}{*{2}{l}*{6}{c}}
   \hline
-  \textbf{Technique} & Translucency & Texture & Lightness & Reflectance & Roughness & Concavity\\
+  \textbf{Class} & \textbf{Technique} & Translucency & Texture & Lightness & Reflectance & Roughness & Concavity\\
   \hline
-  Furukawa~\cite{furukawa2010accurate} & Opaque & Textured & N/A & Lambertian & N/A & N/A\\
-  Goesele~\cite{goesele2006multi} & Opaque & Textured & N/A & Lambertian & N/A & N/A\\
-  Vogiatzis~\cite{vogiatzis2007multiview} & Opaque & Textured & N/A & Lambertian & N/A & N/A\\
-  Woodham~\cite{woodham1980photometric} & Opaque & Textureless & Bright & Lambertian & N/A & Convex\\
-  Hertzmann~\cite{hertzmann2005example} & Opaque & N/A & Bright & N/A & N/A & Convex\\
+  Class 1 & Horn~\cite{horn1970shape} \\
+  & Woodham~\cite{woodham1980photometric} & Opaque & Textureless & Bright & Lambertian & N/A & Convex\\
+  & Hayakawa~\cite{hayakawa1994photometric} \\
+  & Belhumeur~\cite{belhumeur1999bas} \\
+  \hline
+  Class 2 & Coleman~\cite{coleman1982obtaining} \\
+  & Barsky~\cite{barsky20034} \\
+  & Schluns~\cite{schluns1993photometric} \\
+  & Sato~\cite{sato1994temporal} \\
+  & Mallick~\cite{mallick2005beyond} \\
+  & Alldrain~\cite{alldrin2008photometric} \\
+  & Goldman~\cite{goldman2010shape} \\
+  & Silver~\cite{silver1980determining}\\
+  & Hertzmann~\cite{hertzmann2005example} \\
+  & Zickler~\cite{zickler2002helmholtz} \\
+  \hline
+  Class 3 & Furukawa~\cite{furukawa2010accurate} \\
+  & Goesele~\cite{goesele2006multi} \\
+  & Vogiatzis~\cite{vogiatzis2007multiview} \\
+  \hline
+  Class 4 & Szeliski~\cite{szeliski1993rapid} \\
+  & Tarini~\cite{tarini2002marching} \\
+  & Matusik~\cite{matusik2002efficient} \\
   \hline
   \end{tabular}
   \caption{Algorithm classification based on the new taxonomy}
