@@ -200,10 +200,12 @@
 \usepackage{tikz}
 \usetikzlibrary{shapes.geometric, arrows, fit, positioning, calc}
 \tikzstyle{data} = [rectangle, rounded corners, minimum width=3cm, minimum height=1cm, text centered, text width=3cm, draw=black, fill=blue!30]
-\tikzstyle{data_fix} = [rectangle, rounded corners, minimum width=1.5cm, minimum height=1cm, text centered, draw=black, fill=blue!30]
+\tikzstyle{data_nonfixed} = [rectangle, rounded corners, minimum width=1.5cm, minimum height=1cm, text centered, draw=black, fill=blue!30]
 \tikzstyle{io} = [trapezium, trapezium left angle=70, trapezium right angle=110, minimum width=3cm, minimum height=1cm, text centered, text width=3cm, draw=black, fill=blue!30]
 \tikzstyle{process} = [rectangle, minimum width=3cm, minimum height=1cm, text centered, text width=3cm, draw=black, fill=green!30]
+\tikzstyle{process_nonfixed} = [rectangle, minimum width=1.5cm, minimum height=1cm, text centered, draw=black, fill=green!30]
 \tikzstyle{model} = [ellipse, minimum width=3cm, minimum height=1cm, text centered, text width=2cm, draw=black, fill=red!20]
+\tikzstyle{model_nonfixed} = [ellipse, minimum width=1.5cm, minimum height=1cm, text centered, draw=black, fill=red!20]
 \tikzstyle{decision} = [diamond, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=green!30]
 \tikzstyle{arrow} = [thick,->,>=stealth]
 
@@ -394,8 +396,8 @@
 % Generally recommended to put each chapter into a separate file
 \include{relatedwork}
 \include{taxonomy}
-\include{model}
-\include{benchmark}
+\include{description}
+\include{mapping}
 \include{interp}
 %\include{discussion}
 %\include{conclusions}

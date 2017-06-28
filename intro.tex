@@ -65,10 +65,10 @@ We use both synthetic and real-world datasets to evaluate the proposed abstracti
 
 % 3D taxonomy
 \node (cue) [model, above of=algo, yshift=1.8cm] {Visual Cues};
-\node (stereo) [data_fix, below of=cue, xshift=-3cm] {Stereo};
-\node (shading) [data_fix, below of=cue, xshift=-1cm] {Shading};
-\node (silhouette) [data_fix, below of=cue, xshift=1cm] {Silhouette};
-\node (more) [data_fix, below of=cue, xshift=3cm] {...};
+\node (stereo) [data_nonfixed, below of=cue, xshift=-3cm] {Stereo};
+\node (shading) [data_nonfixed, below of=cue, xshift=-1cm] {Shading};
+\node (silhouette) [data_nonfixed, below of=cue, xshift=1cm] {Silhouette};
+\node (more) [data_nonfixed, below of=cue, xshift=3cm] {...};
 \node (3d_taxo) [dotted, draw=red, fill=none, thick, fit=(cue) (stereo) (shading) (silhouette) (more), inner sep=0.3cm] {};
 \node [data, draw=none, fill=none, above of=3d_taxo, yshift=0.4cm] {Chapter~\ref{ch:3DRecon_Taxo}: 3D Taxonomy};
 
@@ -78,10 +78,11 @@ We use both synthetic and real-world datasets to evaluate the proposed abstracti
 \node [data, draw=none, fill=none, below of=abstract, yshift=0.4cm] {Chapter~\ref{ch:3DRecon_Interp}: 3D Interpretation};
 
 % 3D model
-\node (def) [data, left of=abstract, xshift=-3cm, yshift=4cm)] {Definition};
-\node (rep) [data, below of=def] {Representation};
+\node (def) [data, left of=abstract, xshift=-3cm, yshift=6cm)] {Definition};
+\node (model) [data, below of=def] {Model};
+\node (rep) [data, below of=model] {Representation};
 \node (exp) [data, below of=rep] {Expressions};
-\node [data, draw=none, fill=none, above of=def, yshift=-0.5cm] {Chapter~\ref{ch:3DRecon_Model}: 3D Model};
+\node [data, draw=none, fill=none, above of=def, yshift=-0.5cm] {Chapter~\ref{ch:3DRecon_Desc}: 3D Model};
 
 % depend_check, and training
 \draw (prop_set.south) -- ++(0.0, -0.5) coordinate (inter0);
@@ -108,7 +109,8 @@ We use both synthetic and real-world datasets to evaluate the proposed abstracti
 \draw [arrow] (3d_taxo) -- (algo);
 
 % 3D model
-\draw [arrow] (def) -- (rep);
+\draw [arrow] (def) -- (model);
+\draw [arrow] (model) -- (rep);
 \draw [arrow] (rep) -- (exp);
 \draw [arrow] (exp) -- (abstract);
 \draw[red,thick,dotted] ($(def.north west)+(-0.3,0.3)$)  rectangle ($(exp.south east)+(0.3,-0.3)$);
@@ -125,8 +127,8 @@ We use both synthetic and real-world datasets to evaluate the proposed abstracti
 The main contributions are:
 \begin{itemize}
 \item A new taxonomy of 3D reconstruction problem from object-centered perspective;
-\item A model of 3D reconstruction that can describe 3D reconstruction problem distincitvely without loss of generability;
-\item An abstraction of 3D reconstruction that maps problem model to a suite of algorithms.
+\item A model of 3D reconstruction that can describe 3D reconstruction problem using visual/geometric properties;
+\item An mapping of 3D reconstruction that maps problem model to a suite of algorithms.
 \end{itemize}
 
 \section{Organization}

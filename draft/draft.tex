@@ -90,3 +90,94 @@ In this section, we explore the expression of common 3D reconstruction problems 
 
 
 %% a table from taxonomy
+\begin{landscape}
+\centering
+\begin{table}[h]
+  \centering
+  \begin{tabular}{*{2}{l}*{6}{c}}
+  \hline
+  \textbf{Class} & \textbf{Technique} & Translucency & Texture & Lightness & Reflectance & Roughness & Concavity\\
+  \hline
+  Class 1 & Horn~\cite{horn1989shape} \\
+  & Woodham~\cite{woodham1980photometric} & Opaque & Textureless & Bright & Lambertian & N/A & Convex\\
+  & Hayakawa~\cite{hayakawa1994photometric} \\
+  & Belhumeur~\cite{belhumeur1999bas} \\
+  \hline
+  Class 2 & Coleman~\cite{coleman1982obtaining} \\
+  & Barsky~\cite{barsky20034} \\
+  & Schluns~\cite{schluns1993photometric} \\
+  & Sato~\cite{sato1994temporal} \\
+  & Mallick~\cite{mallick2005beyond} \\
+  & Alldrain~\cite{alldrin2008photometric} \\
+  & Goldman~\cite{goldman2010shape} \\
+  & Silver~\cite{silver1980determining}\\
+  & Hertzmann~\cite{hertzmann2005example} \\
+  & Zickler~\cite{zickler2002helmholtz} \\
+  \hline
+  Class 3 & Furukawa~\cite{furukawa2010accurate} \\
+  & Goesele~\cite{goesele2006multi} \\
+  & Vogiatzis~\cite{vogiatzis2007multiview} \\
+  \hline
+  Class 4 & Szeliski~\cite{szeliski1993rapid} \\
+  & Tarini~\cite{tarini2002marching} \\
+  & Matusik~\cite{matusik2002efficient} \\
+  \hline
+  \end{tabular}
+  \caption{Algorithm classification based on the new taxonomy}
+  \label{tab:algo_taxo}
+\end{table}
+\end{landscape}
+
+\begin{sidewaystable}[h]
+  \centering
+  \begin{tabular}{l*{6}{c}r}
+  \hline
+  \textbf{Technique} & Translucency & Texture & Lightness & Reflectance & Roughness & Concavity & \textbf{Class}\\
+  Horn~\cite{horn1970shape} & Opaque & Textureless & Bright & Lambertian & N/A & Convex & Class 1\\
+  Woodham~\cite{woodham1980photometric} & Opaque & N/A & Bright & Lambertian & N/A & Convex & Class 1, 3\\
+  Hayakawa~\cite{hayakawa1994photometric} & Opaque & N/A & Bright & Lambertian & N/A & Convex & Class 1, 3\\
+  Belhumeur~\cite{belhumeur1999bas} & Opaque & N/A & Bright & Lambertian & N/A & Convex & Class 1, 3\\
+  Coleman~\cite{coleman1982obtaining} & Opaque & N/A & Bright & Non-Lambertian & N/A & Convex & Class 2, 5\\
+  Barsky~\cite{barsky20034} & Opaque & N/A & Bright & Non-Lambertian & N/A & Convex & Class 2, 5\\
+  Schluns~\cite{schluns1993photometric} & Opaque & N/A & Bright & Non-Lambertian & N/A & Convex & Class 2, 5\\
+  Sato~\cite{sato1994temporal} & Opaque & N/A & Bright & Non-Lambertian & N/A & Convex & Class 2, 5\\
+  Mallick~\cite{mallick2005beyond} & Opaque & N/A & Bright & Non-Lambertian & N/A & Convex & Class 2, 5\\
+  Alldrain~\cite{alldrin2008photometric} & Opaque & N/A & Bright & Non-Lambertian & N/A & Convex & Class 2, 5\\
+  Goldman~\cite{goldman2010shape} & Opaque & N/A & Bright & Non-Lambertian & N/A & Convex & Class 2, 5\\
+  Silver~\cite{silver1980determining} & Opaque & N/A & Bright & Non-Lambertian & N/A & Convex & Class 1, 2\\
+  Hertzmann~\cite{hertzmann2005example} & Opaque & N/A & Bright & Non-Lambertian & N/A & Convex & Class 1, 2, 3, 5\\
+  Zickler~\cite{zickler2002helmholtz} & Opaque & N/A & Bright & Non-Lambertian & N/A & Convex & Class 3, 5\\
+  Furukawa~\cite{furukawa2010accurate} & Opaque & Textured & N/A & Lambertian & N/A & Convex & Class 3, 4\\
+  Goesele~\cite{goesele2006multi} & Opaque & Textured & N/A & Lambertian & N/A & Convex & Class 3, 4\\
+  Vogiatzis~\cite{vogiatzis2007multiview} & Opaque & Textured & N/A & Lambertian & N/A & Convex & Class 3, 4\\
+  Szeliski~\cite{szeliski1993rapid} & Opaque & N/A & N/A & N/A & N/A & Convex & Class 1-6\\
+  Tarini~\cite{tarini2002marching} & Opaque & N/A & N/A & N/A & N/A & Convex & Class 1-6\\
+  Matusik~\cite{matusik2002efficient} & Opaque & N/A & N/A & N/A & N/A & Convex & Class 1-6\\
+  \hline
+  \end{tabular}
+  \caption{Algorithm classification based on the new taxonomy}
+  \label{tab:algo_taxo}
+\end{sidewaystable}
+
+\begin{sidewaystable}[h]
+  \centering
+  \begin{tabular}{c||l}
+  \hline
+  Class \# & Techniques\\
+  1 & Horn~\cite{horn1970shape}, Woodham~\cite{woodham1980photometric}, Hayakawa~\cite{hayakawa1994photometric}, Belhumeur~\cite{belhumeur1999bas}, Alldrin~\cite{alldrin2007resolving}, \\
+  & Inokuchi~\cite{inokuchi1984range}, Szeliski~\cite{szeliski1993rapid}, Tarini~\cite{tarini2002marching}, Matusik~\cite{matusik2002efficient}\\
+  2 & Coleman~\cite{coleman1982obtaining}, Barsky~\cite{barsky20034}, Schluns~\cite{schluns1993photometric}, Sato~\cite{sato1994temporal}, Mallick~\cite{mallick2005beyond}, \\
+    & Alldrain~\cite{alldrin2008photometric}, Goldman~\cite{goldman2010shape}, Zickler~\cite{zickler2002helmholtz}, Silver~\cite{silver1980determining}, Hertzmann~\cite{hertzmann2005example}\\
+    & Inokuchi~\cite{inokuchi1984range}, Szeliski~\cite{szeliski1993rapid}, Tarini~\cite{tarini2002marching}, Matusik~\cite{matusik2002efficient}\\
+  3 & Furukawa~\cite{furukawa2010accurate}, Goesele~\cite{goesele2006multi}, Vogiatzis~\cite{vogiatzis2007multiview}, Hern{\'a}ndez~\cite{esteban2004silhouette}, Faugeras~\cite{faugeras2002variational}, \\
+    & Woodham~\cite{woodham1980photometric}, Hayakawa~\cite{hayakawa1994photometric}, Belhumeur~\cite{belhumeur1999bas}, Alldrin~\cite{alldrin2007resolving}\\
+    & Szeliski~\cite{szeliski1993rapid}, Tarini~\cite{tarini2002marching}, Matusik~\cite{matusik2002efficient}\\
+  4 & \\
+  5 & Coleman~\cite{coleman1982obtaining}, Barsky~\cite{barsky20034}, Schluns~\cite{schluns1993photometric}, Sato~\cite{sato1994temporal}, Mallick~\cite{mallick2005beyond}, \\
+    & Alldrain~\cite{alldrin2008photometric}, Goldman~\cite{goldman2010shape}, Zickler~\cite{zickler2002helmholtz}, Silver~\cite{silver1980determining}, Hertzmann~\cite{hertzmann2005example}\\
+  6 & \\
+  \hline
+  \end{tabular}
+  \caption{Algorithm classification based on the new taxonomy. The order of the properties are: 1(textureless), 2(textured), 3(Lambertian), 4(non-Lambertian), 5(bright), 6(dark).}
+  \label{tab:algo_taxo}
+\end{sidewaystable}
