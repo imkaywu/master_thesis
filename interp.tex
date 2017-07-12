@@ -37,7 +37,7 @@ We use one object shown in Figure~\ref{fig:synth_data}, and four property settin
   (d) & 0.8 & 0.8 & 0.5 & 0.2 & MVS, PS, SL\\
   \hline
   \end{tabular}
-  \caption{Property lists of the test objects. Link to the labels in Figure~\ref{fig:training_labeled}, (a): dark blue rectangle, (b): dark green rectangle, (c): light blud rectangle, (d): light green rectangle.}
+  \caption{Property lists of the test objects.}
   \label{tab:prop_list_synth_data}
 \end{table}
 
@@ -56,7 +56,7 @@ We use one object shown in Figure~\ref{fig:synth_data}, and four property settin
 \end{figure}
 
 Now we show both the quantitative results and qualitative results of the test objects, and see if the results is consistent with the techniques selected by our abstraction.
-\begin{figure}[h!]
+\begin{figure}[!htbp]
 \centering
 \begin{tabular}{ccccc}
   Quantitative results & ~ & Qualitative results & ~\\
@@ -91,26 +91,66 @@ Now we show both the quantitative results and qualitative results of the test ob
 \textbf{Case 3\&4} All three algorithms perform relatively well, which is also consistent to the results returned by the mapping, as shown in Table~\ref{tab:prop_list_synth_data} (c) - (d).
 
 \section{Real-world Datasets}
-We used a similar setup to the synthetic settings and captured a real world dataset for 11 objects. The property of these objects are listed in Table~\ref{tab:prop_list_real_data}.
-\begin{table}[h]
+We used a similar setup to the synthetic settings and captured a real world dataset for nine objects. The property of these objects are listed in Table~\ref{tab:prop_list_real_data}.
+
+\begin{table}[!htbp]
+  \centering
+  \begin{tabular}{*{9}{c}}
+  \multicolumn{3}{l}{\includegraphics[width=0.33\textwidth]{interp/real_world_obj/box/box}} &
+  \multicolumn{3}{l}{\includegraphics[width=0.33\textwidth]{interp/real_world_obj/cat0/cat0}} &
+  \multicolumn{3}{l}{\includegraphics[width=0.33\textwidth]{interp/real_world_obj/cat1/cat1}}\\
+  \includegraphics[width=0.1\textwidth]{interp/real_world_obj/box/base_00} &
+  \includegraphics[width=0.1\textwidth]{interp/real_world_obj/box/base_01} & 
+  \includegraphics[width=0.1\textwidth]{interp/real_world_obj/box/base_02} &
+  \includegraphics[width=0.1\textwidth]{interp/real_world_obj/cat0/base_00} & 
+  \includegraphics[width=0.1\textwidth]{interp/real_world_obj/cat0/base_01}& &
+  \includegraphics[width=0.1\textwidth]{interp/real_world_obj/cat1/base_00} &\\
+  \multicolumn{3}{c}{(a). box} & \multicolumn{3}{c}{(b). cat0} & \multicolumn{3}{c}{(c). cat1} \\
+  \multicolumn{3}{l}{\includegraphics[width=0.33\textwidth]{interp/real_world_obj/cup/cup}} &
+  \multicolumn{3}{l}{\includegraphics[width=0.33\textwidth]{interp/real_world_obj/dino/dino}} &
+  \multicolumn{3}{l}{\includegraphics[width=0.33\textwidth]{interp/real_world_obj/house/house}}\\
+  \includegraphics[width=0.1\textwidth]{interp/real_world_obj/cup/base_00} & & &
+  \includegraphics[width=0.1\textwidth]{interp/real_world_obj/dino/base_00} & 
+  \includegraphics[width=0.1\textwidth]{interp/real_world_obj/dino/base_01} & 
+  \includegraphics[width=0.1\textwidth]{interp/real_world_obj/dino/base_02} &
+  \includegraphics[width=0.1\textwidth]{interp/real_world_obj/house/base_00} &
+  \includegraphics[width=0.1\textwidth]{interp/real_world_obj/house/base_01} & \\
+  \multicolumn{3}{c}{(d). cup} & \multicolumn{3}{c}{(e). dino} & \multicolumn{3}{c}{(f). house} \\
+  \multicolumn{3}{l}{\includegraphics[width=0.33\textwidth]{interp/real_world_obj/pot/pot}} &
+  \multicolumn{3}{l}{\includegraphics[width=0.33\textwidth]{interp/real_world_obj/statue/statue}} &
+  \multicolumn{3}{l}{\includegraphics[width=0.33\textwidth]{interp/real_world_obj/vase/vase}}\\
+  \includegraphics[width=0.1\textwidth]{interp/real_world_obj/pot/base_00} &
+  \includegraphics[width=0.1\textwidth]{interp/real_world_obj/pot/base_01} & &
+  \includegraphics[width=0.1\textwidth]{interp/real_world_obj/statue/base_00} & & &
+  \includegraphics[width=0.1\textwidth]{interp/real_world_obj/vase/base_00} &
+  \includegraphics[width=0.1\textwidth]{interp/real_world_obj/vase/base_01}\\
+  \multicolumn{3}{c}{(g). pot} & \multicolumn{3}{c}{(h). statue} & \multicolumn{3}{c}{(i). vase} \\
+  \end{tabular}
+  \caption{Material of Real-world objects.}
+  \label{fig:real_data_material}
+\end{table}
+
+\begin{table}[!htbp]
   \centering
   \begin{tabular}{l*{5}{c}}
   \hline
   \textbf{Property} & Texture & Albedo & Specular & Roughness & Best-suited Algo.\\
   \hline
-  box & 0.8 & 0.8 & 0.2 & 0.2 & MVS, SL, PS\\
-  cat0 & 0.5 & 0.2 & 0.5 & 0.2 & None\\
-  cat1 & 0.2 & 0.2 & 0.8 & 0.2 & None\\
-  cup & 0.2 & 0.8 & 0.8 & 0.2 & PS, SL\\
-  dino & 0.2 & 0.5 & 0.2 & 0.8 & PS, SL\\
-  house & 0.8 & 0.5,0.8 & 0.8 & 0.2 & MVS\\
-  pot & 0.5 & 0.5 & 0.2 & 0.2 & MVS, SL\\
-  status & 0.2 & 0.8 & 0.5 & 0.2 & PS, SL\\
-  vase & 0.8 & 0.2 & 0.8 & 0.2 & None\\
+  box & 0.2 & 0.8 & 0.2 & 0.2 & MVS, SL, PS\\
+      & 0.5 & 0.2 & 0.2 & 0.5 & \\
+      & 0.8 & 0.8 & 0.2 & 0.5 & \\
+  cat0 & 0.5 & 0.5, 0.2 & 0.2 & 0.2 & None\\
+  cat1 & 0.2 & 0.2 & 0.2 & 0.2 & None\\
+  cup & 0.2 & 0.8 & 0.2 & 0.2 & PS, SL\\
+  dino & 0.2 & 0.5, 0.8, 0.8 & 0.2 & 0.5 & SL\\
+  house & 0.8 & 0.8, 0.2 & 0.2 & 0.2 & MVS\\
+  pot & 0.5 & 0.2, 0.5 & 0.2 & 0.2 & MVS, SL\\
+  status & 0.2 & 0.8 & 0.2 & 0.5 & PS, SL\\
+  vase & 0.8 & 0.8, 0.2 & 0.2 & 0.2 & None\\
   \hline
   \end{tabular}
   \caption{Property list for the real-world objects}
-  \label{tab:prop_list_real_data}
+  \label{tab:real_data_prop_list}
 \end{table}
 
 In Figure~\ref{fig:test_real_world_obj}, we show the reconstructions of the real-world dataset. Since we don't have the ground truth, no quantitative measures are available, only visual inspection is used. We can show that the qualitative results match the results returned by the mapping.

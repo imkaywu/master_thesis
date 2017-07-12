@@ -72,35 +72,25 @@ We evaluate the performance of PMVS in terms of accuracy and completeness under 
 \subsection{Property and Reconstruction}
 We investigate how each property affects the reconstruction in terms of accuracy and completeness.
 
-\textbf{Texture} - \textit{(a), (b), (c)}. As the texture level increases, the accuracy and completeness both increase. Thus texture has a positive correlation with the accuracy and completeness of the reconstruction.
+\textbf{(a), (b), (c) Texture} As the texture level increases, the accuracy and completeness both increase. Thus texture has a positive correlation with the accuracy and completeness of the reconstruction.
 
-\textbf{Specular} - \textit{(b), (d), (f)}. As the specular level goes up, the accuracy and completeness of the reconstruction gets worse. Thus specular has an negative correlation with the accuracy and completeness of the reconstruction.\begin{figure}[!htbp]
+\textbf{(b), (d) Specular} As the specular level goes up, the accuracy and completeness of the reconstruction gets worse. Thus specular has an negative correlation with the accuracy and completeness of the reconstruction. See Figure~\ref{fig:mvs_spec}.
+\begin{figure}[!htbp]
 \begin{tabular}{ccc}
-\includegraphics[width=0.33\textwidth]{mapping/mvs_spec}&
-\includegraphics[width=0.33\textwidth]{mapping/mvs_spec_01}&
-\includegraphics[width=0.33\textwidth]{mapping/mvs_spec_00}\\
+\includegraphics[width=0.33\textwidth]{mapping/mvs_spec/mvs_spec}&
+\includegraphics[width=0.33\textwidth]{mapping/mvs_spec/mvs_spec_01}&
+\includegraphics[width=0.33\textwidth]{mapping/mvs_spec/mvs_spec_00}\\
 (a) Image formation & (b) $V_1$ & (c) $V_2$\\
 \end{tabular}
 \caption{(a) shows the reflection of light off a specular surface. $V_1$ received the diffuse component while $V_2$ receives the specular component. (b), (c) shows the images observed from these two views. The specular area (red circle) observed in $V_2$ is visible in $V_1$.}
 \label{fig:mvs_spec}
 \end{figure}
 
-\textbf{Texture and Specular}
-
-\textbf{Albedo and Specular}
-
-\textbf{Albedo} - \textit{(a), (d), (e)}. we can tell that albedo doesn't have an effect when texture or roughness changes. But when the specular level changes, albedo has an effect on both accuracy and completeness of the reconstruction.
-
-\textbf{Roughness} - \textit{(c), (e), (f)}. We can see that roughness doesn't have a significant impact on the accuracy and completeness of reconstruction.
-
-\subsubsection{Pairwise properties}
-Now let's investigate the influence of pairwise properties. We observed that (b), and (d) has significant changes in terms of accuracy and completeness when one property changes while the other is fixed.
-
 \textbf{(b) Texture and Specular} 
-For a fixed texture, as the specularity goes up, the accuracy and the completeness goes up, which is consistent to previous observations. Besides, for a lower value texture, the effect of specular is more substantial than that for a higher value texture. However, we observe that, the specular has a bigger impact on lower textured surface, this can be explain as: the specular lobe is observed only by cameras positioned and oriented towards the specular lobe, thus only a highlight is visible. Thus cameras positioned otherwise would observed the true surface. The reconstruction exploit the texture information provided by those latter cameras, and thus is able to reconstruct the specular surface. If the surface texture level decreases, as shown before, the reconstruction deteriorates.
+For a fixed texture, as the specularity goes up, the accuracy and the completeness goes up, which is consistent to previous observations. Besides, for a lower value texture, the effect of specular is more substantial than that for a higher value texture. However, we observe that, the specular has a bigger impact on lower textured surface, this can be explain as: the specular lobe is observed only by cameras positioned and oriented towards the specular lobe, thus only a highlight is visible, as shown in Figure~\ref{fig:mvs_spec} $V_2$. Thus cameras positioned otherwise would observed the true surface, as shown in Figure~\ref{fig:mvs_spec} $V_1$. The reconstruction exploits the texture information provided by views like $V_1$, and thus is able to reconstruct the specular surfaces. If the surface texture level decreases, as shown before, the reconstruction deteriorates.
 
 \textbf{(d) Albedo and Specular} 
-For a fixed albedo, as the specular goes up, the accuracy and completeness both goes down, which is consistent to previous observations. However, the effect of specular is more substantial for a lower value albedo than that for a higher value albedo.
+For a fixed albedo, as the specular goes up, the accuracy and completeness both goes down, which is consistent to previous observations. However, the effect of specular is more substantial for a lower value albedo than that for a higher value albedo. See Figure~\ref{fig:mvs_alb_spec}.
 \begin{figure}[!htbp]
 \centering
 \begin{tabular}{ccc}
@@ -118,7 +108,7 @@ For a fixed albedo, as the specular goes up, the accuracy and completeness both 
 \end{figure}
 
 \textbf{(f) Specular and Roughness} 
-The effect of roughness is that it can diminish the specular and make the surface appearch diffuse. Since specular has a negative impact on the reconstruction, in theory, roughness should have a positive impact on the reconstruction. However, since this test is conducted on highly textured surface, as shown before, the reconstruction is still good for specular, highly textured surface, refer to~\ref{fig:mvs_depend_check}(b). That's why the effect of roughness on specualar seem insignificant. Since for this method, these two property are closed related, we'll just consider specular only, and ignore roughness. since a low specular achieve almost the same result as a high specular and rough surface, we would just combine these two factors into a single one, and consider the specular only for simplicity.
+The effect of roughness is that it can diminish the specular and make the surface appearch diffuse. Since specular has a negative impact on the reconstruction, in theory, roughness should have a positive impact on the reconstruction. However, since this test is conducted on highly textured surface, as discussed before, the reconstruction is still good for specular, highly textured surface, refer to~\ref{fig:mvs_depend_check}(b). That's why the effect of roughness on specualar seem insignificant. Since for this method, these two property are closed related, we'll just consider specular only, and ignore roughness. since a low specular achieve almost the same result as a high specular and rough surface, we would just combine these two factors into a single one, and consider the specular only for simplicity.
 
 \textbf{Conclusion} 
 The most important property is, high texture would lead to good reconstruction. Specular effect would deteriorate the reconstruction for lower textured and lower albedo surfaces. Since low specular and high specular + rough achieves almost the same results, we combine these two factors together and consider specular only.
@@ -195,19 +185,19 @@ We evaluate the performance of example-based PS in terms of angular difference u
 \label{fig:ps_depend_check}
 \end{figure}
 
-\subsection{Single property}
-\textbf{Texture} - \textit{(a), (b), (c)}. As the texture level increases, all statistic measures of the angular difference remain almost the same. Thus texture doesn't affect the reconstruction of the chosen PS algorithm.
+\subsection{Property and Reconstruction}
+We investigate how each property affects the reconstruction in terms of the statistics of the angular difference.
 
-\textbf{Albedo} - \textit{(a), (d), (e)}. As the albedo level increases, all statistic measures of the angular difference decreases. Thus the albedo has a positive correlation to the reconstruction.
+\textbf{(a), (b), (c) Texture} As the texture level increases, all statistic measures of the angular difference remain almost the same. Thus texture doesn't affect the reconstruction of the chosen PS algorithm.
 
-\textbf{Specular} - \textit{(b), (d), (f)}. As the specular level goes up, all statistic measures of the angular difference increases. Thus specular has an negative impact on the reconstruction.
+\textbf{(a), (d), (e) Albedo} As the albedo level increases, all statistic measures of the angular difference decreases. Thus the albedo has a positive correlation to the reconstruction.
 
-\textbf{Roughness} - \textit{(c), (e), (f)}. The effect of roughness is a bit complicated. Generally, it will improve the reconstruction as the roughness goes higher. However, as shown in Figure~\ref{fig:ps_depend_check} (f), the roughness will cause worse reconstruction for medium high value, which will be discussed more later. As the surface roughness increases, the size of the highlight increases, making elimination of specularity harder. However, if the roughness increases enough, the surface begins to look diffuse.
+\textbf{(b), (d), (f) Specular} As the specular level goes up, all statistic measures of the angular difference increases. Thus specular has an negative impact on the reconstruction.
 
-\subsection{Pairwise properties}
-All the pairwise relations are straightforward except for (f).
+\textbf{(c), (e), (f) Roughness} The effect of roughness is a bit complicated. Generally, it will improve the reconstruction as the roughness goes higher. However, as shown in Figure~\ref{fig:ps_depend_check} (f), the roughness will cause worse reconstruction for medium high value, which will be discussed more later. As the surface roughness increases, the size of the highlight increases, making elimination of specularity harder. However, if the roughness increases enough, the surface begins to look diffuse.
 
 \textbf{(b) Texture and Specular}
+For a fixed texture, as the specular increases, only the specular regions exhibit erroneous normal estimation, the rest of the surface is reliably estimated. That is why the median value is non-increasing while the mean value increases as is shown in Figure~\ref{fig:ps_depend_check} (b), and Figure~\ref{fig:ps_tex_spec}.
 \begin{figure}[!htbp]
 \centering
 \begin{tabular}{ccc}
@@ -220,11 +210,11 @@ All the pairwise relations are straightforward except for (f).
 (a) spec: 0.2 & (b) spec: 0.5 & (c) spec: 0.8\\
 \end{tabular}
 \caption{(a)-(c). The texture is set as 0.5. According to energy conservation, as the specular component increases, the diffuse component decreases.}
-\label{fig:mvs_alb_spec}
+\label{fig:ps_tex_spec}
 \end{figure}
 
-\textbf{(b) Albedo and Specular}
-For 
+\textbf{(d) Albedo and Specular}
+For a fixed albedo, as the specular level increases, the normal estimation of the specular areas gets worse while the rest of the surface are reliably estimated, see Figure~\ref{fig:ps_alb_spec} (a) - (c), and Figure~\ref{fig:ps_depend_check} (d). For a fix specular, as the albedo level increases, the normal estimation of the specular areas gets better, see Figure~\ref{fig:ps_alb_spec} (d) - (f), and Figure~\ref{fig:ps_depend_check} (d).
 \begin{figure}[!htbp]
 \centering
 \begin{tabular}{ccc}
@@ -244,10 +234,10 @@ For
 (d) albedo: 0.2 & (e) albedo: 0.5 & (f) albedo: 0.8\\
 \end{tabular}
 \caption{(a)-(c). The albedo is set as 0.2, (d)-(f). the specular is set as 0.2. According to energy conservation, as the specular component increases, the diffuse component decreases.}
-\label{fig:mvs_alb_spec}
+\label{fig:ps_alb_spec}
 \end{figure}
 
-\textbf{(f) Specularity and Roughness} 
+\textbf{(f) Specular and Roughness} 
 For a fixed specularity, if the specularity is lower, the effect of roughness is less noticeable, whereas if the specularity is higher, the effect of roughness becomes more substantial. We've also noticed a `peculiar' case when roughness is 0.5, it makes the reconstruction worse, which is counter-intuitive. However, we argue that it's because the roughness effect is not strong enough to cancel out the specularity, thus causing a much larger area of `blurred' specularity, which makes the reconstruction worse. This effect is also demonstrated in the training stage, see Figure~\ref{fig:ps_outlier} for some visual examples.
 \begin{figure}[h!]
 \centering
@@ -304,7 +294,7 @@ We evaluate the performance of Gray-code SL in terms of accuracy and completenes
   \hline
   \end{tabular}
   \caption{Property settings of the pairwise conditions used for the dependency check of the Structured Light algorithms.}
-  \label{fig:sl_depend_check_params}
+  \label{tab:sl_depend_check_params}
 \end{table}
 
 \begin{figure}[!htbp]
@@ -323,23 +313,37 @@ We evaluate the performance of Gray-code SL in terms of accuracy and completenes
 \label{fig:sl_depend_check}
 \end{figure}
 
-\subsection{Single property}
-A depth check step is performed to remove erroneous depth, thus the accuracy remain almost constant across all cases.
+\subsection{Property and Reconstruction}
+We investigate how each property affects the reconstruction in terms of accuracy and completeness. A depth check step is performed to remove erroneous depth, thus the accuracy remain almost constant across all cases.
 
-\textbf{Texture} - \textit{(a), (b), (c)}. As the texture level increases, the accuracy and completeness remain remain almost constant. Thus texture doesn't affect the reconstruction of the chosen SL algorithm.
+\textbf{(a), (b), (c) Texture} As the texture level increases, the accuracy and completeness remain remain almost constant. Thus texture doesn't affect the reconstruction of the chosen SL algorithm.
 
-\textbf{Albedo} - \textit{(a), (d), (e)}. As the albedo level increases, the accuracy remain almost constant while the completeness increases. Thus albedo has a positive correlation with completeness.
+\textbf{(a), (d), (e) Albedo} As the albedo level increases, the accuracy remain almost constant while the completeness increases. Thus albedo has a positive correlation with completeness.
 
-\textbf{Specular} - \textit{(b), (d), (f)}. As the specular level goes up, the accuracy remain almost constant while the completeness of the reconstruction decreases. Thus specular has an negative correlation with the completeness of the reconstruction.
+\textbf{(b), (d), (f) Specular} As the specular level goes up, the accuracy remain almost constant while the completeness of the reconstruction decreases. Thus specular has an negative correlation with the completeness of the reconstruction.
 
-\textbf{Roughness} - \textit{(c), (e), (f)}. As the roughness level increases, the accuracy remain almost constant while the completeness increases. Thus roughness has a positive correlation with completeness.
+\textbf{(c), (e), (f) Roughness} As the roughness level increases, the accuracy remain almost constant while the completeness increases. Thus roughness has a positive correlation with completeness.
 
-\subsection{Pairwise properties}
 \textbf{(d) Albedo and Specularity} 
-For a fixed albedo, the completeness goes down as the specularity goes up for low albedo surface, this effect becomes less substantial when the albedo increases. Thus we conclude that the effect of specular is most significant when the albedo is low.
+For a fixed albedo, the completeness goes down as the specularity goes up for low albedo surface, see Figure~\ref{fig:sl_alb_spec} (a)-(c). This effect becomes less substantial when the albedo increases. For a fixed specular, the completeness goes up as the albedo increases, see~Figure~\ref{fig:sl_alb_spec} (d)-(f). Thus we conclude that the effect of specular is most significant when the albedo is low. See Figure~\ref{fig:sl_alb_spec} (d).
+\begin{figure}[!htbp]
+\centering
+\begin{tabular}{ccc}
+\includegraphics[width=0.33\textwidth]{mapping/sl_alb_spec/sl_alb_spec_0202}&
+\includegraphics[width=0.33\textwidth]{mapping/sl_alb_spec/sl_alb_spec_0205}&
+\includegraphics[width=0.33\textwidth]{mapping/sl_alb_spec/sl_alb_spec_0208}\\
+(a) specular: 0.2 & (b) specular: 0.5 & (c) specular: 0.8\\
+\includegraphics[width=0.33\textwidth]{mapping/sl_alb_spec/sl_alb_spec_0202}&
+\includegraphics[width=0.33\textwidth]{mapping/sl_alb_spec/sl_alb_spec_0502}&
+\includegraphics[width=0.33\textwidth]{mapping/sl_alb_spec/sl_alb_spec_0802}\\
+(d) albedo: 0.2 & (e) albedo: 0.5 & (f) albedo: 0.8\\
+\end{tabular}
+\caption{(a)-(c). The albedo is set as 0.2, (d)-(e). the specular is set as 0.2. According to energy conservation, as the specular component increases, the diffuse component decreases.}
+\label{fig:sl_alb_spec}
+\end{figure}
 
 \textbf{(f) Specular and Roughness} 
-As the specular increases, the completeness decreases.
+For a fixed roughness, as the specular increases, the completeness decreases, see Figure~\ref{fig:sl_spec_rough}. For a fixed specular, as the roughness goes up, the completeness increases, see Figure~\ref{fig:sl_spec_rough} (d)-(f).
 \begin{figure}[!htbp]
 \centering
 \begin{tabular}{ccc}
@@ -353,7 +357,7 @@ As the specular increases, the completeness decreases.
 (d) roughness: 0.2 & (e) roughness: 0.5 & (f) roughness: 0.8\\
 \end{tabular}
 \caption{(a)-(c). The roughness is set as 0.2, (d)-(e). the specular is set as 0.8. According to energy conservation, as the specular component increases, the diffuse component decreases.}
-\label{fig:mvs_alb_spec}
+\label{fig:sl_spec_rough}
 \end{figure}
 
 \textbf{Conclusion} the properties that have an effect on the SL are: texture, albedo, specularity, as shown in Table. Therefore, we will only consider these three properties for all forthcoming discussion of SL.
@@ -376,7 +380,7 @@ As the specular increases, the completeness decreases.
 For each technique, we generate the synthetic dataset using only the dependent properties, thus there are $L\times L\times L$ different combinations for each technique, where $L$ is the number of levels for each property.
 
 \subsection{PMVS}
-The performance of PMVS under difference combinations of properties is shown in Figure~\ref{fig:mvs_training}. The conditions that PMVS works well is listed in Table~\ref{fig:mvs_training_result}.
+The performance of PMVS under difference combinations of properties is shown in Figure~\ref{fig:mvs_training}. The conditions that PMVS works well is listed in Table~\ref{tab:mvs_training_result}.
 \begin{figure}[!htbp]
 \begin{tabular}{ccc}
 \includegraphics[width=0.33\textwidth]{mapping/training/mvs_train_spec_02}&
@@ -420,7 +424,7 @@ The performance of PMVS under difference combinations of properties is shown in 
 \end{table}
 
 \subsection{Example-based PS}
-The performance of example-based PS under difference combinations of properties is shown in Figure~\ref{fig:ps_training}. The conditions that example-based PS works well is listed in Table~\ref{fig:ps_training_result}.
+The performance of example-based PS under difference combinations of properties is shown in Figure~\ref{fig:ps_training}. The conditions that example-based PS works well is listed in Table~\ref{tab:ps_training_result}.
 \begin{figure}[!htbp]
 \begin{tabular}{ccc}
 \includegraphics[width=0.33\textwidth]{mapping/training/ps_rough_02}&
@@ -465,7 +469,7 @@ The performance of example-based PS under difference combinations of properties 
 \end{table}
 
 \subsection{Gray-code SL}
-The performance of Gray code SL under difference combinations of properties is shown in Figure~\ref{fig:sl_training}. The conditions that PMVS works well is listed in Table~\ref{fig:sl_training_result}.
+The performance of Gray code SL under difference combinations of properties is shown in Figure~\ref{fig:sl_training}. The conditions that PMVS works well is listed in Table~\ref{tab:sl_training_result}.
 \begin{figure}[!htbp]
 \begin{tabular}{ccc}
 \includegraphics[width=0.33\textwidth]{mapping/training/sl_train_rough_02}&
