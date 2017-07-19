@@ -105,12 +105,19 @@
 \usepackage{checkend}	% better error messages on left-open environments
 \usepackage{graphicx}	% for incorporating external images
 \graphicspath{ {img/} } % images are kept in a folder named img under the current directory
+{%
+\setlength{\fboxsep}{0pt}%
+\setlength{\fboxrule}{4pt}%
+}%
 
 %% booktabs: provides some special commands for typesetting tables as used
 %% in excellent journals.  Ignore the examples in the Lamport book!
 \usepackage{booktabs}
+% \newcommand{\tabitem}{~~\llap{\textbullet}~~}
 %% multi-row and multi-column table 
 \usepackage{multirow, bigstrut}
+%% table with itemize
+\usepackage{tabularx}
 
 %% listings: useful support for including source code listings, with
 %% optional special keyword formatting.  The \lstset{} causes

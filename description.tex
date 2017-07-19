@@ -99,10 +99,23 @@ We select the subset of the properties used for object taxonomy in Chapter~\ref{
   \centering
   \begin{tabular}{l|*{5}{c}}
   \hline
-  \textbf{Component} & Texture & Lightness & Reflectance & Roughness & Concavity\\
+  \textbf{Property} & Texture & Lightness & Reflectance & Roughness & Concavity\\
   \hline
   \end{tabular}
-  \caption{Model of the 3D reconstruction problem.}
+  \caption{Model of the 3D reconstruction problem: properties}
+  \label{tab:3DRecon_model}
+\end{table}
+
+In addition to the properties, there are requirements that can be imposed to the final reconstruction result. These requirements include but not exclude:
+
+\begin{table}[h]
+  \centering
+  \begin{tabular}{l|*{5}{c}}
+  \hline
+  \textbf{Requirement} & Accuracy-first & Completeness-first & Orientation-first & Roughness & Concavity\\
+  \hline
+  \end{tabular}
+  \caption{Model of the 3D reconstruction problem: requirements}
   \label{tab:3DRecon_model}
 \end{table}
 

@@ -1,7 +1,7 @@
 %% The following is a directive for TeXShop to indicate the main file
 %%!TEX root = diss.tex
 
-\chapter{A Mapping of 3D Reconstruction Techniques}
+\chapter{A Mapping of 3D Reconstruction}
 \label{ch:3DRecon_Mapping}
 Most of the vision work focuses on developing algorithmic novelties, and very few investigates the rigorous conditions under which these algorithms work. Thus this knowledge is only known empirically, without a rigorous definition of the problem or application domain or the conditions. This section builds upon the 3D description proposed in Chapter~\ref{ch:3DRecon_Desc}, and attempts to find out the optimal algorithms under a pre-defined condition.
 
@@ -260,7 +260,7 @@ For a fixed specularity, if the specularity is lower, the effect of roughness is
   (j).080805 & (k). normal map & (l). angle diff distribution\\
 \end{tabular}
 \caption{The `peculiar' effect of roughness on PS. The order of the property is: albedo, specular, and roughness, thus 080205 means albedo: 0.8, specular: 0.2, and roughness: 0.5}
-\label{fig:ps_outlier}
+\label{fig:ps_spec_rough}
 \end{figure}
 
 \textbf{Conclusion} the properties that have an effect on the PS are: albedo, specularity, and roughness, as shown in Table~\ref{tab:ps_depend_prop}. Therefore, we will only consider these three properties for all forthcoming discussion of PS.
@@ -376,7 +376,7 @@ For a fixed roughness, as the specular increases, the completeness decreases, se
 \end{table}
 
 
-\section{Training and mapping}
+\section{Training}
 For each technique, we generate the synthetic dataset using only the dependent properties, thus there are $L\times L\times L$ different combinations for each technique, where $L$ is the number of levels for each property.
 
 \subsection{PMVS}
@@ -400,19 +400,23 @@ The performance of PMVS under difference combinations of properties is shown in 
 \label{fig:mvs_training}
 \end{figure}
 
+We make the following observations from the training results
+\begin{itemize}
+\item (a)-(c): albedo could counteract the effect of specular, take the case when $\text{tex}=0.5$ as an example, as the albedo increases, the result becomes better. The effect albedo has on specular has to do with surface texture, \ie higher texture, more significant the influence is.
+\item (d)-(f): specular has a bigger impact on low texture surfaces than on high texture ones, \ie for low textured surface, even low specular would result in bad results whereas for high textured surface, satisfactory results could be achieved under high specular cases. This is illustrated in Figure~\ref{fig:mvs_spec}
+\item (g)-(i): 
+\end{itemize}
+
+From all the training results, we could derive the problem conditions that PMVS could reliably work on and get satisfactory results. Those conditions are in Table~\ref{tab:mvs_traing_result}.
 \begin{table}[!htbp]
   \centering
   \begin{tabular}{l*{4}{c}}
   \hline
   \textbf{Metric} & Texture & Albedo & Specular & Roughness\\
   \hline
-  Accuracy \&  & 0.5 & 0.5 & 0.2 & -\\
-  Completeness & 0.5 & 0.8 & 0.2 & -\\
-               & 0.8 & 0.2 & 0.2 & -\\
-               & 0.8 & 0.5 & 0.2 & -\\
-               & 0.8 & 0.8 & 0.2 & -\\
-               & 0.5 & 0.8 & 0.5 & - \\
-               & 0.5 & 0.8 & 0.5 & -\\
+  Accuracy \&  & 0.8 & 0.2 & 0.2 & -\\
+  Completeness & 0.8 & 0.2 & 0.5 & -\\
+               & 0.8 & 0.2 & 0.8 & -\\
                & 0.8 & 0.5 & 0.5 & -\\
                & 0.8 & 0.8 & 0.5 & -\\
                & 0.8 & 0.5 & 0.8 & -\\
@@ -423,7 +427,7 @@ The performance of PMVS under difference combinations of properties is shown in 
   \label{tab:mvs_traing_result}
 \end{table}
 
-\subsection{Example-based PS}
+\subsection{Example-based PS (EPS)}
 The performance of example-based PS under difference combinations of properties is shown in Figure~\ref{fig:ps_training}. The conditions that example-based PS works well is listed in Table~\ref{tab:ps_training_result}.
 \begin{figure}[!htbp]
 \begin{tabular}{ccc}
@@ -444,23 +448,31 @@ The performance of example-based PS under difference combinations of properties 
 \label{fig:ps_training}
 \end{figure}
 
+We make the following observations from the training results
+\begin{itemize}
+\item (a)-(c): albedo has a positive effect on the reconstruction. Roughness has a more complicated effect on reconstruction, \ie as roughness would blur the specular area, it might actually make the results worse, see Figure~\ref{fig:ps_spec_rough}.
+\item (d)-(f): the effect of specular is that it will create `spikes', as shown in Figure~\ref{fig:ps_alb_spec}, and albedo can effective alleviate that.
+\item (g)-(i): as stated previous, roughness has a more complicated effect on reconstruction, \ie as roughness would blur the specular area, it might actually make the results worse.
+\end{itemize}
+
+From all the training results, we could derive the problem conditions that EPS could reliably work on and get satisfactory results. Those conditions are in Table~\ref{tab:ps_traing_result}.
 \begin{table}[!htbp]
   \centering
   \begin{tabular}{l*{4}{c}}
   \hline
   \textbf{Metric} & Texture & Albedo & Specular & Roughness\\
   \hline
-  Angle difference & - & 0.2 & 0.2 & 0.8\\
+  Angle difference & - & 0.8 & 0.2 & 0.2\\
+                   & - & 0.8 & 0.5 & 0.2\\
+                   & - & 0.8 & 0.8 & 0.2\\
+                   & - & 0.2 & 0.2 & 0.8\\
                    & - & 0.2 & 0.5 & 0.8\\
                    & - & 0.2 & 0.8 & 0.8\\
                    & - & 0.5 & 0.2 & 0.8\\
                    & - & 0.5 & 0.5 & 0.8\\
                    & - & 0.5 & 0.8 & 0.8\\
-                   & - & 0.8 & 0.2 & 0.2\\
                    & - & 0.8 & 0.2 & 0.8\\
-                   & - & 0.8 & 0.5 & 0.2\\
                    & - & 0.8 & 0.5 & 0.8\\
-                   & - & 0.8 & 0.8 & 0.2\\
                    & - & 0.8 & 0.8 & 0.8\\
   \hline
   \end{tabular}
@@ -468,7 +480,7 @@ The performance of example-based PS under difference combinations of properties 
   \label{tab:ps_training_result}
 \end{table}
 
-\subsection{Gray-code SL}
+\subsection{Gray-code SL (GSL)}
 The performance of Gray code SL under difference combinations of properties is shown in Figure~\ref{fig:sl_training}. The conditions that PMVS works well is listed in Table~\ref{tab:sl_training_result}.
 \begin{figure}[!htbp]
 \begin{tabular}{ccc}
@@ -489,40 +501,47 @@ The performance of Gray code SL under difference combinations of properties is s
 \label{fig:sl_training}
 \end{figure}
 
+From all the training results, we could derive the problem conditions that GSL could reliably work on and get satisfactory results. Those conditions are in Table~\ref{tab:sl_traing_result}.
 \begin{table}[!htbp]
   \centering
   \begin{tabular}{l*{4}{c}}
   \hline
   \textbf{Metric} & Texture & Albedo & Specular & Roughness\\
   \hline
-  Accuracy \&  & - & 0.5 & 0.2 & 0.2\\
-  Completeness & - & 0.5 & 0.5 & 0.2\\
-               & - & 0.5 & 0.8 & 0.2\\
-               & - & 0.8 & 0.2 & 0.2\\
-               & - & 0.8 & 0.5 & 0.2\\
-               & - & 0.8 & 0.8 & 0.2\\
-               & - & 0.5 & 0.2 & 0.5\\
-               & - & 0.5 & 0.5 & 0.5\\
-               & - & 0.5 & 0.8 & 0.5\\
-               & - & 0.8 & 0.2 & 0.5\\
-               & - & 0.8 & 0.5 & 0.5\\
-               & - & 0.8 & 0.8 & 0.5\\
-               & - & 0.2 & 0.2 & 0.8\\
-               & - & 0.2 & 0.5 & 0.8\\
+  Accuracy     & - & - & - & -\\
+  \hline\hline
+  Completeness & - & 0.2 & 0.5 & 0.8\\
                & - & 0.2 & 0.8 & 0.8\\
                & - & 0.5 & 0.2 & 0.8\\
                & - & 0.5 & 0.5 & 0.8\\
                & - & 0.5 & 0.8 & 0.8\\
+               & - & 0.8 & 0.2 & 0.5\\
+               & - & 0.8 & 0.5 & 0.5\\
+               & - & 0.8 & 0.8 & 0.5\\
                & - & 0.8 & 0.2 & 0.8\\
                & - & 0.8 & 0.5 & 0.8\\
                & - & 0.8 & 0.8 & 0.8\\
+               % & - & 0.5 & 0.8 & 0.5\\
+               % & - & 0.8 & 0.2 & 0.5\\
+               % & - & 0.8 & 0.5 & 0.5\\
+               % & - & 0.8 & 0.8 & 0.5\\
+               % & - & 0.2 & 0.2 & 0.8\\
+               % & - & 0.2 & 0.5 & 0.8\\
+               % & - & 0.2 & 0.8 & 0.8\\
+               % & - & 0.5 & 0.2 & 0.8\\
+               % & - & 0.5 & 0.5 & 0.8\\
+               % & - & 0.5 & 0.8 & 0.8\\
+               % & - & 0.8 & 0.2 & 0.8\\
+               % & - & 0.8 & 0.5 & 0.8\\
+               % & - & 0.8 & 0.8 & 0.8\\
   \hline
   \end{tabular}
   \caption{The conditions under which Gray code SL works well in terms of the two metrics \textit{accuracy} and \textit{completeness}.}
   \label{tab:sl_traing_result}
 \end{table}
 
-\section{Guidelines}
+\section{Mapping}
+From the training results, we can derive the problem conditions under which each algorithm works well. The next step is to find the best possible algorithm based on the problem description. This could results in multiple algorithms selected, or none selected for some cases. Nonetheless, we need to establish the rule of determining which algorithm gives the best result under the specified conditions.
 
 % \begin{figure}[!htbp]
 % \includegraphics[width=\textwidth]{mapping/training}

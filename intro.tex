@@ -7,48 +7,71 @@
 Modelling of the 3D world has been an active research topic in computer vision for decades. The goal is to reconstruct a 3D geometric model, represented by point cloud, voxel grid, depth maps, or surface mesh, from RGB or range sensors, optionally with the material of the surface. It has a wide range of applications including 3D mapping and navigation, online shopping, 3D printing, computational photography, video games, visual effects, and cultural heritage archival.
 
 % [current situation and context]\\
-We've witness a variety of tools and approaches such as Computer Aided Design (CAD) tools~\cite{CAD}, arm-mounted probes, active methods~\cite{bernardini2002building,levoy2000digital,Lidar,kinect} and passive image-based methods~\cite{kutulakos2000theory,furukawa2010accurate,faugeras2002variational,goesele2006multi} applied successfully to some sub-domains of the problem. Among the existing techniques, active techniques such as laser scanner~\cite{levoy2000digital}, structured light system (SL)~\cite{bernardini2002building}, and Photometric Stereo (PS)~\cite{woodham1980photometric}, and passive method such as Multi-view Stereo (MVS)~\cite{seitz2006comparison} have been the most successful ones. Laser scanners and structured light techniques can generate the most accurate results, but is generally complicated to set up and calibrate, time consuming to scan, and memory demanding to store and process. Photometric Stereo is able to achieve highly detailed reconstruction comparable to that of laser scanner, but the true depth information is lost due to the use of a single viewpoint. MVS requires minimal setup and works in both controlled, small scale lab setting or a outdoor, medium to large scale environments. However, the quality of the reconstruction is generally noisier, and is susceptible to the texture and material property of the surface. All these techniques requires an understanding of calibration, stereo correspondence, physics-based vision, and etc, which is no easy task to master. Furthermore, this is an extremely challenging task since it's the reverse process of image formation, which is highly likely to have more than one plausible results. To overcome this challenge, some assumptions have to be made in terms of the materials, viewpoints, and lighting, which adds additional layer of complexity to the inherit complexity of the specific reconstruction technique. A solid understanding of the interaction of lighting with surface geometry and material is a prerequisite to fully take advantage of these existing techniques.
+This is an extremely challenging task since it's the reverse process of image formation, which is highly likely to have more than one plausible results. To overcome this challenge, some assumptions have to be made in terms of the materials, viewpoints, and lighting. Thus A solid understanding of the interaction of lighting with surface geometry and material is a prerequisite to fully take advantage of the existing techniques. In the past decades, we've witness a variety of tools and approaches such as Computer Aided Design (CAD) tools~\cite{CAD}, arm-mounted probes, active methods~\cite{bernardini2002building,levoy2000digital,Lidar,kinect} and passive image-based methods~\cite{kutulakos2000theory,furukawa2010accurate,faugeras2002variational,goesele2006multi} applied successfully to some sub-domains of the problem. Among the existing techniques, active techniques such as laser scanner~\cite{levoy2000digital}, structured light system (SL)~\cite{bernardini2002building}, and Photometric Stereo (PS)~\cite{woodham1980photometric}, and passive method such as Multi-view Stereo (MVS)~\cite{seitz2006comparison} have been the most successful ones. Laser scanners and structured light techniques can generate the most accurate results, but is generally complicated to set up and calibrate, time consuming to scan, and memory demanding to store and process. Photometric Stereo is able to achieve highly detailed reconstruction comparable to that of laser scanner, but the true depth information is lost due to the use of a single viewpoint. MVS requires minimal setup and can work in both controlled, small scale lab settings or outdoor, medium to large scale environments. However, the quality of the reconstruction is generally noisier, and is susceptible to the texture and material property of the surface. All these techniques requires an understanding of calibration, stereo correspondence, physics-based vision, and etc, which is no easy task to master.
 
 % [motivation]\\
-Regardless of the success in the past and the substantial need for this technology, we have not yet witnessed any substantial progress in terms of making those techniques accessible to application developers who generally have little or no computer vision expertise. These developers generally focus more on the development of the application, have a good understanding of the properties of the target objects for their application domain, and are good at learning programming API rather than vision algorithms. We've made two key observations about computer vision algorithms: 1) none of these methods works well under all circumstances, nor do they require the same setup or inputs/outputs, making it difficult for developers to choose the optimal method for their particular application; 2) expertise knowledge is a prerequisite to fully exploit the potentials of existing vision techniques. These observations lead us to the question: is it possible to create a computer vision abstraction that makes the selection of a particular algorithm based on the descriptions of the object or scene to be reconstructed. By doing so, we can encapsulate computer vision experts' knowledge of their algorithms strengths within the abstraction so that a developer need only describe the problem they need solved. The mental model to our approach is similar to that of the game `name that object': one participant takes guesses of what the object is based solely on the descriptions of the appearance provided by the other participant. In our case, the key idea is to construct an algorithm-free abstraction around the detailed algorithms and implementations so that one or multiple best suited ones can be selected based on the `appearance' of the object described by the developers. The developers use the abstraction's description interface that is structured to match how vision problems can be described based on a model of a 3D scene and translated to parameters useful for determining which algorithms would work best.
+Regardless of the past success and the strong demands in various areas, we have not yet witnessed any substantial progress in terms of making those techniques accessible to application developers who generally have little or no computer vision expertise. We've made two key observations about computer vision algorithms: 1) none of these methods works well under all circumstances, nor do they require the same setup or inputs/outputs, making it difficult for developers to choose the optimal method for their particular application; 2) expertise knowledge is a prerequisite to fully exploit the potentials of existing vision techniques. These observations lead us to the question: is it possible to create a framework that can select the best possible algorithm based on the descriptions of the object or scene to be reconstructed. The mental model to our approach is similar to that of the game `name that object': one participant takes guesses of what the object is based solely on the descriptions of the appearance provided by the other participant. In our case, the key idea is to construct an algorithm-free framework above the algorithms so that one or multiple best suited ones can be selected based on the `appearance' of the object described by the developers. The developers use the framework's description interface that is structured to match how vision problems can be described based on a model of a 3D scene and translated to parameters useful for determining which algorithms would work best.
 
-\section{Problem definition}
-The problem we address in this thesis can be described as: find a small set of visual and geometric properties, from which an descriptive abstraction is formed to find the best-suited algorithm(s) to reconstruct the target object. The 
+% \section{Problem definition}
+% The problem we address in this thesis can be described as: construct a mapping with the description of the object as input, returning the best possible reconstruction result by one algorithm from a suite of algorithms.
 
-\subsection{Scope}
-To limit the scope of this work, we make the following assumptions:
+% \subsection{Scope}
+% To limit the scope of this work, we make the following assumptions:
 
-\subsubsection{Simplified reflectance model}
-Since the majority of reconstruciton techniques rely on observing light reflected off a surface, surfaces exhibit significant effect of global light tranport present a huge challenge to the reconstruction problem. Surface exhibits global light transport, including \textit{specular}, \textit{transmission}, \textit{sub-surface scattering}, \textit{inter-reflection}, \textit{self-shadow}, and etc would break the assumptions made by most generic 3D reconstruction algorithms. Thus the global light transport are ignored, and the reflection properties of consideration are \textit{albedo}, \ie the ratio of reflected light w.r.t the received light, and \textit{specularity}, \ie the amount of specular reflection. A more comprehensive model should be constructed based on our work to incorporate more complex phenomena to be more comprehensive.
+% \subsubsection{Simplified reflectance model}
+% Since the majority of reconstruciton techniques rely on observing light reflected off a surface, surfaces exhibit significant effect of global light tranport present a huge challenge to the reconstruction problem. Surface exhibits global light transport, including \textit{specular}, \textit{transmission}, \textit{sub-surface scattering}, \textit{inter-reflection}, \textit{self-shadow}, and etc would break the assumptions made by most generic 3D reconstruction algorithms. Thus the global light transport are ignored, and the reflection properties of consideration are \textit{albedo}, \ie the ratio of reflected light w.r.t the received light, and \textit{specularity}, \ie the amount of specular reflection. A more comprehensive model should be constructed based on our work to incorporate more complex phenomena to be more comprehensive.
 
-\subsubsection{Simplified geometric model}
-It's a challenging task to model geometry using mathematical descriptions. For geometric primitives such as cube, sphere, or cone, etc, it's possible to describe the shape using concise descriptions. However, the task becomes prohibitive when it comes to shapes with varied characteristics. Furthermore it becomes more ambiguous when natural language is employed. Thus we only consider the microscopic roughness of the surface, which has a direct relation with the reflection. Other prominent geometric properties such as \textit{concavity}, which affects self-shadow, inter-reflection, \textit{depth-discontinuity}, which affects the depth estimation, are ignored.
+% \subsubsection{Simplified geometric model}
+% It's a challenging task to model geometry using mathematical descriptions. For geometric primitives such as cube, sphere, or cone, etc, it's possible to describe the shape using concise descriptions. However, the task becomes prohibitive when it comes to shapes with varied characteristics. Furthermore it becomes more ambiguous when natural language is employed. Thus we only consider the microscopic roughness of the surface, which has a direct relation with the reflection. Other prominent geometric properties such as \textit{concavity}, which affects self-shadow, inter-reflection, \textit{depth-discontinuity}, which affects the depth estimation, are ignored.
 
-\subsubsection{Simplified object class}
-Only a subset of visual/geometric properties are considered, which include texture, lightness, specular, and roughness. Since we use a simplified reflectance and geometric model, phenomena such as translucency, subsurface scattering, refraction, occlusion, concavity can not be described properly. Thus object exhibiting those properties are not considered in the evaluation.
+% \subsubsection{Simplified object class}
+% Only a subset of visual/geometric properties are considered, which include texture, lightness, specular, and roughness. Since we use a simplified reflectance and geometric model, phenomena such as translucency, subsurface scattering, refraction, occlusion, concavity can not be described properly. Thus object exhibiting those properties are not considered in the evaluation.
 
-\subsection{Data}
-We use both a synthetic and a real-world dataset. The synthetic dataset is generated by a physically-based renderer Cycles with varied reflectant and geometric properties, including texture, albedo, specular,and roughness. We used the similar setup to capture real-world images of 11 objects to further test the validity of our proposed abstraction.
+% \subsection{Data}
+% We use both a synthetic and a real-world dataset. The synthetic dataset is generated by a physically-based renderer Cycles with varied reflectant and geometric properties, including texture, albedo, specular,and roughness. We used the similar setup to capture real-world images of 11 objects to further test the validity of our proposed abstraction.
 
-\section{Thesis outline}
-We present a flow chart to summarize the complete working of the system, as shown in Figure~\ref{fig:system_overview}.
+\section{Outline}
+The problem that this thesis addresses can be described as: construct a framework for 3D reconstruction that maps the description of the problem condition to the best possible algorithm from a suite of algorithms. First the development of the framework is discussed, which ultimately maps from a well defined problem space to a suite of algorithms, and then a rigorious evaluation is carried out to verify the effectiveness and robustness of the derived mapping. More specifically, a new taxonomy transforms the 3D reconstruction problem from one requiring knowledge of algorithmic details to one that is based on the mapping between the problem space and algorithms. Then a well defined model and representations are developed to describe the problem space definitively. Lastly, the mapping bewteen the problem space and algorithms are discovered, from which a mapping is derived. More detailed descriptions and flow charts are presented below to provide an overview of the framework and the thesis.
 
-\subsubsection{Related Work}
-We discuss the existing softwares and toolboxes for 3D reconstruction, and present the minimum vision background needed to fully take advantage of those toolboxes. Then a review of 3D acquisition techniques is provided, organized by the visual and geometric cues used for reconstruction.
+\subsection{Related Work}
+We discuss the existing softwares and toolboxes for 3D reconstruction, and present the required vision background needed to fully take advantage of those toolboxes. A review of the 3D acquisition techniques is provided, organized by the visual and geometric cues used for reconstruction.
 
-\subsubsection{Taxonomy of Algorithms}
-The majority of taxonomy of 3D reconstruction utilizes the differences of the algorithmic details as taxonomy axes. For instance, MVS algorithms can be categorized based on various visibility models or scene representations, and PS methods can be classified by the reflectance models. However, it doesn't provide the context or the applicability of these techniques. Thus the proposed taxonomy categorize algorithms from an object-centered perspective, \ie algorithms are classified based on the class that the object belongs to.
+\subsection{Taxonomy of 3D Reconstruction}
+The proposed taxonomy categorizes algorithms based on how well they work on the specific problem condition. First the problem space is developed, with each axis represents a key property of object's materal or geometry. Then the selected classes of algorithms are mapped to selected problem conditions based on reports in the literature.
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}[node distance=2cm, auto]
+\node (algorithm) [model] {Algorithms};
+\node (translucency) [data_nonfixed, below of=algorithm, xshift=-3.9cm] {Translucency};
+\node (texture) [data_nonfixed, right of=translucency, xshift=0.1cm]{Texture};
+\node (lightness)[data_nonfixed, right of=texture, xshift=-0.2cm]{Lightness};
+\node (reflection)[data_nonfixed, right of=lightness, xshift=0.0cm]{Reflection};
+\node (rough)[data_nonfixed, right of=reflection, xshift=0.1cm]{Roughness};
 
-\subsubsection{Description of 3D Reconstruction}
-Once we have a taxonomy of algorithm based on object class, a model of the 3D reconstruction problem needs to be developed. This model should give a clear and distinct description of the task that doesn't require much vision knowledge and general enough that is not object specific. This includes a formal/applied definition of the 3D reconstruction problem, the representation, and lastly, the expression.
+\draw (algorithm.south) -- ++(0.0, -0.5) coordinate (c);
+\draw (c) -- ++(-1.8, 0.0) coordinate (n1);
+\draw [arrow](n1) -- (texture.north);
+\draw (n1) -- ++(-2.1, 0.0) coordinate (n2);
+\draw [arrow](n2) -- (translucency.north);
+\draw [arrow](c) -- (lightness.north);
+\draw (c) -- ++(2.0, 0.0) coordinate (p1);
+\draw [arrow](p1) -- (reflection.north);
+\draw (p1) -- ++(2.1, 0.0) coordinate (p2);
+\draw [arrow](p2) -- (rough.north);
 
-\subsubsection{Mapping of 3D Reconstruction}
-The abstraction consists of mappings from a property set and all its combination to algorithms that can achieve satisfactory results. To construct such mappings, we need to evaluate the performance of the selected algorithm under varied properties and their combinations.
+\end{tikzpicture}
+\caption{Taxonomy of 3D reconstruction algorithms and its dimensions.}
+\label{fig:overview_taxonomy}
+\end{figure}
 
-We use synthetic datasets to achieve this goal. Part of the challenge in establishing a comprehensive set of experiments for such an evaluation is the large variability of shapes and material properties. To overcome this issue, we first investigate the dependent properties, which are properties that have influence on one another, thus must be considered jointly. Then we evaluate the performance the each algorithm under the conditions of dependent properties and all their combinations, which makes up our abstraction.
+\subsection{Description of 3D Reconstruction}
+We provide a rigorous definition of the problem space. First, a formal and practical definition of the 3D reconstruction problem based on set theory is proposed. Second, a model consists of key properties of an object is developed. Third, the rerepsentations of the problem are proposed: we select key elements that can affect the properties of the model and use them as the components of the representation. Lastly, common 3D reconstruction tasks are expressed using the proposed model and representations.
 
-\subsubsection{Interpretation of 3D Reconstruction}
-We use both synthetic and real-world datasets to evaluate the proposed abstraction. We used three synthetic objects: a cup, a pot, and a vase. For the real-world dataset, we use the similar setups and captured the images for 11 objects with various shape and material properties.
+\subsection{Mapping of 3D Reconstruction}
+Since the problem space was not well defined, the mapping from problem space to algorithms is ambigueous. To derive more accurate mapping, we need to evaluate the performance of the selected algorithms under varied properties and their combinations. We use synthetic datasets to achieve this goal. Part of the challenge in establishing a comprehensive set of experiments for such an evaluation is the large variability of shapes and material properties. To overcome this issue, we first investigate the dependent properties, which are properties that have influence on one another, thus must be considered jointly. Then we evaluate the performance the each algorithm under the conditions of dependent properties and all their combinations, which makes up our abstraction.
+
+\subsection{Interpretation of 3D Reconstruction}
+To test the effectiveness and robustness of the derived mapping, three key questions need to be answered: 1). can the mapping return the best possible result given the description; 2). how useful is the derived mapping compared to the traditional approaches; 3). what limitations does the current mapping have. To answer these questions, we carry out separate steps: 1). we use both synthetic and real-world datasets to see if the quantitative and qualitative results is consistent with the algorithm returned by the mapping; 2). we simulate a practical scenario of applying 3D reconstruction and see how accessible each step is individually; 3). 
 \begin{figure}[ht]
 \centering
 \begin{tikzpicture}[node distance=2cm, auto]
@@ -59,15 +82,16 @@ We use both synthetic and real-world datasets to evaluate the proposed abstracti
 \node (depend_prop) [data, below of=depend_check] {Dependent Property Set};
 \node (train) [process, below of=depend_prop] {Training};
 \node (prfm_algo) [data, below of=train] {Performance of Algo. i};
-\node [data, draw=none, fill=none, left of=prop_set, xshift=-1.2cm] {Chapter~\ref{ch:3DRecon_Benchmark}: 3D Benchmark};
+\node [data, draw=none, fill=none, left of=prop_set, xshift=-1.2cm] {Chapter~\ref{ch:3DRecon_Mapping}: 3D Benchmark};
 
 % 3D taxonomy
-\node (cue) [model, above of=algo, yshift=1.8cm] {Visual Cues};
-\node (stereo) [data_nonfixed, below of=cue, xshift=-3cm] {Stereo};
-\node (shading) [data_nonfixed, below of=cue, xshift=-1cm] {Shading};
-\node (silhouette) [data_nonfixed, below of=cue, xshift=1cm] {Silhouette};
-\node (more) [data_nonfixed, below of=cue, xshift=3cm] {...};
-\node (3d_taxo) [dotted, draw=red, fill=none, thick, fit=(cue) (stereo) (shading) (silhouette) (more), inner sep=0.3cm] {};
+\node (algorithm) [model, above of=algo, yshift=1.8cm] {Algorithms};
+\node (translucency) [data_nonfixed, below of=algorithm, xshift=-3.9cm] {Translucency};
+\node (texture) [data_nonfixed, right of=translucency, xshift=0.1cm]{Texture};
+\node (lightness)[data_nonfixed, right of=texture, xshift=-0.2cm]{Lightness};
+\node (reflection)[data_nonfixed, right of=lightness, xshift=0.0cm]{Reflection};
+\node (rough)[data_nonfixed, right of=reflection, xshift=0.1cm]{Roughness};
+\node (3d_taxo) [dotted, draw=red, fill=none, thick, fit=(algorithm) (translucency) (texture) (lightness) (reflection) (rough), inner sep=0.3cm] {};
 \node [data, draw=none, fill=none, above of=3d_taxo, yshift=0.4cm] {Chapter~\ref{ch:3DRecon_Taxo}: 3D Taxonomy};
 
 % 3D interpretation
@@ -94,16 +118,16 @@ We use both synthetic and real-world datasets to evaluate the proposed abstracti
 \draw [arrow] (prfm_algo) -- (abstract);
 \draw[red,thick,dotted] ($(prop_set.north west)+(-0.3,0.3)$)  rectangle ($(prfm_algo.south east)+(2.3,-0.3)$);
 
-% 3D taxonomy
-\draw (cue.south) -- ++(0.0, -0.5) coordinate (n2);
-\draw (n2) -- ++(-1.0, 0.0) coordinate (n1);
-\draw [arrow] (n1) -- (shading.north);
-\draw (n1) -- ++(-2.0, 0.0) coordinate (n0);
-\draw [arrow] (n0) -- (stereo.north);
-\draw (n2) -- ++(1.0, 0.0) coordinate (n3);
-\draw [arrow] (n3) -- (silhouette.north);
-\draw (n3) -- ++(2.0, 0.0) coordinate (n4);
-\draw [arrow] (n4) -- (more.north);
+\draw (algorithm.south) -- ++(0.0, -0.5) coordinate (c);
+\draw (c) -- ++(-1.8, 0.0) coordinate (n1);
+\draw [arrow](n1) -- (texture.north);
+\draw (n1) -- ++(-2.1, 0.0) coordinate (n2);
+\draw [arrow](n2) -- (translucency.north);
+\draw [arrow](c) -- (lightness.north);
+\draw (c) -- ++(2.0, 0.0) coordinate (p1);
+\draw [arrow](p1) -- (reflection.north);
+\draw (p1) -- ++(2.1, 0.0) coordinate (p2);
+\draw [arrow](p2) -- (rough.north);
 \draw [arrow] (3d_taxo) -- (algo);
 
 % 3D model
@@ -122,19 +146,21 @@ We use both synthetic and real-world datasets to evaluate the proposed abstracti
 \end{figure}
 
 \section{Contributions}
-The main contribution of the thesis is the development and evaluation of a framework capable of taking the description of an object as input, and output the best possible reconstruction result produced by one of the algorithms.
+The main contribution of the thesis is the development and evaluation of a framework that maps the description of the problem condition to the best possible algorithm from a suite of algorithms. It is non-trivial for two reasons: 1). currently, no one approach can achieve satisfactory result for an object with general material and geometric properties, the derived mapping can, to some extend, solve this problem by incorporating multiple algorithms into the framework; 2). a solid understanding of the algorithmic details of reconstruction algorithms is a prerequisite to fully take advantage of the existing techniques, which is unotainable for general developers, the descriptive language proposed in the thesis can allow application developer bypass this hurdle thus is more developer-friendly. The significant aspects are presented below:
 
-\noindent\textbf{1. A new taxonomy of 3D reconstruction problem from object-centered perspective.}
+\noindent\textbf{1. A new taxonomy of 3D reconstruction problem that focuses on problem conditions instead of algorithmic details.}
 
-The previous taxonomies generally focus on one class of algorithms, and thus can only deal with a specific class of objects. The proposed taxonomy address this issue by considering the criteria from an object-centered perspective, \ie classify the algorithm based on the object classes that can be reliably reconstructed. Understanding where algorithms perform well and where they fail is crucial when designing a system which requires 3D reconstruction.
+Most taxonomies generally focus on one class of algorithms, and classify intra-class algorithms based on differences of the algorithmic details. For instance, MVS algorithms can be categorized based on visibility models or scene representations, and PS methods can be classified by the reflectance models. However, it doesn't provide the context or the conditions where these techniques perform well, which is crucial when it comes to design an application that requires reliable reconstruction techniques.
 
-\noindent\textbf{2. A description of 3D reconstruction that can describe 3D reconstruction problem using visual/geometric properties.}
+\noindent\textbf{2. A formal definition of the problem space and description of 3D reconstruction that allows more accurate mapping.}
 
-A formal and a practical definition of the 3D reconstruction problem is proposed, followed by a model and representation, which can be used to describe a 3D reconstruction problem, not from an algorithmic point of view, but in an object-centered manner. Knowledge of which algorithm performs best from amongst those that target the conditions of a particular application area is similarly empirical and is often contentious as the conditions or images used to represent those con- ditions are often not the same. Binary classification of a problem type does not allow for the level of distinction required to know how effective a given algorithm will be within a particular range of the problem space. This in- formation also changes regularly as new algorithms are developed. Without a model of the image registration problem space, expressing the conditions of a given problem is not a well defined process.
+The research of the vision has always been focused on technical novelties. However, we started to lose sight of the big picture and . Therefore, it's crutial to have a better understanding of the problem space to exploit the strengths and weaknesses of existing techniques. Besides, it shows the researchers the lack of progress in certain areas thus is helpful to redirect research efforts to less explored territories.
 
-\noindent\textbf{3. A mapping of 3D reconstruction that maps problem description to a suite of algorithms.}
+Knowledge of which algorithm performs best from amongst those that target the conditions of a particular application area is similarly empirical and is often contentious as the conditions or images used to represent those conditions are often not the same. Binary classification of a problem type does not allow for the level of distinction required to know how effective a given algorithm will be within a particular range of the problem space. This information also changes regularly as new algorithms are developed. Without a model of the image registration problem space, expressing the conditions of a given problem is not a well defined process.
 
-A mapping that maps a description of 3D reconstruction problem into a set of appropriate algorithms are derived from the synthetic dataset. The process of finding the mapping is discussed in depth, which includes a dependency checking step to identify all the dependent properties to reduce the dimensions of the problem domain, and a training step to evaluate the performance under all dependent properties and their combinations. This mapping builds upon the results from the training step.
+\noindent\textbf{3. The development and evaluation of the mapping of 3D reconstruction.}
+
+The construction of the mapping allows more accurate mapping. However, different from the previous research working on algorithms, the evaluation is more complicated and sophisticated. The reason for such an evaluation is that the mapping is for more general objects and algorithms, thus it requires a wider test cases, and rigorous experiment design. 
 
 \section{Organization}
-We organize this thesis as follows: we discuss the related work in Chapter~\ref{ch:RelatedWork}. In Chapter~\ref{ch:3DRecon_Taxo} we provide a new taxonomy of 3D reconstruction based on object class. In Chapter~\ref{ch:3DRecon_Desc}, we provide a formal description of the 3D reconstruction problem, which can be applied to the currently existing techniques, and extended to future algorithms. In Chapter~\ref{ch:3DRecon_Mapping}, we discuss the process of generating a synthetic dataset to evaluate the performance of a selected set of techniques under the condition of different properties, which serves as the basis for the mapping of 3D reconstruction. In Chapter~\ref{ch:3DRecon_Interp}, we use both synthetic and real-world datasets to demonstrate the interpretation of the 3D reconstruction description and the validity of the proposed mapping.
+We organize this thesis as follows: we discuss the related work in Chapter~\ref{ch:RelatedWork}. In Chapter~\ref{ch:3DRecon_Taxo} we provide a new taxonomy of 3D reconstruction based on the mapping from problem space to algorithms. In Chapter~\ref{ch:3DRecon_Desc}, we provide a formal description of the 3D reconstruction problem, which can be applied to the currently existing techniques, and extended to future algorithms. In Chapter~\ref{ch:3DRecon_Mapping}, we discuss the process of generating a synthetic dataset to evaluate the performance of a selected set of techniques under varied problem conditions, from which a mapping is derived for 3D reconstruction. In Chapter~\ref{ch:3DRecon_Interp}, we use both synthetic and real-world datasets to demonstrate the interpretation of the 3D reconstruction description and the validity of the proposed mapping.
