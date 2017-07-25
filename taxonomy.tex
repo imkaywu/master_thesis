@@ -1,7 +1,7 @@
 %% The following is a directive for TeXShop to indicate the main file
 %%!TEX root = diss.tex
 
-\chapter{A taxonomy of 3D Reconstruction}
+\chapter{A Taxonomy of 3D Reconstruction}
 \label{ch:3DRecon_Taxo}
 Existing taxonomies of 3D reconstruction techniques generally focus on one category of techniques: the Multi-view Stereo taxonomy in~\cite{seitz2006comparison} proposed classification of MVS algorithms from various perspectives. Reviews of Structured Light techniques generally classify techniques based on the type of projection pattern used~\cite{geng2011structured, salvi2004pattern}. Photometric Stereo algorithms are classified by the assumptions or generalizations made, for instance, unknown/known reflectance, unknown/known light conditions (uncalibrated/calibrated), etc~\cite{shi2016benchmark}. These frameworks provide a way to categorize intra-category algorithms, but is unsuitable to evaluate the performance of inter-category algorithms. Furthermore, the algorithms under consideration are targeted at a limited categories of objects. It's well known that these algorithms are highly likely to fail on other categories of objects, and this knowledge of algorithmic applicability is largely empirical, with each algorithm roughly maps to a problem domain that is poorly defined. Thus we need a more object-centered approach to the taxonomy so that a more precise mapping is available.
 
@@ -30,7 +30,7 @@ To make the problem tackleable, only six classes of objects are being investigat
 \end{figure}
 
 Here is a list of algorithms we will look into in depth, a summary is list in Table\ref{tab:class_algo}.
-\begin{table}[!ht]
+\begin{table}[!htbp]
   \centering
   \begin{tabular}{l||l}
   \hline

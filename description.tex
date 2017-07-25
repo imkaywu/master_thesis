@@ -40,7 +40,7 @@ A scell can be considered as a generalization of a voxel. However, a scell is no
 The property of the scell can be the 3D position or orientation information, visual texture, reflectance, surface orientation, roughness, convacity, etc.
 
 The relation between the notions define above is shown in Figure~\ref{seg_scell}.
-\begin{figure}[h]
+\begin{figure}[!htbp]
 \centering
 \includegraphics[width=0.5\textwidth]{model/seg_scell}
 \caption{Relation between a scell and a segment}
@@ -87,7 +87,7 @@ $$
 
 \textbf{Definition (Applied 3D Reconstruction)} Given a set of images $\{I_n\}_{n=0}^{N-1}$ captured by cameras $\{C_n\}_{n=0}^{N-1}$, or under a set of light sources $\{L_n\}_{n=0}^{N-1}$, find a set of scells $\{sc_n\}_{n=0}^{M-1}$ such that the photo-consistency score between the set of scells and their corresponding segments $\{seg_{(i, n)}\}_{i=0,j=0}^{M-1,N-1}$ are maximized.
 $$
-\mbox{maximize} \quad \sum_{n=0}^{N-1}\sum_{i=0}^{M-1} consist(rep(sc_i), prop(sc_i), cue(seg_{(i, n)}))
+\mbox{maximize} \quad \sum_{n=0}^{N-1}\sum_{i=0}^{M-1} consist(prop(sc_i), cue(seg_{(i, n)}))
 $$
 
 \section{Model}
