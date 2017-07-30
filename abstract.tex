@@ -3,18 +3,11 @@
 
 \chapter{Abstract}
 
-This document provides brief instructions for using the \class{ubcdiss}
-class to write a \acs{UBC}-conformant dissertation in \LaTeX.  This
-document is itself written using the \class{ubcdiss} class and is
-intended to serve as an example of writing a dissertation in \LaTeX.
-This document has embedded \acp{URL} and is intended to be viewed
-using a computer-based \ac{PDF} reader.
+The state-of-the-art for 3D reconstruction algorithms has advanced much faster than the development of interfaces that improve the algorithms' accessibility to application developers. We propose a novel abstraction framework specifically for shape capture techniques, designed to allow developers to design their own camera setups and apply the most effective method to retrieve an object's shape and appearance for their particular application.
 
-Note: Abstracts should generally try to avoid using acronyms.
+Details of the 3D reconstruction algorithms are hidden by the abstraction, which uses a description based on the camera setup and the characteristics of the object. We demonstrate that the description can be mapped to one or more methods to provide the user's requested result. Given that no single algorithm can work in all situations, we select a suite of three algorithms that each works in substantially different conditions to provide an example of how the space of 3D reconstruction can be filled.
 
-Note: at \ac{UBC}, both the \ac{GPS} Ph.D. defence programme and the
-Library's online submission system restricts abstracts to 350
-words.
+We evaluate our abstraction through a proof-of-concept implementation of the algorithm framework and a synthetic dataset where each object has been imaged with the appropriate setup for each algorithm. We demonstrate that the mapping from object characteristics to 3D shape is effective, and provides an illustration of an accessible form of 3D shape reconstruction for non-experts in computer vision, such as application developers.
 
 % Consider placing version information if you circulate multiple drafts
 %\vfill

@@ -60,9 +60,9 @@ We could adopt the same methodology to determine the reconstruction result of PS
 Mean ($\mu$) & Median (med)\\
 $\mu - \text{med} < \text{c}^\circ$ & $\text{med}<10^\circ$\\
 \hline
+\end{tabular}
 \caption{Acceptable results of Photometric Stereo}
 \label{tab:ps_criteria}
-\end{tabular}
 \end{table}
 
 where $c$ is a constant that is varied from object to object. For the examples shown in Figure~\ref{fig:ps_criteria}, $c=1^\circ$ for sphere, and $c=2^\circ$ for `knight'.
@@ -83,10 +83,10 @@ where $c$ is a constant that is varied from object to object. For the examples s
 \includegraphics[width=0.33\textwidth]{mapping/ps_criteria/knight_5_5.png} &
 \includegraphics[width=0.33\textwidth]{mapping/ps_criteria/knight_5_6.png} &
 \includegraphics[width=0.33\textwidth]{mapping/ps_criteria/knight_5_8.png} \\
-(a) $\mu=5, \text{med}=5$ & (a) $\mu=5, \text{med}=6$ & (a) $\mu=5, \text{med}=7$\\
+(a) $\mu=5, \text{med}=5$ & (a) $\mu=5, \text{med}=6$ & (a) $\mu=5, \text{med}=8$\\
+\end{tabular}
 \caption{Acceptable results of Photometric Stereo}
 \label{fig:ps_criteria}
-\end{tabular}
 \end{figure}
 
 \section{Evaluation metrics}
@@ -440,7 +440,6 @@ For a fixed roughness, as the specular increases, the completeness decreases, se
   \label{tab:sl_depend_prop}
 \end{table}
 
-
 \section{Training}
 For each technique, we generate the synthetic dataset using only the dependent properties, thus there are $L\times L\times L$ different combinations for each technique, where $L$ is the number of levels for each property.
 
@@ -448,17 +447,17 @@ For each technique, we generate the synthetic dataset using only the dependent p
 The performance of PMVS under difference combinations of properties is shown in Figure~\ref{fig:mvs_training}. The conditions that PMVS works well is listed in Table~\ref{tab:mvs_training_result}.
 \begin{figure}[!htbp]
 \begin{tabular}{ccc}
-\includegraphics[width=0.33\textwidth]{mapping/training/mvs_train_spec_02}&
-\includegraphics[width=0.33\textwidth]{mapping/training/mvs_train_spec_05}&
-\includegraphics[width=0.33\textwidth]{mapping/training/mvs_train_spec_08}\\
-(a) & (b) & (c)\\
 \includegraphics[width=0.33\textwidth]{mapping/training/mvs_train_tex_02}&
 \includegraphics[width=0.33\textwidth]{mapping/training/mvs_train_tex_05}&
 \includegraphics[width=0.33\textwidth]{mapping/training/mvs_train_tex_08}\\
-(d) & (e) & (f)\\
+(a) & (b) & (c)\\
 \includegraphics[width=0.33\textwidth]{mapping/training/mvs_train_alb_02}&
 \includegraphics[width=0.33\textwidth]{mapping/training/mvs_train_alb_05}&
 \includegraphics[width=0.33\textwidth]{mapping/training/mvs_train_alb_08}\\
+(d) & (e) & (f)\\
+\includegraphics[width=0.33\textwidth]{mapping/training/mvs_train_spec_02}&
+\includegraphics[width=0.33\textwidth]{mapping/training/mvs_train_spec_05}&
+\includegraphics[width=0.33\textwidth]{mapping/training/mvs_train_spec_08}\\
 (g) & (h) & (i)\\
 \end{tabular}
 \caption{Performance of MVS with varied properties.}
@@ -479,12 +478,25 @@ From all the training results, we could derive the problem conditions that PMVS 
   \hline
   \textbf{Metric} & Texture & Albedo & Specular & Roughness\\
   \hline
-  Accuracy \&  & 0.8 & 0.2 & 0.2 & -\\
-  Completeness & 0.8 & 0.2 & 0.5 & -\\
-               & 0.8 & 0.2 & 0.8 & -\\
+  Accuracy & 0.5 & 0.5 & 0.2 & -\\
+           & 0.5 & 0.8 & 0.2 & -\\
+           & 0.8 & 0.2 & 0.2 & -\\
+           & 0.8 & 0.5 & 0.2 & -\\
+           & 0.8 & 0.8 & 0.2 & -\\
+           & 0.8 & 0.5 & 0.5 & -\\
+           & 0.8 & 0.8 & 0.5 & -\\
+           & 0.8 & 0.5 & 0.8 & -\\
+           & 0.8 & 0.8 & 0.8 & -\\
+  \hline
+  Completeness & 0.5 & 0.5 & 0.2 & -\\
+               & 0.5 & 0.8 & 0.2 & -\\
+               & 0.5 & 0.8 & 0.5 & -\\
+               & 0.8 & 0.2 & 0.2 & -\\
+               & 0.8 & 0.5 & 0.2 & -\\
+               & 0.8 & 0.8 & 0.2 & -\\
                & 0.8 & 0.5 & 0.5 & -\\
-               & 0.8 & 0.5 & 0.8 & -\\
                & 0.8 & 0.8 & 0.5 & -\\
+               & 0.8 & 0.5 & 0.8 & -\\
                & 0.8 & 0.8 & 0.8 & -\\
   \hline
   \end{tabular}
@@ -496,17 +508,17 @@ From all the training results, we could derive the problem conditions that PMVS 
 The performance of example-based PS under difference combinations of properties is shown in Figure~\ref{fig:ps_training}. The conditions that example-based PS works well is listed in Table~\ref{tab:ps_training_result}.
 \begin{figure}[!htbp]
 \begin{tabular}{ccc}
-\includegraphics[width=0.33\textwidth]{mapping/training/ps_rough_02}&
-\includegraphics[width=0.33\textwidth]{mapping/training/ps_rough_05}&
-\includegraphics[width=0.33\textwidth]{mapping/training/ps_rough_08}\\
-(a) & (b) & (c)\\
 \includegraphics[width=0.33\textwidth]{mapping/training/ps_alb_02}&
 \includegraphics[width=0.33\textwidth]{mapping/training/ps_alb_05}&
 \includegraphics[width=0.33\textwidth]{mapping/training/ps_alb_08}\\
-(d) & (e) & (f)\\
+(a) & (b) & (c)\\
 \includegraphics[width=0.33\textwidth]{mapping/training/ps_spec_02}&
 \includegraphics[width=0.33\textwidth]{mapping/training/ps_spec_05}&
 \includegraphics[width=0.33\textwidth]{mapping/training/ps_spec_08}\\
+(d) & (e) & (f)\\
+\includegraphics[width=0.33\textwidth]{mapping/training/ps_rough_02}&
+\includegraphics[width=0.33\textwidth]{mapping/training/ps_rough_05}&
+\includegraphics[width=0.33\textwidth]{mapping/training/ps_rough_08}\\
 (g) & (h) & (i)\\
 \end{tabular}
 \caption{Performance of PS with varied properties.}
@@ -527,17 +539,17 @@ From all the training results, we could derive the problem conditions that EPS c
   \hline
   \textbf{Metric} & Texture & Albedo & Specular & Roughness\\
   \hline
-  Angle difference & - & 0.8 & 0.2 & 0.2\\
-                   & - & 0.8 & 0.5 & 0.2\\
-                   & - & 0.8 & 0.8 & 0.2\\
-                   & - & 0.2 & 0.2 & 0.8\\
+  Angle difference & - & 0.2 & 0.2 & 0.8\\
                    & - & 0.2 & 0.5 & 0.8\\
                    & - & 0.2 & 0.8 & 0.8\\
                    & - & 0.5 & 0.2 & 0.8\\
                    & - & 0.5 & 0.5 & 0.8\\
                    & - & 0.5 & 0.8 & 0.8\\
+                   & - & 0.8 & 0.2 & 0.2\\
                    & - & 0.8 & 0.2 & 0.8\\
+                   & - & 0.8 & 0.5 & 0.2\\
                    & - & 0.8 & 0.5 & 0.8\\
+                   & - & 0.8 & 0.8 & 0.2\\
                    & - & 0.8 & 0.8 & 0.8\\
   \hline
   \end{tabular}
@@ -549,17 +561,17 @@ From all the training results, we could derive the problem conditions that EPS c
 The performance of Gray code SL under difference combinations of properties is shown in Figure~\ref{fig:sl_training}. Since there is only one camera, thus only a portion of scene is visible. Thus we claim that the completeness is $50\%$ of that of VH is acceptable. The conditions that PMVS works well is listed in Table~\ref{tab:sl_training_result}.
 \begin{figure}[!htbp]
 \begin{tabular}{ccc}
-\includegraphics[width=0.33\textwidth]{mapping/training/sl_train_rough_02}&
-\includegraphics[width=0.33\textwidth]{mapping/training/sl_train_rough_05}&
-\includegraphics[width=0.33\textwidth]{mapping/training/sl_train_rough_08}\\
-(a) & (b) & (c)\\
 \includegraphics[width=0.33\textwidth]{mapping/training/sl_train_alb_02}&
 \includegraphics[width=0.33\textwidth]{mapping/training/sl_train_alb_05}&
 \includegraphics[width=0.33\textwidth]{mapping/training/sl_train_alb_08}\\
-(d) & (e) & (f)\\
+(a) & (b) & (c)\\
 \includegraphics[width=0.33\textwidth]{mapping/training/sl_train_spec_02}&
 \includegraphics[width=0.33\textwidth]{mapping/training/sl_train_spec_05}&
 \includegraphics[width=0.33\textwidth]{mapping/training/sl_train_spec_08}\\
+(d) & (e) & (f)\\
+\includegraphics[width=0.33\textwidth]{mapping/training/sl_train_rough_02}&
+\includegraphics[width=0.33\textwidth]{mapping/training/sl_train_rough_05}&
+\includegraphics[width=0.33\textwidth]{mapping/training/sl_train_rough_08}\\
 (g) & (h) & (i)\\
 \end{tabular}
 \caption{Performance of SL with varied properties.}
@@ -583,15 +595,10 @@ From all the training results, we could derive the problem conditions that GSL c
   \textbf{Metric} & Texture & Albedo & Specular & Roughness\\
   \hline
   Accuracy     & - & - & - & -\\
-  \hline\hline
-  Completeness & - & 0.2 & 0.5 & 0.8\\
-               & - & 0.2 & 0.8 & 0.8\\
-               & - & 0.5 & 0.2 & 0.8\\
+  \hline
+  Completeness & - & 0.2 & 0.8 & 0.8\\
                & - & 0.5 & 0.5 & 0.8\\
                & - & 0.5 & 0.8 & 0.8\\
-               & - & 0.8 & 0.2 & 0.5\\
-               & - & 0.8 & 0.5 & 0.5\\
-               & - & 0.8 & 0.8 & 0.5\\
                & - & 0.8 & 0.2 & 0.8\\
                & - & 0.8 & 0.5 & 0.8\\
                & - & 0.8 & 0.8 & 0.8\\
