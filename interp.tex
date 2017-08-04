@@ -114,9 +114,9 @@ We use one object shown in Figure~\ref{fig:synth_data}, and four property settin
   \textbf{Property} & Texture & Albedo & Specular & Roughness & Accuracy & Completeness & Ang diff\\
   \hline
   (a) & 0.2 & 0.8 & 0.2 & 0.8 & GSL & GSL & EPS\\
-  (b) & 0.2 & 0.8 & 0.5 & 0.2 & GSL & - & EPS \\
+  (b) & 0.2 & 0.8 & 0.5 & 0.2 & GSL & - & - \\
   (c) & 0.8 & 0.8 & 0.2 & 0.8 & PMVS, GSL & PMVS, GSL & EPS \\
-  (d) & 0.8 & 0.8 & 0.5 & 0.2 & PMVS, GSL & PMVS & EPS\\
+  (d) & 0.8 & 0.8 & 0.5 & 0.2 & PMVS, GSL & PMVS & -\\
   \hline
   \end{tabular}
   \caption{Property lists of the test objects.}
@@ -126,18 +126,18 @@ We use one object shown in Figure~\ref{fig:synth_data}, and four property settin
 \begin{figure}[!htbp]
 \centering
 \begin{tabular}{cccc}
+  \includegraphics[width=0.2\textwidth]{interp/synth_data/bottle/bottle_mvs}&
+  \includegraphics[width=0.2\textwidth]{interp/synth_data/bottle/bottle_ps}&
+  \includegraphics[width=0.2\textwidth]{interp/synth_data/bottle/bottle_sl}&
+  \includegraphics[width=0.2\textwidth]{interp/synth_data/bottle/bottle_ps_gt}\\
   \includegraphics[width=0.2\textwidth]{interp/synth_data/knight/knight_mvs}&
   \includegraphics[width=0.2\textwidth]{interp/synth_data/knight/knight_ps}&
   \includegraphics[width=0.2\textwidth]{interp/synth_data/knight/knight_sl}&
   \includegraphics[width=0.2\textwidth]{interp/synth_data/knight/knight_ps_gt}\\
-  \includegraphics[width=0.2\textwidth]{interp/synth_data/knight/knight_mvs}&
-  \includegraphics[width=0.2\textwidth]{interp/synth_data/knight/knight_ps}&
-  \includegraphics[width=0.2\textwidth]{interp/synth_data/knight/knight_sl}&
-  \includegraphics[width=0.2\textwidth]{interp/synth_data/knight/knight_ps_gt}\\
-  \includegraphics[width=0.2\textwidth]{interp/synth_data/knight/knight_mvs}&
-  \includegraphics[width=0.2\textwidth]{interp/synth_data/knight/knight_ps}&
-  \includegraphics[width=0.2\textwidth]{interp/synth_data/knight/knight_sl}&
-  \includegraphics[width=0.2\textwidth]{interp/synth_data/knight/knight_ps_gt}\\
+  \includegraphics[width=0.2\textwidth]{interp/synth_data/king/king_mvs}&
+  \includegraphics[width=0.2\textwidth]{interp/synth_data/king/king_ps}&
+  \includegraphics[width=0.2\textwidth]{interp/synth_data/king/king_sl}&
+  \includegraphics[width=0.2\textwidth]{interp/synth_data/king/king_ps_gt}\\
   MVS & PS & SL & Normal groundtruth\\
 \end{tabular}
 \caption{The synthetic datasets and groundtruth for the first evaluation question. The three selected objects have different degrees of concavity. More specifically, the objects have increasing concavity.}
@@ -167,29 +167,29 @@ Now we show both the quantitative results and qualitative results of the test ob
 \begin{tabular}{c|ccccc}
   Mapping & Quantitative results & ~ & Qualitative results & ~\\
   \hline
-  PS, SL & 
-  \includegraphics[width=0.2\textwidth]{interp/synth_data/knight/knight_02080208}&
-  \includegraphics[width=0.2\textwidth]{interp/synth_data/knight/knight_mvs_02080208.png}&
-  \fcolorbox{red}{white}{\includegraphics[width=0.2\textwidth]{interp/synth_data/knight/knight_ps_02080208.png}}&
-  \fcolorbox{red}{white}{\includegraphics[width=0.2\textwidth]{interp/synth_data/knight/knight_sl_02080208.png}}\\
+  EPS, GSL & 
+  \includegraphics[width=0.2\textwidth]{interp/synth_data/bottle/bottle_02080208}&
+  \includegraphics[width=0.2\textwidth]{interp/synth_data/bottle/bottle_mvs_02080208.png}&
+  \fcolorbox{green}{white}{\includegraphics[width=0.2\textwidth]{interp/synth_data/bottle/bottle_ps_02080208.png}}&
+  \fcolorbox{green}{white}{\includegraphics[width=0.2\textwidth]{interp/synth_data/bottle/bottle_sl_02080208.png}}\\
   & \multicolumn{4}{c}{(a). tex(0.2), alb(0.8), spec(0.2), rough(0.8)}\\
-  PS, SL &
-  \includegraphics[width=0.2\textwidth]{interp/synth_data/knight/knight_02080502}&
-  \includegraphics[width=0.2\textwidth]{interp/synth_data/knight/knight_mvs_02080502.png}&
-  \fcolorbox{red}{white}{\includegraphics[width=0.2\textwidth]{interp/synth_data/knight/knight_ps_02080502.png}}&
-  \fcolorbox{red}{white}{\includegraphics[width=0.2\textwidth]{interp/synth_data/knight/knight_sl_02080502.png}}\\
+  -&
+  \includegraphics[width=0.2\textwidth]{interp/synth_data/bottle/bottle_02080502}&
+  \includegraphics[width=0.2\textwidth]{interp/synth_data/bottle/bottle_mvs_02080502.png}&
+  \fcolorbox{green}{white}{\includegraphics[width=0.2\textwidth]{interp/synth_data/bottle/bottle_ps_02080502.png}}&
+  \includegraphics[width=0.2\textwidth]{interp/synth_data/bottle/bottle_sl_02080502.png}\\
   & \multicolumn{4}{c}{(b). tex(0.2), alb(0.8), spec(0.5), rough(0.2)}\\
-  MVS, PS, SL&
-  \includegraphics[width=0.2\textwidth]{interp/synth_data/knight/knight_08080208}&
-  \fcolorbox{red}{white}{\includegraphics[width=0.2\textwidth]{interp/synth_data/knight/knight_mvs_08080208.png}}&
-  \fcolorbox{red}{white}{\includegraphics[width=0.2\textwidth]{interp/synth_data/knight/knight_ps_08080208.png}}&
-  \fcolorbox{red}{white}{\includegraphics[width=0.2\textwidth]{interp/synth_data/knight/knight_sl_08080208.png}}\\
+  PMVS, EPS, GSL&
+  \includegraphics[width=0.2\textwidth]{interp/synth_data/bottle/bottle_08080208}&
+  \fcolorbox{green}{white}{\includegraphics[width=0.2\textwidth]{interp/synth_data/bottle/bottle_mvs_08080208.png}}&
+  \fcolorbox{green}{white}{\includegraphics[width=0.2\textwidth]{interp/synth_data/bottle/bottle_ps_08080208.png}}&
+  \fcolorbox{green}{white}{\includegraphics[width=0.2\textwidth]{interp/synth_data/bottle/bottle_sl_08080208.png}}\\
   & \multicolumn{4}{c}{(c). tex(0.8), alb(0.8), spec(0.2), rough(0.8)}\\
-  MVS, PS, SL&
-  \includegraphics[width=0.2\textwidth]{interp/synth_data/knight/knight_08080502}&
-  \fcolorbox{red}{white}{\includegraphics[width=0.2\textwidth]{interp/synth_data/knight/knight_mvs_08080502.png}}&
-  \fcolorbox{red}{white}{\includegraphics[width=0.2\textwidth]{interp/synth_data/knight/knight_ps_08080502.png}}&
-  \fcolorbox{red}{white}{\includegraphics[width=0.2\textwidth]{interp/synth_data/knight/knight_sl_08080502.png}}\\
+  PMVS&
+  \includegraphics[width=0.2\textwidth]{interp/synth_data/bottle/bottle_08080502}&
+  \fcolorbox{green}{white}{\includegraphics[width=0.2\textwidth]{interp/synth_data/bottle/bottle_mvs_08080502.png}}&
+  \fcolorbox{green}{white}{\includegraphics[width=0.2\textwidth]{interp/synth_data/bottle/bottle_ps_08080502.png}}&
+  \includegraphics[width=0.2\textwidth]{interp/synth_data/bottle/bottle_sl_08080502.png}\\
   & \multicolumn{4}{c}{(d). tex(0.8), alb(0.8), spec(0.5), rough(0.2)}\\
   \hline
   ~ & ~ & MVS & PS & SL\\
@@ -198,10 +198,88 @@ Now we show both the quantitative results and qualitative results of the test ob
 \label{fig:synth_data_results}
 \end{sidewaysfigure}
 
-\subsubsection{Results}
-\textbf{(a), (b)} In Figure~\ref{fig:synth_data_results} (a), the mapping predicts that EPS and GSL can give satisfactory results, which is consistent to the quantitative result shown in column 2 and the qualitative resulted labeled in red rectangle. The completeness of the PMVS is low due to the lack of texture.
+In this case of low concavity, we can see that the algorithms returned from the mapping is consistent to both the quantitative and qualitative results.
 
-\textbf{(c), (d)} In Figure~\ref{fig:synth_data_results} (a), the mapping predicts that all three methods can give satisfactory results, which is consistent to the quantitative result shown in column 2 and the qualitative resulted labeled in red rectangle.
+\begin{sidewaysfigure}[!htbp]
+\centering
+\begin{tabular}{c|ccccc}
+  Mapping & Quantitative results & ~ & Qualitative results & ~\\
+  \hline
+  EPS, GSL & 
+  \includegraphics[width=0.2\textwidth]{interp/synth_data/knight/knight_02080208}&
+  \includegraphics[width=0.2\textwidth]{interp/synth_data/knight/knight_mvs_02080208.png}&
+  \fcolorbox{green}{white}{\includegraphics[width=0.2\textwidth]{interp/synth_data/knight/knight_ps_02080208.png}}&
+  \fcolorbox{green}{white}{\includegraphics[width=0.2\textwidth]{interp/synth_data/knight/knight_sl_02080208.png}}\\
+  & \multicolumn{4}{c}{(a). tex(0.2), alb(0.8), spec(0.2), rough(0.8)}\\
+  - &
+  \includegraphics[width=0.2\textwidth]{interp/synth_data/knight/knight_02080502}&
+  \includegraphics[width=0.2\textwidth]{interp/synth_data/knight/knight_mvs_02080502.png}&
+  \includegraphics[width=0.2\textwidth]{interp/synth_data/knight/knight_ps_02080502.png}&
+  \includegraphics[width=0.2\textwidth]{interp/synth_data/knight/knight_sl_02080502.png}\\
+  & \multicolumn{4}{c}{(b). tex(0.2), alb(0.8), spec(0.5), rough(0.2)}\\
+  PMVS, EPS, GSL&
+  \includegraphics[width=0.2\textwidth]{interp/synth_data/knight/knight_08080208}&
+  \fcolorbox{green}{white}{\includegraphics[width=0.2\textwidth]{interp/synth_data/knight/knight_mvs_08080208.png}}&
+  \fcolorbox{green}{white}{\includegraphics[width=0.2\textwidth]{interp/synth_data/knight/knight_ps_08080208.png}}&
+  \fcolorbox{green}{white}{\includegraphics[width=0.2\textwidth]{interp/synth_data/knight/knight_sl_08080208.png}}\\
+  & \multicolumn{4}{c}{(c). tex(0.8), alb(0.8), spec(0.2), rough(0.8)}\\
+  PMVS&
+  \includegraphics[width=0.2\textwidth]{interp/synth_data/knight/knight_08080502}&
+  \fcolorbox{green}{white}{\includegraphics[width=0.2\textwidth]{interp/synth_data/knight/knight_mvs_08080502.png}}&
+  \includegraphics[width=0.2\textwidth]{interp/synth_data/knight/knight_ps_08080502.png}&
+  \includegraphics[width=0.2\textwidth]{interp/synth_data/knight/knight_sl_08080502.png}\\
+  & \multicolumn{4}{c}{(d). tex(0.8), alb(0.8), spec(0.5), rough(0.2)}\\
+  \hline
+  ~ & ~ & MVS & PS & SL\\
+\end{tabular}
+\caption{The first column shows the best algorithm chosen by the mapping. The quantitative and qualitative performance of each technique on the synthetic dataset. The red dots are from the ground truth while the black ones the reconstruction.}
+\label{fig:synth_data_results}
+\end{sidewaysfigure}
+
+In this case of medium concavity, we can see that the algorithms returned from the mapping is consistent to both the quantitative and qualitative results.
+
+\begin{sidewaysfigure}[!htbp]
+\centering
+\begin{tabular}{c|ccccc}
+  Mapping & Quantitative results & ~ & Qualitative results & ~\\
+  \hline
+  GSL & 
+  \includegraphics[width=0.2\textwidth]{interp/synth_data/king/king_02080208}&
+  \includegraphics[width=0.2\textwidth]{interp/synth_data/king/king_mvs_02080208.png}&
+  \includegraphics[width=0.2\textwidth]{interp/synth_data/king/king_ps_02080208.png}&
+  \fcolorbox{green}{white}{\includegraphics[width=0.2\textwidth]{interp/synth_data/king/king_sl_02080208.png}}\\
+  & \multicolumn{4}{c}{(a). tex(0.2), alb(0.8), spec(0.2), rough(0.8)}\\
+  - &
+  \includegraphics[width=0.2\textwidth]{interp/synth_data/king/king_02080502}&
+  \includegraphics[width=0.2\textwidth]{interp/synth_data/king/king_mvs_02080502.png}&
+  \includegraphics[width=0.2\textwidth]{interp/synth_data/king/king_ps_02080502.png}&
+  \includegraphics[width=0.2\textwidth]{interp/synth_data/king/king_sl_02080502.png}\\
+  & \multicolumn{4}{c}{(b). tex(0.2), alb(0.8), spec(0.5), rough(0.2)}\\
+  PMVS, GSL&
+  \includegraphics[width=0.2\textwidth]{interp/synth_data/king/king_08080208}&
+  \fcolorbox{green}{white}{\includegraphics[width=0.2\textwidth]{interp/synth_data/king/king_mvs_08080208.png}}&
+  \includegraphics[width=0.2\textwidth]{interp/synth_data/king/king_ps_08080208.png}&
+  \fcolorbox{green}{white}{\includegraphics[width=0.2\textwidth]{interp/synth_data/king/king_sl_08080208.png}}\\
+  & \multicolumn{4}{c}{(c). tex(0.8), alb(0.8), spec(0.2), rough(0.8)}\\
+  PMVS&
+  \includegraphics[width=0.2\textwidth]{interp/synth_data/king/king_08080502}&
+  \fcolorbox{green}{white}{\includegraphics[width=0.2\textwidth]{interp/synth_data/king/king_mvs_08080502.png}}&
+  \includegraphics[width=0.2\textwidth]{interp/synth_data/king/king_ps_08080502.png}&
+  \includegraphics[width=0.2\textwidth]{interp/synth_data/king/king_sl_08080502.png}\\
+  & \multicolumn{4}{c}{(d). tex(0.8), alb(0.8), spec(0.5), rough(0.2)}\\
+  \hline
+  ~ & ~ & MVS & PS & SL\\
+\end{tabular}
+\caption{The first column shows the best algorithm chosen by the mapping. The quantitative and qualitative performance of each technique on the synthetic dataset. The green dots are from the ground truth while the black ones the reconstruction.}
+\label{fig:synth_data_results}
+\end{sidewaysfigure}
+
+In this case of high concavity, we can see that the algorithms returned from the mapping is no longer consistent to the quantitative and qualitative results for EPS.
+
+\subsubsection{Results}
+\textbf{(a), (b)} In Figure~\ref{fig:synth_data_results} (a), the mapping predicts that EPS and GSL can give satisfactory results, which is consistent to the quantitative result shown in column 2 and the qualitative resulted labeled in green rectangle. The completeness of the PMVS is low due to the lack of texture.
+
+\textbf{(c), (d)} In Figure~\ref{fig:synth_data_results} (a), the mapping predicts that all three methods can give satisfactory results, which is consistent to the quantitative result shown in column 2 and the qualitative resulted labeled in green rectangle.
 
 \section{Usefulness of Framework}
 \label{sec:interp_useful}
@@ -277,27 +355,27 @@ Mapping & PMVS & EPS & GSL & VH\\
 \hline
 EPS, GSL & 
 \raisebox{-.5\height}{\includegraphics[width=0.2\textwidth]{interp/real_data/statue/statue_mvs}}&
-\fcolorbox{red}{white}{\raisebox{-.5\height}{\includegraphics[width=0.2\textwidth]{interp/real_data/statue/statue_ps}}}&
-\fcolorbox{red}{white}{\raisebox{-.5\height}{\includegraphics[width=0.2\textwidth]{interp/real_data/statue/statue_sl}}}&
+\fcolorbox{green}{white}{\raisebox{-.5\height}{\includegraphics[width=0.2\textwidth]{interp/real_data/statue/statue_ps}}}&
+\fcolorbox{green}{white}{\raisebox{-.5\height}{\includegraphics[width=0.2\textwidth]{interp/real_data/statue/statue_sl}}}&
 \raisebox{-.5\height}{\includegraphics[width=0.2\textwidth]{interp/real_data/statue/statue_sc}}\\
 EPS, GSL &
 \raisebox{-.5\height}{\includegraphics[width=0.2\textwidth]{interp/real_data/cup/cup_mvs}}&
-\fcolorbox{red}{white}{\raisebox{-.5\height}{\includegraphics[width=0.2\textwidth]{interp/real_data/cup/cup_ps}}}&
-\fcolorbox{red}{white}{\raisebox{-.5\height}{\includegraphics[width=0.2\textwidth]{interp/real_data/cup/cup_sl}}}&
+\fcolorbox{green}{white}{\raisebox{-.5\height}{\includegraphics[width=0.2\textwidth]{interp/real_data/cup/cup_ps}}}&
+\fcolorbox{green}{white}{\raisebox{-.5\height}{\includegraphics[width=0.2\textwidth]{interp/real_data/cup/cup_sl}}}&
 \raisebox{-.5\height}{\includegraphics[width=0.2\textwidth]{interp/real_data/cup/cup_sc}}\\
 PMVS &
-\fcolorbox{red}{white}{\raisebox{-.5\height}{\includegraphics[width=0.2\textwidth]{interp/real_data/pot/pot_mvs}}}&
+\fcolorbox{green}{white}{\raisebox{-.5\height}{\includegraphics[width=0.2\textwidth]{interp/real_data/pot/pot_mvs}}}&
 \raisebox{-.5\height}{\includegraphics[width=0.2\textwidth]{interp/real_data/pot/pot_ps}}&
 \raisebox{-.5\height}{\includegraphics[width=0.2\textwidth]{interp/real_data/pot/pot_sl}}&
 \raisebox{-.5\height}{\includegraphics[width=0.2\textwidth]{interp/real_data/pot/pot_sc}}\\
 PMVS &
-\fcolorbox{red}{white}{\raisebox{-.5\height}{\includegraphics[width=0.2\textwidth]{interp/real_data/vase/vase_mvs}}}&
+\fcolorbox{green}{white}{\raisebox{-.5\height}{\includegraphics[width=0.2\textwidth]{interp/real_data/vase/vase_mvs}}}&
 \raisebox{-.5\height}{\includegraphics[width=0.2\textwidth]{interp/real_data/vase/vase_ps}}&
 \raisebox{-.5\height}{\includegraphics[width=0.2\textwidth]{interp/real_data/vase/vase_sl}}&
 \raisebox{-.5\height}{\includegraphics[width=0.2\textwidth]{interp/real_data/vase/vase_sc}}\\
 \hline
 \end{tabular}
-\caption{The evaluation of the effectiveness of the mapping using real-world object. The well reconstructed object is label by red rectangle.}
+\caption{The evaluation of the effectiveness of the mapping using real-world object. The well reconstructed object is label by green rectangle.}
 \end{figure}
 
 \section{Summary}

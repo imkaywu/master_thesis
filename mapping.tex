@@ -27,17 +27,19 @@ Due to the number of properties and number of levels for each property, it would
 \label{fig:dataset_structure}
 \end{figure}
 
+\section{Evaluation metrics}
+We use the metric proposed in \cite{seitz2006comparison} to evaluate MVS and SL algorithms. More specifically, we compute the accuracy and completeness of the reconstruction. For accuracy, the distance between the points in the reconstruction $R$ and the nearest points on ground truth $G$ is computed, and the distance $d$ such that $X\%$ of the points on $R$ are within distance $d$ of $G$ is considered as accuracy. Thus the lower the accuracy value, the better the reconstruction result. For completeness, we compute the distance from $G$ to $R$. Intuitively, points on $G$ is not ``covered'' if no suitable nearest points on $R$ found. A more practical approach computes the fraction of points of $G$ that are within an allowable distance $d$ of $R$.
+Note that as the reconstruction gets better, the ``accuracy value'' goes down, but the ``accuracy'' is often claimed as improved, which is contradictory at first glance. To make it more consistent to the natural context, we say the accuracy goes up when the reconstruction gets better.
+
+For photometric stereo, the metric information is lost since only one viewpoint is used. Thus the previous metrics is not applicable. We employ another evaluation criteria that is widely adopted by the community, which is based on the statistics of angular error. For each pixel, the angular error is calculated as $arccos$($n_g^T n$) in degrees, where $n_g$ and $n$ are the ground truth and estimated normals respectively. In addition to the mean angular error, we also calculate the minimum, maximum, median, the first quartile, and the third quartile of angular errors for each estimated normal map.
+
 \section{Selected methods}
-We have selected one representative algorithm from three major classes of algorithms presented in Chapter~\ref{ch:3DRecon_Taxo}: the PMVS proposed in~\cite{furukawa2010accurate}, the example-based photometric stereo proposed in~\cite{hertzmann2005example}, and the Gray code structured light technique, see Table~\ref{tab:selected_algo} for a summary of the selected algorithms. The current implementation of SL projects both column and row patterns, and depth values are computed using these two kinds of patterns individually. A depth consistency checking step is performed to reject erroneous triangulations.
+We have selected one representative algorithm from three major classes of algorithms presented in Chapter~\ref{ch:3DRecon_Taxo}: the PMVS proposed in~\cite{furukawa2010accurate}, the example-based photometric stereo proposed in~\cite{hertzmann2005example}, and the Gray code structured light technique, see Table~\ref{tab:selected_algos} for a summary of the selected algorithms. The current implementation of SL projects both column and row patterns, and depth values are computed using these two kinds of patterns individually. A depth consistency checking step is performed to reject erroneous triangulations.
 \begin{table}[!htbp]
 \centering
 \begin{tabular}{c|c|c|c|c}
 \hline
 Technique & Texture & Albedeo & Specular & Roughness\\
-\hline\hline
-\multicolumn{5}{l}{(Baseline)VH: volumetric Visual Hull}\\
-\hline
-VH & - & - & - & -\\
 \hline\hline
 \multicolumn{5}{l}{PMVS: patch-based, seed points propagation MVS.}\\
 \hline
@@ -53,24 +55,51 @@ GSL & - & High & Low & High\\
 \hline
 \end{tabular}
 \caption{Summary of the baseline and selected algorithms for the framework, and the corresponding working conditions in theory.}
-\label{tab:selected_algo}
+\label{tab:selected_algos}
 \end{table}
 
-\section{Evaluation metrics}
-We use the metric proposed in \cite{seitz2006comparison} to evaluate MVS and SL algorithms. More specifically, we compute the accuracy and completeness of the reconstruction. For accuracy, the distance between the points in the reconstruction $R$ and the nearest points on ground truth $G$ is computed, and the distance $d$ such that $X\%$ of the points on $R$ are within distance $d$ of $G$ is considered as accuracy. Thus the lower the accuracy value, the better the reconstruction result. For completeness, we compute the distance from $G$ to $R$. Intuitively, points on $G$ is not ``covered'' if no suitable nearest points on $R$ found. A more practical approach computes the fraction of points of $G$ that are within an allowable distance $d$ of $R$.
-Note that as the reconstruction gets better, the ``accuracy value'' goes down, but the ``accuracy'' is often claimed as improved, which is contradictory at first glance. To make it more consistent to the natural context, we say the accuracy goes up when the reconstruction gets better.
-
-For photometric stereo, the metric information is lost since only one viewpoint is used. Thus the previous metrics is not applicable. We employ another evaluation criteria that is widely adopted by the community, which is based on the statistics of angular error. For each pixel, the angular error is calculated as $arccos$($n_g^T n$) in degrees, where $n_g$ and $n$ are the ground truth and estimated normals respectively. In addition to the mean angular error, we also calculate the minimum, maximum, median, the first quartile, and the third quartile of angular errors for each estimated normal map.
-
 \section{Baseline}
+\begin{table}[!htbp]
+\centering
+\begin{tabular}{c|c|c|c|c}
+\hline
+Technique & Texture & Albedeo & Specular & Roughness\\
+\hline\hline
+\multicolumn{5}{l}{VH: volumetric Visual Hull}\\
+\hline
+VH & - & - & - & -\\
+\hline\hline
+\multicolumn{5}{l}{LLS-PS: linear least squares Photometric Stereo.}\\
+\hline
+LLS-PS & - & High & Low & High\\
+\hline
+\end{tabular}
+\caption{Summary of the baseline algorithms for the framework, and the corresponding working conditions in theory.}
+\label{tab:selected_baseline_algos}
+\end{table}
 A baseline algorithm that works sufficiently well under most conditions should be chosen first so that it's possible to determine the performance of selected algorithm within the framework. We choose the Visual Hull technique as our baseline algorithm since 1) it works relatively well as long as the silhouette of the object can be extracted thus is insensitive to material properties; 2). the true scene is always enclosed by the reconstruction result thus the outcome is always predictable.
 
-We could adopt the same methodology to determine the reconstruction result of PS. However, there is currently no such algorithm that works reasonaly well under varied conditions. Therefore, the fact that the estimated normal map is better than that of the baseline method is not a good indicator of a satisfactory reconstruction. As an alternative, we conducted extensive simulated experiments with changing mean and median angular errors, and have the following observations:
+We could adopt the same methodology to determine the reconstruction result of PS. A simple linear least square based Photometric Stereo is selected. However, there is currently no such algorithm that works reasonaly well under varied conditions, we run this algorithm under the optimal condition to ensure that a best possible result is achieved by the baseline method. To assess the performance of the selected PS against the baseline method, we compare the following characteristics of the angular error:
 \begin{itemize}
-\item The normal estimation is more tolerant to angular difference when the mean and median are close. The shape can be reliably estimated even with a mean/median angular difference of $10^\circ$, see Figure~\ref{fig:ps_criteria} (a)-(f).
-\item The normal estimation is more susceptible to large mean and median difference, see Figure~\ref{fig:ps_criteria} (g)-(l).
+\item Measures of Central Tendency: Mean and median are both valid measures of central tendency. But as the skewness increase, mean is being dragged in the direct of the skew, thus the median is generally considered to be the best representative of the central location of the data. The more skewed the distribution, the greater the difference between the median and mean, and the greater emphasis should be placed on using the median as opposed to the mean. See Figure\ref{fig:ang_diff_skew}.
+\item Variation:
+  \begin{itemize}
+    \item Interquatile range%: $Q_{(3 - 1)} < 3$;
+    \item Standard deviation%: canslightly larger than $Q_3$
+  \end{itemize}
+\item Skewness (right (positive)-skewness):
+  \begin{itemize}
+    \item Difference between Mean and Median: The normal estimation is more tolerant to angular difference when the mean and median are close. The shape can be reliably estimated even with a mean/median angular difference of $10^\circ$, see Figure~\ref{fig:ps_criteria} (a)-(f). The normal estimation is more susceptible to large mean and median difference, see Figure~\ref{fig:ps_criteria} (g)-(l).
+  \end{itemize}
 \end{itemize}
 This can be explained as follows: when the normals are reliably estimated, the angular difference should follow a Gaussian distribution. Therefore, the mean and median are close to each other. However, if normals are poorly recovering, the mean would become larger since large angular errors exist while the median would change far less since only a small amount of pixels are affected. Thus the difference beteen mean and median would be larger when surface normals are poorly recovered.
+\begin{figure}[!htbp]
+\centering
+\includegraphics[width=0.6\textwidth]{mapping/skewed}
+\caption{Right-skewed distribution. A typical graph of the angular difference.}
+\label{fig:ang_diff_skew}
+\end{figure}
+
 \begin{figure}[!htbp]
 \begin{tabular}{ccc}
 \includegraphics[width=0.33\textwidth]{mapping/ps_criteria/mu_med_0_0.png} &
@@ -94,19 +123,22 @@ This can be explained as follows: when the normals are reliably estimated, the a
 \label{fig:ps_criteria}
 \end{figure}
 
-Therefore, the criteria of an ``acceptable'' normal reconstruction are listed in Table~\ref{tab:ps_criteria}, where $c$ is a constant that varies from object to object, and is normally less then $5^\circ$. For the examples shown in Figure~\ref{fig:ps_criteria}, $c=1^\circ$ for sphere, and $c=2^\circ$ for `knight'.
-\begin{table}[!htbp]
-\centering
-\begin{tabular}{cc}
-\hline
-Mean ($\mu$) & Median (med)\\
-$\mu<10^\circ$ & $\text{med}<10^\circ$\\
-$\mu - \text{med} < \text{c}^\circ$\\
-\hline
-\end{tabular}
-\caption{Criteria of an ``acceptable'' normal estimation by Photometric Stereo techniques.}
-\label{tab:ps_criteria}
-\end{table}
+% However, as we will be shown in Chapter~\ref{ch:3DRecon_Interp}, the actual thresholds of the angular error might vary from shape to shape. Therefore, it's impractical to use a categorical numeric value to determine the quality of reconstruction. The metrics mentioned above provide the guidelines when it comes to assess the performance of the algorithm, but the actual thresholds are by no means and should not be fixed.
+
+% Therefore, the criteria of an ``acceptable'' normal reconstruction are listed in Table~\ref{tab:ps_criteria}, where $c$ is a constant that varies from object to object, and is normally less then $5^\circ$. For the examples shown in Figure~\ref{fig:ps_criteria}, $c=1^\circ$ for sphere, and $c=2^\circ$ for `knight'.
+% \begin{table}[!htbp]
+% \centering
+% \begin{tabular}{cccc}
+% \hline
+% Mean ($\mu$) & Median (med) & Interquatile & Standard Deviation\\
+% \hline
+% $\mu<10^\circ$ & $\text{med}<10^\circ$ & $Q_{(3-1)}<3^\circ$ & $\sigma \not\gg Q_3$\\
+% $\mu - \text{med} < \text{c}^\circ$\\
+% \hline
+% \end{tabular}
+% \caption{Criteria of an ``acceptable'' normal estimation by Photometric Stereo techniques.}
+% \label{tab:ps_criteria}
+% \end{table}
 
 \section{Effective Problem Domain}
 The biggest challenge in conducting a comprehensive evaluation is the large variability of shapes and material properties, which results in a problem domain that is too large to cope with. Therefore, the first step is to establish the \textit{effective problem domain} (EPD) by finding the effective properties so that the dimension of the problem conditions would become more manageable. We conduct comprehensive experiments that evaluate the performance of the algorithms by changing two properties at a time while fixing the others. The goals are to 1). identify effective properties; 2). identify dependent properties that would impact the algorithm differently with different combinations of values.
@@ -492,12 +524,12 @@ The performance of PMVS under difference combinations of properties is shown in 
 
 We make the following observations from the training results
 \begin{itemize}
-\item (a)-(c): albedo could counteract the effect of specular, take the case when $\text{tex}=0.5$ as an example, as the albedo increases, the result becomes better. The effect albedo has on specular has to do with surface texture, \ie higher texture, more significant the influence is.
-\item (d)-(f): specular has a bigger impact on low texture surfaces than on high texture ones, \ie for low textured surface, even low specular would result in bad results whereas for high textured surface, satisfactory results could be achieved under high specular cases. This is illustrated in Figure~\ref{fig:mvs_spec}
-\item (g)-(i): 
+\item \textbf{(a)-(c)}: as the texture level increases, the completeness increases consistently.
+\item \textbf{(d)-(f)}: albedo could counteract the effect of specular, take the case when $\text{tex}=0.5$ as an example, as the albedo increases, the result becomes better. The effect albedo has on specular has to do with surface texture, \ie higher texture, more significant the influence is.
+\item \textbf{(g)-(i)}: specular has a bigger impact on low texture surfaces than on high texture ones, \ie for low textured surface, even low specular would result in bad results whereas for high textured surface, satisfactory results could be achieved under high specular cases. This is illustrated in Figure~\ref{fig:mvs_spec}
 \end{itemize}
 
-From all the training results, we could derive the problem conditions that PMVS could reliably work on and get satisfactory results. Those conditions are in Table~\ref{tab:mvs_traing_result}.
+From all the training results, we could derive the problem conditions that PMVS could reliably work on and get satisfactory results. Those conditions are in Table~\ref{tab:mvs_training_result}.
 \begin{table}[!htbp]
   \centering
   \begin{tabular}{l*{4}{c}}
@@ -533,18 +565,21 @@ From all the training results, we could derive the problem conditions that PMVS 
 \subsection{Mapping of EPS}
 The performance of example-based PS under difference combinations of properties is shown in Figure~\ref{fig:ps_training}. The conditions that example-based PS works well is listed in Table~\ref{tab:ps_training_result}.
 \begin{figure}[!htbp]
-\begin{tabular}{ccc}
-\includegraphics[width=0.33\textwidth]{mapping/training/ps_alb_02}&
-\includegraphics[width=0.33\textwidth]{mapping/training/ps_alb_05}&
-\includegraphics[width=0.33\textwidth]{mapping/training/ps_alb_08}\\
+\begin{tabular}{cccc}
+\includegraphics[width=0.3\textwidth]{mapping/training/ps_alb_02}&
+\includegraphics[width=0.3\textwidth]{mapping/training/ps_alb_05}&
+\includegraphics[width=0.3\textwidth]{mapping/training/ps_alb_08}&
+\includegraphics[width=0.087\textwidth]{mapping/training/ps_baseline}\\
 (a) & (b) & (c)\\
-\includegraphics[width=0.33\textwidth]{mapping/training/ps_spec_02}&
-\includegraphics[width=0.33\textwidth]{mapping/training/ps_spec_05}&
-\includegraphics[width=0.33\textwidth]{mapping/training/ps_spec_08}\\
+\includegraphics[width=0.3\textwidth]{mapping/training/ps_spec_02}&
+\includegraphics[width=0.3\textwidth]{mapping/training/ps_spec_05}&
+\includegraphics[width=0.3\textwidth]{mapping/training/ps_spec_08}&
+\includegraphics[width=0.087\textwidth]{mapping/training/ps_baseline}\\
 (d) & (e) & (f)\\
-\includegraphics[width=0.33\textwidth]{mapping/training/ps_rough_02}&
-\includegraphics[width=0.33\textwidth]{mapping/training/ps_rough_05}&
-\includegraphics[width=0.33\textwidth]{mapping/training/ps_rough_08}\\
+\includegraphics[width=0.3\textwidth]{mapping/training/ps_rough_02}&
+\includegraphics[width=0.3\textwidth]{mapping/training/ps_rough_05}&
+\includegraphics[width=0.3\textwidth]{mapping/training/ps_rough_08}&
+\includegraphics[width=0.087\textwidth]{mapping/training/ps_baseline}\\
 (g) & (h) & (i)\\
 \end{tabular}
 \caption{Performance of PS with varied properties.}
@@ -553,12 +588,12 @@ The performance of example-based PS under difference combinations of properties 
 
 We make the following observations from the training results
 \begin{itemize}
-\item (a)-(c): albedo has a positive effect on the reconstruction. Roughness has a more complicated effect on reconstruction, \ie as roughness would blur the specular area, it might actually make the results worse, see Figure~\ref{fig:ps_spec_rough}.
-\item (d)-(f): the effect of specular is that it will create `spikes', as shown in Figure~\ref{fig:ps_alb_spec}, and albedo can effective alleviate that.
-\item (g)-(i): as stated previous, roughness has a more complicated effect on reconstruction, \ie as roughness would blur the specular area, it might actually make the results worse.
+\item \textbf{(a)-(c)}: albedo has a positive effect on the reconstruction.
+\item \textbf{(d)-(f)}: the effect of specular is that it will create `spikes', as shown in Figure~\ref{fig:ps_alb_spec}, and albedo can effective alleviate that.
+\item \textbf{(g)-(i)}: roughness has a more complicated effect on reconstruction, \ie as roughness would blur the specular area, it might actually make the results worse, see Figure~\ref{fig:ps_spec_rough}.
 \end{itemize}
 
-From all the training results, we could derive the problem conditions that EPS could reliably work on and get satisfactory results. Those conditions are in Table~\ref{tab:ps_training_result}.
+From all the training results, we could derive the problem conditions that EPS could reliably work on and get satisfactory results. Those conditions are in Table~\ref{tab:ps_training_result}. We determine the mapping based on both the quantitative results, and the visual inspection of the normal maps.
 \begin{table}[!htbp]
   \centering
   \begin{tabular}{l*{4}{c}}
@@ -571,11 +606,11 @@ From all the training results, we could derive the problem conditions that EPS c
                    & - & 0.5 & 0.2 & 0.8\\
                    & - & 0.5 & 0.5 & 0.8\\
                    & - & 0.5 & 0.8 & 0.8\\
-                   & - & 0.8 & 0.2 & 0.2\\
+                   & - & 0.8 & 0.2 & 0.2\\ % can be removed
                    & - & 0.8 & 0.2 & 0.8\\
                    & - & 0.8 & 0.5 & 0.2\\
                    & - & 0.8 & 0.5 & 0.8\\
-                   & - & 0.8 & 0.8 & 0.2\\
+                   & - & 0.8 & 0.8 & 0.2\\ % can be removed
                    & - & 0.8 & 0.8 & 0.8\\
   \hline
   \end{tabular}
@@ -584,7 +619,7 @@ From all the training results, we could derive the problem conditions that EPS c
 \end{table}
 
 \subsection{Mapping of GSL}
-The performance of Gray code SL under difference combinations of properties is shown in Figure~\ref{fig:sl_training}. Since there is only one camera, thus only a portion of scene is visible. Thus we claim that the completeness is $50\%$ of that of VH is acceptable. The conditions that PMVS works well is listed in Table~\ref{tab:sl_training_result}.
+The performance of Gray code SL under difference combinations of properties is shown in Figure~\ref{fig:sl_training}. Since there is only one camera, thus only a portion of scene is visible. Thus we claim that the completeness is $60\%$ of that of VH is acceptable. The conditions that PMVS works well is listed in Table~\ref{tab:sl_training_result}.
 \begin{figure}[!htbp]
 \begin{tabular}{ccc}
 \includegraphics[width=0.33\textwidth]{mapping/training/sl_train_alb_02}&
@@ -608,9 +643,9 @@ We can make the following observations
 \begin{itemize}
 \item the accuracy remains almost fixed
 \item texture doesn't have an effect on the accuracy or completeness of the reconstruction
-\item (a)-(c): albedo has a positive effect on the reconstruction result, and specular a negative effect. However, when the roughness is high enough, speular actually is a good thing, especially for low albedo surface, as illustrated in Figure~\ref{fig:sl_alb_spec}.
-\item (d)-(f): for fixed albedo, roughness can effectively counteract the effect of specular.
-\item (g)-(i): 
+\item \textbf{(a)-(c)}: albedo has a positive effect on the reconstruction result, and specular a negative effect. However, when the roughness is high enough, speular actually is a good thing, especially for low albedo surface, as illustrated in Figure~\ref{fig:sl_alb_spec}.
+\item \textbf{(d)-(f)}: SL is very sensitive to specular, it cann't handle low specular, see Figure~\ref{fig:sl_alb_spec} (d)-(f), and Figure~\ref{fig:sl_spec_rough} (a)-(c).
+\item \textbf{(g)-(i)}: roughness can effectively counteract the effect of specular.
 \end{itemize}
 
 From all the training results, we could derive the problem conditions that GSL could reliably work on and get satisfactory results. Those conditions are in Table~\ref{tab:sl_training_result}.
@@ -648,24 +683,46 @@ From all the training results, we could derive the problem conditions that GSL c
 \end{table}
 
 \section{Framework}
-Use additional requirements and constraints to select algorithm.
+% \subsubsection{Requirements}
+The framework consists of three separate models: The first layer is the actual implementation of the algorithms. The second layer is the description of the problem domain. The interpreter is next layer in the framework, and receives the description from the user passed through the interface (\eg API). It is responsible for choosing the appropriate 3D reconstruction algorithm(s) based on the described properties and additional requirements.
+\begin{figure}[!htbp]
+\centering
+\begin{tikzpicture}[node distance=1.2cm, auto]
 
-\subsubsection{Requirements}
+\node (interp) [data] {L3: Interpreter};
+\node (desc) [data, below of=interp] {L2: Description};
+\node (algo) [data, below of=desc] {L1: Algorithm};
+\draw[red,thick,solid] ($(interp.north west)+(-0.3,0.3)$)  rectangle ($(algo.south east)+(0.3,-0.3)$);
 
-\subsubsection{Constraints}
+\end{tikzpicture}
+\caption{The three layer of the 3D reconstruction framework.}
+\label{fig:framework_overview}
+\end{figure}
 
-The interpreter is next layer in the framework, and receives the description from the user passed through the interface (\eg API). It is responsible for choosing the appropriate 3D reconstruction algorithm(s) based on the described properties and additional requirements.
+The interpreter has two major components: mapping and constraints.
+\begin{figure}[!htbp]
+\centering
+\begin{tikzpicture}[node distance=1.2cm, auto]
 
-The addition of an algorithm to the framework is accomplished through a `plug-in' system, defined using an internal interface. Each algorithm must implement this interface; the interpreter then uses it to provide the algorithm with the input images and the full user-defined description. The algorithm returns matches in the interface-defined representation, so that all algorithms return the same type to the user.
+\node (mapping) [data_nonfixed] {Mapping};
+\node (constraint) [data_nonfixed, right of=mapping, xshift=1cm] {Constraints};
+\draw[red,thick,solid] ($(mapping.north west)+(-0.3,0.3)$)  rectangle ($(constraint.south east)+(0.3,-0.3)$);
+
+\end{tikzpicture}
+\caption{The two components of the Interpreter layer.}
+\label{fig:interpreter_layer}
+\end{figure}
 
 The process of adding a new algorithm to the framework is as follows:
 \begin{itemize}
 \item The problem condition under which the algorithm is designed to return reliable results. The set of conditions defines a large dimensional volume in which algorithms occupy sub-volumes.
 \end{itemize}
-
 From the training results, we can derive the condition matrices for each algorithm. The next step is to find the best possible algorithm based on the problem description. This could results in multiple algorithms selected, or none selected for some cases. Nonetheless, we need to establish the rule of determining which algorithm gives the best result under the specified conditions. We collect all the problem conditions and the corresponding algorithms.
 
-We use this as an illustrative example. Since PMVS works for arbitray roughness, and GSL and EPS requires high roughness, we
+In addition to the mapping, we also provide additional constraints to the framework to select a satisfactory result if more than one algorithm give acceptable ones. The current constraints include: 3D-first, accuracy-first, completenss first. Since Photometric Stereo generally would generate models with higher accuracy, however, the depth information is lost, which is often refered to as 2.5D reconstruction. Therefore, if true 3D reconstruction is not required, or only the shape of the surface is required, we should choose PS. Otherwise, we determine the best model based on accuracy or completeness measure. tollerance
+
+The addition of an algorithm to the framework is accomplished through a `plug-in' system, defined using an internal interface. Each algorithm must implement this interface; the interpreter then uses it to provide the algorithm with the input images and the full user-defined description. The algorithm returns matches in the interface-defined representation, so that all algorithms return the same type to the user.
+
 
 % \begin{table}[!htbp]
 %   \centering
