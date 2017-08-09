@@ -5,12 +5,12 @@
 \label{ch:3DRecon_Mapping}
 Most of the vision work focuses on developing algorithmic novelties, and very few investigates the rigorous conditions under which these algorithms work. Thus this knowledge is only known empirically, without a rigorous definition of the application domain or problem conditions. This section builds upon the 3D description proposed in Chapter~\ref{ch:3DRecon_Desc}, and attempts to find out the optimal algorithms under a well defined condition.
 
-To achieve this goal, we need a dataset to evaluate the performance of each algorithm under varied conditions, which is not the goal of most of the online datasets. To the best of our knowledge, current existing 3D benchmarks focus on one specific class of algorithms, for example, the Middlebury dataset is targeted at MVS algorithms, and the `DiLiGenT' dataset is for Photometric Stereo algorithms. This makes them only suitable to the evaluation of algorithms within the same category. There is no dataset that evaluates 3D reconstruction across differ categories, let alone one that covers a range of properties of material and geometry and all their combinations. The reasons for the lack of such a dataset are: 1). it's already tedious to create a real-world dataset for one specific category of algorithms, it would be even more challenging to create a dataset for a larger range of algorithms with the ground truth; 2). it's practically impossible to change one property, \eg, noise level, lighting configuration, material, \etc while fixing the others in order to conduct a thorough evaluation.
+To achieve this goal, we need a dataset to evaluate the performance of each algorithm under varied conditions, which is not the goal of most online datasets. To the best of our knowledge, current existing 3D benchmarks focus on one specific class of algorithms, for example, the Middlebury dataset is targeted at MVS algorithms, and the `DiLiGenT' dataset is for Photometric Stereo algorithms. This makes them only suitable to the evaluation of the within-category algorithms. There is no dataset that evaluates 3D reconstruction across differ categories, not to mention one that covers a range of properties of material and geometry and all their combinations. The reasons for the lack of such a dataset are: 1). it's already tedious to create a real-world dataset for one specific category of algorithms, it would be even more challenging to create a dataset for a larger range of algorithms with the ground truth; 2). it's practically impossible to change one property, \eg, noise level, lighting configuration, material, \etc while fixing the others in order to conduct a thorough evaluation.
 
 We propose a synthetic dataset created by phisically-based rendering software - Blender, to evaluate the 3D reconstruction algorithms. The dataset includes a collection of images of a scene under different materials or lighting conditions. The camera/projector intrinsic and extrinsic parameters are computed directly from the configurations of the synthetic setup, and the ground truth, including the 3D model point cloud and normal map, are generated directly from Blender.
 
 \section{Synthetic setup}
-We use the physically-based rendering engine named Cycles in Blender to generate the synthetic dataset. For each technique, the configuration of the camera remains fixed. The image resolution is 1280$\times$720, with a focal length of $35mm$ or $1400px$.
+We use the physically-based rendering engine named Cycles in Blender to generate the synthetic dataset. For each technique, the configuration of the camera remains fixed. The image resolution is 1280$\times$720, with a focal length of $35mm$ or $1400pix$.
 
 For the Multi-View Stereo setup, there are five rings of cameras, of which the elevation angle is $15^\circ$, $30^\circ$, $45^\circ$, $60^\circ$, $90^\circ$. The between-angle of two neighbouring cameras is $30^\circ$, $30^\circ$, $45^\circ$, $45^\circ$, and $360^\circ$. Thus there are in total $12+12+8+8+1=41$ cameras.
 
@@ -19,7 +19,7 @@ For the photometric stereo setup, since increasing the number of images is only 
 For the structured light setup, the baseline angle between the camera and the projector is $10^\circ$, and only one camera is used, thus only a portion of the object is visible. The resolution of the projector is $1024\times768$, thus 10 Gray code patterns are needed. To counter the effect of inter-reflection, each pattern and its inverse are projected, which makes it less sensitive to scattered light.
 
 \section{Structure of Datasets}
-Due to the number of properties and number of levels for each property, it would be unrealistic to render all the combinations of properties. For instance, if there are $N$ properties and each is discretized into $L$ levels, the number of different combinations is $L^N$, and for each combination, there are in total $41+25+42=108$ images to render. Therefore, we take another approach: 1). first we investigate the \textit{dependency} between any two properties, if these two properties are independent, there is no need to render all their combinations whereas it's necessary to do so if they are dependent; 2). render all the dependent properties and their combinations. The structure of the dataset is as follows
+Due to the number of properties and number of levels for each property, it would be unrealistic to render all their combinations. For instance, if there are $N$ properties and each is discretized into $L$ levels, the number of different combinations is $L^N$, and for each combination, there are in total $41+25+42=108$ images to render. Therefore, we take another approach: 1). we investigate the \textit{effetive problem domain} which consists of only the \textit{effective} and \textit{dependent} properties; 2). generate synthetic images for the \textit{effective} and \textit{dependent} properties and all their combinations. The structure of the dataset is as follows
 \begin{figure}[!htbp]
 \centering
 \includegraphics[width=0.5\textwidth]{mapping/dataset_structure}
@@ -31,7 +31,7 @@ Due to the number of properties and number of levels for each property, it would
 We use the metric proposed in \cite{seitz2006comparison} to evaluate MVS and SL algorithms. More specifically, we compute the accuracy and completeness of the reconstruction. For accuracy, the distance between the points in the reconstruction $R$ and the nearest points on ground truth $G$ is computed, and the distance $d$ such that $X\%$ of the points on $R$ are within distance $d$ of $G$ is considered as accuracy. Thus the lower the accuracy value, the better the reconstruction result. For completeness, we compute the distance from $G$ to $R$. Intuitively, points on $G$ is not ``covered'' if no suitable nearest points on $R$ found. A more practical approach computes the fraction of points of $G$ that are within an allowable distance $d$ of $R$.
 Note that as the reconstruction gets better, the ``accuracy value'' goes down, but the ``accuracy'' is often claimed as improved, which is contradictory at first glance. To make it more consistent to the natural context, we say the accuracy goes up when the reconstruction gets better.
 
-For photometric stereo, the metric information is lost since only one viewpoint is used. Thus the previous metrics is not applicable. We employ another evaluation criteria that is widely adopted by the community, which is based on the statistics of angular error. For each pixel, the angular error is calculated as $arccos$($n_g^T n$) in degrees, where $n_g$ and $n$ are the ground truth and estimated normals respectively. In addition to the mean angular error, we also calculate the minimum, maximum, median, the first quartile, and the third quartile of angular errors for each estimated normal map.
+For photometric stereo, the depth information is lost since only one viewpoint is used. Thus the previous metrics are not applicable. We employ another evaluation criteria that is widely adopted by the community, which is based on the statistics of angular error. For each pixel, the angular error is calculated as the angle between the estimated and ground truth normal, \ie $arccos$($n_g^T n$), where $n_g$ and $n$ is the ground truth and estimated normals respectively. In addition to the mean angular error, we also calculate the standard deviation, minimum, maximum, median, the first quartile, and the third quartile of angular errors for each estimated normal map.
 
 \section{Selected methods}
 We have selected one representative algorithm from three major classes of algorithms presented in Chapter~\ref{ch:3DRecon_Taxo}: the PMVS proposed in~\cite{furukawa2010accurate}, the example-based photometric stereo proposed in~\cite{hertzmann2005example}, and the Gray code structured light technique, see Table~\ref{tab:selected_algos} for a summary of the selected algorithms. The current implementation of SL projects both column and row patterns, and depth values are computed using these two kinds of patterns individually. A depth consistency checking step is performed to reject erroneous triangulations.
@@ -54,7 +54,7 @@ EPS & - & High & Low & High \\
 GSL & - & High & Low & High\\
 \hline
 \end{tabular}
-\caption{Summary of the baseline and selected algorithms for the framework, and the corresponding working conditions in theory.}
+\caption{Summary of the selected algorithms for the framework, and the corresponding working conditions in theory.}
 \label{tab:selected_algos}
 \end{table}
 
@@ -77,28 +77,27 @@ LLS-PS & - & High & Low & High\\
 \caption{Summary of the baseline algorithms for the framework, and the corresponding working conditions in theory.}
 \label{tab:selected_baseline_algos}
 \end{table}
-A baseline algorithm that works sufficiently well under most conditions should be chosen first so that it's possible to determine the performance of selected algorithm within the framework. We choose the Visual Hull technique as our baseline algorithm since 1) it works relatively well as long as the silhouette of the object can be extracted thus is insensitive to material properties; 2). the true scene is always enclosed by the reconstruction result thus the outcome is always predictable.
+A baseline algorithm that works sufficiently well under most conditions should be chosen so that it's possible to determine the performance of selected algorithm within the framework. We choose the Visual Hull technique as one of our baseline algorithms since 1) it works relatively well as long as the silhouette of the object can be reliably extracted thus is insensitive to material properties; 2). the true scene is always enclosed by the reconstruction result thus the outcome is always predictable.
 
-We could adopt the same methodology to determine the reconstruction result of PS. A simple linear least square based Photometric Stereo is selected. However, there is currently no such algorithm that works reasonaly well under varied conditions, we run this algorithm under the optimal condition to ensure that a best possible result is achieved by the baseline method. To assess the performance of the selected PS against the baseline method, we compare the following characteristics of the angular error:
-\begin{itemize}
-\item Measures of Central Tendency: Mean and median are both valid measures of central tendency. But as the skewness increase, mean is being dragged in the direct of the skew, thus the median is generally considered to be the best representative of the central location of the data. The more skewed the distribution, the greater the difference between the median and mean, and the greater emphasis should be placed on using the median as opposed to the mean. See Figure\ref{fig:ang_diff_skew}.
-\item Variation:
-  \begin{itemize}
-    \item Interquatile range%: $Q_{(3 - 1)} < 3$;
-    \item Standard deviation%: canslightly larger than $Q_3$
-  \end{itemize}
-\item Skewness (right (positive)-skewness):
-  \begin{itemize}
-    \item Difference between Mean and Median: The normal estimation is more tolerant to angular difference when the mean and median are close. The shape can be reliably estimated even with a mean/median angular difference of $10^\circ$, see Figure~\ref{fig:ps_criteria} (a)-(f). The normal estimation is more susceptible to large mean and median difference, see Figure~\ref{fig:ps_criteria} (g)-(l).
-  \end{itemize}
-\end{itemize}
-This can be explained as follows: when the normals are reliably estimated, the angular difference should follow a Gaussian distribution. Therefore, the mean and median are close to each other. However, if normals are poorly recovering, the mean would become larger since large angular errors exist while the median would change far less since only a small amount of pixels are affected. Thus the difference beteen mean and median would be larger when surface normals are poorly recovered.
+A simple linear least squares based Photometric Stereo (LLS-PS) is selected to evaluate Photometric Stereo algorithms. However, there is currently no such algorithm that works reasonaly well under various conditions. Thus we run this baseline algorithm under the optimal condition to ensure that a best possible result is achieved. To assess the performance of the selected PS algorithm against the baseline, we compare the following characteristics of the angular error:
+
+\subsubsection{Measures of Central Tendency}
+Mean and median are both valid measures of central tendency. But as the skewness increases, mean would be dragged in the direct of the skew, thus the median is generally considered to be the best representative of the central location of the data. The more skewed the distribution, the greater the difference between the median and mean, and the greater emphasis should be placed on using the median as opposed to the mean. See Figure~\ref{fig:ang_diff_skew}.
 \begin{figure}[!htbp]
 \centering
-\includegraphics[width=0.6\textwidth]{mapping/skewed}
-\caption{Right-skewed distribution. A typical graph of the angular difference.}
+\includegraphics[width=0.4\textwidth]{mapping/skewed}
+\caption{A right-skewed distribution, which is a typical graph of the angular error.}
 \label{fig:ang_diff_skew}
 \end{figure}
+
+\subsubsection{Variation}
+\begin{itemize}
+  \item Interquatile range %: $Q_{(3 - 1)} < 3$;
+  \item Standard deviation %: canslightly larger than $Q_3$
+\end{itemize}
+  
+\subsubsection{Skewness (right/positive-skewness)}
+The normal estimation is more insensitive to angular error when the mean and median are close. The shape can be relatively well recovered with a mean/median angular error of $10^\circ$, see Figure~\ref{fig:ps_criteria} (a)-(f). The normal estimation becomes more susceptible as the difference between the mean and median increases, see Figure~\ref{fig:ps_criteria} (g)-(l). This can be explained as follows: when the normals are reliably estimated, the angular error should follow a Gaussian distribution. Therefore, the mean and median are close to each other. However, if normals are poorly recovering, the mean would become larger since large angular errors exist while the median would change far less since only a small amount of pixels are affected. Thus the difference beteen mean and median would be larger when surface normals are poorly recovered.
 
 \begin{figure}[!htbp]
 \begin{tabular}{ccc}
@@ -119,7 +118,7 @@ This can be explained as follows: when the normals are reliably estimated, the a
 \includegraphics[width=0.33\textwidth]{mapping/ps_criteria/knight_5_8.png} \\
 (j) $\mu=5, \text{med}=5$ & (k) $\mu=5, \text{med}=6$ & (l) $\mu=5, \text{med}=8$\\
 \end{tabular}
-\caption{Acceptable results of Photometric Stereo}
+\caption{Shape estimation results with varied mean and median values. The algorithm is less sensitive to large mean or median value while more sensitive to the difference between the mean and median value.}
 \label{fig:ps_criteria}
 \end{figure}
 
@@ -141,10 +140,10 @@ This can be explained as follows: when the normals are reliably estimated, the a
 % \end{table}
 
 \section{Effective Problem Domain}
-The biggest challenge in conducting a comprehensive evaluation is the large variability of shapes and material properties, which results in a problem domain that is too large to cope with. Therefore, the first step is to establish the \textit{effective problem domain} (EPD) by finding the effective properties so that the dimension of the problem conditions would become more manageable. We conduct comprehensive experiments that evaluate the performance of the algorithms by changing two properties at a time while fixing the others. The goals are to 1). identify effective properties; 2). identify dependent properties that would impact the algorithm differently with different combinations of values.
+The biggest challenge in conducting a comprehensive evaluation is the large variations in shapes and material properties, which results in a problem domain that is too large to cope with. Therefore, the first step is to establish the \textit{effective problem domain} (EPD) by finding the effective properties so that the dimension of the problem conditions would become more manageable. We conduct comprehensive experiments that evaluate the performance of the algorithms by changing two properties at a time while fixing the others. The goals are to 1). identify effective properties; 2). identify dependent properties that would impact the algorithm differently with different combinations of values.
 
 \subsection{EPD of PMVS}
-We evaluate the performance of PMVS in terms of accuracy and completeness under varied combinations of properties, the settings of the properties and all their combinations are listed in Table~\ref{tab:mvs_depend_check_params}.
+We evaluate the performance of PMVS in terms of accuracy and completeness under varied combinations of properties, the settings of the properties are listed in Table~\ref{tab:mvs_depend_check_params}.
 \begin{table}[!htbp]
   \centering
   \begin{tabular}{l*{4}{c}}
@@ -163,21 +162,20 @@ We evaluate the performance of PMVS in terms of accuracy and completeness under 
   \label{tab:mvs_depend_check_params}
 \end{table}
 
-\begin{figure}[!htbp]
-\begin{tabular}{cc}
-\includegraphics[width=0.5\textwidth]{mapping/depend_check/mvs_tex_alb}&
-\includegraphics[width=0.5\textwidth]{mapping/depend_check/mvs_tex_spec}\\
-(a) & (b)\\
-\includegraphics[width=0.5\textwidth]{mapping/depend_check/mvs_tex_rough}&
-\includegraphics[width=0.5\textwidth]{mapping/depend_check/mvs_alb_spec}\\
-(c) & (d)\\
-\includegraphics[width=0.5\textwidth]{mapping/depend_check/mvs_alb_rough}&
-\includegraphics[width=0.5\textwidth]{mapping/depend_check/mvs_spec_rough}\\
-(e) & (f)\\
+\begin{sidewaysfigure}[!htbp]
+\begin{tabular}{ccc}
+\includegraphics[width=0.3\textwidth]{mapping/depend_check/mvs_tex_alb}&
+\includegraphics[width=0.3\textwidth]{mapping/depend_check/mvs_tex_spec}&
+\includegraphics[width=0.3\textwidth]{mapping/depend_check/mvs_tex_rough}\\
+(a) & (b) & (c)\\
+\includegraphics[width=0.3\textwidth]{mapping/depend_check/mvs_alb_spec}&
+\includegraphics[width=0.3\textwidth]{mapping/depend_check/mvs_alb_rough}&
+\includegraphics[width=0.3\textwidth]{mapping/depend_check/mvs_spec_rough}\\
+(d) & (e) & (f)\\
 \end{tabular}
-\caption{Performance of PMVS under six pairwise conditions. For instance, (a) shows the performance under changing \textit{texture} and \textit{albedo} values. The property values are assigned based on (a) of Table~\ref{tab:mvs_depend_check_params}.}
+\caption{Performance of PMVS under six pairwise conditions. For instance, (a) shows the performance under changing \textit{texture} and \textit{albedo} values while the others are fixed. The property values are set based on settings in Table~\ref{tab:mvs_depend_check_params}.}
 \label{fig:mvs_depend_check}
-\end{figure}
+\end{sidewaysfigure}
 
 \subsubsection{Effective and Dependent Properties}
 We investigate how each property affects the reconstruction in terms of accuracy and completeness.
@@ -223,19 +221,17 @@ Albedo has a positive effect whereas specular a negative effect on the reconstru
 The albedo and roughness have a negligible effect on the results.
 
 \textbf{(f) Specular and Roughness} 
-The effect of roughness is that it can diminish the specular and make the surface appearch diffuse. Since specular has a negative impact on the reconstruction, in theory, roughness should have a positive impact on the reconstruction. However, since this test is conducted on highly textured surface, as discussed before, the reconstruction is still good for specular, highly textured surface, refer to~\ref{fig:mvs_depend_check}(b). That's why the effect of roughness on specualar seem insignificant. Since for this method, these two property are closed related, we'll just consider specular only, and ignore roughness. since a low specular achieve almost the same result as a high specular and rough surface, we would just combine these two factors into a single one, and consider the specular only for simplicity.
+Surface roughness can effectively diminishes the specular component and makes the surface appearch more diffuse. Since specular has a negative impact on the reconstruction, in theory, roughness should have a positive impact on the reconstruction. However, this effect is closely related to surface texture: surface reconstruction is always poor for low textured surfaces or good for highly textured ones regardless of the amount of specular component, as shown in Figure~\ref{fig:mvs_depend_check} (b). The result shown in Figure~\ref{fig:mvs_depend_check} (f) happens to be tested in highly textured surface, therefore achieves consistently good results. Since high specular, high roughness surfaces visually resemble low specular ones, and achieve similar reconstruction results as well, we would only consider specular, and ignore roughness for simplicity.
 
-\subsubsection{Effective Problem Domain} 
-The most important property is, high texture would lead to good reconstruction. Specular effect would deteriorate the reconstruction for lower textured and lower albedo surfaces. Since low specular and high specular + rough achieves almost the same results, we combine these two factors together and consider specular only.
-
-The effective properties of PMVS are: texture, albedo, and specularity, and the effective problem domain is shown in Table~\ref{tab:mvs_depend_prop}.
+\subsubsection{Summary} 
+The effective properties of PMVS are: texture, albedo, and specular, of which texture is the most important one. Specular would deteriorate the reconstruction for lower textured and lower albedo surfaces. The effective problem domain is shown in Table~\ref{tab:mvs_depend_prop}.
 \begin{table}[!htbp]
   \centering
   \begin{tabular}{l*{4}{c}}
   \hline
   \textbf{Metric} & Texture & Albedo & Specular & Roughness\\
   \hline
-  Accuracy & \ding{55} & \checkmark & \checkmark & \ding{55}\\
+  Accuracy & \checkmark & \checkmark & \checkmark & \ding{55}\\
   Completeness & \checkmark & \checkmark & \checkmark & \ding{55}\\
   \hline
   \end{tabular}
@@ -243,29 +239,8 @@ The effective properties of PMVS are: texture, albedo, and specularity, and the 
   \label{tab:mvs_depend_prop}
 \end{table}
 
-% \begin{table}[!htbp]
-%   % \centering
-%   \begin{tabular}{*{4}{c}r||*{4}{c}r||*{4}{c}r}
-%   \hline
-%   T & A & S & R & RS & T & A & S & R & RS & T & A & S & R & RS\\
-%   \hline
-%   0.2 & 0.2 & 0.2 & 0.0 & \ding{55} & 0.5 & 0.2 & 0.2 & 0.0 & \ding{55} & 0.8 & 0.2 & 0.2 & 0.0 & \ding{55}\\
-%   0.2 & 0.2 & 0.5 & 0.0 & \ding{55} & 0.5 & 0.2 & 0.5 & 0.0 & \ding{55} & 0.8 & 0.2 & 0.5 & 0.0 & \ding{55}\\
-%   0.2 & 0.2 & 0.8 & 0.0 & \ding{55} & 0.5 & 0.2 & 0.8 & 0.0 & \ding{55} & 0.8 & 0.2 & 0.8 & 0.0 & \ding{55}\\
-%   0.2 & 0.5 & 0.2 & 0.0 & \ding{55} & 0.5 & 0.5 & 0.2 & 0.0 & \ding{55} & 0.8 & 0.5 & 0.2 & 0.0 & \ding{55}\\
-%   0.2 & 0.5 & 0.5 & 0.0 & \ding{55} & 0.5 & 0.5 & 0.5 & 0.0 & \ding{55} & 0.8 & 0.5 & 0.5 & 0.0 & \ding{55}\\
-%   0.2 & 0.5 & 0.8 & 0.0 & \ding{55} & 0.5 & 0.5 & 0.8 & 0.0 & \ding{55} & 0.8 & 0.5 & 0.8 & 0.0 & \ding{55}\\
-%   0.2 & 0.8 & 0.2 & 0.0 & \ding{55} & 0.5 & 0.8 & 0.2 & 0.0 & \ding{55} & 0.8 & 0.8 & 0.2 & 0.0 & \ding{55}\\
-%   0.2 & 0.8 & 0.5 & 0.0 & \ding{55} & 0.5 & 0.8 & 0.5 & 0.0 & \ding{55} & 0.8 & 0.8 & 0.5 & 0.0 & \ding{55}\\
-%   0.2 & 0.8 & 0.8 & 0.0 & \ding{55} & 0.5 & 0.8 & 0.8 & 0.0 & \ding{55} & 0.8 & 0.8 & 0.8 & 0.0 & \ding{55}\\
-%   \hline
-%   \end{tabular}
-%   \caption{Mapping from the problem conditions to PMVS}
-% \end{table}
-
 \subsection{EPD of EPS}
-We evaluate the performance of example-based PS in terms of angular difference under varied combinations of properties, The statistical measures that we used include median, mean, first and third quartile of the angular difference. We investigate two properties at a time. The settings of the properties and all their combinations are listed in Table~\ref{tab:ps_depend_check_params}.
-
+We evaluate the performance of example-based PS in terms of angular error under varied combinations of properties, The statistical measures that we used include median, mean, standard deviation, first and third quartile of the angular error. We investigate two properties at a time. The settings of the properties are listed in Table~\ref{tab:ps_depend_check_params}.
 \begin{table}[!htbp]
   \centering
   \begin{tabular}{l*{4}{c}}
@@ -284,21 +259,20 @@ We evaluate the performance of example-based PS in terms of angular difference u
   \label{tab:ps_depend_check_params}
 \end{table}
 
-\begin{figure}[!htbp]
-\begin{tabular}{cc}
-\includegraphics[width=0.5\textwidth]{mapping/depend_check/ps_tex_alb}&
-\includegraphics[width=0.5\textwidth]{mapping/depend_check/ps_tex_spec}\\
-(a) & (b)\\
-\includegraphics[width=0.5\textwidth]{mapping/depend_check/ps_tex_rough}&
-\includegraphics[width=0.5\textwidth]{mapping/depend_check/ps_alb_spec}\\
-(c) & (d)\\
-\includegraphics[width=0.5\textwidth]{mapping/depend_check/ps_alb_rough}&
-\includegraphics[width=0.5\textwidth]{mapping/depend_check/ps_spec_rough}\\
-(e) & (f)\\
+\begin{sidewaysfigure}[!htbp]
+\begin{tabular}{ccc}
+\includegraphics[width=0.3\textwidth]{mapping/depend_check/ps_tex_alb}&
+\includegraphics[width=0.3\textwidth]{mapping/depend_check/ps_tex_spec}&
+\includegraphics[width=0.3\textwidth]{mapping/depend_check/ps_tex_rough}\\
+(a) & (b) &(c)\\
+\includegraphics[width=0.3\textwidth]{mapping/depend_check/ps_alb_spec}&
+\includegraphics[width=0.3\textwidth]{mapping/depend_check/ps_alb_rough}&
+\includegraphics[width=0.3\textwidth]{mapping/depend_check/ps_spec_rough}\\
+(d) & (e) & (f)\\
 \end{tabular}
-\caption{Performance of Example-based PS under six pairwise conditions. For instance, (a) shows the performance under changing \textit{texture} and \textit{albedo} values. The property values are assigned based on Table~\ref{tab:ps_depend_check_params} (a).}
+\caption{Performance of Example-based PS under six pairwise conditions. For instance, (a) shows the performance under changing \textit{texture} and \textit{albedo} values. The property values are assigned based on the settings in Table~\ref{tab:ps_depend_check_params} (a).}
 \label{fig:ps_depend_check}
-\end{figure}
+\end{sidewaysfigure}
 
 \subsubsection{Effective and Dependent Properties}
 We investigate how each property affects the reconstruction in terms of the statistics of the angular difference.
@@ -310,16 +284,26 @@ Texture has no effect on angular difference while albedo has a positive effect o
 Texture has no effect on angular difference while specular has a negative effect on normal estimation since the difference of mean and median gets larger as the specular increases. This can be explained as follows: as the specular increases, only the specular regions exhibit erroneous normal estimation while the rest of the surface is reliably estimated, see Figure~\ref{fig:ps_tex_spec}. That is why the median value exhibits far less change while the mean value increases significantly as shown in Figure~\ref{fig:ps_depend_check} (b).
 \begin{figure}[!htbp]
 \centering
-\begin{tabular}{ccc}
+\begin{tabular}{c|ccc}
+Image & Normal map & Height map & Angular error\\
+\hline\\
 \includegraphics[width=0.33\textwidth]{mapping/ps_tex_spec/0502_0001}&
-\includegraphics[width=0.33\textwidth]{mapping/ps_tex_spec/0505_0001}&
-\includegraphics[width=0.33\textwidth]{mapping/ps_tex_spec/0508_0001}\\
 \includegraphics[width=0.33\textwidth]{mapping/ps_tex_spec/0502_normal}&
+\includegraphics[width=0.25\textwidth]{mapping/ps_tex_spec/0502_dmap}&
+\includegraphics[width=0.06\textwidth]{mapping/ps_tex_spec/0502_ang_error}\\
+ & spec: 0.2 & \\
+\includegraphics[width=0.33\textwidth]{mapping/ps_tex_spec/0505_0001}&
 \includegraphics[width=0.33\textwidth]{mapping/ps_tex_spec/0505_normal}&
-\includegraphics[width=0.33\textwidth]{mapping/ps_tex_spec/0508_normal}\\
-(a) spec: 0.2 & (b) spec: 0.5 & (c) spec: 0.8\\
+\includegraphics[width=0.25\textwidth]{mapping/ps_tex_spec/0505_dmap}&
+\includegraphics[width=0.06\textwidth]{mapping/ps_tex_spec/0505_ang_error}\\
+ & spec: 0.5 & \\
+\includegraphics[width=0.33\textwidth]{mapping/ps_tex_spec/0508_0001}&
+\includegraphics[width=0.33\textwidth]{mapping/ps_tex_spec/0508_normal}&
+\includegraphics[width=0.25\textwidth]{mapping/ps_tex_spec/0508_dmap}&
+\includegraphics[width=0.06\textwidth]{mapping/ps_tex_spec/0508_ang_error}\\
+ & spec: 0.8 & \\
 \end{tabular}
-\caption{(a)-(c). The texture is set as 0.5. According to energy conservation, as the specular component increases, the diffuse component decreases.}
+\caption{(a)-(c). The texture is set as 0.5. The estimated normal map and recovered surface becomes consistently worse as the specular level rises.}
 \label{fig:ps_tex_spec}
 \end{figure}
 
@@ -330,23 +314,41 @@ Texture has no effect on angular difference while roughness has a positive effec
 The albedo has a positive impact on normal estimation, see Figure~\ref{fig:ps_alb_spec} (a)-(c) whereas the specular a negative impact on normal estimation, see Figure~\ref{fig:ps_alb_spec} (d)-(f).
 \begin{figure}[!htbp]
 \centering
-\begin{tabular}{ccc}
-\includegraphics[width=0.33\textwidth]{mapping/ps_alb_spec/0202_0001}&
+\begin{tabular}{c|ccc}
+Image & Normal map & Height map & Angular error\\
+\hline\\
+% \includegraphics[width=0.33\textwidth]{mapping/ps_alb_spec/0202_0001}&
+% \includegraphics[width=0.33\textwidth]{mapping/ps_alb_spec/0202_normal}&
+% \includegraphics[width=0.25\textwidth]{mapping/ps_alb_spec/0202_dmap}&
+% \includegraphics[width=0.06\textwidth]{mapping/ps_alb_spec/0202_ang_error}\\
+%  & (a) albedo: 0.2, spec: 0.2 & \\
+\includegraphics[width=0.33\textwidth]{mapping/ps_alb_spec/0802_0001}&
+\includegraphics[width=0.33\textwidth]{mapping/ps_alb_spec/0802_normal}&
+\includegraphics[width=0.25\textwidth]{mapping/ps_alb_spec/0802_dmap}&
+\includegraphics[width=0.06\textwidth]{mapping/ps_alb_spec/0802_ang_error}\\
+ & (a) albedo: 0.8, spec: 0.2 & \\
 \includegraphics[width=0.33\textwidth]{mapping/ps_alb_spec/0502_0001}&
-\includegraphics[width=0.33\textwidth]{mapping/ps_alb_spec/0802_0001}\\
-\includegraphics[width=0.33\textwidth]{mapping/ps_alb_spec/0202_normal}&
 \includegraphics[width=0.33\textwidth]{mapping/ps_alb_spec/0502_normal}&
-\includegraphics[width=0.33\textwidth]{mapping/ps_alb_spec/0802_normal}\\
-(a) albedo: 0.2 & (b) albedo: 0.5 & (c) albedo: 0.8\\
+\includegraphics[width=0.25\textwidth]{mapping/ps_alb_spec/0502_dmap}&
+\includegraphics[width=0.06\textwidth]{mapping/ps_alb_spec/0502_ang_error}\\
+ & (b) albedo: 0.5, spec: 0.2 & \\
 \includegraphics[width=0.33\textwidth]{mapping/ps_alb_spec/0202_0001}&
-\includegraphics[width=0.33\textwidth]{mapping/ps_alb_spec/0205_0001.jpg}&
-\includegraphics[width=0.33\textwidth]{mapping/ps_alb_spec/0208_0001}\\
 \includegraphics[width=0.33\textwidth]{mapping/ps_alb_spec/0202_normal}&
-\includegraphics[width=0.33\textwidth]{mapping/ps_alb_spec/0205_normal.png}&
-\includegraphics[width=0.33\textwidth]{mapping/ps_alb_spec/0208_normal}\\
-(d) specular: 0.2 & (e) specular: 0.5 & (f) specular: 0.8\\
+\includegraphics[width=0.25\textwidth]{mapping/ps_alb_spec/0202_dmap}&
+\includegraphics[width=0.06\textwidth]{mapping/ps_alb_spec/0202_ang_error}\\
+ & (c) albedo: 0.2, spec: 0.2 & \\
+\includegraphics[width=0.33\textwidth]{mapping/ps_alb_spec/0205_0001}&
+\includegraphics[width=0.33\textwidth]{mapping/ps_alb_spec/0205_normal}&
+\includegraphics[width=0.25\textwidth]{mapping/ps_alb_spec/0205_dmap}&
+\includegraphics[width=0.06\textwidth]{mapping/ps_alb_spec/0205_ang_error}\\
+ & (d) albedo: 0.2, spec: 0.5 & \\
+\includegraphics[width=0.33\textwidth]{mapping/ps_alb_spec/0208_0001}&
+\includegraphics[width=0.33\textwidth]{mapping/ps_alb_spec/0208_normal}&
+\includegraphics[width=0.25\textwidth]{mapping/ps_alb_spec/0208_dmap}&
+\includegraphics[width=0.06\textwidth]{mapping/ps_alb_spec/0208_ang_error}\\
+ & (e) albedo: 0.2, spec: 0.8 & \\
 \end{tabular}
-\caption{(a)-(c). the specular is set as 0.2, (d)-(f). the albedo is set as 0.2. According to energy conservation, as the specular component increases, the diffuse component decreases.}
+\caption{According to energy conservation, as the specular component increases, the diffuse component decreases. (a)-(c): the estimated normal map and recovered height map becomes consistently worse as the albedo decreases; (c)-(e): the estimated normal map and recovered height map becomes consistently worse as the specular increaess.}
 \label{fig:ps_alb_spec}
 \end{figure}
 
@@ -357,31 +359,31 @@ Both albedo and roughness have a positive effect on normal estimation.
 The specular has a negative impact on normal estimation. However, the roughness has a more complicated effect. We observed that the reconstruction becomes worse when roughness is 0.5, which is counter-intuitive at first sight. However, we argue that it's because the roughness is not strong enough to counteract the specular component, thus resulting in a smoothed and blurred specular lobe with larger area, thus leading to a worse reconstruction result. This effect is also demonstrated in the training stage, see Figure~\ref{fig:ps_spec_rough} for some visual examples.
 \begin{figure}[h!]
 \centering
-\begin{tabular}{ccc}
-  image & normal map & angular difference\\
-  \includegraphics[width=0.35\textwidth]{mapping/ps_rough/00020202_0001}&
-  \includegraphics[width=0.35\textwidth]{mapping/ps_rough/00020202_normal}&
-  \includegraphics[width=0.30\textwidth]{mapping/ps_rough/00020202_boxplot}\\
-  \multicolumn{3}{c}{(a). alb: 0.2, spec: 0.2, rough: 0.2}\\
-  \includegraphics[width=0.35\textwidth]{mapping/ps_rough/00020205_0001}&
-  \includegraphics[width=0.35\textwidth]{mapping/ps_rough/00020205_normal}&
-  \includegraphics[width=0.30\textwidth]{mapping/ps_rough/00020205_boxplot}\\
-  \multicolumn{3}{c}{(b). alb: 0.2, spec: 0.2, rough: 0.5}\\
-  \includegraphics[width=0.35\textwidth]{mapping/ps_rough/00080205_0001}&
-  \includegraphics[width=0.35\textwidth]{mapping/ps_rough/00080205_normal}&
-  \includegraphics[width=0.30\textwidth]{mapping/ps_rough/00080205_boxplot}\\
-  \multicolumn{3}{c}{(c). alb: 0.8, spec: 0.2, rough: 0.5}\\
-  \includegraphics[width=0.35\textwidth]{mapping/ps_rough/00080805_0001}&
-  \includegraphics[width=0.35\textwidth]{mapping/ps_rough/00080805_normal}&
-  \includegraphics[width=0.30\textwidth]{mapping/ps_rough/00080805_boxplot}\\
-  \multicolumn{3}{c}{(b). alb: 0.8, spec: 0.8, rough: 0.5}\\
+\begin{tabular}{c|ccc}
+  Image & Normal map & Height map & Angular error\\
+  \hline\\
+  \includegraphics[width=0.33\textwidth]{mapping/ps_spec_rough/0802_0001}&
+  \includegraphics[width=0.33\textwidth]{mapping/ps_spec_rough/0802_normal}&
+  \includegraphics[width=0.25\textwidth]{mapping/ps_spec_rough/0802_dmap}&
+  \includegraphics[width=0.06\textwidth]{mapping/ps_spec_rough/0802_ang_error}\\
+  & (a). rough: 0.2\\
+  \includegraphics[width=0.33\textwidth]{mapping/ps_spec_rough/0805_0001}&
+  \includegraphics[width=0.33\textwidth]{mapping/ps_spec_rough/0805_normal}&
+  \includegraphics[width=0.25\textwidth]{mapping/ps_spec_rough/0805_dmap}&
+  \includegraphics[width=0.06\textwidth]{mapping/ps_spec_rough/0805_ang_error}\\
+  & (b). rough: 0.5\\
+  \includegraphics[width=0.33\textwidth]{mapping/ps_spec_rough/0808_0001}&
+  \includegraphics[width=0.33\textwidth]{mapping/ps_spec_rough/0808_normal}&
+  \includegraphics[width=0.25\textwidth]{mapping/ps_spec_rough/0808_dmap}&
+  \includegraphics[width=0.06\textwidth]{mapping/ps_spec_rough/0808_ang_error}\\
+  & (c). rough: 0.8\\
 \end{tabular}
-\caption{The `peculiar' effect of roughness on PS. (a), (b) demonstrate that a medium level roughness would lead to worse normal estimation. (b), (c) demonstrate the positive effect of albedo, and (c), (d) demonstrate the negative effect of specular.}
+\caption{The `peculiar' effect of roughness on PS. Albedo is set as 0.8, and specular is set as 0.8. (b) demonstrate that a medium level roughness would lead to worse normal estimation since it blurs the specular lobe.}
 \label{fig:ps_spec_rough}
 \end{figure}
 
-\subsubsection{Effective Problem Domain} 
-The properties that have an effect on the PS are: albedo, specularity, and roughness, as shown in Table~\ref{tab:ps_depend_prop}. Therefore, we will only consider these three properties for all forthcoming discussion of PS.
+\subsubsection{Summary} 
+The properties that have an effect on the EPS are: albedo, specular, and roughness, as shown in Table~\ref{tab:ps_depend_prop}. Therefore, we will only consider these three properties for all the forthcoming discussion of EPS.
 \begin{table}[!htbp]
   \centering
   \begin{tabular}{l*{5}{c}}
@@ -396,7 +398,7 @@ The properties that have an effect on the PS are: albedo, specularity, and rough
 \end{table}
 
 \subsection{EPD of GSL}
-We evaluate the performance of Gray-code SL in terms of accuracy and completeness under varied combination of properties, the settings of the properties and all their combinations are listed in Table~\ref{tab:sl_depend_check_params}.
+We evaluate the performance of Gray-code SL in terms of accuracy and completeness under varied combination of properties, the settings of the properties are listed in Table~\ref{tab:sl_depend_check_params}.
 \begin{table}[!htbp]
   \centering
   \begin{tabular}{l*{4}{c}}
@@ -415,21 +417,20 @@ We evaluate the performance of Gray-code SL in terms of accuracy and completenes
   \label{tab:sl_depend_check_params}
 \end{table}
 
-\begin{figure}[!htbp]
-\begin{tabular}{cc}
-\includegraphics[width=0.5\textwidth]{mapping/depend_check/sl_tex_alb}&
-\includegraphics[width=0.5\textwidth]{mapping/depend_check/sl_tex_spec}\\
-(a) & (b)\\
-\includegraphics[width=0.5\textwidth]{mapping/depend_check/sl_tex_rough}&
-\includegraphics[width=0.5\textwidth]{mapping/depend_check/sl_alb_spec}\\
-(c) & (d)\\
-\includegraphics[width=0.5\textwidth]{mapping/depend_check/sl_alb_rough}&
-\includegraphics[width=0.5\textwidth]{mapping/depend_check/sl_spec_rough}\\
-(e) & (f)\\
+\begin{sidewaysfigure}[!htbp]
+\begin{tabular}{ccc}
+\includegraphics[width=0.3\textwidth]{mapping/depend_check/sl_tex_alb}&
+\includegraphics[width=0.3\textwidth]{mapping/depend_check/sl_tex_spec}&
+\includegraphics[width=0.3\textwidth]{mapping/depend_check/sl_tex_rough}\\
+(a) & (b) & (c)\\
+\includegraphics[width=0.3\textwidth]{mapping/depend_check/sl_alb_spec}&
+\includegraphics[width=0.3\textwidth]{mapping/depend_check/sl_alb_rough}&
+\includegraphics[width=0.3\textwidth]{mapping/depend_check/sl_spec_rough}\\
+(d) & (e) & (f)\\
 \end{tabular}
-\caption{Performance of Gray-encoded SL under six pairwise conditions. For instance, (a) shows the performance under changing \textit{texture} and \textit{albedo} values. The property values are assigned based on Table~\ref{tab:sl_depend_check_params} (a).}
+\caption{Performance of Gray-encoded SL under six pairwise conditions. For instance, (a) shows the performance under changing \textit{texture} and \textit{albedo} values. The property values are assigned based on settings in Table~\ref{tab:sl_depend_check_params} (a).}
 \label{fig:sl_depend_check}
-\end{figure}
+\end{sidewaysfigure}
 
 \subsubsection{Effective and Dependent Properties}
 We investigate how each property affects the reconstruction in terms of accuracy and completeness. A depth check step is performed to remove erroneous depth, thus the accuracy remain almost constant across all cases.
@@ -444,20 +445,20 @@ Texture has no significant effect whereas specular has a negative effect on comp
 Texture has no significant effect whereas roughness has a slightly positive effect on compleness. Both properties have no significant effect on accuracy.
 
 \textbf{(d) Albedo and Specular} 
-Albedo has a positive effect, see Figure~\ref{fig:sl_alb_spec} (a)-(c) whereas specular a negative effect on completeness, see Figure~\ref{fig:sl_alb_spec} (d)-(f). Th effect of specular becomes less substantial as the albedo increases, see Figure~\ref{fig:ps_depend_check} (d). Thus we conclude that the effect of specular is most significant when the albedo is low. Neither property has a significant effect on accuracy.
+Albedo has a positive effect, see Figure~\ref{fig:sl_alb_spec} (a)-(c) whereas specular a negative effect on completeness, see Figure~\ref{fig:sl_alb_spec} (d)-(f). Th effect of specular becomes less substantial as the albedo increases, see Figure~\ref{fig:sl_depend_check} (d). Thus we conclude that the effect of specular is most significant when the albedo is low. Neither property has a significant effect on accuracy.
 \begin{figure}[!htbp]
 \centering
 \begin{tabular}{ccc}
-\includegraphics[width=0.33\textwidth]{mapping/sl_alb_spec/sl_alb_spec_0202}&
-\includegraphics[width=0.33\textwidth]{mapping/sl_alb_spec/sl_alb_spec_0502}&
-\includegraphics[width=0.33\textwidth]{mapping/sl_alb_spec/sl_alb_spec_0802}\\
+\includegraphics[width=0.33\textwidth]{mapping/sl_alb_spec/sl_00020202}&
+\includegraphics[width=0.33\textwidth]{mapping/sl_alb_spec/sl_00050202}&
+\includegraphics[width=0.33\textwidth]{mapping/sl_alb_spec/sl_00080202}\\
 (a) albedo: 0.2 & (b) albedo: 0.5 & (c) albedo: 0.8\\
-\includegraphics[width=0.33\textwidth]{mapping/sl_alb_spec/sl_alb_spec_0202}&
-\includegraphics[width=0.33\textwidth]{mapping/sl_alb_spec/sl_alb_spec_0205}&
-\includegraphics[width=0.33\textwidth]{mapping/sl_alb_spec/sl_alb_spec_0208}\\
+\includegraphics[width=0.33\textwidth]{mapping/sl_alb_spec/sl_00020202}&
+\includegraphics[width=0.33\textwidth]{mapping/sl_alb_spec/sl_00020502}&
+\includegraphics[width=0.33\textwidth]{mapping/sl_alb_spec/sl_00020802}\\
 (d) specular: 0.2 & (e) specular: 0.5 & (f) specular: 0.8\\
 \end{tabular}
-\caption{(a)-(c) the specular is set as 0.2, (d)-(e) the albedo is set as 0.2. the specular is set as 0.2. According to energy conservation, as the specular component increases, the diffuse component decreases.}
+\caption{(a)-(c): the specular is set as 0.2, albedo has a positive effect on completeness; (d)-(e): the albedo is set as 0.2, specular has a negative effect on completeness.}
 \label{fig:sl_alb_spec}
 \end{figure}
 
@@ -469,21 +470,21 @@ Specular has a negative effect, see Figure~\ref{fig:sl_spec_rough} (a)-(c) where
 \begin{figure}[!htbp]
 \centering
 \begin{tabular}{ccc}
-\includegraphics[width=0.33\textwidth]{mapping/sl_spec_rough/spec_rough_0202}&
-\includegraphics[width=0.33\textwidth]{mapping/sl_spec_rough/spec_rough_0502}&
-\includegraphics[width=0.33\textwidth]{mapping/sl_spec_rough/spec_rough_0802}\\
+\includegraphics[width=0.33\textwidth]{mapping/sl_spec_rough/sl_00050202}&
+\includegraphics[width=0.33\textwidth]{mapping/sl_spec_rough/sl_00050502}&
+\includegraphics[width=0.33\textwidth]{mapping/sl_spec_rough/sl_00050802}\\
 (a) specular: 0.2 & (b) specular: 0.5 & (c) specular: 0.8\\
-\includegraphics[width=0.33\textwidth]{mapping/sl_spec_rough/spec_rough_0802}&
-\includegraphics[width=0.33\textwidth]{mapping/sl_spec_rough/spec_rough_0805}&
-\includegraphics[width=0.33\textwidth]{mapping/sl_spec_rough/spec_rough_0808}\\
+\includegraphics[width=0.33\textwidth]{mapping/sl_spec_rough/sl_00050802}&
+\includegraphics[width=0.33\textwidth]{mapping/sl_spec_rough/sl_00050805}&
+\includegraphics[width=0.33\textwidth]{mapping/sl_spec_rough/sl_00050808}\\
 (d) roughness: 0.2 & (e) roughness: 0.5 & (f) roughness: 0.8\\
 \end{tabular}
-\caption{(a)-(c). The roughness is set as 0.2, (d)-(e). the specular is set as 0.8. According to energy conservation, as the specular component increases, the diffuse component decreases.}
+\caption{(a)-(c): the roughness is set as 0.2, specular has a negative effect on completeness; (d)-(e): the specular is set as 0.8, roughness has a positive effect on competeness.}
 \label{fig:sl_spec_rough}
 \end{figure}
 
-\subsubsection{Effective Problem Domain}
-The properties that have an effect on the SL are: texture, albedo, specularity, as shown in Table. Therefore, we will only consider these three properties for all forthcoming discussion of SL.
+\subsubsection{Summary}
+The properties that have an effect on the GSL are: texture, albedo, specular, as shown in Table~\ref{tab:sl_depend_prop}. Therefore, we will only consider these three properties for all forthcoming discussion of GSL.
 \begin{table}[!htbp]
   \centering
   \begin{tabular}{l*{4}{c}}
@@ -499,37 +500,36 @@ The properties that have an effect on the SL are: texture, albedo, specularity, 
 \end{table}
 
 \section{Mapping Construction}
-We generate another synthetic dataset using only the effective and dependent properties and all their combinations. Since there are three effective properties for each selected method, there are in total $L^3$ different combinations for each technique, where $L$ is the number of discrete values for each property, and $L$ is set as 3, which represents the discrete values of $0.2, 0.5, 0.8$.
+We generate another synthetic dataset using only the effective and dependent properties and all their combinations. Since there are three effective properties for each selected method, there are in total $L^3$ different combinations of property values for each technique, where $L$ is the number of discrete values for each property, which is set as 3 representing the discrete values of $0.2, 0.5, 0.8$. We present the results as follows: the $27(3^3)$ results are divided into three plots. Each plot illustrates the results of one fixed property $P_1$, and two changing properties $P_2$ and $P_3$. To have a better understanding of the pairwise relation between any two properties, each effective property would be chosen as $P_1$ once. Therefore, we end up with three groups of graphs with each consisting of three plots.
 
 \subsection{Mapping of PMVS}
-The performance of PMVS under difference combinations of properties is shown in Figure~\ref{fig:mvs_training}. The conditions that PMVS works well is listed in Table~\ref{tab:mvs_training_result}.
+The performances of PMVS under different combinations of property values are shown in Figure~\ref{fig:mvs_training}, along with the performance of the baseline method. The conditions under which PMVS works well are listed in Table~\ref{tab:mvs_training_result}. We make the following observations from the training results:
 \begin{figure}[!htbp]
 \begin{tabular}{ccc}
-\includegraphics[width=0.33\textwidth]{mapping/training/mvs_train_tex_02}&
-\includegraphics[width=0.33\textwidth]{mapping/training/mvs_train_tex_05}&
-\includegraphics[width=0.33\textwidth]{mapping/training/mvs_train_tex_08}\\
-(a) & (b) & (c)\\
-\includegraphics[width=0.33\textwidth]{mapping/training/mvs_train_alb_02}&
-\includegraphics[width=0.33\textwidth]{mapping/training/mvs_train_alb_05}&
-\includegraphics[width=0.33\textwidth]{mapping/training/mvs_train_alb_08}\\
-(d) & (e) & (f)\\
 \includegraphics[width=0.33\textwidth]{mapping/training/mvs_train_spec_02}&
 \includegraphics[width=0.33\textwidth]{mapping/training/mvs_train_spec_05}&
 \includegraphics[width=0.33\textwidth]{mapping/training/mvs_train_spec_08}\\
+(a) & (b) & (c)\\
+\includegraphics[width=0.33\textwidth]{mapping/training/mvs_train_tex_02}&
+\includegraphics[width=0.33\textwidth]{mapping/training/mvs_train_tex_05}&
+\includegraphics[width=0.33\textwidth]{mapping/training/mvs_train_tex_08}\\
+(d) & (e) & (f)\\
+\includegraphics[width=0.33\textwidth]{mapping/training/mvs_train_alb_02}&
+\includegraphics[width=0.33\textwidth]{mapping/training/mvs_train_alb_05}&
+\includegraphics[width=0.33\textwidth]{mapping/training/mvs_train_alb_08}\\
 (g) & (h) & (i)\\
 \end{tabular}
-\caption{Performance of MVS with varied properties.}
+\caption{Performance of PMVS under varied conditions of changing property values. The baseline method serves as the guidelines to determine the performance of PMVS.}
 \label{fig:mvs_training}
 \end{figure}
 
-We make the following observations from the training results
-\begin{itemize}
-\item \textbf{(a)-(c)}: as the texture level increases, the completeness increases consistently.
-\item \textbf{(d)-(f)}: albedo could counteract the effect of specular, take the case when $\text{tex}=0.5$ as an example, as the albedo increases, the result becomes better. The effect albedo has on specular has to do with surface texture, \ie higher texture, more significant the influence is.
-\item \textbf{(g)-(i)}: specular has a bigger impact on low texture surfaces than on high texture ones, \ie for low textured surface, even low specular would result in bad results whereas for high textured surface, satisfactory results could be achieved under high specular cases. This is illustrated in Figure~\ref{fig:mvs_spec}
-\end{itemize}
+\noindent\textbf{(a)-(c) Texture}: as the texture level increases, the completeness increases consistently, and accuracy also improves for medium/high albedo and low-medium specular surfaces.
 
-From all the training results, we could derive the problem conditions that PMVS could reliably work on and get satisfactory results. Those conditions are in Table~\ref{tab:mvs_training_result}.
+\noindent\textbf{(d)-(f) Albedo}: for medium/high textured surfaces, albedo can effectively counteract the effect of specular, \ie improve both the accuracy and completenss of the reconstruction, see the red and green lines in Figure~\ref{fig:mvs_training} (d)-(f). As for low textured surface, the effect of albedo is less significant, see the blue line in Figure~\ref{fig:mvs_training} (d)-(f).
+
+\noindent\textbf{(g)-(i) Specular}: the effect of specular is closely related to albedo: surface with higher albedo is able to endure higher specular component, see the performance difference between the red (alb = 0.5) and green (alb = 0.8) line in Figure~\ref{fig:mvs_train} (g) - (i). For low/medium textured surface, Specular has a consistently negative impact for low/medium textured surface whereas the effect is almost neutralized for highly textured surfaces. This aligns with previous observation illustrated in Figure~\ref{fig:mvs_spec}.
+
+We could derive the problem conditions that PMVS could reliably work on from the training results. Those conditions are listed in Table~\ref{tab:mvs_training_result}.
 \begin{table}[!htbp]
   \centering
   \begin{tabular}{l*{4}{c}}
@@ -563,37 +563,36 @@ From all the training results, we could derive the problem conditions that PMVS 
 \end{table}
 
 \subsection{Mapping of EPS}
-The performance of example-based PS under difference combinations of properties is shown in Figure~\ref{fig:ps_training}. The conditions that example-based PS works well is listed in Table~\ref{tab:ps_training_result}.
+The performances of example-based PS under difference combinations of properties are shown in Figure~\ref{fig:ps_training}, along with the result of te baseline method. The conditions under which example-based PS works well are listed in Table~\ref{tab:ps_training_result}. We make the following observations from the training results:
 \begin{figure}[!htbp]
 \begin{tabular}{cccc}
-\includegraphics[width=0.3\textwidth]{mapping/training/ps_alb_02}&
-\includegraphics[width=0.3\textwidth]{mapping/training/ps_alb_05}&
-\includegraphics[width=0.3\textwidth]{mapping/training/ps_alb_08}&
-\includegraphics[width=0.087\textwidth]{mapping/training/ps_baseline}\\
-(a) & (b) & (c)\\
-\includegraphics[width=0.3\textwidth]{mapping/training/ps_spec_02}&
-\includegraphics[width=0.3\textwidth]{mapping/training/ps_spec_05}&
-\includegraphics[width=0.3\textwidth]{mapping/training/ps_spec_08}&
-\includegraphics[width=0.087\textwidth]{mapping/training/ps_baseline}\\
-(d) & (e) & (f)\\
 \includegraphics[width=0.3\textwidth]{mapping/training/ps_rough_02}&
 \includegraphics[width=0.3\textwidth]{mapping/training/ps_rough_05}&
 \includegraphics[width=0.3\textwidth]{mapping/training/ps_rough_08}&
 \includegraphics[width=0.087\textwidth]{mapping/training/ps_baseline}\\
+(a) & (b) & (c)\\
+\includegraphics[width=0.3\textwidth]{mapping/training/ps_alb_02}&
+\includegraphics[width=0.3\textwidth]{mapping/training/ps_alb_05}&
+\includegraphics[width=0.3\textwidth]{mapping/training/ps_alb_08}&
+\includegraphics[width=0.087\textwidth]{mapping/training/ps_baseline}\\
+(d) & (e) & (f)\\
+\includegraphics[width=0.3\textwidth]{mapping/training/ps_spec_02}&
+\includegraphics[width=0.3\textwidth]{mapping/training/ps_spec_05}&
+\includegraphics[width=0.3\textwidth]{mapping/training/ps_spec_08}&
+\includegraphics[width=0.087\textwidth]{mapping/training/ps_baseline}\\
 (g) & (h) & (i)\\
 \end{tabular}
-\caption{Performance of PS with varied properties.}
+\caption{Performance of EPS under varied conditions of changing property values. Varied statistical measures of angular error are compared to the baseline method to determine the performance of EPS.}
 \label{fig:ps_training}
 \end{figure}
 
-We make the following observations from the training results
-\begin{itemize}
-\item \textbf{(a)-(c)}: albedo has a positive effect on the reconstruction.
-\item \textbf{(d)-(f)}: the effect of specular is that it will create `spikes', as shown in Figure~\ref{fig:ps_alb_spec}, and albedo can effective alleviate that.
-\item \textbf{(g)-(i)}: roughness has a more complicated effect on reconstruction, \ie as roughness would blur the specular area, it might actually make the results worse, see Figure~\ref{fig:ps_spec_rough}.
-\end{itemize}
+\noindent\textbf{(a)-(c) Albedo}: albedo has a consistently positive effect on the reconstruction.
 
-From all the training results, we could derive the problem conditions that EPS could reliably work on and get satisfactory results. Those conditions are in Table~\ref{tab:ps_training_result}. We determine the mapping based on both the quantitative results, and the visual inspection of the normal maps.
+\noindent\textbf{(d)-(f) Specular}: specular has a consistently negative impact on the normal estimation, which is manifested by the increasing variation represented by interquartile range and standard deviation.
+
+\noindent\textbf{(g)-(i) Roughness}: roughness has a more complicated effect on reconstruction as illustrated in Figure~\ref{fig:ps_spec_rough}, \ie medium roughness would blur the specular area, and lead to worse normal estimation and shape recovery.
+
+We could derive the problem conditions that EPS could reliably work on from the training results. Those conditions are in Table~\ref{tab:ps_training_result}.
 \begin{table}[!htbp]
   \centering
   \begin{tabular}{l*{4}{c}}
@@ -614,41 +613,41 @@ From all the training results, we could derive the problem conditions that EPS c
                    & - & 0.8 & 0.8 & 0.8\\
   \hline
   \end{tabular}
-  \caption{The condition matrix of example-based PS in terms of the metric \textit{angular difference}.}
+  \caption{The condition matrix of example-based PS in terms of the metric \textit{angular error}.}
   \label{tab:ps_training_result}
 \end{table}
 
 \subsection{Mapping of GSL}
-The performance of Gray code SL under difference combinations of properties is shown in Figure~\ref{fig:sl_training}. Since there is only one camera, thus only a portion of scene is visible. Thus we claim that the completeness is $60\%$ of that of VH is acceptable. The conditions that PMVS works well is listed in Table~\ref{tab:sl_training_result}.
+The performances of Gray-code SL under different combinations of property values are shown in Figure~\ref{fig:sl_training}, along with the result of the baseline method. Only a portion of the scene is visible since there is only one camera, and the percent of visible surface varies from object to object. This value can be approximated by the completeness value obtained under the optimal reconstruction condition. In this case, we claim that the a completeness of $80\%$ of that of the baseline is acceptable. The conditions under which GSL works well are listed in Table~\ref{tab:sl_training_result}. We make the following observations:
 \begin{figure}[!htbp]
 \begin{tabular}{ccc}
-\includegraphics[width=0.33\textwidth]{mapping/training/sl_train_alb_02}&
-\includegraphics[width=0.33\textwidth]{mapping/training/sl_train_alb_05}&
-\includegraphics[width=0.33\textwidth]{mapping/training/sl_train_alb_08}\\
-(a) & (b) & (c)\\
-\includegraphics[width=0.33\textwidth]{mapping/training/sl_train_spec_02}&
-\includegraphics[width=0.33\textwidth]{mapping/training/sl_train_spec_05}&
-\includegraphics[width=0.33\textwidth]{mapping/training/sl_train_spec_08}\\
-(d) & (e) & (f)\\
 \includegraphics[width=0.33\textwidth]{mapping/training/sl_train_rough_02}&
 \includegraphics[width=0.33\textwidth]{mapping/training/sl_train_rough_05}&
 \includegraphics[width=0.33\textwidth]{mapping/training/sl_train_rough_08}\\
+(a) & (b) & (c)\\
+\includegraphics[width=0.33\textwidth]{mapping/training/sl_train_alb_02}&
+\includegraphics[width=0.33\textwidth]{mapping/training/sl_train_alb_05}&
+\includegraphics[width=0.33\textwidth]{mapping/training/sl_train_alb_08}\\
+(d) & (e) & (f)\\
+\includegraphics[width=0.33\textwidth]{mapping/training/sl_train_spec_02}&
+\includegraphics[width=0.33\textwidth]{mapping/training/sl_train_spec_05}&
+\includegraphics[width=0.33\textwidth]{mapping/training/sl_train_spec_08}\\
 (g) & (h) & (i)\\
 \end{tabular}
-\caption{Performance of SL with varied properties.}
+\caption{Performance of GSL under varied conditions of changing property values. The baseline method serves as the guidelines to determine the performance of GSL.}
 \label{fig:sl_training}
 \end{figure}
 
-We can make the following observations
-\begin{itemize}
-\item the accuracy remains almost fixed
-\item texture doesn't have an effect on the accuracy or completeness of the reconstruction
-\item \textbf{(a)-(c)}: albedo has a positive effect on the reconstruction result, and specular a negative effect. However, when the roughness is high enough, speular actually is a good thing, especially for low albedo surface, as illustrated in Figure~\ref{fig:sl_alb_spec}.
-\item \textbf{(d)-(f)}: SL is very sensitive to specular, it cann't handle low specular, see Figure~\ref{fig:sl_alb_spec} (d)-(f), and Figure~\ref{fig:sl_spec_rough} (a)-(c).
-\item \textbf{(g)-(i)}: roughness can effectively counteract the effect of specular.
-\end{itemize}
+\noindent\textbf{(a)-(i)}: the accuracy remains almost fixed, thus irrelevant to all properties;
 
-From all the training results, we could derive the problem conditions that GSL could reliably work on and get satisfactory results. Those conditions are in Table~\ref{tab:sl_training_result}.
+\noindent\textbf{(a)-(c) Albedo}: albedo has a consistently positive effect on the completeness of the reconstruction.
+
+\noindent\textbf{(d)-(f) Specular}: specular has a negative effect on completeness as shown in Figure~\ref{fig:sl_alb_spec} (d)-(f). However, we did notice in some case, the completeness of the reconstruction improves as the specular level increases. There are two contributing factors to completeness: 1). specular would decrease the completeness since the pattern can no longer be decoded in the glossy area, thus causing incomplete reconstruction; 2). large roughness would spread the specular lobe into a larger area, leading to a brighter surface, thus increase the completeness of the reconstruction. These two contradicting factors would together determine the completeness of the reconstruction. Thus if the first factor is more substantial, the completeness would decrease whereas if the second one is more significant, the completeness would increase.
+
+\noindent\textbf{(g)-(i) Roughness}: roughness has similar effect as that we found on EPS, \ie medium roughness would blur the specular lobe to a larger area thus causing larger holes in the reconstruction, see Figure~\ref{fig:ps_spec_rough} (d)-(f). Large roughness would effectively counteract the effect of specular, thus improve the completeness of the reconstruction.
+
+% However, we realize that the metric completeness doesn't always faithfully reflect the true quality of the reconstruction. Let's consider the following two cases: 1). with low albedo, high specular, 2). low albedo, median specular. We can see from the quantitative results that case 1 has higher completeness. However, case 2 has better reconstruction. The reason is that high specular would increase the lightness of the surface, and high lightness would lead to more reliably reconstructed points. Therefore, even though high specular leads to hole, these two factors eventually cancels out. Therefore, when deriving the mapping and comparing the results of SL. We should consider both the qualitative and quantitative results. 
+We could derive the problem conditions under which GSL could reliably work by considering both the quantitative and qualitative results. Those conditions are listed in Table~\ref{tab:sl_training_result}.
 \begin{table}[!htbp]
   \centering
   \begin{tabular}{l*{4}{c}}
@@ -657,71 +656,20 @@ From all the training results, we could derive the problem conditions that GSL c
   \hline
   Accuracy     & - & - & - & -\\
   \hline
-  Completeness & - & 0.2 & 0.8 & 0.8\\
-               & - & 0.5 & 0.5 & 0.8\\
-               & - & 0.5 & 0.8 & 0.8\\
+  Completeness & - & 0.8 & 0.2 & 0.2\\
+               & - & 0.8 & 0.5 & 0.2\\
+               & - & 0.8 & 0.8 & 0.2\\
                & - & 0.8 & 0.2 & 0.8\\
                & - & 0.8 & 0.5 & 0.8\\
                & - & 0.8 & 0.8 & 0.8\\
-               % & - & 0.5 & 0.8 & 0.5\\
-               % & - & 0.8 & 0.2 & 0.5\\
-               % & - & 0.8 & 0.5 & 0.5\\
-               % & - & 0.8 & 0.8 & 0.5\\
-               % & - & 0.2 & 0.2 & 0.8\\
-               % & - & 0.2 & 0.5 & 0.8\\
-               % & - & 0.2 & 0.8 & 0.8\\
-               % & - & 0.5 & 0.2 & 0.8\\
-               % & - & 0.5 & 0.5 & 0.8\\
-               % & - & 0.5 & 0.8 & 0.8\\
-               % & - & 0.8 & 0.2 & 0.8\\
-               % & - & 0.8 & 0.5 & 0.8\\
-               % & - & 0.8 & 0.8 & 0.8\\
   \hline
   \end{tabular}
-  \caption{The condition matrix of Gray code SL in terms of the two metrics \textit{accuracy} and \textit{completeness}.}
+  \caption{The condition matrix of Gray-code SL in terms of the two metrics \textit{accuracy} and \textit{completeness}.}
   \label{tab:sl_training_result}
 \end{table}
 
-\section{Framework}
-% \subsubsection{Requirements}
-The framework consists of three separate models: The first layer is the actual implementation of the algorithms. The second layer is the description of the problem domain. The interpreter is next layer in the framework, and receives the description from the user passed through the interface (\eg API). It is responsible for choosing the appropriate 3D reconstruction algorithm(s) based on the described properties and additional requirements.
-\begin{figure}[!htbp]
-\centering
-\begin{tikzpicture}[node distance=1.2cm, auto]
-
-\node (interp) [data] {L3: Interpreter};
-\node (desc) [data, below of=interp] {L2: Description};
-\node (algo) [data, below of=desc] {L1: Algorithm};
-\draw[red,thick,solid] ($(interp.north west)+(-0.3,0.3)$)  rectangle ($(algo.south east)+(0.3,-0.3)$);
-
-\end{tikzpicture}
-\caption{The three layer of the 3D reconstruction framework.}
-\label{fig:framework_overview}
-\end{figure}
-
-The interpreter has two major components: mapping and constraints.
-\begin{figure}[!htbp]
-\centering
-\begin{tikzpicture}[node distance=1.2cm, auto]
-
-\node (mapping) [data_nonfixed] {Mapping};
-\node (constraint) [data_nonfixed, right of=mapping, xshift=1cm] {Constraints};
-\draw[red,thick,solid] ($(mapping.north west)+(-0.3,0.3)$)  rectangle ($(constraint.south east)+(0.3,-0.3)$);
-
-\end{tikzpicture}
-\caption{The two components of the Interpreter layer.}
-\label{fig:interpreter_layer}
-\end{figure}
-
-The process of adding a new algorithm to the framework is as follows:
-\begin{itemize}
-\item The problem condition under which the algorithm is designed to return reliable results. The set of conditions defines a large dimensional volume in which algorithms occupy sub-volumes.
-\end{itemize}
-From the training results, we can derive the condition matrices for each algorithm. The next step is to find the best possible algorithm based on the problem description. This could results in multiple algorithms selected, or none selected for some cases. Nonetheless, we need to establish the rule of determining which algorithm gives the best result under the specified conditions. We collect all the problem conditions and the corresponding algorithms.
-
-In addition to the mapping, we also provide additional constraints to the framework to select a satisfactory result if more than one algorithm give acceptable ones. The current constraints include: 3D-first, accuracy-first, completenss first. Since Photometric Stereo generally would generate models with higher accuracy, however, the depth information is lost, which is often refered to as 2.5D reconstruction. Therefore, if true 3D reconstruction is not required, or only the shape of the surface is required, we should choose PS. Otherwise, we determine the best model based on accuracy or completeness measure. tollerance
-
-The addition of an algorithm to the framework is accomplished through a `plug-in' system, defined using an internal interface. Each algorithm must implement this interface; the interpreter then uses it to provide the algorithm with the input images and the full user-defined description. The algorithm returns matches in the interface-defined representation, so that all algorithms return the same type to the user.
+\section{Summary}
+The development of the mapping is an on-going process. For instance, we can include more quantitative metrics such as colour accuracy, `ghost reconstruction', etc. In order to make the mapping applicable to objects with more complex shapes, we need to consider more sophisticated geometric properties besides roughness, such as concavity, depth-discontinuity, occlusion, etc. Furthermore, the incorporation of more algorithms to another way to make sure that the problem space is well covered.
 
 
 % \begin{table}[!htbp]

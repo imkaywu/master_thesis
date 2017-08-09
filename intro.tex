@@ -4,7 +4,7 @@
 \chapter{Introduction}
 \label{ch:Introduction}
 % [introduction to 3D reconstruction]\\
-Modelling of the 3D world has been an active research topic in computer vision for decades. The goal is to reconstruct a 3D geometric model, represented by point cloud, voxel grid, depth maps, or surface mesh, from RGB or range sensors, optionally with the material of the surface. It has a wide range of applications including 3D mapping and navigation, online shopping, 3D printing, computational photography, video games, visual effects, and cultural heritage archival.
+Modeling of the 3D world has been an active research topic in computer vision for decades. The goal is to reconstruct a 3D geometric model, represented by point cloud, voxel grid, depth maps, or surface mesh, from RGB or range sensors, optionally with the material of the surface. It has a wide range of applications including 3D mapping and navigation, online shopping, 3D printing, computational photography, video games, visual effects, and cultural heritage archival.
 
 % [current situation and context]\\
 This is an extremely challenging task since it's the reverse process of image formation, which is highly likely to have more than one plausible results. To overcome this challenge, some assumptions have to be made in terms of the materials, viewpoints, and lighting. Thus A solid understanding of the interaction of lighting with surface geometry and material is a prerequisite to fully take advantage of the existing techniques. In the past decades, we've witness a variety of tools and approaches such as Computer Aided Design (CAD) tools~\cite{CAD}, arm-mounted probes, active methods~\cite{bernardini2002building,levoy2000digital,Lidar,kinect} and passive image-based methods~\cite{kutulakos2000theory,furukawa2010accurate,faugeras2002variational,goesele2006multi} applied successfully to some sub-domains of the problem. Among the existing techniques, active techniques such as laser scanner~\cite{levoy2000digital}, Structured Light (SL) systems~\cite{bernardini2002building}, and Photometric Stereo (PS)~\cite{woodham1980photometric}, and passive method such as Multi-View Stereo (MVS)~\cite{seitz2006comparison} have been the most successful ones. Laser scanners and structured light techniques can generate the most accurate results, but is generally complicated to set up and calibrate, time consuming to scan, and memory demanding to store and process. Photometric Stereo is able to achieve highly detailed reconstruction comparable to that of laser scanner, but the true depth information is lost due to the use of a single viewpoint. MVS requires minimal setup and can work in both controlled, small scale lab settings or outdoor, medium to large scale environments. However, the quality of the reconstruction is generally noisier, and is susceptible to the texture and material property of the surface. All these techniques requires an understanding of calibration, stereo correspondence, physics-based vision, and etc, which is no easy task to master.
@@ -49,11 +49,11 @@ The problem that this thesis addresses can be described as: construct a framewor
 \subsection{Related Work}
 We discuss the existing softwares and toolboxes for 3D reconstruction, and present the required vision background needed to fully take advantage of those toolboxes. A review of the 3D acquisition techniques is provided, organized by the visual and geometric cues used for reconstruction.
 
-\subsection{Taxonomy of 3D Reconstruction}
-The proposed taxonomy categorizes algorithms based on how well they work on each specific problem condition. First the problem space is developed, with each axis represents a key property of object's materal or geometry. Then the selected classes of algorithms are mapped to selected problem conditions based on reports in the literature.
+\subsection{A Taxonomy of 3D Reconstruction}
+The proposed taxonomy categorizes algorithms based not on \textit{how} they work well they work, but on the problem domain that they can reliably work under. First the problem space is developed, with each axis represents a key property of object's material or geometry. Then the selected classes of algorithms are mapped to the problem conditions based on reports in the literature.
 
-\subsection{Description of 3D Reconstruction}
-We provide a rigorous definition of the problem space. First, a formal and practical definition of the 3D reconstruction problem based on set theory is proposed. Second, a model consists of key properties of an object is developed. Third, the rerepsentations of the problem are proposed: we select key elements that can affect the properties of the model and use them as the components of the representation. Lastly, common 3D reconstruction tasks are expressed using the proposed model and representations.
+\subsection{A Description of 3D Reconstruction}
+Previously, the mapping from problem space to algorithms is ambigueous since the problem space was not well defined. We set out to provide a rigorous definition of the problem space. First, a formal and practical definition of the 3D reconstruction problem based on set theory is proposed. Second, a model consists of key properties of an object is developed. Third, the rerepsentations of the problem are proposed: we select key elements that can affect the properties of the model and use them as the components of the representation. Lastly, common 3D reconstruction tasks are expressed using the proposed model and representations.
 % \begin{figure}[!htbp]
 % \centering
 % \begin{tikzpicture}[node distance=1.2cm, auto]
@@ -69,125 +69,127 @@ We provide a rigorous definition of the problem space. First, a formal and pract
 % \label{fig:framework_overview}
 % \end{figure}
 
-\subsection{Mapping of 3D Reconstruction}
-Since the problem space was not well defined, the mapping from problem space to algorithms is ambigueous. To derive more accurate mapping, we need to evaluate the performance of the selected algorithms under varied properties and their combinations. We use synthetic datasets to achieve this goal. Part of the challenge in establishing a comprehensive set of experiments for such an evaluation is the large variability of shapes and material properties. To overcome this issue, we first investigate the dependent properties, which are properties that have influence on one another, thus must be considered jointly. Then we evaluate the performance the each algorithm under the conditions of dependent properties and all their combinations, which makes up our abstraction.
-\begin{figure}[!htbp]
-\centering
-\begin{tikzpicture}[node distance=1.5cm, auto]
+\subsection{A Mapping of 3D Reconstruction}
+To derive more precise mapping, we need to evaluate the performance of the selected algorithms under varied properties and their combinations. We use synthetic datasets to achieve this goal. Part of the challenge in establishing a comprehensive set of experiments for such an evaluation is the large variations of shapes and material properties. To overcome this issue, we first establish the \textit{effective problem domain} (EPS) by finding the effective and dependent properties. Then we evaluate the performance of each algorithm under the conditions of all dependent properties and their combinations, which serves as the basis of the mapping.
+% \begin{figure}[!htbp]
+% \centering
+% \begin{tikzpicture}[node distance=1.5cm, auto]
 
-\node (depend_check) [process] {Denpendency Check};
-\node (prop_set) [data, above of=depend_check, xshift=-2cm, yshift=0.25cm] {Property Set};
-\node (algo) [data, above of=depend_check, xshift=2cm, yshift=0.25cm]{Algo. i};
-\node (depend_prop) [data, below of=depend_check] {Dependent Property Set};
-\node (train) [process, below of=depend_prop] {Training};
-\node (cond_mat) [data, below of=train] {Condition matrix};
+% \node (depend_check) [process] {Denpendency Check};
+% \node (prop_set) [data, above of=depend_check, xshift=-2cm, yshift=0.25cm] {Property Set};
+% \node (algo) [data, above of=depend_check, xshift=2cm, yshift=0.25cm]{Algo. i};
+% \node (depend_prop) [data, below of=depend_check] {Dependent Property Set};
+% \node (train) [process, below of=depend_prop] {Training};
+% \node (cond_mat) [data, below of=train] {Condition matrix};
 
-\draw (prop_set.south) -- ++(0.0, -0.25) coordinate (inter0);
-\draw (inter0) -- ++(2.0, 0.0) coordinate (inter1);
-\draw (algo.south) -- ++(0.0, -0.25) coordinate (inter2);
-\draw (inter2) -- ++(-2.0, 0.0) coordinate ();
-\draw [arrow] (inter1) -- (depend_check);
-\draw [arrow] (depend_check) -- (depend_prop);
-\draw [arrow] (depend_prop) -- (train);
-\draw [arrow] (train) -- (cond_mat);
-\draw[red,thick,dotted] ($(prop_set.north west)+(-0.3,0.3)$)  rectangle ($(cond_mat.south east)+(2.3,-0.3)$);
+% \draw (prop_set.south) -- ++(0.0, -0.25) coordinate (inter0);
+% \draw (inter0) -- ++(2.0, 0.0) coordinate (inter1);
+% \draw (algo.south) -- ++(0.0, -0.25) coordinate (inter2);
+% \draw (inter2) -- ++(-2.0, 0.0) coordinate ();
+% \draw [arrow] (inter1) -- (depend_check);
+% \draw [arrow] (depend_check) -- (depend_prop);
+% \draw [arrow] (depend_prop) -- (train);
+% \draw [arrow] (train) -- (cond_mat);
+% \draw[red,thick,dotted] ($(prop_set.north west)+(-0.3,0.3)$)  rectangle ($(cond_mat.south east)+(2.3,-0.3)$);
 
-\end{tikzpicture}
-\caption{The process of obtaining the condition matrix for an algorithm.}
-\label{fig:mapping_overview}
-\end{figure}
+% \end{tikzpicture}
+% \caption{The process of obtaining the condition matrix for an algorithm.}
+% \label{fig:mapping_overview}
+% \end{figure}
 
-\subsection{Interpretation of 3D Reconstruction}
-To test the effectiveness and robustness of the derived mapping, three key questions need to be answered: 1). can the mapping return the best possible result given the description; 2). how useful is the derived mapping compared to the traditional approaches; 3). what limitations does the current mapping have. To answer these questions, we carry out separate steps: 1). we use both synthetic and real-world datasets to see if the quantitative and qualitative results is consistent with the algorithm returned by the mapping; 2). we simulate a practical scenario of applying 3D reconstruction and see how accessible each step is individually; 3). 
-\begin{figure}[ht]
-\centering
-\begin{tikzpicture}[node distance=2cm, auto]
-% depend_check, and training
-\node (depend_check) [process] {Denpendency Check};
-\node (prop_set) [data, above of=depend_check, xshift=-2cm, yshift=0.5cm] {Property Set};
-\node (algo) [data, above of=depend_check, xshift=2cm, yshift=0.5cm]{Algo. i};
-\node (depend_prop) [data, below of=depend_check] {Dependent Property Set};
-\node (train) [process, below of=depend_prop] {Training};
-\node (prfm_algo) [data, below of=train] {Performance of Algo. i};
-\node [data, draw=none, fill=none, left of=prop_set, xshift=-1.2cm] {Chapter~\ref{ch:3DRecon_Mapping}: 3D Benchmark};
+\subsection{An Interpretation of 3D Reconstruction}
+We conduct the evaluation of the framework around two key evaluation questions: 1). can the derived mapping be extended to object with a different shape; 2). can the framework return a reliable result given the correct description to the problem condition. To answer these questions, we carry out two separate experiments: 1). we use synthetic objects with the same configurations as the ones used to derive the mapping, and check if the algorithms that can return reliable results are consistent with the mapping; 2). we use real-world objects to test the use of the framework.
+% \begin{figure}[ht]
+% \centering
+% \begin{tikzpicture}[node distance=2cm, auto]
+% % depend_check, and training
+% \node (depend_check) [process] {Denpendency Check};
+% \node (prop_set) [data, above of=depend_check, xshift=-2cm, yshift=0.5cm] {Property Set};
+% \node (algo) [data, above of=depend_check, xshift=2cm, yshift=0.5cm]{Algo. i};
+% \node (depend_prop) [data, below of=depend_check] {Dependent Property Set};
+% \node (train) [process, below of=depend_prop] {Training};
+% \node (prfm_algo) [data, below of=train] {Performance of Algo. i};
+% \node [data, draw=none, fill=none, left of=prop_set, xshift=-1.2cm] {Chapter~\ref{ch:3DRecon_Mapping}: 3D Benchmark};
 
-% 3D taxonomy
-\node (algorithm) [model, above of=algo, yshift=1.8cm] {Algorithms};
-\node (translucency) [data_nonfixed, below of=algorithm, xshift=-3.9cm] {Translucency};
-\node (texture) [data_nonfixed, right of=translucency, xshift=0.1cm]{Texture};
-\node (lightness)[data_nonfixed, right of=texture, xshift=-0.2cm]{Lightness};
-\node (reflection)[data_nonfixed, right of=lightness, xshift=0.0cm]{Reflection};
-\node (rough)[data_nonfixed, right of=reflection, xshift=0.1cm]{Roughness};
-\node (3d_taxo) [dotted, draw=red, fill=none, thick, fit=(algorithm) (translucency) (texture) (lightness) (reflection) (rough), inner sep=0.3cm] {};
-\node [data, draw=none, fill=none, above of=3d_taxo, yshift=0.4cm] {Chapter~\ref{ch:3DRecon_Taxo}: 3D Taxonomy};
+% % 3D taxonomy
+% \node (algorithm) [model, above of=algo, yshift=1.8cm] {Algorithms};
+% \node (translucency) [data_nonfixed, below of=algorithm, xshift=-3.9cm] {Translucency};
+% \node (texture) [data_nonfixed, right of=translucency, xshift=0.1cm]{Texture};
+% \node (lightness)[data_nonfixed, right of=texture, xshift=-0.2cm]{Lightness};
+% \node (reflection)[data_nonfixed, right of=lightness, xshift=0.0cm]{Reflection};
+% \node (rough)[data_nonfixed, right of=reflection, xshift=0.1cm]{Roughness};
+% \node (3d_taxo) [dotted, draw=red, fill=none, thick, fit=(algorithm) (translucency) (texture) (lightness) (reflection) (rough), inner sep=0.3cm] {};
+% \node [data, draw=none, fill=none, above of=3d_taxo, yshift=0.4cm] {Chapter~\ref{ch:3DRecon_Taxo}: 3D Taxonomy};
 
-% 3D interpretation
-\node (abstract) [process, below of=prfm_algo]{Mapping};
-\node (best_algo) [data, right of=abstract, xshift=2cm] {Best-suited algorithm(s)};
-\node [data, draw=none, fill=none, below of=abstract, yshift=0.4cm] {Chapter~\ref{ch:3DRecon_Interp}: 3D Interpretation};
+% % 3D interpretation
+% \node (abstract) [process, below of=prfm_algo]{Mapping};
+% \node (best_algo) [data, right of=abstract, xshift=2cm] {Best-suited algorithm(s)};
+% \node [data, draw=none, fill=none, below of=abstract, yshift=0.4cm] {Chapter~\ref{ch:3DRecon_Interp}: 3D Interpretation};
 
-% 3D model
-\node (def) [data, left of=abstract, xshift=-3cm, yshift=6cm)] {Definition};
-\node (model) [data, below of=def] {Model};
-\node (rep) [data, below of=model] {Representation};
-\node (exp) [data, below of=rep] {Expressions};
-\node [data, draw=none, fill=none, above of=def, yshift=-0.5cm] {Chapter~\ref{ch:3DRecon_Desc}: 3D Model};
+% % 3D model
+% \node (def) [data, left of=abstract, xshift=-3cm, yshift=6cm)] {Definition};
+% \node (model) [data, below of=def] {Model};
+% \node (rep) [data, below of=model] {Representation};
+% \node (exp) [data, below of=rep] {Expressions};
+% \node [data, draw=none, fill=none, above of=def, yshift=-0.5cm] {Chapter~\ref{ch:3DRecon_Desc}: 3D Model};
 
-% depend_check, and training
-\draw (prop_set.south) -- ++(0.0, -0.5) coordinate (inter0);
-\draw (inter0) -- ++(2.0, 0.0) coordinate (inter1);
-\draw (algo.south) -- ++(0.0, -0.5) coordinate (inter2);
-\draw (inter2) -- ++(-2.0, 0.0) coordinate ();
-\draw [arrow] (inter1) -- (depend_check);
-\draw [arrow] (depend_check) -- (depend_prop);
-\draw [arrow] (depend_prop) -- (train);
-\draw [arrow] (train) -- (prfm_algo);
-\draw [arrow] (prfm_algo) -- (abstract);
-\draw[red,thick,dotted] ($(prop_set.north west)+(-0.3,0.3)$)  rectangle ($(prfm_algo.south east)+(2.3,-0.3)$);
+% % depend_check, and training
+% \draw (prop_set.south) -- ++(0.0, -0.5) coordinate (inter0);
+% \draw (inter0) -- ++(2.0, 0.0) coordinate (inter1);
+% \draw (algo.south) -- ++(0.0, -0.5) coordinate (inter2);
+% \draw (inter2) -- ++(-2.0, 0.0) coordinate ();
+% \draw [arrow] (inter1) -- (depend_check);
+% \draw [arrow] (depend_check) -- (depend_prop);
+% \draw [arrow] (depend_prop) -- (train);
+% \draw [arrow] (train) -- (prfm_algo);
+% \draw [arrow] (prfm_algo) -- (abstract);
+% \draw[red,thick,dotted] ($(prop_set.north west)+(-0.3,0.3)$)  rectangle ($(prfm_algo.south east)+(2.3,-0.3)$);
 
-\draw (algorithm.south) -- ++(0.0, -0.5) coordinate (c);
-\draw (c) -- ++(-1.8, 0.0) coordinate (n1);
-\draw [arrow](n1) -- (texture.north);
-\draw (n1) -- ++(-2.1, 0.0) coordinate (n2);
-\draw [arrow](n2) -- (translucency.north);
-\draw [arrow](c) -- (lightness.north);
-\draw (c) -- ++(2.0, 0.0) coordinate (p1);
-\draw [arrow](p1) -- (reflection.north);
-\draw (p1) -- ++(2.1, 0.0) coordinate (p2);
-\draw [arrow](p2) -- (rough.north);
-\draw [arrow] (3d_taxo) -- (algo);
+% \draw (algorithm.south) -- ++(0.0, -0.5) coordinate (c);
+% \draw (c) -- ++(-1.8, 0.0) coordinate (n1);
+% \draw [arrow](n1) -- (texture.north);
+% \draw (n1) -- ++(-2.1, 0.0) coordinate (n2);
+% \draw [arrow](n2) -- (translucency.north);
+% \draw [arrow](c) -- (lightness.north);
+% \draw (c) -- ++(2.0, 0.0) coordinate (p1);
+% \draw [arrow](p1) -- (reflection.north);
+% \draw (p1) -- ++(2.1, 0.0) coordinate (p2);
+% \draw [arrow](p2) -- (rough.north);
+% \draw [arrow] (3d_taxo) -- (algo);
 
-% 3D model
-\draw (def) -- (model);
-\draw (model) -- (rep);
-\draw (rep) -- (exp);
-\draw [arrow] (exp) -- (abstract);
-\draw[red,thick,dotted] ($(def.north west)+(-0.3,0.3)$)  rectangle ($(exp.south east)+(0.3,-0.3)$);
+% % 3D model
+% \draw (def) -- (model);
+% \draw (model) -- (rep);
+% \draw (rep) -- (exp);
+% \draw [arrow] (exp) -- (abstract);
+% \draw[red,thick,dotted] ($(def.north west)+(-0.3,0.3)$)  rectangle ($(exp.south east)+(0.3,-0.3)$);
 
-% 3D interpretation
-\draw [arrow] (abstract) -- (best_algo);
-\draw[red,thick,dotted] ($(exp.north west)+(-0.3,0.3)$)  rectangle ($(best_algo.south east)+(0.3,-0.3)$);
-\end{tikzpicture}
-\caption{Thesis overview. Rectangles denote process. Rounded rectangles represents data or component.}
-\label{fig:system_overview}
-\end{figure}
+% % 3D interpretation
+% \draw [arrow] (abstract) -- (best_algo);
+% \draw[red,thick,dotted] ($(exp.north west)+(-0.3,0.3)$)  rectangle ($(best_algo.south east)+(0.3,-0.3)$);
+% \end{tikzpicture}
+% \caption{Thesis overview. Rectangles denote process. Rounded rectangles represents data or component.}
+% \label{fig:system_overview}
+% \end{figure}
 
 \section{Contributions}
-The main contribution of the thesis is the development and evaluation of a framework that maps the description of the problem condition to the best possible algorithm from a suite of algorithms. It is non-trivial for two reasons: 1). currently, no one approach can achieve satisfactory result for an object with general material and geometric properties, the derived mapping can, to some extend, solve this problem by incorporating multiple algorithms into the framework; 2). a solid understanding of the algorithmic details of reconstruction algorithms is a prerequisite to fully take advantage of the existing techniques, which is unotainable for general developers, the descriptive language proposed in the thesis can allow application developer bypass this hurdle thus is more developer-friendly. The significant aspects are presented below:
+The main contribution of the thesis is the development and evaluation of a framework for the 3D reconstruction problem in computer vision, to hide the details of specific methods. The abstraction may be employed by users to describe the conditions of the vision problem they are trying to solve, and our novel interpreter uses the description to select an appropriate algorithm and return a reliable result. It is non-trivial for two reasons: 1). currently, no one approach can achieve satisfactory result for an object with general material and geometric properties, this framework can, to some extend, solve this problem by incorporating multiple algorithms that are designed for a range of problem conditions; 2). a solid understanding of the details of the reconstruction algorithms is a prerequisite to fully take advantage of the existing techniques, which is unotainable for general developers, the descriptive language proposed in the thesis can allow application developer to bypass this hurdle thus is more developer-friendly. The significant aspects are presented below:
 
 \noindent\textbf{1. A new taxonomy of 3D reconstruction problem that focuses on problem conditions instead of algorithmic details.}
 
-Most taxonomies generally focus on one class of algorithms, and classify intra-class algorithms based on differences of the algorithmic details. For instance, MVS algorithms can be categorized based on visibility models or scene representations, and PS methods can be classified by the reflectance models. However, it doesn't provide the context or the conditions where these techniques perform well, which is crucial when it comes to design an application that requires reliable reconstruction techniques.
+Typical taxonomies generally focus on one class of algorithms, and is algorithm centric, describing and classifying intra-class algorithms based on \textit{how} an algorithm solves the problem. For instance, MVS algorithms can be categorized based on visibility models or scene representations, and PS methods can be classified by the reflectance models. While this type of taxonomy provides an decent basis for comparison of intra-class algorithms, it provides little or none insights to the conditions where these techniques perform well, which is crucial when it comes to design an application that requires reliable reconstruction techniques. This thesis introduces a new taxonomy to 3D reconstruction that is based on the conditions surrounding the problem. Besides, it shows the researchers the lack of progress in certain areas thus is helpful to redirect research efforts to less explored territories.
 
-\noindent\textbf{2. A formal definition of the problem space and description of 3D reconstruction that allows more accurate mapping.}
+\noindent\textbf{2. A description of the 3D reconstruction problem that allows the mapping from a well defined problem space to algorithms be more precise.}
 
-The research of the vision has always been focused on technical novelties. However, we started to lose sight of the big picture and . Therefore, it's crutial to have a better understanding of the problem space to exploit the strengths and weaknesses of existing techniques. Besides, it shows the researchers the lack of progress in certain areas thus is helpful to redirect research efforts to less explored territories.
+The research of the vision has always been focused on technical novelties. However, we haven't paid equal attentions to the conditions under which these algorithms are designed to return reliable results. One of the reasons is the ambiguity of the problem domain. Information regarding the set of conditions under which a given algorithm performs well is difficult to convey without an agreed upon model which represents the problem space itself. Conversely, knowledge of which algorithm best suits a particular set of conditions in the problem space is also difficult to determine without a model to represent those conditions by. Therefore, it's crutial to have a better understanding of the problem space so that we can exploit the working space of the algorithms.
 
-Knowledge of which algorithm performs best from amongst those that target the conditions of a particular application area is similarly empirical and is often contentious as the conditions or images used to represent those conditions are often not the same. Binary classification of a problem type does not allow for the level of distinction required to know how effective a given algorithm will be within a particular range of the problem space. This information also changes regularly as new algorithms are developed. Without a model of the image registration problem space, expressing the conditions of a given problem is not a well defined process.
+\noindent\textbf{3. Derive the condition matrix of a specific algorithm using synthetic datasets.}
 
-\noindent\textbf{3. The development and evaluation of the mapping of 3D reconstruction.}
+The sub-volume of the problem space that a specific algorithm works well is largely unclear, or unknown. Additionally, the knowledge of which algorithm performs best under a specific problem condition is also empirical. Therefore, we need to find a precise mapping from the well defined problem space to a reliable solution. The condition matrix of a specific algorithm is derived by evaluating the performance under the well defined problem conditions.
 
-The construction of the mapping allows more accurate mapping. However, different from the previous research working on algorithms, the evaluation is more complicated and sophisticated. The reason for such an evaluation is that the mapping is for more general objects and algorithms, thus it requires a wider test cases, and rigorous experiment design. 
+% \noindent\textbf{4. The development and evaluation of the mapping of 3D reconstruction.}
+
+% The construction of the mapping allows more accurate mapping. However, different from the previous research working on algorithms, the evaluation is more complicated and sophisticated. The reason for such an evaluation is that the mapping is for more general objects and algorithms, thus it requires a wider test cases, and rigorous experiment design. 
 
 \section{Organization}
-We organize this thesis as follows: we discuss the related work in Chapter~\ref{ch:RelatedWork}. In Chapter~\ref{ch:3DRecon_Taxo} we provide a new taxonomy of 3D reconstruction based on the mapping from problem space to algorithms. In Chapter~\ref{ch:3DRecon_Desc}, we provide a formal description of the 3D reconstruction problem, which can be applied to the currently existing techniques, and extended to future algorithms. In Chapter~\ref{ch:3DRecon_Mapping}, we discuss the process of generating a synthetic dataset to evaluate the performance of a selected set of techniques under varied problem conditions, from which a mapping is derived for 3D reconstruction. In Chapter~\ref{ch:3DRecon_Interp}, we use both synthetic and real-world datasets to demonstrate the interpretation of the 3D reconstruction description and the validity of the proposed mapping.
+We organize this thesis as follows: we discuss the related work in Chapter~\ref{ch:RelatedWork}. In Chapter~\ref{ch:3DRecon_Taxo} we provide a new taxonomy of 3D reconstruction based on the conditions surrounding problem. In Chapter~\ref{ch:3DRecon_Desc}, we provide a formal description of the 3D reconstruction problem, which can be applied to the currently existing techniques, and extended to future algorithms. In Chapter~\ref{ch:3DRecon_Mapping}, we discuss the process of generating a synthetic dataset to evaluate the performance of a selected set of techniques under varied problem conditions, from which a mapping is derived for 3D reconstruction. In Chapter~\ref{ch:3DRecon_Interp}, we use both synthetic and real-world datasets to demonstrate the interpretation of the 3D reconstruction description and the validity of the proposed mapping.

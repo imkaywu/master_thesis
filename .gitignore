@@ -26,3 +26,5 @@
 *.toc
 *.zip
 .DS_Store
+/draft
+/img/trash
