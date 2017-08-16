@@ -17,9 +17,9 @@ The 3D reconstruction techniques exploits a variety of visual and geometric cues
 \begin{table}[h]
   \centering
   \begin{tabular}{l|r}
-  \hline
+  \toprule
   \textbf{Cue} & \textbf{Algorithm}\\
-  \hline\hline
+  \midrule
   Stereo correspondence & Stereoscopy\\
   & Trinocular Stereo\\
   & Multi-view Stereo (MVS)\\
@@ -34,7 +34,7 @@ The 3D reconstruction techniques exploits a variety of visual and geometric cues
   Texture & Shape from Texture\\
   \hline
   (De)focus & Shape from (De)focus\\
-  \hline
+  \bottomrule
   \end{tabular}
   \caption{Classes of algorithms that utilize each visual/geometric cue. Note that the abbreviations will be used extensively in the theis, and the actuall meaning of SfS can be deduced from the context.}
   \label{tab:cue_algo}
@@ -84,14 +84,14 @@ where $(p, q) = (z_x, z_y)$ are surface gradients. Unfortunately, measurements o
 \subsubsection{Photometric Stereo}
 \begin{table}[h]
   \centering
-  \begin{tabular}{l|*{4}{c}}
-  \hline
-  \textbf{Category} & Camera & Light source & Reflectance & Others\\
-  \hline
-  Original PS & Orthographic & Directional, known intensity and direction & Lambertian & No shadow, interreflection.\\
-  Generalized lighting PS & Orthographic & unknown intensity and direction, ambient & Lambertian & \\
-  Generalized reflectance PS & Orthographic & Distant, known intensity and direction & Non-Lambertian & \\
-  \hline
+  \begin{tabular}{p{2cm}|cp{4cm}c}
+  \toprule
+  \textbf{Category} & Camera & Light source & Reflectance \\
+  \midrule
+  Original PS & Orthographic & Directional, known intensity and direction & Lambertian \\
+  Generalized lighting PS & Orthographic & unknown intensity and direction, ambient & Lambertian \\
+  Generalized reflectance PS & Orthographic & Distant, known intensity and direction & Non-Lambertian \\
+  \bottomrule
   \end{tabular}
   \caption{Assumptions made by different classes of photometric stereo.}
   \label{tab:ps_assumptions}
