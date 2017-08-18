@@ -3,98 +3,100 @@
 
 \chapter{A Description of 3D Reconstruction}
 \label{ch:3DRecon_Desc}
-In Chapter~\ref{ch:3DRecon_Taxo}, we introduce a taxonomy of 3D reconstruction which maps algorithms according to the visual/geometric characteristics of the object. However, without a formal `language', \ie a model and representations, the mapping from an algorithm to a volumn of the problem space would be largely empirical. Without a formal definition of the problem space, expressing the condition that an algorithm works well is not a well defined problem.
+In Chapter~\ref{ch:3DRecon_Taxo}, we introduce a taxonomy of 3D reconstruction which maps algorithms according to visual/geometric characteristics of the object. However, without a formal `language', \ie a model and representations, the mapping from an algorithm to a volumn of the problem space would be largely empirical. Expressing the conditions within which an algorithm works well without a formal definition of the problem space prevents formulating a well defined problem.
 
-Computer vision problems require, among other factors, a model of the problem domain~\cite{little1985phdthesis}. The relevant properties of the elements in the domain must be characterized and their relations must be analyzed. Representations describe the object properties selected by the model to facilitate solution of the problem. For instance, surface orientation is a geometric model, and surface normal or curvature are representations of this mdoel. More specifically in the case of reconstruction problem, we first need to establish a model that defines the problem domain, then properties of the objects and surfaces are investigated to see their influence on the problem domain, which serves as the representation of the reconstruction problem.
+Computer vision problems require, among other factors, a model of the problem domain~\cite{little1985phdthesis}. The relevant properties of the elements in the domain must be characterized and their relations must be analyzed. Representations can describe an object's properties selected by the model to facilitate a solution of the problem. For instance, surface orientation is a geometric model, and surface normal or curvature are representations of this model. More specifically, in the case of the reconstruction problem, we first need to establish a model that defines the problem domain, then properties of the objects and surfaces should be investigated to see their influence on the problem domain, which serves as the representation of the reconstruction problem.
 
-In this chapter, we attempt to extend this taxonomy by providing a description of 3D reconstruction problem which allows for a well defined specification of the visual cues surrounding the problem and of the range of the desired solution, abstracting away from the functional specification of \textit{how} to estimate a reconstruction. We first propose a formal definition of the 3D reconstruction problem in Section~\ref{sec:3DRecon_Def}. Section~\ref{sec:3DRecon_Model} discusses various key \textit{aspects} of the problem space that are crutial to describe the appearance of the object. Section~\ref{sec:3DRecon_Rep} the actual concrete representations of the proposed model. Section~\ref{sec:3DRecon_Exp} provides examples of expressing common 3D reconstruction problems using the proposed model and representations. These four layers: Definition, Representation, Model, and Expression represent out framework of accessible 3D reconstruction.
+In this chapter, we attempt to extend this taxonomy by providing a description of the 3D reconstruction problem which allows for a well defined specification of the visual cues surrounding the problem and the range of desired solution. This description abstracts away from the functional specification of \textit{how} to estimate a reconstruction. We first propose a formal definition of the 3D reconstruction problem in Section~\ref{sec:3DRecon_Def}. Section~\ref{sec:3DRecon_Model} then discusses various key \textit{aspects} of the problem space that are crucial for describing the appearance of the object. Section~\ref{sec:3DRecon_Rep} outlines concrete representations of the proposed model. Section~\ref{sec:3DRecon_Exp} provides examples of expressing common 3D reconstruction problems using the proposed model and representations. These following four layers represent the description of our accessible 3D reconstruction framework: Definition, Representation, Model, and Expression.
 
 \section{Definition}
 \label{sec:3DRecon_Def}
-We first give the definitions of some basic concepts, which include general computer vision concepts such as scene, camera, and image. We then define some other notions that are close related to the reconstruction problem before a formal definition is introduced. We then provide some reasonable approximations for a more practical definition.
+We will first provide definitions of some basic concepts, which include general computer vision concepts such as scene, camera, and image. We then define a few other terms that are closely related to the reconstruction problem. We then provide reasonable approximations for a more practical definition of the problem as a whole.
 
 \subsection{Basic notations}
-We use the following notations: $\{C_n\}_{n=0}^{N-1}$ represents the camera set, which include both the intrinsic and extrinsic parameters; $\{I_n\}_{n=0}^{N-1}$ represents the set of all images; $\{L_n\}_{n=0}^{N-1}$ represents the set of light sources.
+We will use the following notations: $\{C_n\}_{n=0}^{N-1}$ represents the camera set, which includes both intrinsic and extrinsic parameters; $\{I_n\}_{n=0}^{N-1}$ represents the set of all images; $\{L_n\}_{n=0}^{N-1}$ represents the set of light sources.
 
-\textbf{Definition 1 (Scene)} The scene $S$ is the four-dimensional joint spatio-temporal target of interest.
+\noindent\textbf{Definition 1 (Scene)} The scene $S$ is the four-dimensional joint spatio-temporal target of interest.
 
-\textbf{Definition 2 (Image)} The 2D observation of the 3D scene $S$ on the image plane of camera $C_i$ at time $t_0$, which is modelled as: $I_i = T(S, C_i, L_0, t_0)$, or on the image plane of $C_0$  under the light source $L_i$ at time $t_i$, $I_i= T(S, C_0, L_i, t_i)$, where $T$ is the geometric/radiometric transformation.
+\noindent\textbf{Definition 2 (Image)} The image refers to the 2D observation of the 3D scene $S$ on the image plane of camera $C_i$ at time $t_0$, which is modelled as: $I_i = T(S, C_i, L_0, t_0)$, or on the image plane of $C_0$  under the light source $L_i$ at time $t_i$, $I_i= T(S, C_0, L_i, t_i)$, where $T$ is the geometric/radiometric transformation.
 
-The transformation $T$ can be a geometric one which determines the 2D coordinates of a 3D point, or a radiometric one which determines the intensity/irradiance information from the information of illumination, viewing direction and surface orientation, or both.
+$T$ can be a geometric transformation which determines the 2D coordinates of a 3D point, or a radiometric transformation which determines the intensity/irradiance information from the information of illumination, viewing direction and surface orientation.
 
 \subsection{Segment and Scell}
-\textbf{Definition 3 (Segment)} A segment is a distinct region in the image.
+\noindent\textbf{Definition 3 (Segment)} A segment ($seg$) is a distinct region in the image, and is the most basic element in the image, which can be considered as a generalized pixel. 
 
-Segment is the most basic element in the image, can be considered as a generalized pixel. For instance, a segment can be a pixel, a window area, an edge, a contour, or a region of arbitrary size and shape.
+For instance, a segment can be a pixel, a window area, an edge, a contour, or a region of arbitrary size and shape.
 
-\textbf{Definition 4 (Cue)} cues are the visual or geometric characteristics of the segments $seg$ that can be used for reconstruction, denoted as $cue(seg)$.
+\noindent\textbf{Definition 4 (Cue)} Cues are the visual or geometric characteristics of the segments $seg$ that can be used for reconstruction, denoted as $cue(seg)$.
 
-For instance, the cue can be texture within a window area, intensity/colour value of a pixel, or object contour, etc.
+For instance, the cue can be the texture within a window area, the intensity/colour value of a pixel, or the object contour, etc.
 
-\textbf{Definition (scell)} A Scell (scene element) is a volume in the scene which corresponds to at least one segment.
+\noindent\textbf{Definition (Scell)} A scell (scene element, denoted as $sc$) is a volume in the scene which corresponds to at least one segment. A scell can be considered as a generalization of a voxel.
+ % However, a scell is not necessarily distinct since
 
-A scell can be considered as a generalization of a voxel. However, a scell is not necessarily distinct since
-
-\textbf{Definition (Property)} Properties are the visual and geometric characteristics of the Scell $sc$, which would influence the cues of a segment, denoted as $prop(sc)$.
+\noindent\textbf{Definition (Property)} Properties are the visual and geometric characteristics of the scell $sc$, which would influence the cues of a segment, denoted as $prop(sc)$.
 
 The property of the scell can be the 3D position or orientation information, visual texture, reflectance, surface orientation, roughness, convacity, etc.
 
-The relation between the notions define above is shown in Figure~\ref{seg_scell}.
+The relation between the terms defined above is shown in Figure~\ref{fig:scell_seg}.
 \begin{figure}[!htbp]
 \centering
 \includegraphics[width=0.5\textwidth]{model/seg_scell}
 \caption{Relation between a scell and a segment}
+\label{fig::scell_seg}
 \end{figure}
 
 % \textbf{Definition (Representation)} The scell can be represented as a voxel, a depth value, a 3D point/patch, or a surface normal, etc, which is denoted as $rep(sc)$.
 
-\subsection{Photo-consistency}
-Every photograph of a 3D scene taken from a camera $C_i$ partitions the set of all possible shape-radiance scene descriptions into two families, those that reproduce the photograph and those that do not. We characterize this constraint for a given shape and a given radiance assignment by the notion of \textit{photo-consistency}.
+\subsection{Consistency}
+Every photograph of a 3D scene taken from a camera $C_i$ partitions the set of all possible shape-radiance scene descriptions into two families, those that reproduce the photograph and those that do not. We characterize this constraint for a given shape and a given radiance assignment by the notion of \textit{consistency}.
 
-\textbf{Definition (Photo-consistency criterion)} The photo-consistency criterion checks whether the properties of a scell $sc$ can produce the cues observed in the corresponding segment $seg$.
+\noindent\textbf{Definition (Consistency criterion)} The consistency criterion checks whether the properties of a scell $sc$ can produce the cues observed in the corresponding segment $seg$.
 \begin{align*}
-consist(prop(sc), cue(seg)) = 1 &\Rightarrow \textit{photo consistent}\\
-consist(prop(sc), cue(seg)) = 0 &\Rightarrow \textit{not photo consistent}
+consist(prop(sc), cue(seg)) = 1 &\Rightarrow \textit{consistent}\\
+consist(prop(sc), cue(seg)) = 0 &\Rightarrow \textit{not consistent}
 \end{align*}
 
-\textbf{Definition (Segment photo-consistency)} Let $S$ be the scene. A scell $s\in S$ that is visible from $C_i$ is photo-consistent with the image $I_i$ if and only if the photo-consistency check is true.
+\noindent\textbf{Definition (Segment consistency)} Let $S$ be the scene. A scell $s\in S$ that is visible from $C_i$ is consistent with the image $I_i$ if and only if the consistency criterion is true.
 
-\textbf{Definition (Image photo-consistency)} A scene $S$ is image photo-consistent with image $I_i$ if any scell $\forall s\in S$ visible from the camera $C_i$ is segment photo-consistent with this image.
+\noindent\textbf{Definition (Image consistency)} A scene $S$ is image consistent with image $I_i$ if any scell $\forall s\in S$ visible from the camera $C_i$ is segment consistent with this image.
 
-\textbf{Definition (Scene photo-consistency)} A scene $S$ is scene photo-consistent with a set of images $\{I_n\}_{n=0}^{N-1}$ if it's image photo-consistency with each image $I_i\in \{I_n\}_{n=0}^{N-1}$ in the set.
+\noindent\textbf{Definition (Scene consistency)} A scene $S$ is scene photo-consistent with a set of images $\{I_n\}_{n=0}^{N-1}$ if it's image consistency with each image $I_i\in \{I_n\}_{n=0}^{N-1}$ in the set.
 
 \subsection{Formal Definition}
-\textbf{Definition (3D reconstruction)} Given a set of images $\{I_n\}_{n=0}^{N-1}$ captured by cameras $\{C_n\}_{n=0}^{N-1}$, or under a set of light sources $\{L_n\}_{n=0}^{N-1}$, find a set of scells $\{sc_n\}_{n=0}^{M-1}$ such that any scell is photo-consistent with the image set $\{I_n\}_{n=0}^{N-1}$, \ie $\forall sc_i\in \{sc_n\}_{n=0}^{M-1}$, we have $consist(prop(sc_i), cue(seg_{(i, n)})) = 1$.
-
-where $seg_{(i, n)}$ is the corresponding segment of $sc_i$ in camera $C_n$. Alternatively, 3D reconstruction tries to find a set of scelments $\{sc_n\}_{n=0}^{M-1}$ that are scene photo-consistent with the image set $\{I_n\}_{n=0}^{N-1}$
+\noindent\textbf{Definition (3D reconstruction problem)} Given a set of images $\{I_n\}_{n=0}^{N-1}$ captured by cameras $\{C_n\}_{n=0}^{N-1}$, or under a set of light sources $\{L_n\}_{n=0}^{N-1}$, find a set of scells $\{sc_n\}_{n=0}^{M-1}$ such that any scell is consistent with the image set $\{I_n\}_{n=0}^{N-1}$, \ie $\forall sc_i\in \{sc_n\}_{n=0}^{M-1}$, we the have following:
+\begin{align*}
+consist(prop(sc_i), cue(seg_{(i, n)})) = 1.
+\end{align*}
+where $seg_{(i, n)}$ is the corresponding segment of $sc_i$ in camera $C_n$. Alternatively, 3D reconstruction tries to find a set of scells $\{sc_n\}_{n=0}^{M-1}$ that are scene consistent with the image set $\{I_n\}_{n=0}^{N-1}$
 
 \subsection{Applied Definition}
-While the definition presented above gives an formal definition of the problem of 3D reconstruction, it is not necessarily applicable in a practical setting. We extend in this section this formal definition to an approximate, but more applied version.
+While the definition presented above gives a formal definition of the problem of 3D reconstruction, it is not necessarily applicable in a practical setting. In this section, we extend this formal definition to an approximate, yet applied version.
 
-\textbf{Definition (Photo-consistency score)} The photo-consistency score measures the similariy betweem a scell $sc$ and the corresponding segment $seg$.
+\noindent\textbf{Definition (Consistency score)} The consistency score measures the similarity betweem a scell $sc$ and the corresponding segment $seg$.
 \begin{align*}
 consist(prop(sc), cue(seg)) &= x \text{, } x\in[0, 1]\\
-consist(prop(sc), cue(seg)) &= 1 \Rightarrow \textit{photo consistent}\\
-consist(prop(sc), cue(seg)) &= 0 \Rightarrow \textit{not photo consistent}
+consist(prop(sc), cue(seg)) &= 1 \Rightarrow \textit{consistent}\\
+consist(prop(sc), cue(seg)) &= 0 \Rightarrow \textit{not consistent}
 \end{align*}
 
-\textbf{Definition (Applied photo-consistency check)} A scell $sc$ and a segment $seg$ are considered photo-consistent if the the photo-consistency score is above a pre-defined threshold $\epsilon$.
+\noindent\textbf{Definition (Applied consistency criterion)} A scell $sc$ and a segment $seg$ are considered consistent if the the consistency score is above a pre-defined threshold $\epsilon$.
 $$
 consist(prop(sc), cue(seg)) > \epsilon
 $$
 
-\textbf{Some more definitions} $\sum_{n\in I'}consist(prop(sc_i), cue(seg_{(i, n)}))$
+% \noindent\textbf{Some more definitions} $\sum_{n\in I'}consist(prop(sc_i), cue(seg_{(i, n)}))$
 
-\textbf{Definition (Applied 3D Reconstruction)} Given a set of images $\{I_n\}_{n=0}^{N-1}$ captured by cameras $\{C_n\}_{n=0}^{N-1}$, or under a set of light sources $\{L_n\}_{n=0}^{N-1}$, find a set of scells $\{sc_n\}_{n=0}^{M-1}$ such that the photo-consistency score between the set of scells and their corresponding segments $\{seg_{(i, n)}\}_{i=0,j=0}^{M-1,N-1}$ are maximized.
+\noindent\textbf{Definition (Applied 3D Reconstruction Problem)} Given a set of images $\{I_n\}_{n=0}^{N-1}$ captured by cameras $\{C_n\}_{n=0}^{N-1}$, or under a set of light sources $\{L_n\}_{n=0}^{N-1}$, find a set of scells $\{sc_n\}_{n=0}^{M-1}$ such that the consistency score between the set of scells and their corresponding segments $\{seg_{(i, n)}\}_{i=0,j=0}^{M-1,N-1}$ are maximized.
 $$
 \mbox{maximize} \quad \sum_{n=0}^{N-1}\sum_{i=0}^{M-1} consist(prop(sc_i), cue(seg_{(i, n)}))
 $$
 
 \section{Model}
 \label{sec:3DRecon_Model}
-Models and representations are fundamental for vision problem solving. Models select characteristic properties of an object, and representation describe object properties selected by the model to facilitate solution of a class of problem. A model facilitates the representation of aspects of reality useful in a particular problem domain~\cite{bolles19863dpo}. For instance, surface orientation is one component of surface geometry model, and the corresponding representaion can be surface normal or curvature; another example is: colour is a component of material model, and RGB space is the corresponding representation of the colour.
+Models and representations are fundamental for vision problem solving. Models select characteristic properties of an object, and representation describes the model selected object properties to facilitate a solution of a class of problem. A model facilitates the representation of aspects in reality that are useful in a particular problem domain~\cite{bolles19863dpo}. For instance, surface orientation is one component of the surface geometry model, and the corresponding representation can be surface normal or curvature. Another example is colour, which is a component of a material model, and where RGB space is the corresponding representation of the colour.
 
-We select the subset of the properties used for object taxonomy in Chapter~\ref{ch:3DRecon_Taxo} as the main components of our model. The model consisting of the key properties are shown in Table~\ref{tab:3DRecon_model}.
+We select the subset of properties used for object taxonomy in Chapter~\ref{ch:3DRecon_Taxo} as the main components of our model. The model consisting of these key properties is shown in Table~\ref{tab:3DRecon_model}.
 \begin{table}[h]
   \centering
   \begin{tabular}{l|*{5}{c}}
@@ -106,22 +108,22 @@ We select the subset of the properties used for object taxonomy in Chapter~\ref{
   \label{tab:3DRecon_model}
 \end{table}
 
-In addition to the properties, there are requirements that can be imposed to the final reconstruction result. These requirements include but not exclude:
+% In addition to these properties, there are requirements that can be imposed to the final reconstruction result. These requirements include but not exclude:
 
-\begin{table}[h]
-  \centering
-  \begin{tabular}{l|*{5}{c}}
-  \hline
-  \textbf{Requirement} & Accuracy-first & Completeness-first & Orientation-first & Roughness & Concavity\\
-  \hline
-  \end{tabular}
-  \caption{Model of the 3D reconstruction problem: requirements}
-  \label{tab:3DRecon_model}
-\end{table}
+% \begin{table}[h]
+%   \centering
+%   \begin{tabular}{l|*{5}{c}}
+%   \hline
+%   \textbf{Requirement} & Accuracy-first & Completeness-first & Orientation-first & Roughness & Concavity\\
+%   \hline
+%   \end{tabular}
+%   \caption{Model of the 3D reconstruction problem: requirements}
+%   \label{tab:3DRecon_model}
+% \end{table}
 
 \section{Representation}
 \label{sec:3DRecon_Rep}
-Based on the proposed definitions and model of 3D reconstruction problem, we need to further define the representations so that 3D reconstruction problem can be expressed using the proposed model. Now we need to turn to how to represent the properties used in the proposed model, and these factors impact the corresponding properties.
+Based on the proposed definitions and model of the 3D reconstruction problem, we need to further define our representations so that the 3D reconstruction problem can indeed be expressed using our proposed model. We need to turn our attention to how to represent the properties used in the proposed model, as these factors impact the corresponding properties.
 
 % We look at the \textit{cues} that are utilized by 3D reconstruction techniques and their corresponding contributing properties. In Chapter~\ref{ch:3DRecon_Taxo}, we explored a new taxonomy of 3D reconstruction based visual/geometric cues. Now we need to investigate the visual and geometric properties of the object that can affect those cues. This section is organized by the visual/geomtric cues, and the visual/geomtric properties are investigated in each section.
 
@@ -151,14 +153,16 @@ Based on the proposed definitions and model of 3D reconstruction problem, we nee
 % As defined in Chapter~\ref{sec:3DRecon_Def}, cue is the characteristics of the segment while property is that of the scell. For each cue observed in a segment, we discuss the underlying properties that have an impact on it.
 
 \subsection{Texture}
-Texture is one of the most important cues for many computer vision algorithms. It is generally divided into two categories, namely \textit{tactile} and \textit{visual} textures. Tactile textures refer to the immediate tangible feel of a surface whereas visual textures refer to the visual impression that textures produce to human observer, which are related to local spatial variations of simple stimuli like colour, orientation and intensity in an image. We focus only on visual textures as it's the most widely used ones in the stereo vision research, thus the term `texture' thereafter is exclusively referred to `visual texture' unless mentioned otherwise.
+Texture is one of the most important cues for many computer vision algorithms. It is generally divided into two categories, namely \textit{tactile} and \textit{visual} textures. Tactile textures refer to the immediate tangible feel of a surface, whereas visual textures refer to the visual impression that textures produce to the human observer, which are related to local spatial variations of simple stimuli like colour, orientation and intensity in an image. Here we focus only on visual textures, as they are more widely used in the stereo vision research. The term `texture' hereafter refers exclusively to `visual texture' unless mentioned otherwise.
 
-Although texture is an important component in computer vision, there is no precise definition of the notion texture. The main reason is that natural textures often exhibit different yet contradicting properties, such as regularity versus randomness, uniformity versus distortion, which can hardly be described in a unified manner. 
+Although texture is an important component in computer vision, there is no precise definition for the notion of texture itself. The main reason for this is that natural textures often exhibit separate yet contradicting properties, such as regularity versus randomness, or uniformity versus distortion, which can hardly be described in a unified manner. 
 % Haralick considers a texture as an ``organized area phenomenon'' which can be decomposed into `primitives' having specific spatial distributions~\cite{haralick1979statistical}. This definition, also known as structural approach, comes directly from human visual experience of texture. These primitives are organized in a particular spatial structure indicating certain underlying placement rules. Alternatively, as Cross and Jain suggested, a texture is ``a stochastic, possibly periodic, two-dimensional image field''~\cite{cross1983markov}, which is also known as \textit{stochastic approach}.
 
 % For s regular textures, there are two basic dimensions on which it may be described. The first dimension is for describing the primitives out of which the texture is composed, and the second dimension is for the description of the spatial dependence or interaction between the primitives of an image texture. The first property is concerned with tonal primitives and local properties, and the second dimension is concerned with the spatial organization of the tonal primitives.
 
-There are various properties that make the texture distinguishable: scale/size/granularity, orientation, homogeneity, randomness, and etc. However, due to the diverse and complexity of natural textures, it's a challenging task to map from these semantic meanings to the precise properties of a synthetic texture. The stereo vision community often take a simplified approach, classifying them into two categories: regular and stochastic ones by their degree of randomness. A regular texture is formed by regular tiling of easily identifiable elements (texels) organized into strong periodic patterns. A stochastic texture exhibits less noticeable elements and display rather random patterns. Most of the real world texture are mixtures of these two categories. We adopt another simplification and consider \textit{texture coverage}, which is the ratio of the surface that is textured. Stereo vision, in theory, attempts to find the correspondences based on the `distinctiveness' of the texture. Therefore, as long as the surface is covered by distinctive texture, it make little difference what the basic building texture element is.
+There are various properties that make texture distinguishable: scale/size/granularity, orientation, homogeneity, randomness, etc. However, due to the diversity and complexity of natural textures, it is a challenging task to map from these semantic meanings to the precise properties of a synthetic texture. The stereo vision community often takes a simplified approach, classifying two categories, regular and stochastic, by degree of randomness. A regular texture is formed by regular tiling of easily identifiable elements (texels) organized into strong periodic patterns. A stochastic texture exhibits less noticeable elements and displays rather random patterns. Most of the real world textures are mixtures of these two categories.
+
+In this thesis, we adopt another simplification and consider \textit{texture coverage}, which is the ratio of the surface that is textured. Stereo vision, in theory, attempts to find correspondences based on the `distinctiveness' of the texture. Therefore, as long as a surface is covered by distinctive texture, it make little difference what the basic building texture element is.
 
 % Most texture synthetic research has focused on data-driven or statistical approaches. For the data-driven approach, the generated texture is not general enough whereas it's not intuitive enough for the statistical approach. Thus we turn to an approach that is more tailored to the stereo vision problem. Based on the observations from practical tests, stereo algorithms work well under the condition of non-uniform texture, even for textures caused by shadow. This is theoretically plausible as stereo vision tries to find the correspondence based on the `distinctiveness' of the texture. Therefore, as long as the surface is covered by distinct texture, it doesn't matter what the basic texture element is. Thus the most significant attributes of the texture is coverage, \ie the percent of the surface that is covered, and it's the focus of this thesis.
 
@@ -167,12 +171,12 @@ There are various properties that make the texture distinguishable: scale/size/g
 % Here we only consider visual textures, which is the result of shape and reflection. Therefore, a surface with varying reflectance property can produces a textured surface, a flat surface with fixed reflectance property under different illuminations can also achieve textured effect. Even very weak texture can be a strong cue to object reconstruction as manifested by the Middlebury `Dino' dataset.
 
 \subsection{Lightness}
-When light strikes a surface, it may be reflected, transmitted, absorbed, or scattered; usually, a combination of these effects occur. The intensity/colour information received by the sensor is thus determined, among other factors, the amount of light after these interaction. We consider intensity caused solely by reflection as it is the most common phenomenon and the easiest to analyse. Generally, we assume that all effects are local, thus global effects such as inter-reflection, transmission, and etc are omitted, which is called a \textbf{local interaction model}. Lightness ranges from `black' to `white' in the grey scale axis. Colour is a superset intensity, which takes account into the spectral composition of light. Both terms depend on illumination, surface normal, surface reflectance, and viewing direction.
+When light strikes a surface, it may be reflected, transmitted, absorbed, or scattered; usually, a combination of these effects occur. The intensity/colour information received by a sensor is thus determined, among other factors, by the amount of light available after these interactions. We consider intensity as caused solely by reflection, as this is the one of most common phenomena experienced and is the easiest to analyze. Generally, we assume that all effects are local, thus global effects such as inter-reflection and transmission, among others, are omitted. This is called a \textbf{local interaction model}. Lightness ranges from `black' to `white' in the grey scale axis, and colour is a superset of intensity, which takes into account the spectral composition of light. Both lightness and colour depend on illumination, surface normal, surface reflectance, and viewing direction.
 
-In order to understand the contributing factor of pixel intensity/colour, we need a in-depth understanding of reflection, \ie how light is reflected off of a surface patch, and the relation between material and intensity value. The radiometric formation of an image consists of three separate process, \textit{light-matter interaction}, \textit{light-lens interaction}, and \textit{light-sensor interaction}.
+In order to understand the contributing factor of pixel intensity/colour, we need an in-depth understanding of reflection, \ie how light is reflected off of a surface patch, and the relation between material and intensity values. The radiometric formation of an image consists of three separate processes, \textit{light-matter interaction}, \textit{light-lens interaction}, and \textit{light-sensor interaction}.
 
 \subsubsection{Definition of Radiometric Terms}
-Here is a list of radiometry terms, see Figure~\ref{fig:radiometry_terms} for an illustration:
+Below is a list of radiometry terms, see Figure~\ref{fig:radiometry_terms} for an illustration:
 \begin{itemize}
 \item Solid angle ($d\omega$): 3D counterpart of angle, $d\omega=\frac{dA \cos\theta_i}{R^2}\mathit{ (steradian)}$.
 \item Projected solid angle ($d\Omega$): $d\Omega = \cos\theta d\omega$.
@@ -181,17 +185,17 @@ Here is a list of radiometry terms, see Figure~\ref{fig:radiometry_terms} for an
 \item Surface radiance ($\mathbf{L_r(\theta_r, \phi_r)}$): light flux emmited from a unit surface area in the direction $(\theta_r, \phi_r)$, unit $\mathit{ (watt\cdot m^{-2}\cdot steradian^{-1})}$.
 \end{itemize}
 
-\begin{figure}[!ht]
+\begin{figure}[!htbp]
 \centering
 \includegraphics[width=0.5\textwidth]{model/radiometry_terms.png}
-\caption{Light-matter interaction }
+\caption{Illustration of light-matter interaction.}
 \label{fig:radiometry_terms}
 \end{figure}
 
 \subsubsection{Light-matter interaction}
-The relation between the incoming illumination and reflected light is model using the \textit{bidirectional reflectance distribution function}, usually abbreviated BRDF. The BRDF is define as
+The relation between the incoming illumination and reflected light is modelled using the \textit{bidirectional reflectance distribution function} (BRDF). The BRDF is defined as
 
-\textbf{Definition (BRDF)} the ratio of the surface radiance $\mathbf{L_r(\theta_r, \phi_r)}$ to the irradiance $\mathbf{E_i(\theta_i, \phi_i)}$, \ie $f(\theta_i, \phi_i, \theta_r, \phi_r)=\frac{E^{surface}(\theta_i, \phi_i)}{L^{surface}(\theta_r, \phi_r)}$.
+\noindent\textbf{Definition (BRDF)} the ratio of the surface radiance $\mathbf{L_r(\theta_r, \phi_r)}$ to the irradiance $\mathbf{E_i(\theta_i, \phi_i)}$, \ie $f(\theta_i, \phi_i, \theta_r, \phi_r)=\frac{E^{surface}(\theta_i, \phi_i)}{L^{surface}(\theta_r, \phi_r)}$.
 
 \begin{figure}[!ht]
 \centering
@@ -204,14 +208,14 @@ The relation between the incoming illumination and reflected light is model usin
 \draw [arrow] (brdf) -- (scene);
 \draw [arrow] (scene) -- (scene_rad);
 \end{tikzpicture}
-\caption{The light-matter interaction.}
+\caption{The process of light-matter interaction. The ellipse represents the physical components, the rectangle represents the interaction process, and the rounded rectangle represents input/output, same representations used in graphs below.[change the graphs]}
 \label{fig:light_matter_interact}
 \end{figure}
 
-\textbf{Diffuse Albedo} or surface lightness is the proportion of incident light that is reflected by the surface. It should be noted that albedo is not an intrinsic property of a surface. Instead, for any surface, the albedo depends on the spectral and angular distributions of the incident light.
+\textbf{Diffuse albedo} or surface lightness is the proportion of incident light that is reflected by the surface. It should be noted that albedo is not an intrinsic property of a surface. Instead, for any surface, the albedo depends on the spectral and angular distributions of the incident light.
 
 \subsubsection{Light lens interaction}
-The assumption made in vision is that radiance is constant as it propagates along ray. Therefore the scene radiance is the same as the radiance hitting on the camera sensor. It can be further shown that the image irradiance received by the sensor is proportional to the scene radiance, thus the relation between \textit{scene radiance} and \textit{image irradiance} is linear.
+The assumption made in vision is that radiance is constant as it propagates along a ray. Therefore, the scene radiance is the same as the radiance hitting the camera sensor. It can be further shown that the image irradiance received by the sensor is proportional to the scene radiance, thus the relation between \textit{scene radiance} and \textit{image irradiance} is linear.
 \begin{figure}[!ht]
 \centering
 \begin{tikzpicture}[node distance=2cm, auto]
@@ -226,7 +230,7 @@ The assumption made in vision is that radiance is constant as it propagates alon
 \end{figure}
 
 \subsubsection{Light sensor interaction}
-The camera response function relating image irradiance at the image plane to the measured pixel intensity values is a non-linear mapping. A linear relation can be retrieved by radiometric calibration.
+The camera response function relating image irradiance at the image plane to measured pixel intensity values is a non-linear mapping. A linear relation can be retrieved by radiometric calibration.
 \begin{figure}[!ht]
 \centering
 \begin{tikzpicture}[node distance=2cm, auto]
@@ -240,7 +244,7 @@ The camera response function relating image irradiance at the image plane to the
 \label{fig:light_sensor_interact}
 \end{figure}
 
-In conclusion, if \textit{light sensor} is assumed as a linear mapping as most of vision algorithms do, or calibrated as a pre-processing step. The factor that influence the intensity is the BRDF value. There are 4 DoF for spatially-invariant BRDF, and for a special, simple case - Lambertian reflectance, the BRDF is degenerated to the diffuse \textit{albedo}, which is the representation we adopt for intensity.
+In conclusion, the \textit{light sensor} can be assumed as a linear mapping (as most vision algorithms do) or calibrated as a pre-processing step. The factor that influences the intensity is the BRDF value. There are 4 degrees of freedom for spatially-invariant BRDF, and for a special, simple case - Lambertian reflectance, the BRDF is degenerated to the diffuse \textit{albedo}, which is the representation we adopt for the property of intensity.
 
 % The reflectance of light also depends on the incident direction. Specifically, light that lands on a surface at a grazing angle will be much more likely to reflect, see Figure~\ref{fig:alb_ang}. We take into account the Fresnel effect in the synthetic stage, thus we consider the albedo with small incident angle.
 % \begin{figure}[h]
@@ -251,7 +255,7 @@ In conclusion, if \textit{light sensor} is assumed as a linear mapping as most o
 % \end{figure}
 
 \subsection{Reflectance}
-Specular surfaces reflect light in almost a single direction when the microscopic surface irregularities is small compared to light wavelength, and no subsurface scattering present~\cite{nayar1989surface}. Unlike diffuse reflections, which we experience the lightness and colour of an object, specular reflections carry information about the structure, intensity, and spectral content of the illumination field. In other words, specular reflection is simply image of the environment, or the illumination field, distorted by the geometry of the reflecting surface. See Figure~\ref{fig:spec_ref}, the image no long reflect the original colour of the surface (red), instead it shows a distorted image of the environment. A purely specular surface is a mirror. Purely specular surfaces are rare in nature. Most natural materials exhibit a mix of specular and diffuse reflection. Variations in microscopic surface geometry can cause specular reflections to be scattered, blurring the image of the environment in an amount proportional to surface roughness. We use a numeric \textit{specular}ps value to denote the proportion of specularity of the material, with 0 being completely diffuse, and 1 being completely specular or mirror light.
+Specular surfaces reflect light in nearly a single direction when the microscopic surface irregularities are small compared to light wavelength, and when no subsurface scattering is present~\cite{nayar1989surface}. Unlike diffuse reflections, where we experience the lightness and colour of an object, specular reflections carry information about the structure, intensity, and spectral content of the illumination field. In other words, specular reflection is simply an image of the environment, or the illumination field, distorted by the geometry of the reflecting surface. In Figure~\ref{fig:spec_ref}, the image no longer reflects the original colour of the surface (red). Instead it shows a distorted image of the environment. A purely specular surface is a mirror, which is rare in nature. Most natural materials exhibit a mixture of specular and diffuse reflections. Variations in microscopic surface geometry can cause specular reflections to be scattered, blurring the image of the environment in an amount proportional to surface roughness. We use a numeric \textit{specular} value to denote the proportion of a material's specularity, with 0 being completely diffuse, and 1 being completely specular (mirror lik).
 \begin{figure}[h]
 \centering
 \includegraphics[width=0.5\textwidth]{model/spec_ref}
@@ -260,9 +264,9 @@ Specular surfaces reflect light in almost a single direction when the microscopi
 \end{figure}
 
 \subsection{Roughness}
-Roughness, which is characterized as the microscopic shape characteristics of the surface, contributes to the way in which light is reflected off of a surface. A smooth surface may reflect incident light in a single direction, while a rough surface may scatter the light in various directions. We need prior knowledge of the microscopic surface irregularities, or a model of the surface to determine the reflection of incident light.
+Roughness, which refers to the microscopic shape characteristics of a surface, contributes to the way in which light is reflected off of a surface. A smooth surface may reflect incident light in a single direction, while a rough surface may scatter the light in various directions. We need prior knowledge of the microscopic surface irregularities, or a model of the surface itself, to determine the reflection of incident light.
 
-The possible surface models are divided into 2 categories: surface with exactly known profiles and surfaces with random irregularities. An exact profile may be determined by measuring the height at each point on the surface by means of a sensor such as the stylus profilometer. This method is cumbersome and impractical. Hence, it’s more reasonable to model the surface as a random process, where it is described by a statistical distribution of either its height above a certain mean level, or its slope w.r.t its mean (macroscopic) slope. The section only discusses these second statistical approach.
+Possible surface models are divided into 2 categories: surfaces with exact known profiles and surfaces with random irregularities. An exact profile may be determined by measuring the height at each point on the surface by means of a sensor such as the stylus profilometer. This method tends to be cumbersome and impractical, hence, it is more reasonable to model the surface as a random process, where it is described by a statistical distribution of either its height above a certain mean level, or its slope with respect to its mean (macroscopic) slope. We will use the second statistical approach in this section.
 
 % \textit{Height Distribution Model} The height coordinate of the surface is expressed as random function of the coordinates $x$ and $y$.
 % \begin{figure}[h]
@@ -293,16 +297,14 @@ The possible surface models are divided into 2 categories: surface with exactly 
 % where $T$ is the *correlation distance*. Therefore, the above surfaces have small and large correlation distances respectively.
 
 \subsubsection{Slope Distribution Model}
-We can think of a surface as a collection of planar micro-facets.
+We can think of a surface as a collection of planar micro-facets. A large set of micro-facets constitutes an infinitesimal surface patch that has a mean surface orientation $\vec{n}$. Each micro-facet has its own orientation, which may deviate from the mean surface orientation by an angle $\alpha$.
 \begin{figure}[h]
 \centering
 \includegraphics[width=0.7\textwidth]{model/surface_representation_2}
 \caption{Surface Slope Distribution Model}
 \end{figure}
 
-A large set of micro-facets constitutes an infinitesimal surface patch that has a mean surface orientation $\vec{n}$. Each micro-facet has its own orientation, which may deviate from the mean surface orientation by an angle $\alpha$.
-
-We will use the parameter $\alpha$ to represent the slope of individual facets. Surfaces can be modeled by a statistical distribution of the micro-facet slopes. If the surface is isotropic, the probability distribution of the micro-facet slopes can be assumed to be rotationally symmetric w.r.t the mean surface normal $\vec{n}$.  Therefore, facet slopes can be described by a one-dimensional probability distribution function. For instance, the surface may be modeled by assuming a normal distribution for the facet slope $\alpha$, with mean value $\bar{\alpha}=0$ and standard deviation $\sigma_\alpha$, and larger $\sigma_\alpha$ can be used to model rougher surfaces:
+We will use the parameter $\alpha$ to represent the slope of individual facets. Surfaces can be modeled by a statistical distribution of the micro-facet slopes. If the surface is isotropic, the probability distribution of the micro-facet slopes can be assumed as rotationally symmetric w.r.t the mean surface normal $\vec{n}$.  Therefore, facet slopes can be described by a one-dimensional probability distribution function. For instance, the surface may be modeled by assuming a normal distribution for the facet slope $\alpha$, with mean value $\bar{\alpha}=0$ and standard deviation $\sigma_\alpha$, where the larger $\sigma_\alpha$ can be used to model rougher surfaces:
 $$
 p_\alpha(\alpha)=\frac{1}{\sqrt{2\pi}\sigma_\alpha}e^{-\frac{\alpha^2}{2\sigma_\alpha^2}}
 $$
@@ -312,14 +314,14 @@ $$
 % surface roughness will affect the fresnel and specularity
 
 \subsection{Concavity}
-Concavity can cause self-shadow or inter-reflection effect, which can severely impede the accuracy of intensity based algorithms. Since concavity is not shown in the silhouette image, methods that utilize silhouette information may also fail to reconstruct concavities. Concavity is measured by \textit{surface curvature}.
+Concavity can cause self-shadow or inter-reflection effects, which can severely impede the accuracy of intensity based algorithms. Since concavity is not shown in the silhouette image, methods that utilize silhouette information may also fail to reconstruct concavities. Concavity is measured by \textit{surface curvature}.
 
 % \subsubsection{Silhouette}
 % \textbf{Concavity} is not shown in the silhouette image, thus methods that utilize silhouette information may fail to reconstruct concavities. Concavity is measured by \textit{surface curvature}.
 
 \section{Expression}
 \label{sec:3DRecon_Exp}
-Now with the proposed definition and representation of 3D reconstruction problem, we can express some existing 3D reconstruction algorithms under this framework. The expression of the reconstruction problem is shown in table~\ref{tab:express}.
+Now that we have a proposed definition and representation of 3D reconstruction problem, we can express existing 3D reconstruction algorithms under this framework. The expression of the reconstruction problem is shown in table~\ref{tab:express}.
 \begin{table}[h]
   \centering
   \begin{tabular}{l*{5}{c}}
@@ -332,6 +334,6 @@ Now with the proposed definition and representation of 3D reconstruction problem
   Class 5 & 0.8 & 0.8 & 0.5 & 0.2 & 0.2\\
   \hline
   \end{tabular}
-  \caption{Expression of the reconstruction problem for the object class 1, 2, 3, 5.}
+  \caption{Expression of the reconstruction problem for the object classss 1, 2, 3, 5.}
   \label{tab:express}
 \end{table}

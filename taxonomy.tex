@@ -3,17 +3,17 @@
 
 \chapter{A Taxonomy of 3D Reconstruction}
 \label{ch:3DRecon_Taxo}
-Existing taxonomies of 3D reconstruction techniques generally focus on one category of techniques: the Multi-view Stereo taxonomy in~\cite{seitz2006comparison} proposed classification of MVS algorithms from various perspectives. Reviews of Structured Light techniques generally classify techniques based on the type of projection pattern used~\cite{geng2011structured, salvi2004pattern}. Photometric Stereo algorithms are classified by the assumptions or generalizations made, for instance, unknown/known reflectance, unknown/known light conditions (uncalibrated/calibrated), etc~\cite{shi2016benchmark}. These frameworks provide a way to categorize intra-category algorithms, but is unsuitable to evaluate the performance of inter-category algorithms. Furthermore, the algorithms under consideration are targeted at a limited categories of objects. It's well known that these algorithms are highly likely to fail on other categories of objects, and this knowledge of algorithmic applicability is largely empirical, with each algorithm roughly maps to a problem domain that is poorly defined. Thus we need a more object-centered approach to the taxonomy so that a more precise mapping is available.
+Existing taxonomies of 3D reconstruction techniques generally focus on one category of techniques: the Multi-view Stereo taxonomy in~\cite{seitz2006comparison}, which proposes classification of MVS algorithms from various perspectives. Reviews of Structured Light techniques generally classify techniques based on the type of projection pattern used~\cite{geng2011structured, salvi2004pattern}. Photometric Stereo algorithms are classified by the assumptions or generalizations made, such as, unknown/known reflectance, unknown/known light conditions (uncalibrated/calibrated), and so on~\cite{shi2016benchmark}. These frameworks provide a way to categorize intra-category algorithms, but are unsuitable to evaluate the performance of inter-category algorithms. Furthermore, the algorithms under consideration target limited categories of objects. It is well known that such algorithms are highly likely to fail when targeting a diverse set of object categories, and this knowledge of algorithmic applicability is largely empirical, with each algorithm roughly mapping to a problem domain that is poorly defined. Thus we need a more object-centered approach to the taxonomy so that a more precise mapping can be made available.
 
-It's crutial to understand where algorithms perform well and where they fail when designing an application for reconstruction. Under the previous framework of taxonomy, this knowledge is largely empirical, with each algorithm mapped roughly to a sub-volume in the problem space. However, this mapping is ambigueous, \ie the sub-space is not well defined, and also too general, \ie algorithm within the same category cannot be effectively distinguished. To overcome this limitation, we need to 1). propose a well-defined problem space; 2). bypass the algorithmic details and focus on properties that are not intuitive to understand and perceive.
+It is crucial to understand where algorithms perform well and where they fail when designing an application for reconstruction. Under the previous framework of taxonomy, this knowledge is largely empirical, with each algorithm mapped roughly to a sub-volume in the problem space. However, this mapping is ambigueous, as the sub-space is too general and is not well defined. For instance, algorithms within the same category cannot be effectively distinguished. To overcome this limitation, we need to first propose a well-defined problem space; second, bypass algorithmic details to focus on properties that are not intuitive to understand and perceive.
 
-The taxonomy proposed in this chapter defines the 3D reconstruction techniques from an object-centered viewpoint, \ie categorize algorithm based on object class. This taxonomy transforms the 3D reconstruction problem from one requiring knowledge and expertise of specific algorithms in terms of how and when to use them, to one requiring knowledge of the visual and geometric properties of the target object.
+The taxonomy proposed in this chapter defines 3D reconstruction techniques from an object-centered viewpoint, \ie categorizes an algorithm based on object class. This taxonomy transforms the 3D reconstruction problem from one requiring knowledge and expertise of specific algorithms in terms of how and when to use them, to one requiring knowledge of the visual and geometric properties of the target object.
 
 \section{A New Perspective of Taxonomy}
-Typical taxonomies generally focus on one class of algorithms, and are algorithm centric, describing and classifying intra-class algorithms based on \textit{how} an algorithm solves the problem. However, this approach 1). gives very little insight to what conditions does a specific algorithm work well; 2). requires vision knowledge to understand and use these algorithms. The new taxonomy approaches this problem from a different perspective, more specifically, the algorithms are categorized based on the type of objects/problem conditions that they can reliably work under. We first give an overview of object classes, which serves as the bases to the taxonomy.
+Typical taxonomies are generally algorithm centric, describing and classifying intra-class algorithms based on \textit{how} an algorithm solves the problem. However, this approach gives very little insight on what conditions allow a specific algorithm to work well. Further, it requires vision knowledge to understand and use these algorithms. The new perspective approaches taxonomy from a different angle, more specifically, the algorithms are categorized based on the type of objects/problem conditions that they can reliably work under. We first give an overview of object classes, which serves as the bases to the taxonomy, then proceeds to investigates the working conditions of each class of algorithms.
 
 \subsection{Object class}
-In Figure~\ref{fig:obj_class} (a), we show a taxonomy of object classes with different material and shape properties. There are in total $3\times 3\times 2\times4\times 2\times 5 = 720$ classes of objects, which still don't fully capture the variations exhibited by real world objects, for instance, effects such as occlusion, discontinuity, emission, etc are not considered.
+In Figure~\ref{fig:obj_class}, we show a taxonomy of object classes with different material and shape properties. However, by no means are these presented object classes complete. There are many other properties not included that are commonely seen in real world objects. For instance, effects such as occlusion, discontinuity, and emission, among others, are not considered.
 \begin{figure}[!htbp]
 \centering
 \includegraphics[width=0.8\textwidth]{taxo/obj_class}\\
@@ -22,7 +22,7 @@ In Figure~\ref{fig:obj_class} (a), we show a taxonomy of object classes with dif
 \end{figure}
 
 \subsection{Class labels}
-We propose the following labels to the differentiate object classes reviewed above. The order of the labels are: translucency, texture, lightness, reflection model, surface roughness, and concavity.
+We propose the following labels to differentiate object classes reviewed above. The order of the labels are: translucency, texture, lightness, reflection model, surface roughness, and concavity.
 \begin{itemize}
 \item \textbf{Translucency}: \textbf{O}: opaque, \textbf{Tl}: translucent, \textbf{Tp}: transparent.
 \item \textbf{Texture}: \textbf{T}: textured, \textbf{Tr}: repeated textured, \textbf{Tl}: textureless.
@@ -32,7 +32,7 @@ We propose the following labels to the differentiate object classes reviewed abo
 \item \textbf{Concavity}: \textbf{Cx}: convex, \textbf{Cv}: concave
 \end{itemize}
 
-Most techniques that have been developed over the past decades can only tackle a subset of all possible object classes, with a focus on opaque, diffuse objects. For specular, refractive, and translucent or transparent objects, only very specialized algorithms are applicable for reconstruction~\cite{ihrke2010transparent}. Therefore, we consider only the six classes of objects listed in Table~\ref{tab:six_obj_class}.
+Most techniques that have been developed over the past few decades can only tackle a subset of all possible object classes, with a focus on opaque, diffuse objects. For specular, refractive, and translucent or transparent objects, only very specialized algorithms are applicable for reconstruction~\cite{ihrke2010transparent}. To approach this problem in a feasible manner, six classes of objects are being investigated in depth. They are selected based on the availability of reliable techniques and the diversity of objects in real world. See the six classes of objects listed in Table~\ref{tab:six_obj_class}.
 \begin{table}[!htbp]
 \centering
 \begin{tabular}{l|*{6}{c}}
@@ -52,7 +52,7 @@ Class \# & Translucency & Texture & Lightness & Refection & Roughness & Concavit
 \end{table}
 
 \subsection{Classes of algorithms}
-Here is a list of seletected algorithms that will be looked into in depth, a summary is list in Figure~\ref{tab:class_algo}.
+In the following section, we have listed the algorithms that will be investigated in depth. A summary is list below in Table~\ref{tab:class_algo}.
 \begin{table}[!htbp]
   \centering
   \begin{tabular}{l|l}
@@ -72,23 +72,23 @@ Here is a list of seletected algorithms that will be looked into in depth, a sum
   VH & Szeliski~\cite{szeliski1993rapid}, Matusik~\cite{matusik2002efficient}, Tarini~\cite{tarini2002marching}\\
   \bottomrule
   \end{tabular}
-  \caption{Selected algorithms from each class of algorithms}
+  \caption{Selected algorithms from each algorithm class}
   \label{tab:class_algo}
 \end{table}
 
 \section{Working conditions of algorithms}
-This section investigate the cases where each categories of algorithm is capable to work under based on the reported literature.
+This section investigate the cases where each categories of algorithm is capable to work under based on the reported literature. Visual texture can be thought of as a pattern or variance of intensity appearing on an object's surface. In this thesis, the visual texture will be considered as resulting from non-uniform surface albedo. Thus uniform albedo represents uniform texuture while non-uniform albedo represents textured surface.
 
 \subsection{Multi-view Stereo}
 The working conditios of Multi-view Stereo algorithms are summarized in Table~\ref{tab:mvs_cond}.
 
 \subsubsection{High texture}
-Multi-view Stereo algorithms take advantage of the textural information to establish point correspondences across various viewpoints, thus they work best under high textured conditions.
+Multi-view Stereo algorithms take advantage of textural information to establish point correspondences across different views. Thus homogeneous surfaces pose great challenges to MVS algorithms. However, some MVS algorithms tested on a textureless object ``Dino'' in the Middlebury MVS benchmark~\cite{seitz2006comparison} give successful reconstruction results. This demonstrates that MVS algorithms are able to exploit very weak and intricate image textures, most of which come from shading and/or shadowing effects. However, these texture are so weak that images need to have very high quality.
 
 % \citeauthor{furukawa2008high} use wide-baseline stereo matching to recover the 3D coordinates of salient feature points, then shrink a visual hull model so that the recovered points lie on its surface, then refine the result using energy minimization. \citeauthor{goesele2006multi} compute a depth map from each camera viewpoint (similar to [31]) and merge the results using VRIP [62]. \citeauthor{esteban2004silhouette} first compute a depth map from each camera viewpoint and merge the results into a cost volume. They then iteratively deform a mesh, initialized at the visual hull, to find a minimum cost surface in this volume, also incorporating terms to fit silhouettes. Kolmogorov and Zabih [35] compute a set of depth maps using multi-baseline stereo with graph cuts, then merge the results into a voxel volume by computing the intersections of the occluded volumes from each viewpoint. \citeauthor{faugeras2002variational} compute a minimum cost surface by evolving a surface in a level-set frame-work, using a prediction-error measure. \citeauthor{vogiatzis2007multiview} compute a correlation cost volume in the neighborhood of the visual hull. A minimum-cost surface is then computed using volumetric min-cut.
 
 \subsubsection{Diffuse reflectance}
-Most MVS algorithms require that the matching image region with similar or same appearances from different angles, and hence, most of the algorithms assume Lambertian reflectance. While pure Lambertian surfaces are rare in practice, it is known and empirically verified that MVS algorithms work very well on non-Lambertian surface: as long as they contain some diffuse reflectance component, and the photo-consistency function is able to identify and ignore images whose non-diffsue effects(e.g., specular highlights) are strong, then utilize the diffuse component in the remaining images. However, there are some attempts to overcome this limitations, a pure passive methods was proposed that directly model and analyze non-Lambertian effects for MVS algorithms~\cite{jin2003multi,jin2005multi}.
+Most MVS algorithms require that the matching image region with similar or same appearances from different angles, and hence, most of the algorithms assume Lambertian reflectance. While pure Lambertian surfaces are rare in practice, it is known and empirically verified that MVS algorithms work very well on non-Lambertian surface: as long as they contain some diffuse reflectance component, and the photo-consistency function is able to identify and ignore images whose non-diffsue effects(e.g., specular highlights) are strong, then utilize the diffuse component in the remaining images. However, there are some attempts to overcome this limitation, a pure passive methods was proposed that directly model and analyze non-Lambertian effects for MVS algorithms~\cite{jin2003multi,jin2005multi}.
 \begin{table}[!htbp]
   \centering
   \begin{tabular}{l*{5}{p{15mm}}}
@@ -98,12 +98,12 @@ Most MVS algorithms require that the matching image region with similar or same 
   MVS & Textured & - & Diffuse or mixed & - & -\\
   \bottomrule
   \end{tabular}
-  \caption{Working conditions of typical Multi-view Stereo algorithms.}
+  \caption{Working condition of Multi-view Stereo algorithms.}
   \label{tab:mvs_cond}
 \end{table}
 
 \subsection{Shape from Shading}
-Shape from Shading, first proposed by~\citeauthor{horn1970shape} is targeted specifically for known isotropic Lambertian surfaces. By assuming orthographic projection, and known light source intensity and direction, surface orientation can be estimated from the shading variations. The working condition is shown in Table~\ref{tab:sfs_cond}.
+Shape from Shading, first proposed by~\citeauthor{horn1970shape} specifically targets known isotropic Lambertian surfaces. By assuming orthographic projection, and known light source intensity and direction, surface orientation can be estimated from shading variations. The working condition is shown in Table~\ref{tab:sfs_cond}.
 \begin{table}[!htbp]
   \centering
   \begin{tabular}{l*{5}{p{15mm}}}
@@ -113,22 +113,22 @@ Shape from Shading, first proposed by~\citeauthor{horn1970shape} is targeted spe
   SfS & Textureless & Bright & Lambertian & - & Convex\\
   \bottomrule
   \end{tabular}
-  \caption{Working conditions of typical Shape from Shading algorithms.}
+  \caption{Working condition of Shape from Shading algorithms.}
   \label{tab:sfs_cond}
 \end{table}
 
 \subsection{Photometric Stereo}
-The working conditions of Photometric Stereo algorithms are presented below. Visual texture can be thought of as a pattern or variance of intensity appearing on an object's surface. In this thesis, the visual texture will be considered as resulting from non-uniform surface albedo. Thus uniform albedo represents uniform texuture while non-uniform albedo represents textured surface. The working conditions are shown in Table~\ref{tab:ps_cond}.
+The working conditions of Photometric Stereo algorithms are shown in Table~\ref{tab:ps_cond}.
 
 \subsubsection{Albedo}
-Photometric Stereo can only work well on surfaces with high albedo.
+Photometric Stereo algorithms work well on surfaces with sufficiently strong albedo. This is because the algorithm exploits the intensity changes as a visual cue, which is harder to detect on surfaces with low intensity values.
 
-The original PS was developed for surfaces with uniform albedo, PS can be extended easily for spatially varying albedo. First the albedo-scaled normal can be first estimated as usual, then the albedo is retrieved as the magnitude of the scaled normal~\cite{woodham1980photometric}.
+The original SfS requires uniform albedo, whereas typical PS algorithms can be extended easily for spatially varying albedo. First the albedo-scaled normal can be estimated as usual, then the albedo is retrieved as the magnitude of the scaled normal~\cite{woodham1980photometric}.
 
 \subsubsection{Lambertian reflectance} % Lambertian PS: uniform reflectance
-The traditional Photometric Stereo can be considered as an extenstion of the original Shape from Shading, which incorporates additional light sources to eliminate ambiguity~\cite{woodham1980photometric}, thus are only applicable to Lambertian surface with uniform albedo.
+The original Photometric Stereo method can be considered as an extension of the original Shape from Shading, which incorporates additional light sources to eliminate ambiguity~\cite{woodham1980photometric}, thus are only applicable to Lambertian surface with uniform albedo.
 
-To avoid the tedious process of light calibration, Silver~\cite{silver1980determining} proposed a look-up table scheme that relies on reflectance object with the same reflectance as the target, a uniform Lambertian surface in this case. This approach is later adapted to surface with non-Lambertian reflectance with varying albedo or material in~\cite{hertzmann2005example}.
+To avoid the tedious process of light calibration, Silver~\cite{silver1980determining} proposed a look-up scheme that relies on a reflectance object with the same reflectance as the target, which in this case is a uniform Lambertian surface. This approach is later adapted to surface with non-Lambertian reflectance with varying albedo or material in~\cite{hertzmann2005example}.
 
 The original Photometric Stereo require light calibration, \textit{uncalibrated photometric stereo} has been proposed to avoid this tedious process. One approach used six or more pixels with the same albedo, and was able to solve for normals up to a rotation ambiguity\cite{hayakawa1994photometric}. It can be further proved that a 3-parameter subset of these transformations, known as the Generalized Bas-Relief (GBR) ambiguity, preserve surface integrability~\cite{belhumeur1999bas}. Thus, given three or more imges of a Lambertian object acquired under light sources of unknown direction and strength, the surface can be reconstructed up to GBR transformation by enforcing surface integrability, see Figure~\ref{fig:gbr} for the effect of GBR-ambiguity.
 \begin{figure}[!htbp]
