@@ -39,21 +39,21 @@ We have selected one representative algorithm from three major classes of algori
 \begin{table}[!htbp]
 \centering
 \begin{tabular}{c|c|c|c|c}
-\hline
+\toprule
 Technique & Texture & Albedeo & Specular & Roughness\\
-\hline\hline
+\midrule
 \multicolumn{5}{l}{PMVS: patch-based, seed points propagation MVS.}\\
-\hline
+\midrule
 PMVS & High & - & Low & -\\
-\hline\hline
+\midrule
 \multicolumn{5}{l}{EPS: example-based Photometric Stereo}\\
-\hline
+\midrule
 EPS & - & High & Low & High \\
-\hline\hline
+\midrule
 \multicolumn{5}{l}{GSL: Gray code Structured Light technique}\\
-\hline
+\midrule
 GSL & - & High & Low & High\\
-\hline
+\bottomrule
 \end{tabular}
 \caption{Summary of the selected algorithms for the framework, and the corresponding working conditions in theory.}
 \label{tab:selected_algos}
@@ -63,17 +63,17 @@ GSL & - & High & Low & High\\
 \begin{table}[!htbp]
 \centering
 \begin{tabular}{c|c|c|c|c}
-\hline
+\toprule
 Technique & Texture & Albedeo & Specular & Roughness\\
-\hline\hline
+\midrule
 \multicolumn{5}{l}{VH: volumetric Visual Hull}\\
-\hline
+\midrule
 VH & - & - & - & -\\
-\hline\hline
+\midrule
 \multicolumn{5}{l}{LLS-PS: linear least squares Photometric Stereo.}\\
-\hline
+\midrule
 LLS-PS & - & High & Low & High\\
-\hline
+\bottomrule
 \end{tabular}
 \caption{Summary of the baseline algorithms for the framework, and the corresponding working conditions in theory.}
 \label{tab:selected_baseline_algos}
@@ -92,10 +92,11 @@ Mean and median are both valid measures of central tendency, but as the skewness
 \end{figure}
 
 \subsubsection{Variation}
-\begin{itemize}
-  \item Interquatile range %: $Q_{(3 - 1)} < 3$;
-  \item Standard deviation %: canslightly larger than $Q_3$
-\end{itemize}
+The variation of the angular error is measured by both \textit{interquatile range} ($Q_3 - Q_1$) and \textit{standard deviation} ($std$).
+% \begin{itemize}
+%   \item Interquatile range %: $Q_{(3 - 1)} < 3$;
+%   \item Standard deviation %: canslightly larger than $Q_3$
+% \end{itemize}
   
 \subsubsection{Skewness (right/positive-skewness)}
 The normal estimation is less sensitive to angular error when the mean and median are close. The shape can be recovered relatively well with a mean/median angular error of $10^\circ$ (see Figure~\ref{fig:ps_criteria} (a)-(f)). The normal estimation becomes more susceptible as the difference between the mean and median increases (see Figure~\ref{fig:ps_criteria} (g)-(l)). This can be explained as follows: when the normals are reliably estimated, the angular error should follow a Gaussian distribution. Therefore, the mean and median are close to each other. However, if normals are poorly recovered, the mean would become larger since large angular errors exist, while the median would change far less since only a small amount of pixels are affected. Thus, the difference between mean and median would be larger when surface normals are poorly recovered.
@@ -113,13 +114,15 @@ The normal estimation is less sensitive to angular error when the mean and media
 \includegraphics[width=0.33\textwidth]{mapping/ps_criteria/mu_med_5_5.png} &
 \includegraphics[width=0.33\textwidth]{mapping/ps_criteria/mu_med_5_6.png} &
 \includegraphics[width=0.33\textwidth]{mapping/ps_criteria/mu_med_5_7.png} \\
-(g) $\mu=5, \text{med}=5$ & (h) $\mu=5, \text{med}=6$ & (i) $\mu=5, \text{med}=7$\\
+% (g) $\mu=5, \text{med}=5$ & (h) $\mu=5, \text{med}=6$ & (i) $\mu=5, \text{med}=7$\\
+(g) $\mu=5, \text{med}=5$ & (h) $\mu=6, \text{med}=5$ & (i) $\mu=7, \text{med}=5$\\
 \includegraphics[width=0.33\textwidth]{mapping/ps_criteria/knight_5_5.png} &
 \includegraphics[width=0.33\textwidth]{mapping/ps_criteria/knight_5_6.png} &
 \includegraphics[width=0.33\textwidth]{mapping/ps_criteria/knight_5_8.png} \\
-(j) $\mu=5, \text{med}=5$ & (k) $\mu=5, \text{med}=6$ & (l) $\mu=5, \text{med}=8$\\
+% (j) $\mu=5, \text{med}=5$ & (k) $\mu=5, \text{med}=6$ & (l) $\mu=5, \text{med}=8$\\
+(j) $\mu=5, \text{med}=5$ & (k) $\mu=6, \text{med}=5$ & (l) $\mu=8, \text{med}=5$\\
 \end{tabular}
-\caption{Shape estimation results with varied mean and median values. The algorithm is less sensitive to large mean or median values, while more sensitive to the difference between the mean and median values.}
+\caption{Shape estimation results with varied mean and median values. (a) - (f): the algorithm is less sensitive to large mean or median values when mean and median are close. (g) - (l): as the difference between the mean and median increases, the estimated shape becomes more susceptible to error, as shown by the spikes in the reconstruction.}
 \label{fig:ps_criteria}
 \end{figure}
 
@@ -671,7 +674,7 @@ We can derive from the training results the problem conditions under which GSL c
 \end{table}
 
 \section{Summary}
-The development of mapping is an on-going process. For instance, we can include more quantitative metrics such as colour accuracy, `ghost reconstruction', and so on. In order to make the mapping applicable to objects with more complex shapes, we need to consider more sophisticated geometric properties besides roughness, such as concavity, depth-discontinuity, occlusion, etc. Furthermore, the incorporation of more algorithms is yet another way to ensure that the problem space is well covered.
+The development of mapping is an on-going process. For instance, we can include more quantitative metrics such as colour accuracy, `ghost reconstruction', and so on. In order to make the mapping applicable to objects with more complex shapes, we need to consider more sophisticated geometric properties besides roughness, such as concavity, depth-discontinuity, occlusion, etc. Furthermore, the incorporation of more algorithms is another way to ensure that the problem space is well covered.
 
 
 % \begin{table}[!htbp]

@@ -130,7 +130,7 @@ Photometric Stereo algorithms work more reliably on surfaces with sufficiently s
 Though SfS algorithms requires uniform albedo, typical PS algorithms can be used easily on surfaces with spatially varying albedo. First the albedo-scaled normal can be estimated, then the albedo is retrieved as the magnitude of the scaled normal~\cite{woodham1980photometric}.
 
 \subsubsection{Lambertian reflectance model} % Lambertian PS: uniform reflectance
-The Lambertian PS algorithms can be divided into two group: calibrated method, and uncalibrated method. The original PS proposed by Woodham~\cite{woodham1980photometric} can be considered as calibrated Lambertian PS. Later, more uncalibrated Lambertian PS have been proposed to avoid this tedious process.
+The Lambertian PS algorithms can be divided into two groups: calibrated, and uncalibrated method. The original PS proposed by Woodham~\cite{woodham1980photometric} can be considered as calibrated Lambertian PS. Later, more uncalibrated Lambertian PS have been proposed to avoid this tedious process.
 
 Silver~\cite{silver1980determining} proposed a look-up scheme that relies on a reflectance object with the same reflectance as the target, which in this case is a uniform Lambertian surface. This approach is later adapted to surface with non-Lambertian reflectance with varying albedo or material in~\cite{hertzmann2005example}.
 
@@ -184,7 +184,7 @@ Regardless of what projection pattern is used, the most important feature of mos
 Traditional Structured Light techniques cannot deal with highly specular surfaces since the specular area will exhibit strong reflection even for low lighting conditions, which will cause errors in the encoding process.
 
 \subsubsection{Concexity}
-Active methods that assumes a local reflectance model such as SL algorithms can work more reliably on surfaces without casting shadow and interreflection. Thus surfaces with concavities pose a great challenge for this type of techniques since the indensity can be affected by other surface patches.
+Active methods that assumes a local reflectance model such as most SL algorithms can work more reliably on surfaces without casting shadow and interreflection. Thus surfaces with concavities pose a great challenge for this type of techniques since the indensity can be affected by other surface patches.
 \begin{table}[!htbp]
   \centering
   \begin{tabular}{c*{5}{p{15mm}}}

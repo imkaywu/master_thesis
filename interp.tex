@@ -3,15 +3,17 @@
 
 \chapter{An Interpretation of 3D Reconstruction}
 \label{ch:3DRecon_Interp}
-So far we have proposed a well-defined problem space for the 3D reconstruction problem, as well as a precise mapping from the problem space to the algorithm space. We now need to validate that the derived mapping can be reliably applied to an object with a different shape, and demonstrate the usage of the framework. In other words, the interpretability from the problem centric description to a reliable reconstruction result must be shown.
+So far we have proposed a well-defined problem space for the 3D reconstruction problem, as well as a precise mapping from the problem space to the algorithm space. We now need to validate that the derived mapping can be reliably applied to an object with a different shape, and demonstrate the real-world usage of the framework. In other words, the interpretability from the problem centric description to a reliable reconstruction result must be shown.
 
-However, such an evaluation faces several challenges. First, the mapping doesn't pose very strict constraints on types of material and geometry, and an exhaustive evaluation would require a vast number of objects to reach to a solid conclusion, which is not a practical approach. Second, 
+However, such an evaluation faces several challenges. First, the mapping doesn't pose very strict constraints on object's geometry, and an exhaustive evaluation would require a vast number of objects to reach to a solid conclusion, which is not a practical approach. Second, we need a selection of algorithms that cover a wide range of problem space so that we can determine more convincingly if an unsuccessful result is due to lack of coverage or the limitness of the framework.
+
+To address the first challenge, we select a specific geometric property, concavity, which is the cause of global light transport, and verify the robustness of the framework in terms of surface concavity. We choose concavity since this is a property that is yet to be included in the description, thus is worth investigating since it may or may not affect the robustness of the mapping.
+
+To address the second challenge, we select three representative algorithms from three of the most successful algorithm classes, specifically, PMVS from MVS, EPS from PS, and GSL from SL. We have verified in Chapter~\ref{ch:3DRecon_Mapping} that each covers a wide range of problem space, thus is sufficient to validate the framework's ability to translate the descriptive model into a reconstruction. The integration of new algorithms is possible, as long as they are evaluated with the same problem conditions presented in Chapter~\ref{ch:3DRecon_Mapping}. This allows researchers to contribute novel algorithms to the framework once they become available.
 
 % In Chapter~\ref{ch:3DRecon_Mapping}, we have established a mapping from a well defined problem space to a suite of algorithms by evaluating the performance of the selected algorithms under synthetic conditions. However, the claim that this mapping would help the users obtain a satisfactory reconstruction result given the correct problem conditions is still unclear. Thus a thorough evaluation is needed to validate the proposed framework.
 
-Although only three algorithms and two baseline methods are implemented within the current framework, all of them are the top performers in the corresponding field and thus are sufficient to validate the framework's ability to translate the descriptive model into a reconstruction. The integration of new algorithms requires that they be evaluated with the same problem conditions presented in Chapter~\ref{ch:3DRecon_Mapping}, thus allowing researchers to contribute novel algorithms to the framework once they become available.
-
-Section~\ref{sec:interp_eval_methodology} provides a roadmap of our evaluation that is centered around two key evaluation questions: extensiveness of the mapping, and interpretability of the algorithm-free framework. Section~\ref{sec:interp_extend} investigates cases under which the mapping can be reliably applied to other objects. Section~\ref{sec:interp_useful} presents real-world use cases of the framework, where a satisfactory reconstruction result is in return given the correct description of the object.
+Section~\ref{sec:interp_eval_methodology} provides a roadmap of our evaluation that is centered around two key evaluation questions: robustness of the mapping to surface concavity, and interpretability of the algorithm-free framework. Section~\ref{sec:interp_extend} investigates cases of varying surface concavity, and conditions under which the mapping can be reliably applied. Section~\ref{sec:interp_useful} proposes a proof-of-concept interpreter, and demonstrates real-world use cases of the interpreter, where a satisfactory reconstruction result can be returned given the correct description of the object.
 
 % In order to validate the 3D reconstruction mapping derived from Chapter~\ref{ch:3DRecon_Mapping}, evaluation of the object centric model into appropriate solutions must be shown. Our interpreter is based on the direct evaluation of the performance of each 3D reconstruction algorithm under different conditions presented in Chapter~\ref{ch:3DRecon_Mapping}. From this analysis of how algorithms perform on objects which have different visual and geometric properties, an algorithm(s) can be definitively chosen based on which performed best on the training images.
 
@@ -21,7 +23,7 @@ This section formulates the methodology of evaluation. We start with the objecti
 
 \subsection{Objective}
 % [Develop a description (or access an existing version) of what is to be evaluated and how it is understood to work.]
-This evaluation intends to 1) validate that the mapping from Chapter~\ref{ch:3DRecon_Mapping} can be extended to objects with different shapes, and demonstrate cases where it succeeds and fails; and 2) demonstrate the real-world use cases of the proposed framework. For our first goal, objects with varied degrees of shape changes are used, and the corresponding results are compared to the mapping. We attempt to demonstrate if the mapping, to some extent, is invariant to the changes of shape, and when it would fail to hold. For the second goal, we use real-world objects to demonstrate that the framework can return a satisfactory result when provided with a correct description.
+This evaluation intends to 1) validate that the mapping from Chapter~\ref{ch:3DRecon_Mapping} can be extended to objects with different shapes, and demonstrate cases where it succeeds and fails; and 2) demonstrate the real-world use cases of the proof-of-concept interpreter. For our first goal, objects with varied degrees of shape (concavity) changes are used, and the corresponding results are compared to the mapping. We attempt to demonstrate if the mapping, to some extent, is robust to the changes of shape, and when it would fail to hold. For the second goal, we use real-world objects to demonstrate that the interpreter can return a satisfactory result when provided with a correct description.
 
 % \subsection{Frame}
 % Set the parameters of the evaluation its purposes, key evaluation questions and the criteria and standards to be used.
@@ -35,27 +37,28 @@ This evaluation intends to 1) validate that the mapping from Chapter~\ref{ch:3DR
 
 The evaluation attempts to \textit{prove that the mapping can be extended to other objects with different geometries}, and \textit{demonstrate that the framework can return a satisfactory reconstruction result given a correct description}.
 
-\subsubsection{1. Does the mapping work for objects with a different shape?}
-We first need to prove that the mapping derived in Chapter~\ref{ch:3DRecon_Mapping} is applicable to objects with different shapes. The variation of geometry is too vast and complicated to model, so it wouldn't be possible to consider all possible conditions. Thus we focus on one geometric property that can have a theoretical impact on the mapping, which is the concavity of the surface. We use three synthetic objects with varied degrees of concavity, and verify if the mapping is applicable under our circumstances, and when it would succeed or fail. We use synthetic data to verify the mapping since it would not be practical to change material properties using real world objects. The evaluation steps include:
+\subsubsection{1. Is the mapping robust to changes of object's shape?}
+We first need to verify that the mapping derived in Chapter~\ref{ch:3DRecon_Mapping} is applicable to objects with different shapes. The variation of geometry is too vast and complicated to model, so it wouldn't be possible to consider all possible conditions. As mentioned before, we focus on one geometric property, surface concavity, that in theory can have an impact on the results. We use three synthetic objects with varied degrees of concavity, and verify if the mapping is applicable under all circumstances, and when it would succeed or fail. We use synthetic data to verify the mapping since it would not be practical to change material properties using real world objects. The details of evaluation include:
 
 % \noindent\textbf{System setup}: the synthetic data is generated by the Blender using the same setups in Chapter~\ref{ch:3DRecon_Mapping};
 
-\noindent\textbf{Data generation}: the synthetic data is generated in Blender using the same setups presented in Chapter~\ref{ch:3DRecon_Mapping}. We consider the four property settings that represent four major classes of real-world objects from Chapter~\ref{ch:3DRecon_Taxo}.
+\noindent\textbf{Data generation} the synthetic data is generated in Blender using the same setups presented in Chapter~\ref{ch:3DRecon_Mapping}. We consider the four property settings that represent four major classes of real-world objects from Chapter~\ref{ch:3DRecon_Taxo}.
 
 % \noindent\textbf{Algorithm execution and evaluation}: three selected algorithms as well as the baseline are used to reconstruct the synthetic object. Quantitative and qualitative results are plotted;
 
-% \noindent\textbf{Validation of mapping}: for each object, we verify if the reconstruction results are consistent to the mapping. If not, which algorithm is more suspectible to the change of concavity.
+\noindent\textbf{Validation} consisting of two steps: 1) the successful algorithm(s) in each case need be identified based on qualitative and quantitative results; 2) the reliable algorithms in each case should be consistent with the mapping results. If that is not the case, we need to find out how robust each algorithm in within the mapping is with respect to concavity changes, and how concavity change affects the reconstruction results.
 
-\noindent\textbf{Validation of mapping}  consisting of two steps: 1) the successful algorithm(s) in each case need be identified; 2) the reliable algorithms of each case should be consistent with the mapping results. Both quantitative and qualitative results are used to find the successful algorithms under each problem condition. To determine that a method returns a reliable result, the accuracy value should be lower than that of the baseline method while the completeness should be higher, and all the statistical measures of the angular error must also be lower than those of the baseline method, including the mean, median, standard deviation, and interquartile range. The qualitative results are used to further confirm the validity of the quantitative results and give a visual sense of the cause of failed reconstruction. Once we have identified the successful algorithm(s) in each problem condition, we need to verify that they are consistent with the mapping results. If not, we need to find out how robust each algorithm is with respect to concavity changes, and how concavity change might affect the reconstruction results.
+\noindent\textbf{Criteria} To determine that a method returns a reliable result, the accuracy value should be lower than that of the baseline method while the completeness should be higher, and all the statistical measures of the angular error must also be lower than those of the baseline method, including the mean, median, standard deviation, and interquartile range. The qualitative results are used to further confirm the validity of the quantitative results and give a visual sense of the cause of failed reconstruction.
 
-\subsubsection{2. Can the framework return a satisfactory recontruction given the correct description?}
-Given a correct description of an object, the algorithm chosen by mapping should give a satisfactory reconstruction result of a real-world object. However, quantitative results are not available since we don't have the ground truth data. Therefore, visual inspection is utilized to determine the quality of reconstruction results. The framework would use the algorithm determined by mapping for reconstruction, the result of which would then compared to the baseline algorithm to determine if the quality is acceptable. As previously mentioned, the baseline method is chosen so that it can always provide a decent reconstruction under most circumstances. The evaluation steps are presented as follows:
+\subsubsection{2. Can the proof-of-concept interpreter return a satisfactory recontruction given the correct description?}
+Given a correct description of an object, the algorithm chosen by the proof-of-concept interpreter should give a satisfactory reconstruction result of a real-world object. In this case, visual inspection is utilized to determine the quality of reconstruction results since ground true data is unavailable, thus quantitative results cannot be computed. The framework would use the algorithm determined by mapping for reconstruction, the result of which would then compared to the baseline algorithm to determine if the quality is acceptable. As previously mentioned, the baseline method is chosen so that it can always provide a decent reconstruction under most circumstances. The details of evaluation are presented as follows:
 
 \noindent\textbf{Data generation}: real-world data are captured using similar setups as the synthetic counterparts: for MVS, a Nikon D70S camera with a $18-70mm$ lens are used; for photometric images, a Nikon D70S camera with a $70-200mm$ lens, a handheld lamp, and two reference objects are used (diffuse and glossy); for structured light techniques, a Nikon 70S camera and a Sanyo Pro xtraX Multiverse projector are used, which is positioned with a between angle of around $10^\circ$. We used nine everyday objects with varying textures, reflectance properties, and shapes with low concavity.
 
-\noindent\textbf{Output}: the output of Photometric Stereo algorithms, typically a normal map, is integrated to a surface mesh for visual analysis.
+\noindent\textbf{Validation}: we need to demonstrate that the interpreter would return a reliable reconstructed model given the correct description, and a less successful model given an invalid description. The quality of the reconstruction is determined by comparing the result to the baseline method.
+% Second, the algorithm chosen by the interpreter should be one of the top performers among all the algorithms implemented within the framework.
 
-\noindent\textbf{Use case of framework}: we first need to demonstrate that the interpreter would return a reliable reconstructed model given the correct description, and a less successful model given an invalid description. Second, the algorithm chosen by the interpreter should be one of the top performers among all the algorithms implemented within the framework. The quality of the reconstruction is determined by comparing the result to the baseline method.
+\noindent\textbf{Output}: the output of Photometric Stereo algorithms, typically a normal map, is integrated to a surface mesh for visual inspection.
 
 % \subsubsection{2. Usefulness of Mapping: How the mapping will return the result based on your description and your requirements}
 % The purpose of the framework is not to compare which algorithm gives the best result, but to get the best possible reconstruction result given the correct description. Therefore, we want to see how well it works given the correct description, and how badly the result deteriorates given the incorrect description.
@@ -89,7 +92,7 @@ Given a correct description of an object, the algorithm chosen by mapping should
 % [Collect and retrieve data to answer descriptive questions about the activities of the project/programme/policy, the various results it has had, and the context in which it has been implemented.]
 
 \section{Parameter Setting}
-The first step in this section is to estimate the settings of an object's properties. We use the BRDF explorer developed by Disney Animation~\cite{disnybrdf} to visualize the rendered object with changing properties. A ``try-and-see'' approach was taken to obtain the parameters. More specifically, the user would change the value of each property and see if the rendered result looks like the real object. A similar approach can be found in~\cite{Berkiten:2016:ARB} where \citeauthor{Berkiten:2016:ARB} also use a synthetic dataset to find the contributing factors of various Photometric Stereo algorithms.
+The first step of using the framework is to estimate the parameters of an object's properties. We use the BRDF explorer developed by Disney Animation~\cite{disnybrdf} to visualize the rendered object with changing properties. A ``try-and-see'' approach was taken to obtain the parameters. More specifically, the user would change the value of each property and see if the rendered result looks like the real object. A similar approach can be found in~\cite{Berkiten:2016:ARB} where \citeauthor{Berkiten:2016:ARB} also use a synthetic dataset to find the contributing factors of various Photometric Stereo algorithms.
 \begin{figure}[!htbp]
 \centering
 \begin{tabular}{cc}
@@ -97,22 +100,22 @@ The first step in this section is to estimate the settings of an object's proper
   \includegraphics[width=0.4\textwidth]{interp/ui_teapot.PNG}\\
   (a) Lit sphere & (b) Lit teapot\\
 \end{tabular}
-\caption{The UI for determining the property settings, including albedo, specular, and roughness of the surface. The albedo is set as the value channel of HSV colour. In this case, the albedo is set as 0.8, and the specular and roughness is set as 0.5, 0.2, respectively. (a) demonstrates the effect of the property settings on a sphere while (b) on a teapot.}
+\caption{The UI for determining the property settings, including albedo, specular, and roughness of the surface. The albedo is set as the value channel of HSV colour space. In this case, the albedo is set as 0.8, and the specular and roughness is set as 0.5, 0.2, respectively. (a) demonstrates the effect of the property settings on a sphere while (b) on a teapot.}
 \label{fig:ui}
 \end{figure}
 
-\section{Validation of Mapping}
+\section{Evaluation of Mapping}
 \label{sec:interp_extend}
 We first validate that the derived mapping can be applied to an object with a different shape. Given the description of an arbitrary object, we wish to use all three techniques for reconstruction, to see if the algorithm that has the best quantitative or qualitative results is consistent to the algorithm chosen by the mapping.
 
 \subsection{Synthetic Datasets}
-We use three objects with increasing degree of concavity, which are `bottle', `knight', and `king', as shown in Figure~\ref{fig:synth_data}. We select four property settings representing the four classes of the most commonly seen objects discussed in Chapter~\ref{ch:3DRecon_Desc}, which is shown in Table~\ref{tab:prop_list_synth_data} to assess the validity of the mapping. We present the results of the mapping in Table~\ref{tab:prop_list_synth_data} as a reference to check if the quantitative and qualitative results from the testing data is consistent with the results of the mapping. The results are shown in Figure~\ref{fig:synth_data_results_bottle},~\ref{fig:synth_data_results_knight}, and~\ref{fig:synth_data_results_king}.
+We use three objects with increasing degree of concavity, which are `bottle', `knight', and `king', as shown in Figure~\ref{fig:synth_data}. We select four property settings representing the four classes of the most commonly seen objects discussed in Chapter~\ref{ch:3DRecon_Desc}, which is shown in Table~\ref{tab:prop_list_synth_data} to assess the robustness of the mapping. We present the results of the mapping in Table~\ref{tab:prop_list_synth_data} as a reference to check if the quantitative and qualitative results from the testing data is consistent with the results of the mapping. The results are shown in Figure~\ref{fig:synth_data_results_bottle},~\ref{fig:synth_data_results_knight}, and~\ref{fig:synth_data_results_king}.
 \begin{table}[!htbp]
   \centering
-  \begin{tabular}{*{5}{c}|*{3}{r}}
+  \begin{tabular}{*{3}{p{8mm}}*{2}{p{15mm}}|*{3}{r}}
   \hline
   & & & & & \multicolumn{3}{c}{Metrics}\\
-  Class & Texture & Albedo & Specular & Roughness & Accuracy & Completeness & Ang diff\\
+  Class & Texture & Albedo & Specularity & Roughness & Accuracy & Completeness & Ang error\\
   \hline
   (a) & 0.2 & 0.8 & 0.2 & 0.8 & GSL & GSL & EPS\\
   (b) & 0.2 & 0.8 & 0.5 & 0.2 & GSL & - & - \\
@@ -141,7 +144,7 @@ We use three objects with increasing degree of concavity, which are `bottle', `k
   \includegraphics[width=0.2\textwidth]{interp/synth_data/king/king_ps_gt}\\
   MVS & PS & SL & Normal groundtruth\\
 \end{tabular}
-\caption{The synthetic dataset and groundtruth for the evaluation of the extensiveness of the mapping to objects with different shapes. Three objects with varied degrees of concavity are selected, each is configured with four properties settings.}
+\caption{The synthetic dataset and groundtruth for the evaluation of the robustness of the mapping to concavity. Three objects with varied degrees of concavity are selected, each is configured with four properties settings listed in Table~\ref{tab:prop_list_synth_data}.}
 \label{fig:synth_data}
 \end{figure}
 
@@ -201,7 +204,7 @@ The first test object is a `bottle', which has shallow indentations on the surfa
 \end{sidewaysfigure}
 
 \subsubsection{Data 2: knight}
-The second object is a knight chess piece, which has medium concavity. In this case, we can see that the results of PMVS and GSL are still consistent with the mapping. However, the EPS fails to return reliable reconstruction for cases of high specular, such as (b) and (d), due to the cast shadow effect, which is manifested by an increase in the variation of the angular error, represented by standard variation and the interquartile range. Thus, we claim that the mapping is still valid for PMVS, GSL and for EPS in low specular cases.
+The second object is a knight chess piece, which has medium concavity. In this case, we can see that the results of PMVS and GSL are still consistent with the mapping. However, the EPS fails to return reliable reconstruction in cases of high specular, such as (b) and (d), which is manifested by an increase in the variation of the angular error, represented by standard variation and the interquartile range. Thus, we claim that the mapping is still valid for PMVS, GSL and for EPS in low specular cases.
 \begin{sidewaysfigure}[!htbp]
 \centering
 \begin{tabular}{c|ccccc}
@@ -277,13 +280,13 @@ The last synthetic object is the king chess piece, which has the largest concavi
 \end{sidewaysfigure}
 
 \subsubsection{Summary}
-We can conclude that the mapping of PMVS and GSL are robust to concavity, whereas EPS is relatively more sensitive to concavity due to cast shadows. Therefore, we should put more effort on developing Photometric Stereo algorithms that can reliably deal with cast shadow so that they can be reliably applied to more complex shapes.
+We can conclude that the mapping of PMVS and GSL are robust to concavity, whereas EPS is relatively more sensitive to concavity due to cast shadows. Therefore, we should redirect more research efforts to developing Photometric Stereo algorithms that can reliably deal with cast shadow so that they can be reliably applied to more complex shapes.
 % \textbf{(a), (b)} In Figure~\ref{fig:synth_data_results} (a), the mapping predicts that EPS and GSL can give satisfactory results, which is consistent to the quantitative result shown in column 2 and the qualitative resulted labeled in green rectangle. The completeness of the PMVS is low due to the lack of texture.
 
 % \textbf{(c), (d)} In Figure~\ref{fig:synth_data_results} (a), the mapping predicts that all three methods can give satisfactory results, which is consistent to the quantitative result shown in column 2 and the qualitative resulted labeled in green rectangle.
 
 \section{Interpreter}
-Our framework consists of three separate layers. The upper layer is the description of the problem domain. The middle layer is the interpreter which receives a description from the user and return an acceptable result. The bottom layer is the actual implementation of the algorithms. The interpreter is responsible for choosing an appropriate 3D reconstruction algorithm based on the description of the problem domain and additional requirements. There are many ways to use mapping to interpret the problem description. We proposed a proof of concetp interpreter that consists of two components: mapping and constraints.
+Our framework consists of three separate layers. The upper layer is the description of the problem domain. The middle layer is the interpreter which receives a description from the user and return an acceptable result. The bottom layer is the actual implementation of the algorithms. The interpreter is responsible for choosing an appropriate 3D reconstruction algorithm based on the description of the problem domain and additional requirements. There are many ways to use the mapping to interpret the problem description. We proposed a proof of concetp interpreter that consists of two components: mapping and constraints.
 \begin{figure}[!htbp]
 \centering
 \begin{tikzpicture}[node distance=1.2cm, auto]
@@ -297,16 +300,16 @@ Our framework consists of three separate layers. The upper layer is the descript
 \label{fig:interpreter_layer}
 \end{figure}
 
-This concept requires an understanding of algorithmic performance across difference ranges of problem spaces to create a suitable interpreter of the 3D reconstruction problem. The mapping constructed using the synthetic dataset from Chapter~\ref{ch:3DRecon_Mapping} provides us with a detailed understanding of how different combinations of properties affect the performance of algorithms. This allows us to select an appropriate algorithm based on a description of properties.
+It requires an understanding of algorithmic performance across difference ranges of problem space to create a suitable interpreter of the 3D reconstruction problem. The mapping constructed using the synthetic dataset from Chapter~\ref{ch:3DRecon_Mapping} provides us with a detailed understanding of how different combinations of properties affect the performance of algorithms. This allows us to select an appropriate algorithm based on a description of properties.
 % When multiple algorithms are appropriate, we use a very simple ranking system based on the metrics: if one algorithm has the same efficiency but is more accurate, or more efficient and equally accurate, it is chosen over the others. (This ranking also allows us to define an efficiency versus accuracy tradeoff for the developer to use.) We could also choose to execute more than one algorithm and accept the results of the one which performed best - however measuring this may be challenging.
 
 Next we turn to defining the constraints of the framework. Constraints are provided to allow the user to describe the expected result so that a model best resembling the user's request can be returned by the framework when multiple algorithms achieve satisfactory results. The following constraints are provided: 
 \begin{itemize}
-\item Depth-first/shape-first: methods that reconstructs surface orientations from a single viewpoint cannot retrieve the depth information, and thus are refered to as 2.5D reconstruction. Examples of this are Shape from Shading, Photometric Stereo, and Shape from (de)focus, \etc. However, these methods generally can reconstruct fine scale details, and can achieve results with much higher quality. Intuitively, depth-first can return model with true depth information whereas shape-first prioritizes details over depth information.
+\item Depth-first/shape-first: methods that reconstructs surface orientations from a single viewpoint cannot retrieve the depth information, and thus are refered to as 2.5D reconstruction. Examples of this are Shape from Shading, Photometric Stereo, and Shape from (de)focus, \etc. However, these methods generally can reconstruct fine scale details, thus can achieve results with much higher quality. Intuitively, depth-first can return model with true depth information whereas shape-first prioritizes fine details over depth information.
 \item Accuracy-first/completeness-first: methods that achieve high accuracy do not necessary achieve high completeness. In light of this, the user can choose an algorithm based on the priority level of accuracy and completeness.
 \end{itemize}
 
-\section{Validation of Interpreter}
+\section{Evaluation of Interpreter}
 \label{sec:interp_useful}
 We demonstrate real-world use cases of the proof of concept interpreter, which should return a satisfactory result given a valid description, or a less successful one given an incorrect description. We choose four different problem conditions where each desrcibes one of the four major classes of objects and provides demonstrative results. Please refer to the appendix for more results.
 
