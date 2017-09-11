@@ -3,16 +3,8 @@
 
 \chapter{Abstract}
 
-Advancements in state-of-the-art 3D reconstruction algorithms have sped ahead of the development of interfaces that improve the algorithms' accessibility for application developers. In light of this discrepancy, we propose a novel abstraction framework specifically for shape capture techniques, designed to allow developers to create their own camera setups and apply the most effective method to retrieve an object's shape and appearance for their particular application.
+Advancements in state-of-the-art 3D reconstruction algorithms have sped ahead of the development of interfaces that support the accessibility of these algorithms for application developers, especially to developers who are not experts in the field. 
 
-We see that details of 3D reconstruction algorithms can be hidden by an abstraction, that uses a description based on camera setup and the characteristics of the object. We demonstrate that the description can be mapped to one or more methods to provide the user's requested result. Given that no single algorithm can work in all situations, we select a suite of three algorithms, each working in substantially different conditions, to provide an example of how the space of 3D reconstruction can be filled.
+We present a novel interface, specifically for 3D reconstruction techniques, designed to allow users to reconstruct the shape of an object without knowledge of algorithmic details. The interface hides the details of algorithms by using a description of visual and geometric properties of the object. We show that this description can be interpreted to one appropriate algorithm, which can give a successful reconstruction result. 
 
-We evaluate our abstraction through a proof-of-concept implementation of the algorithm framework and a synthetic dataset where each object has been imaged with the appropriate setup for each algorithm. We demonstrate that the mapping from object characteristics to 3D shape is effective, and provides an illustration of an accessible form of 3D shape reconstruction for non-experts in computer vision, such as application developers.
-
-% Consider placing version information if you circulate multiple drafts
-%\vfill
-%\begin{center}
-%\begin{sf}
-%\fbox{Revision: \today}
-%\end{sf}
-%\end{center}
+We evaluate the interface through a proof-of-concept interpreter, which interprets the description and invokes one of three underlying algorithms for reconstruction. We demonstrate the robustness of interpreter using a synthetic and real-world dataset where each object has been imaged with the appropriate setup.

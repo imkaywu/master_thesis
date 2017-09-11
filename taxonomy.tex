@@ -3,9 +3,9 @@
 
 \chapter{A Taxonomy of 3D Reconstruction}
 \label{ch:3DRecon_Taxo}
-Existing taxonomies of 3D reconstruction techniques generally focus on one category of techniques: \citeauthor{seitz2006comparison} proposed taxonomy of Multi-view Stereo algorithms from various perspectives of algorithmic details. Reviews of Structured Light techniques typically classify techniques based on the type of projection pattern used~\cite{geng2011structured, salvi2004pattern}. Photometric Stereo algorithms are classified by the assumptions or generalizations made, such as, unknown/known reflectance, unknown/known light conditions (uncalibrated/calibrated), and so on~\cite{shi2016benchmark}. These frameworks provide a way to categorize intra-category algorithms, but are unsuitable to evaluate the performance of inter-category algorithms. Furthermore, the algorithms under consideration target limited categories of objects. It is well known that such algorithms are highly likely to fail when targeting a diverse set of object categories. Thus, it is crucial to understand where algorithms perform well and where they fail when designing an application for reconstruction. Under the previous framework of taxonomy, this knowledge is largely empirical, with each algorithm mapped roughly to a sub-volume in the problem space that is poorly defined. To overcome this limitation, we need to first propose a well-defined problem space; second, bypass algorithmic details to focus on properties that are intuitive to understand and perceive. We take a more object-centered approach to the taxonomy so that a more precise mapping can be made available.
+Existing taxonomies of 3D reconstruction techniques generally classify algorithms based on algorithmic details: the survey on Multi-view Stereo algorithms uses taxonomies that differentiate the key properties of each algorithm~\cite{seitz2006comparison}. Reviews of Structured Light techniques typically classify techniques based on the type of projection pattern used~\cite{geng2011structured, salvi2004pattern}. Photometric Stereo algorithms are classified by the assumptions or generalizations made, such as, unknown/known reflectance, unknown/known light conditions (uncalibrated/calibrated), and so on~\cite{shi2016benchmark}. These frameworks provide a way to categorize intra-category algorithms, but are unsuitable to compare the performance of inter-category algorithms. Furthermore, the algorithms under consideration target limited categories of objects. It is well known that such algorithms are highly likely to fail when targeting a diverse set of object categories. Thus, it is crucial to understand where algorithms perform well and where they fail when designing an application for reconstruction. Under the previous framework of taxonomy, this knowledge is largely empirical, with each algorithm mapped roughly to a sub-volume in the problem space that is poorly defined. To overcome this limitation, we take a more \textit{object-centered approach} instead of an \textit{algorithm-centered approach}.
 
-The taxonomy proposed in this chapter defines 3D reconstruction techniques from an object-centered viewpoint, \ie categorizes an algorithm based on object class. This taxonomy transforms the 3D reconstruction problem from one requiring knowledge and expertise of specific algorithms in terms of how and when to use them, to one requiring knowledge of the visual and geometric properties of the target object.
+The taxonomy proposed in this chapter defines 3D reconstruction techniques from an object-centered viewpoint, \ie categorizes an algorithm based on the class of objects that it can reliably work under. This taxonomy transforms the 3D reconstruction problem from one requiring knowledge and expertise of specific algorithms in terms of \textit{how} to use them, to one requiring knowledge of working conditions of each algorithm.
 
 \section{A New Perspective of Taxonomy}
 Typical taxonomies are algorithm centric, describing and classifying algorithms based on \textit{how} an algorithm solves the problem. However, this approach gives very little insight to the conditions that allow a specific algorithm to work well. Further, it requires vision knowledge to understand and use these algorithms. The new perspective approaches taxonomy from a different angle, more specifically, the algorithms are categorized based on the type of objects/problem conditions that they can reliably work under. We first give an overview of object classes, which serves as the bases to the taxonomy, then proceeds to investigate the working conditions of each class of algorithms based on reports in relevant literature.
@@ -31,16 +31,16 @@ In Figure~\ref{fig:obj_class}, we show a taxonomy of object classes with differe
 
 \begin{table}[!htbp]
 \centering
-\begin{tabular}{l|*{6}{c}}
+\begin{tabular}{ll|l}
 \toprule
-Class \# & Translucency & Texture & Lightness & Refection & Roughness & Concavity\\
+Class \# & Description & Label\\
 \midrule
-1 & O & Tl & B & D & R & Cx\\
-2 & O & Tl & B & M & S & Cx\\
-3 & O & T & B & D & R & Cx\\
-4 & O & T & B & M & S & Cx\\
-5 & O & T & D & D & S & Cx\\
-6 & O & T & D & M & S & Cx\\
+1 & Textureless, bright, diffuse reflectance & O-Tl-B-D-R-Cx\\
+2 & Textureless, bright, mixed reflectance & O-Tl-B-M-S-Cx\\
+3 & Textured, bright, diffuse reflectance & O-T-B-D-R-Cx\\
+4 & Textured, bright, mixed reflectance & O-T-B-M-S-Cx\\
+5 & Textured, dark, diffuse reflectance & O-T-D-D-S-Cx\\
+6 & Textured, dark, mixed reflectance & O-T-D-M-S-Cx\\
 \bottomrule
 \end{tabular}
 \caption{Label of six classes of objects.}

@@ -3,27 +3,28 @@
 
 \chapter{An Interpretation of 3D Reconstruction}
 \label{ch:3DRecon_Interp}
-So far we have proposed a well-defined problem space for the 3D reconstruction problem, as well as a precise mapping from the problem space to the algorithm space. We now need to validate that the derived mapping can be reliably applied to an object with a different shape, and demonstrate the real-world usage of the framework. In other words, the interpretability from the problem centric description to a reliable reconstruction result must be shown.
+So far we have proposed a well-defined problem space for the 3D reconstruction problem, as well as a precise mapping from the problem space to the algorithm space. This section, we validate that the derived mapping can be reliably applied to an object with a different shape, and propose a proof-of-concept interpreter that translates the description to an appropriate algorithm that can give a reliable reconstruction result. In other words, the interpretability from the problem centric description to a reliable reconstruction result must be shown. Both synthetic and real-world datasets are provided to evaluate the performance of the interpreter.
 
-However, such an evaluation faces several challenges. First, the mapping doesn't pose very strict constraints on object's geometry, and an exhaustive evaluation would require a vast number of objects to reach to a solid conclusion, which is not a practical approach. Second, we need a selection of algorithms that cover a wide range of problem space so that we can determine more convincingly if an unsuccessful result is due to lack of coverage or the limitness of the framework.
+However, such an evaluation faces several challenges. First, the mapping does not pose very strict constraints on object's geometry, and an exhaustive evaluation would require a vast number of objects to reach to a solid conclusion, which is not a practical approach. Second, we need a selection of algorithms that cover a wide range of problem space so that we can determine more convincingly if an unsuccessful result is due to lack of coverage or the limitness of the framework.
 
-To address the first challenge, we select a specific geometric property, concavity, which is the cause of global light transport, and verify the robustness of the framework in terms of surface concavity. We choose concavity since this is a property that is yet to be included in the description, thus is worth investigating since it may or may not affect the robustness of the mapping.
+To address the first challenge, we assume \textbf{local interaction model}, which is not an uncommon assumption in vision community. Thus, geometric properties, such as concavity, that would violate this assumption will not be considered. Thus, objects with shallow concavities are used for evaluation.
 
-To address the second challenge, we select three representative algorithms from three of the most successful algorithm classes, specifically, PMVS from MVS, EPS from PS, and GSL from SL. We have verified in Chapter~\ref{ch:3DRecon_Mapping} that each covers a wide range of problem space, thus is sufficient to validate the framework's ability to translate the descriptive model into a reconstruction. The integration of new algorithms is possible, as long as they are evaluated with the same problem conditions presented in Chapter~\ref{ch:3DRecon_Mapping}. This allows researchers to contribute novel algorithms to the framework once they become available.
+For the second challenge, we need a selection of algorithms that cover a wide range of problem space. Aside from a Multi-view Stereo algorithm, we implemented a Photometric Stereo and Structured Light techniques as discussed in Chapter~\ref{ch:3DRecon_Mapping}. We can see that the selected algorithms cover a wide range of problem space, thus is sufficient to validate the framework's ability to translate the descriptive model into a reconstruction. Further, it is relatively straightforward to incorporate new algorithms, as long as they are evaluated with the same problem conditions presented in Chapter~\ref{ch:3DRecon_Mapping}. This allows researchers to contribute novel algorithms to the framework once they become available.
+
 
 % In Chapter~\ref{ch:3DRecon_Mapping}, we have established a mapping from a well defined problem space to a suite of algorithms by evaluating the performance of the selected algorithms under synthetic conditions. However, the claim that this mapping would help the users obtain a satisfactory reconstruction result given the correct problem conditions is still unclear. Thus a thorough evaluation is needed to validate the proposed framework.
 
-Section~\ref{sec:interp_eval_methodology} provides a roadmap of our evaluation that is centered around two key evaluation questions: robustness of the mapping to surface concavity, and interpretability of the algorithm-free framework. Section~\ref{sec:interp_extend} investigates cases of varying surface concavity, and conditions under which the mapping can be reliably applied. Section~\ref{sec:interp_useful} proposes a proof-of-concept interpreter, and demonstrates real-world use cases of the interpreter, where a satisfactory reconstruction result can be returned given the correct description of the object.
+This chapter is organized as follows: Section~\ref{sec:interp_eval_methodology} provides a roadmap of our evaluation that is centered around two key evaluation questions: robustness of the mapping with respect to surface concavity, and robustness of the proof of concept interpeter. Section~\ref{sec:eval_mapping} investigates cases of varying surface concavity, and conditions under which the mapping can be reliably applied. Section~\ref{sec:interp} proposes a proof-of-concept interpreter, and Section~\ref{sec:eval_interp} demonstrate the robustness of the interpreter using synthetic and real-world datasets, where a satisfactory reconstruction result can be returned given the correct description of the object.
 
 % In order to validate the 3D reconstruction mapping derived from Chapter~\ref{ch:3DRecon_Mapping}, evaluation of the object centric model into appropriate solutions must be shown. Our interpreter is based on the direct evaluation of the performance of each 3D reconstruction algorithm under different conditions presented in Chapter~\ref{ch:3DRecon_Mapping}. From this analysis of how algorithms perform on objects which have different visual and geometric properties, an algorithm(s) can be definitively chosen based on which performed best on the training images.
 
 \section{Evaluation Methodology}
 \label{sec:interp_eval_methodology}
-This section formulates the methodology of evaluation. We start with the objective, which gives a brief introduction of what needs to be evaluated. Next, two key evaluation questions are proposed, with evaluation steps, criteria and expected outcomes to determine if the evaluation is successful.
+% This section formulates the methodology of evaluation. We start with the objective, which gives a brief introduction of what needs to be evaluated. Next, two key evaluation questions are proposed, with evaluation steps, criteria and expected outcomes to determine if the evaluation is successful.
 
-\subsection{Objective}
+% \subsection{Objective}
 % [Develop a description (or access an existing version) of what is to be evaluated and how it is understood to work.]
-This evaluation intends to 1) validate that the mapping from Chapter~\ref{ch:3DRecon_Mapping} can be extended to objects with different shapes, and demonstrate cases where it succeeds and fails; and 2) demonstrate the real-world use cases of the proof-of-concept interpreter. For our first goal, objects with varied degrees of shape (concavity) changes are used, and the corresponding results are compared to the mapping. We attempt to demonstrate if the mapping, to some extent, is robust to the changes of shape, and when it would fail to hold. For the second goal, we use real-world objects to demonstrate that the interpreter can return a satisfactory result when provided with a correct description.
+This evaluation intends to 1) validate that the mapping from Chapter~\ref{ch:3DRecon_Mapping} can be extended to objects with different shapes, and demonstrate cases where it succeeds and fails; and 2) demonstrate the robustness of the proof-of-concept interpreter using synthetic and real-world datasets. For our first goal, objects with varied degrees of shape (concavity) changes are used, and the corresponding results are compared to the mapping. We attempt to demonstrate if the mapping, to some extent, is robust to the changes of shape, and when it would fail to hold. For the second goal, we use synthetic and real-world objects to demonstrate that the interpreter can return a satisfactory result when provided with a correct description.
 
 % \subsection{Frame}
 % Set the parameters of the evaluation its purposes, key evaluation questions and the criteria and standards to be used.
@@ -50,7 +51,7 @@ We first need to verify that the mapping derived in Chapter~\ref{ch:3DRecon_Mapp
 
 \noindent\textbf{Criteria} To determine that a method returns a reliable result, the accuracy value should be lower than that of the baseline method while the completeness should be higher, and all the statistical measures of the angular error must also be lower than those of the baseline method, including the mean, median, standard deviation, and interquartile range. The qualitative results are used to further confirm the validity of the quantitative results and give a visual sense of the cause of failed reconstruction.
 
-\subsubsection{2. Can the proof-of-concept interpreter return a satisfactory recontruction given the correct description?}
+\subsubsection{2. Can the proof-of-concept interpreter return a satisfactory reconstruction given the correct description?}
 Given a correct description of an object, the algorithm chosen by the proof-of-concept interpreter should give a satisfactory reconstruction result of a real-world object. In this case, visual inspection is utilized to determine the quality of reconstruction results since ground true data is unavailable, thus quantitative results cannot be computed. The framework would use the algorithm determined by mapping for reconstruction, the result of which would then compared to the baseline algorithm to determine if the quality is acceptable. As previously mentioned, the baseline method is chosen so that it can always provide a decent reconstruction under most circumstances. The details of evaluation are presented as follows:
 
 \noindent\textbf{Data generation}: real-world data are captured using similar setups as the synthetic counterparts: for MVS, a Nikon D70S camera with a $18-70mm$ lens are used; for photometric images, a Nikon D70S camera with a $70-200mm$ lens, a handheld lamp, and two reference objects are used (diffuse and glossy); for structured light techniques, a Nikon 70S camera and a Sanyo Pro xtraX Multiverse projector are used, which is positioned with a between angle of around $10^\circ$. We used nine everyday objects with varying textures, reflectance properties, and shapes with low concavity.
@@ -105,7 +106,7 @@ The first step of using the framework is to estimate the parameters of an object
 \end{figure}
 
 \section{Evaluation of Mapping}
-\label{sec:interp_extend}
+\label{sec:eval_mapping}
 We first validate that the derived mapping can be applied to an object with a different shape. Given the description of an arbitrary object, we wish to use all three techniques for reconstruction, to see if the algorithm that has the best quantitative or qualitative results is consistent to the algorithm chosen by the mapping.
 
 \subsection{Synthetic Datasets}
@@ -286,7 +287,8 @@ We can conclude that the mapping of PMVS and GSL are robust to concavity, wherea
 % \textbf{(c), (d)} In Figure~\ref{fig:synth_data_results} (a), the mapping predicts that all three methods can give satisfactory results, which is consistent to the quantitative result shown in column 2 and the qualitative resulted labeled in green rectangle.
 
 \section{Interpreter}
-Our framework consists of three separate layers. The upper layer is the description of the problem domain. The middle layer is the interpreter which receives a description from the user and return an acceptable result. The bottom layer is the actual implementation of the algorithms. The interpreter is responsible for choosing an appropriate 3D reconstruction algorithm based on the description of the problem domain and additional requirements. There are many ways to use the mapping to interpret the problem description. We proposed a proof of concetp interpreter that consists of two components: mapping and constraints.
+\label{sec:interp}
+Our framework consists of three separate layers. The upper layer is the description of the problem domain. The middle layer is the interpreter which receives a description from the user and return an acceptable result. The bottom layer is the actual implementation of the algorithms. The interpreter is responsible for choosing an appropriate 3D reconstruction algorithm based on the description of the problem domain and additional requirements. Thus, it requires an understanding of algorithmic performance across difference ranges of problem space to create a suitable interpreter. There are many ways to use the mapping to interpret the problem description. We proposed a proof of concetp interpreter that consists of two components: mapping and constraints.
 \begin{figure}[!htbp]
 \centering
 \begin{tikzpicture}[node distance=1.2cm, auto]
@@ -300,8 +302,8 @@ Our framework consists of three separate layers. The upper layer is the descript
 \label{fig:interpreter_layer}
 \end{figure}
 
-It requires an understanding of algorithmic performance across difference ranges of problem space to create a suitable interpreter of the 3D reconstruction problem. The mapping constructed using the synthetic dataset from Chapter~\ref{ch:3DRecon_Mapping} provides us with a detailed understanding of how different combinations of properties affect the performance of algorithms. This allows us to select an appropriate algorithm based on a description of properties.
-% When multiple algorithms are appropriate, we use a very simple ranking system based on the metrics: if one algorithm has the same efficiency but is more accurate, or more efficient and equally accurate, it is chosen over the others. (This ranking also allows us to define an efficiency versus accuracy tradeoff for the developer to use.) We could also choose to execute more than one algorithm and accept the results of the one which performed best - however measuring this may be challenging.
+The mapping constructed using the synthetic dataset from Chapter~\ref{ch:3DRecon_Mapping} provides us with a detailed understanding of how different combinations of properties affect the performance of algorithms. This allows us to select an appropriate algorithm based on a description of properties.
+% When multiple algorithms are appropriate, we use a very simple ranking system based on the metrics: if one algorithm has the same completeness but is more accurate, or more complete and equally accurate, it is chosen over the others. (This ranking also allows us to define an efficiency versus accuracy tradeoff for the developer to use.) We could also choose to execute more than one algorithm and accept the results of the one which performed best - however measuring this may be challenging.
 
 Next we turn to defining the constraints of the framework. Constraints are provided to allow the user to describe the expected result so that a model best resembling the user's request can be returned by the framework when multiple algorithms achieve satisfactory results. The following constraints are provided: 
 \begin{itemize}
@@ -309,12 +311,71 @@ Next we turn to defining the constraints of the framework. Constraints are provi
 \item Accuracy-first/completeness-first: methods that achieve high accuracy do not necessary achieve high completeness. In light of this, the user can choose an algorithm based on the priority level of accuracy and completeness.
 \end{itemize}
 
+Under our current interpreter, if a developer-defiend description and constraints have more than one corresponding algorithm available, by default, depth-first has higher priority over quality-first, and accuracy has higher priority over completeness. Since GSL typically generates more accurate resutlts, the order of the algorithms is: GSL $>$ PMVS $>$ EPS.
+
 \section{Evaluation of Interpreter}
-\label{sec:interp_useful}
+\label{sec:eval_interp}
 We demonstrate real-world use cases of the proof of concept interpreter, which should return a satisfactory result given a valid description, or a less successful one given an incorrect description. We choose four different problem conditions where each desrcibes one of the four major classes of objects and provides demonstrative results. Please refer to the appendix for more results.
 
+\subsection{Synthetic Datasets}
+We generate a dataset of four objects, each representing one of the four classes discussed in Section~\ref{ch:3DRecon_Taxo}. The mapping from problem conditions to algorithms are summarized in Table~\ref{tab:synth_prop_list}. Given a specific algorihthm, the proof-of-concept interpreter will select an algorithm, and any object that matches this description should be well reconstructed by this algorithm. We use four descriptions that match the four problem conditions listed in Table so that each object should at least return one well reconstructed result. Since a problem condition could be mapped to multiple algorithms, an object that doesn't match the description could potentially have a satisfactory result as well. The reconstruction results of test objects and those of the baseline method are shown in Figure~\ref{fig:synth_results}.
+\begin{table}[!htbp]
+  \centering
+  \begin{tabular}{lllllll}
+  \hline
+  \textbf{C\#} & \textbf{Obj} & Tex & Alb & Spec & Rough & Mapping\\
+  \hline
+  1 & barrel & 0.8 & 0.8 & 0.2 & 0.8 & PMVS, EPS, GSL\\
+  2 & vase0 & 0.8 & 0.8 & 0.8 & 0.2 & PMVS , EPS\\
+  3 & bust & 0.2 & 0.8 & 0.2 & 0.8 & EPS, GSL\\
+  4 & vase1 & 0.2 & 0.8 & 0.8 & 0.2 & EPS\\
+  \hline
+  \end{tabular}
+  \caption{Problem conditions and mapping of the synthetic objects.}
+  \label{tab:synth_prop_list}
+\end{table}
+
+\begin{figure*}[!htbp]
+\centering
+\begin{tabular}{lccccr}
+\toprule
+Desc \# & Barrel & Vase0 & Bust & Vase1 & Selected Algo.\\
+\midrule
+1 & 
+\fcolorbox{green}{white}{\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/barrel_sl}}}&
+\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/vase2_sl}}&
+\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/beethoven_sl}}&
+\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/vase0_sl}}&
+GSL\\
+2 &
+\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/barrel_mvs}}&
+\fcolorbox{green}{white}{\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/vase2_mvs}}}&
+\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/beethoven_mvs}}&
+\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/vase0_mvs}}&
+PMVS\\
+3 & 
+\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/barrel_sl}}&
+\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/vase2_sl}}&
+\fcolorbox{green}{white}{\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/beethoven_sl}}}&
+\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/vase0_sl}}&
+GSL\\
+4 & 
+\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/barrel_ps}}&
+\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/vase2_ps}}&
+\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/beethoven_ps}}&
+\fcolorbox{green}{white}{\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/vase0_ps}}}&
+EPS\\
+\bottomrule
+\end{tabular}
+\caption{The evaluation of interpreter using synthetic objects. The first column presents the description provided to the interpreter. Description $i$ matches with condition $i$ in Table~\ref{tab:synth_prop_list}. The last column is the algorithm selected by the interpreter. The object of which condition matches the description is labeled in green rectangle. Since the interpreter would return a successful reconstruction given a description that matches the condition, the quality of reconstruction of the labeled objects indicates success/failure of the interpreter.}
+\label{fig:synth_results}
+\end{figure*}
+
+\subsubsection{Data 1: Barrel}
+Description 1 matches with object \textit{barrel}, which has a reliable reconstruction result. The selected algorithm GSL is also in the mapped algorithms of object \textit{bust}, as shown in Table~\ref{tab:synth_prop_list}. Thus even though \textbf{description 1} doesn't match with the problem condition of \textit{bust}, a satisfactory result is also returned. However, the selected algorithm is not in the mapped algorithms of object \textit{vase0} and \textit{vase1}, thus less successful results are returned.
+
 \subsection{Real-world Datasets}
-We use a similar setup to the synthetic settings and captured a real world dataset of nine objects~\ref{fig:test_real_world_6class}. The property of these objects are listed in Table~\ref{tab:real_data_prop_list}. Since we do not have the ground truth here, we resort to visual analysis to see if the appropriate algorithm gives an acceptable reconstruction compared to that of the baseline method.
+We use similar setups to the synthetic counterparts and captured a real world dataset of nine objects~\ref{fig:test_real_world_6class}. The property of these objects are listed in Table~\ref{tab:real_data_prop_list}. Since we do not have the ground truth here, we resort to visual analysis to see if the appropriate algorithm gives an acceptable reconstruction compared to that of the baseline method.
 \begin{figure}[!htbp]
 \centering
 \begin{tabular}{c|lcc}
@@ -322,27 +383,27 @@ We use a similar setup to the synthetic settings and captured a real world datas
 class \# & Description & Object & Material\\
 \hline
   & textureless
-  & \multirow{3}{*}{\includegraphics[width=0.22\textwidth]{interp/real_world_obj/statue/statue}}
-  & \multirow{1}{*}{\includegraphics[width=0.08\textwidth]{interp/real_world_obj/statue/base_00}}\\[2.5ex] 
+  & \multirow{3}{*}{\includegraphics[width=0.22\textwidth]{interp/real_world_img/statue/statue}}
+  & \multirow{1}{*}{\includegraphics[width=0.08\textwidth]{interp/real_world_img/statue/base_00}}\\[2.5ex] 
 1 & diffuse\\[2.5ex]
   & bright\\[2.5ex]
 \hline
   & textureless
-  & \multirow{3}{*}{\includegraphics[width=0.22\textwidth]{interp/real_world_obj/cup/cup}}
-  & \multirow{1}{*}{\includegraphics[width=0.08\textwidth]{interp/real_world_obj/cup/base_00}}\\[2.5ex] 
+  & \multirow{3}{*}{\includegraphics[width=0.22\textwidth]{interp/real_world_img/cup/cup}}
+  & \multirow{1}{*}{\includegraphics[width=0.08\textwidth]{interp/real_world_img/cup/base_00}}\\[2.5ex] 
 2 & mixed diffuse/specular\\[2.5ex]
   & bright\\[2.5ex]
 \hline
      & textured
-     & \multirow{3}{*}{\includegraphics[width=0.22\textwidth]{interp/real_world_obj/pot/pot}}
-     & \multirow{1}{*}{\includegraphics[width=0.08\textwidth]{interp/real_world_obj/pot/base_00}}\\[2.5ex] 
-3\&4 & diffuse & & \multirow{1}{*}{\includegraphics[width=0.08\textwidth]{interp/real_world_obj/pot/base_01}}\\[2.5ex]
+     & \multirow{3}{*}{\includegraphics[width=0.22\textwidth]{interp/real_world_img/pot/pot}}
+     & \multirow{1}{*}{\includegraphics[width=0.08\textwidth]{interp/real_world_img/pot/base_00}}\\[2.5ex] 
+3\&4 & diffuse & & \multirow{1}{*}{\includegraphics[width=0.08\textwidth]{interp/real_world_img/pot/base_01}}\\[2.5ex]
      & dark/bright\\[2.5ex]
 \hline
      & textured
-     & \multirow{3}{*}{\includegraphics[width=0.22\textwidth]{interp/real_world_obj/vase/vase}}
-     & \multirow{1}{*}{\includegraphics[width=0.08\textwidth]{interp/real_world_obj/vase/base_00}}\\[2.5ex] 
-5\&6 & mixed diffuse/specular & & \multirow{1}{*}{\includegraphics[width=0.08\textwidth]{interp/real_world_obj/vase/base_01}}\\[2.5ex]
+     & \multirow{3}{*}{\includegraphics[width=0.22\textwidth]{interp/real_world_img/vase/vase}}
+     & \multirow{1}{*}{\includegraphics[width=0.08\textwidth]{interp/real_world_img/vase/base_00}}\\[2.5ex] 
+5\&6 & mixed diffuse/specular & & \multirow{1}{*}{\includegraphics[width=0.08\textwidth]{interp/real_world_img/vase/base_01}}\\[2.5ex]
      & dark/bright\\[2.6ex]
 \hline
 \end{tabular}
@@ -357,10 +418,10 @@ We use the aforementioned methods to retrieve the parameters of each property. T
   \hline
   \textbf{Object} & Texture & Albedo & Specular & Roughness & Mapping\\
   \hline
-  status & 0.2 & 0.8 & 0.2 & 0.5 & EPS, GSL\\
-  cup & 0.2 & 0.8 & 0.2 & 0.2 & EPS, GSL\\
+  status & 0.2 & 0.8 & 0.2 & 0.8 & EPS, GSL\\
+  cup & 0.2 & 0.8 & 0.5 & 0.2 & EPS, GSL\\
   pot & 0.8 & 0.2, 0.5 & 0.2 & 0.2 & PMVS\\
-  vase & 0.8 & 0.8, 0.2 & 0.5 & 0.2 & PMVS\\
+  vase & 0.8 & 0.2, 0.5 & 0.5 & 0.2 & PMVS\\
   \hline
   \end{tabular}
   \caption{Property list for the real-world objects}
@@ -370,16 +431,16 @@ We use the aforementioned methods to retrieve the parameters of each property. T
 % \begin{table}[!hbtp]
 %   \centering
 %   \begin{tabular}{*{12}{c}}
-%   \multicolumn{3}{l}{\includegraphics[width=0.25\textwidth]{interp/real_world_obj/statue/statue}} &
-%   \multicolumn{3}{l}{\includegraphics[width=0.25\textwidth]{interp/real_world_obj/cup/cup}} &
-%   \multicolumn{3}{l}{\includegraphics[width=0.25\textwidth]{interp/real_world_obj/pot/pot}} &
-%   \multicolumn{3}{l}{\includegraphics[width=0.25\textwidth]{interp/real_world_obj/vase/vase}}\\
-%   \includegraphics[width=0.1\textwidth]{interp/real_world_obj/statue/base_00} & & &
-%   \includegraphics[width=0.1\textwidth]{interp/real_world_obj/cup/base_00} & &
-%   \includegraphics[width=0.1\textwidth]{interp/real_world_obj/pot/base_00} &
-%   \includegraphics[width=0.1\textwidth]{interp/real_world_obj/pot/base_01} & &
-%   \includegraphics[width=0.1\textwidth]{interp/real_world_obj/vase/base_00} &
-%   \includegraphics[width=0.1\textwidth]{interp/real_world_obj/vase/base_01}\\
+%   \multicolumn{3}{l}{\includegraphics[width=0.25\textwidth]{interp/real_world_img/statue/statue}} &
+%   \multicolumn{3}{l}{\includegraphics[width=0.25\textwidth]{interp/real_world_img/cup/cup}} &
+%   \multicolumn{3}{l}{\includegraphics[width=0.25\textwidth]{interp/real_world_img/pot/pot}} &
+%   \multicolumn{3}{l}{\includegraphics[width=0.25\textwidth]{interp/real_world_img/vase/vase}}\\
+%   \includegraphics[width=0.1\textwidth]{interp/real_world_img/statue/base_00} & & &
+%   \includegraphics[width=0.1\textwidth]{interp/real_world_img/cup/base_00} & &
+%   \includegraphics[width=0.1\textwidth]{interp/real_world_img/pot/base_00} &
+%   \includegraphics[width=0.1\textwidth]{interp/real_world_img/pot/base_01} & &
+%   \includegraphics[width=0.1\textwidth]{interp/real_world_img/vase/base_00} &
+%   \includegraphics[width=0.1\textwidth]{interp/real_world_img/vase/base_01}\\
 %   \multicolumn{3}{c}{(d). statue} & \multicolumn{3}{c}{(e). cup} & 
 %   \multicolumn{3}{c}{(g). pot} & \multicolumn{3}{c}{(i). vase} \\
 %   \end{tabular}
@@ -387,48 +448,57 @@ We use the aforementioned methods to retrieve the parameters of each property. T
 %   \label{fig:real_data_material}
 % \end{table}
 
-\subsubsection{Data 1: statue}
-The first real-world object is a statue with low texture, low specular component, medium roughness, and high albedo. PMVS produces a very noisy reconstruction due to the lack of surface texture, whereas the other two techniques (EPS and GSL) return satisfactory results. The interpreter would thus return the appropriate result based on user specified constraints.
+\subsubsection{Data 1: pot}
+Description 1 matches partially with object \textit{pot} since it has both high and low albedo surface areas. The surface area with high albedo is well reconstructed whereas the surface with low albedo, which doesn't match the description is not reconstructed at all. The selected algorithm is also in the mapped algorithms of object \textit{statue} and \textit{cup}, thus satisfactory results are returned as well. However, this is not the case for object \textit{vase}, thus a very sparse reconstruction is returned.
 
-\subsubsection{Data 2: cup}
-The second real-world object is a cup with low texture, low roughness, high albedo and high specular. PMVS fails to reconstruct the surface while EPS and GSL provide good results. The quality of detail of EPS are clearly higher than that of GSL, and the interpreter would return the result meets the constraints specified by the user.
+% \subsubsection{Data 1: statue}
+% The first real-world object is a statue with low texture, low specular component, medium roughness, and high albedo. PMVS produces a very noisy reconstruction due to the lack of surface texture, whereas the other two techniques (EPS and GSL) return satisfactory results. The interpreter would thus return the appropriate result based on user specified constraints.
 
-\subsubsection{Data 3: pot}
-The third object is a pot with high texture, low specular, medium roughness, and both high and low albedo values. PMVS gives a good reconstruction results, while EPS and GSL suffer due to low albedo.
+% \subsubsection{Data 2: cup}
+% The second real-world object is a cup with low texture, low roughness, high albedo and high specular. PMVS fails to reconstruct the surface while EPS and GSL provide good results. The quality of detail of EPS are clearly higher than that of GSL, and the interpreter would return the result meets the constraints specified by the user.
 
-\subsubsection{Data 4: vase}
-The fourth object is a vase with high texture, high specular, low roughness, and both low and high albedo. PMVS shows good result, while EPS and GSL fail to reconstruct the surface due to low albedo and high specular.
+% \subsubsection{Data 3: pot}
+% The third object is a pot with high texture, low specular, medium roughness, and both high and low albedo values. PMVS gives a good reconstruction results, while EPS and GSL suffer due to low albedo.
 
-\begin{figure}[!htbp]
+% \subsubsection{Data 4: vase}
+% The fourth object is a vase with high texture, high specular, low roughness, and both low and high albedo. PMVS shows good result, while EPS and GSL fail to reconstruct the surface due to low albedo and high specular.
+
+\begin{figure*}[!htbp]
 \centering
-\begin{tabular}{c|ccc|c}
-& \multicolumn{3}{c}{Qualitative results} & Baseline\\
-Mapping & PMVS & EPS & GSL & VH\\
-\hline
-EPS, GSL & 
-\raisebox{-.5\height}{\includegraphics[width=0.2\textwidth]{interp/real_data/statue/statue_mvs}}&
-\fcolorbox{green}{white}{\raisebox{-.5\height}{\includegraphics[width=0.2\textwidth]{interp/real_data/statue/statue_ps}}}&
-\fcolorbox{green}{white}{\raisebox{-.5\height}{\includegraphics[width=0.2\textwidth]{interp/real_data/statue/statue_sl}}}&
-\raisebox{-.5\height}{\includegraphics[width=0.2\textwidth]{interp/real_data/statue/statue_sc}}\\
-EPS, GSL &
-\raisebox{-.5\height}{\includegraphics[width=0.2\textwidth]{interp/real_data/cup/cup_mvs}}&
-\fcolorbox{green}{white}{\raisebox{-.5\height}{\includegraphics[width=0.2\textwidth]{interp/real_data/cup/cup_ps}}}&
-\fcolorbox{green}{white}{\raisebox{-.5\height}{\includegraphics[width=0.2\textwidth]{interp/real_data/cup/cup_sl}}}&
-\raisebox{-.5\height}{\includegraphics[width=0.2\textwidth]{interp/real_data/cup/cup_sc}}\\
-PMVS &
-\fcolorbox{green}{white}{\raisebox{-.5\height}{\includegraphics[width=0.2\textwidth]{interp/real_data/pot/pot_mvs}}}&
-\raisebox{-.5\height}{\includegraphics[width=0.2\textwidth]{interp/real_data/pot/pot_ps}}&
-\raisebox{-.5\height}{\includegraphics[width=0.2\textwidth]{interp/real_data/pot/pot_sl}}&
-\raisebox{-.5\height}{\includegraphics[width=0.2\textwidth]{interp/real_data/pot/pot_sc}}\\
-PMVS &
-\fcolorbox{green}{white}{\raisebox{-.5\height}{\includegraphics[width=0.2\textwidth]{interp/real_data/vase/vase_mvs}}}&
-\raisebox{-.5\height}{\includegraphics[width=0.2\textwidth]{interp/real_data/vase/vase_ps}}&
-\raisebox{-.5\height}{\includegraphics[width=0.2\textwidth]{interp/real_data/vase/vase_sl}}&
-\raisebox{-.5\height}{\includegraphics[width=0.2\textwidth]{interp/real_data/vase/vase_sc}}\\
-\hline
+\begin{tabular}{lccccr}
+\toprule
+Desc \# & Pot & Vase & Statue & Cup & Selected Algo.\\
+\midrule
+1 &
+\fcolorbox{green}{white}{\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/real_interp/pot/pot_sl}}}&
+\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/real_interp/vase/vase_sl}}&
+\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/real_interp/statue/statue_sl}}&
+\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/real_interp/cup/cup_sl}}&
+GSL\\
+2 &
+\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/real_interp/pot/pot_mvs}}&
+\fcolorbox{green}{white}{\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/real_interp/vase/vase_mvs}}}&
+\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/real_interp/statue/statue_mvs}}&
+\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/real_interp/cup/cup_mvs}}&
+PMVS\\
+3 &
+\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/real_interp/pot/pot_sl}}&
+\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/real_interp/vase/vase_sl}}&
+\fcolorbox{green}{white}{\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/real_interp/statue/statue_sl}}}&
+\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/real_interp/cup/cup_sl}}&
+GSL\\
+4 &
+\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/real_interp/pot/pot_ps}}&
+\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/real_interp/vase/vase_ps}}&
+\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/real_interp/statue/statue_ps}}&
+\fcolorbox{green}{white}{\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/real_interp/cup/cup_ps}}}&
+EPS\\
+\bottomrule
 \end{tabular}
-\caption{The evaluation of the effectiveness of the interpreter using real-world objects. The objects that were well reconstructed are labelled by a green rectangle.}
-\end{figure}
+\caption{The evaluation of interpreter using real-world objects. The first column presents the description provided to the interpreter. Description $i$ matches with condition $i$ in Table~\ref{tab:real_data_prop_list}. The last column is the algorithm selected by the interpreter. The object of which the condition matches the description is labeled in green rectangle. Since the interpreter would return a successful reconstruction given a description that matches the condition, the quality of reconstruction of the labeled objects indicate the success/failure of the interpreter.}
+\label{fig:real_results}
+\end{figure*}
+
 
 \section{Summary}
 Building upon our description and mapping, we are able to develop a proof of concept interpreter which interprets the description of the problem, selects the most appropriate algorithm based on the mapping and returns a reliable reconstruction result. The development of more complex descriptions of object geometry and material, incorporating new algorithms, and improving mapping are all ongoing processes to improve the framework presented.
