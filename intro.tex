@@ -10,7 +10,22 @@ Modeling of the 3D world has been an active research topic in computer vision fo
 Achieving this goal is an extremely challenging task, as it involves the reverse process of image formation, which is highly likely to result in a variety of possible results and solutions. To overcome this challenge, some assumptions must be made in terms of materials, viewpoints, and lighting conditions. In turn, a solid understanding of the interaction of light with surface geometry and material is a prerequisite to fully take advantage of the existing techniques. In past decades, we have witnessed a variety of tools and approaches to 3D modeling applied successfully to an assortment of sub-domains, such as Computer Aided Design (CAD) tools~\cite{CAD}, arm-mounted probes, active methods~\cite{bernardini2002building,levoy2000digital,Lidar,kinect} and passive image-based methods~\cite{kutulakos2000theory,furukawa2010accurate,faugeras2002variational,goesele2006multi}. Among the existing approaches, active techniques such as laser scanners~\cite{levoy2000digital}, Structured Light (SL) systems~\cite{bernardini2002building}, and Photometric Stereo (PS)~\cite{woodham1980photometric}, as well as passive methods such as Multi-View Stereo (MVS)~\cite{seitz2006comparison}, have been the most successful. Laser scanners and structured light techniques are seen to generate the most accurate results, but are generally complicated to set up and calibrate, time consuming to scan, and demanding to store and process in terms of memory. Photometric Stereo is able to achieve highly detailed reconstruction comparable to that of laser scanners, but the true depth information is lost due to the use of a single viewpoint. Further, MVS requires minimal setup and can work in both controlled, small scale lab settings as well as outdoor, medium to large scale environments. However, the quality of reconstruction is generally noisier, and is susceptible to the texture and material property of the surface. All of the aforementioned techniques requires an understanding of calibration, stereo correspondence, physics-based vision, and so on, which are not easy tasks to master.
 
 % [motivation]\\
-Regardless of past successes and strong demands across various areas, we have not yet witnessed any substantial progress in terms of making the mentioned techniques accessible to application developers who generally have little or no computer vision expertise. We've made two key observations about computer vision algorithms: 1) few of these methods works well under all circumstances, nor do they share the same setup or inputs/outputs, making it difficult for developers to choose an optimal method for their particular application; 2) expertise knowledge is a prerequisite to fully exploit the potentials of existing vision techniques. These observations lead us to the following question which we address in this thesis: is it achievable to create an interface that can return a reliable reconstruction by one of the best possible algorithms based on the descriptions of the object or scene to be reconstructed? 
+Regardless of past successes and strong demands across various areas, we have not yet witnessed any substantial progress in terms of making the mentioned techniques accessible to application developers who generally have little or no computer vision expertise. We've made two key observations about computer vision algorithms: 1) few of these methods works well under all circumstances, nor do they share the same setup or inputs/outputs, making it difficult for developers to choose an optimal method for their particular application; 2) expertise knowledge is a prerequisite to fully exploit the potentials of existing vision techniques. These observations lead us to the following question which we address in this thesis: is it achievable to create an interface that can return a reliable reconstruction by one of the best possible algorithms based on the descriptions of the object or scene to be reconstructed?
+
+The interface consists of the following three layers, see Figure~\ref{fig:interface_overview}: the \textit{description layer} sits on top and acts as the medium between the user and the lower layers. It is through this that the user provides a description of the 3D reconstruction problem. The description is passed to the \textit{interpreter} layer, which chooses appropriate algorithms given the description, and then configures each algorithm's parameters. The interpreter can also define any necessary pre or post-processing operations (such as noise removal or image scaling). The lowest layer of the three is where the \textit{algorithms} sit.
+\begin{figure}[!htbp]
+\centering
+\begin{tikzpicture}[node distance=1.2cm, auto]
+
+\node (desc) [data] {L3: Description};
+\node (interp) [data, below of=desc] {L2: Interpreter};
+\node (algo) [data, below of=interp] {L1: Algorithm};
+\draw[red,thick,solid] ($(desc.north west)+(-0.3,0.3)$)  rectangle ($(algo.south east)+(0.3,-0.3)$);
+
+\end{tikzpicture}
+\caption{The three layers of the 3D reconstruction interface.}
+\label{fig:interface_overview}
+\end{figure}
 
 % The mental model to our approach is similar to that of the game `name that object': one participant makes guesses of what the object is based solely on the descriptions of the appearance provided by the other participant. In our case, the key idea is to construct an algorithm-free interface above the algorithms themselves, so that one or multiple appropriate algorithms can be selected based on the `appearance' of the object described by the developers.
 
@@ -35,29 +50,14 @@ Regardless of past successes and strong demands across various areas, we have no
 \section{Outline}
 The problem addressed in this thesis can be described as follows: construct an interface for 3D reconstruction that can return a reliable reconstruction result by one of the best-suited algorithms, which is determined by the description of the problem condition. More specifically, a taxonomy is proposed that transforms the 3D reconstruction problem from one requiring knowledge of algorithmic details to one that is based on the correlation between the problem space and algorithms. Next, a well defined model and representations are developed to describe the problem space definitively. Lastly, mapping between the problem space and the algorithms is discovered, from which a proof-of-concept interpreter is proposed. A rigorous evaluation is then carried out to verify the robustness of the interpreter. 
 
-The interface consists of the following three layers, see Figure~\ref{fig:interface_overview}: the \textit{description layer} sits on top and acts as the medium between the user and the lower layers. It is through this that the user provides a description of the 3D reconstruction problem. The description is passed to the \textit{interpreter} layer, which chooses appropriate algorithms given the description, and then configures each algorithm's parameters. The interpreter can also define any necessary pre or post-processing operations (such as noise removal or image scaling). The lowest layer of the three is where the \textit{algorithms} sit.
-\begin{figure}[!htbp]
-\centering
-\begin{tikzpicture}[node distance=1.2cm, auto]
-
-\node (desc) [data] {L3: Description};
-\node (interp) [data, below of=desc] {L2: Interpreter};
-\node (algo) [data, below of=interp] {L1: Algorithm};
-\draw[red,thick,solid] ($(desc.north west)+(-0.3,0.3)$)  rectangle ($(algo.south east)+(0.3,-0.3)$);
-
-\end{tikzpicture}
-\caption{The three layers of the 3D reconstruction interface.}
-\label{fig:interface_overview}
-\end{figure}
-
 \subsection{Related Work}
-We discuss the existing software and toolboxes for 3D reconstruction, and present the required vision background needed to fully take advantage of these toolboxes. A review of the 3D acquisition techniques is also provided, organized by the visual and geometric cues used for reconstruction.
+We discuss the existing software and toolboxes for 3D reconstruction, and present the required vision background needed to fully take advantage of these toolboxes. A review of the 3D acquisition techniques is provided, organized by the visual and geometric cues used for reconstruction.
 
 \subsection{A Taxonomy of 3D Reconstruction}
 The proposed taxonomy categorizes algorithms not based on \textit{how} they work, but on the problem space that they can reliably work under. First, the problem space is defined, with each axis representing a key property of the object's material or geometry. Next, a selected classes of algorithms are registered to the problem conditions based on relevant literature reports.
 
 \subsection{A Description of 3D Reconstruction}
-In previous cases, the mapping from a problem space to an algorithm has been ambigueous due to the problem space that is poorly defined. Here, we set out to provide a rigorous definition of the problem space itself. First, a formal and practical definition of the 3D reconstruction problem based on Set Theory is proposed. Second, a model consisting of key object properties is developed. Third, the representations of the problem are proposed. Lastly, common 3D reconstruction tasks are expressed using the proposed model and representations.
+In previous cases, the mapping from a problem space to an algorithm has been ambigueous due to the problem space that is poorly defined. Here, we set out to provide a rigorous definition of the problem space itself. First, a formal and practical definition of the 3D reconstruction problem based on set theory is proposed. Second, a model consisting of key object properties is developed. Third, the representations of the problem are proposed. Lastly, common 3D reconstruction tasks are expressed using the proposed model and representations.
 % \begin{figure}[!htbp]
 % \centering
 % \begin{tikzpicture}[node distance=1.2cm, auto]
@@ -178,7 +178,7 @@ We conduct the evaluation of the interface around two key evaluation questions: 
 
 \section{Contributions}
 % The main contribution of this thesis is the development and evaluation of a interface for the 3D reconstruction problem in computer vision, to hide the details of specific methods. An abstraction may be employed by users to describe the conditions of the vision problems they are trying to solve, and our novel interpreter uses such descriptions to select an appropriate algorithm and return a reliable result. 
-The main contribution of this paper is the development of an interface for 3D reconstruction problem, which hides algorithmic details and allows users to describe conditions surrounding the problem. This description can be interpreted so that an appropriate algorithm is chosen to reconstruct a successful result. This endeavor is non-trivial for two reasons: 1) currently, most approaches can only achieve satisfactory results on a limited categories of objects; 2) a solid understanding of reconstruction algorithm details is a prerequisite to fully take advantage of the existing techniques, which is difficult for application developers to obtain. To some extent, our interface attempts to expand the problem space by incorporating multiple algorithms. Though it can cover a wider range of problem space than a single algorithm, it is still constrained within the space covered by currently existing techniques. Thus, our evaluation is carried out within the problem space covered by the selected algorithms.
+The main contribution of this thesis is the development of an interface for 3D reconstruction problem, which hides algorithmic details and allows users to describe conditions surrounding the problem. This description can be interpreted so that an appropriate algorithm is chosen to reconstruct a successful result. This endeavor is non-trivial for two reasons: 1) currently, most approaches can only achieve satisfactory results on a limited categories of objects; 2) a solid understanding of reconstruction algorithm details is a prerequisite to fully take advantage of the existing techniques, which is difficult for application developers to obtain. To some extent, our interface attempts to expand the problem space by incorporating multiple algorithms. Though it can cover a wider range of problem space than a single algorithm, it is still confined within the space covered by currently existing techniques. Thus, our evaluation is carried out within the problem space covered by the selected algorithms.
 % The significant aspects of our approach are presented in further detail below:
 
 % \noindent\textbf{1. A taxonomy of the 3D reconstruction problem that focuses on problem conditions instead of algorithmic details.}
