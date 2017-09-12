@@ -9,6 +9,23 @@
 % \item technical details of MVS, PS, SL, SfS, etc
 % \end{itemize}
 
+\section{Definition of Radiometric Terms}
+Below is a list of radiometry terms, see Figure~\ref{fig:radiometry_terms} for an illustration:
+\begin{itemize}
+\item Solid angle ($d\omega$): 3D counterpart of angle, $d\omega=\frac{dA \cos\theta_i}{R^2}\mathit{ (steradian)}$.
+\item Projected solid angle ($d\Omega$): $d\Omega = \cos\theta d\omega$.
+\item Incident radiance ($\mathbf{L_i(\theta_i, \phi_i)}$): light flux received from the direction $(\theta_i, \phi_i)$ on a unit surface area, unit $\mathit{ (watt\cdot m^{-2}\cdot steradian^{-1})}$.
+\item Irradiance ($\mathbf{E_i(\theta_i, \phi_i)}$): light Flux (power) incident per unit surface area from all direction, $\mathbf{E_i(\theta_i, \phi_i)}=\int_{\Omega_i} L_i(\theta_i, \phi_i) d\Omega_i \mathit{ (watt/m^2)}$.
+\item Surface radiance ($\mathbf{L_r(\theta_r, \phi_r)}$): light flux emmited from a unit surface area in the direction $(\theta_r, \phi_r)$, unit $\mathit{ (watt\cdot m^{-2}\cdot steradian^{-1})}$.
+\end{itemize}
+
+\begin{figure}[!htbp]
+\centering
+\includegraphics[width=0.5\textwidth]{model/radiometry_terms.png}
+\caption{Illustration of light-matter interaction.}
+\label{fig:radiometry_terms}
+\end{figure}
+
 \section{Material of real-world objects}
 \label{sec:real_world_dataset}
 \begin{table}[!hbtp]

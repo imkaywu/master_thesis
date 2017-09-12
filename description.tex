@@ -3,7 +3,7 @@
 
 \chapter{A Description of 3D Reconstruction}
 \label{ch:3DRecon_Desc}
-In Chapter~\ref{ch:3DRecon_Taxo}, we introduce a taxonomy of 3D reconstruction which maps algorithms to the problem space according to visual/geometric characteristics of the object. However, without a formal `language', \ie a model and representations, this mapping would be largely empirical. Expressing the conditions within which an algorithm works well without a formal definition of the problem space prevents formulating a well defined problem.
+In Chapter~\ref{ch:3DRecon_Taxo}, we introduce a taxonomy of 3D reconstruction which categorizes algorithms based on the problem space that they can reliably work under, \ie a mapping from problem space to algorithm space. However, without a formal `language', \ie a model and representations, this mapping would be largely empirical. Expressing the conditions within which an algorithm works well without a formal definition of the problem space prevents formulating a well defined problem.
 
 In this chapter, we attempt to extend this taxonomy by providing a description of the 3D reconstruction problem which allows for a well defined specification of the conditions surrounding the problem. This description abstracts away from the functional specification of \textit{how} to estimate a reconstruction. We first propose a formal definition of the 3D reconstruction problem in Section~\ref{sec:3DRecon_Def}. Next, section~\ref{sec:3DRecon_Model} proposes a model to 3D reconstruction by selecting various key \textit{aspects} of the problem space that are crucial for describing the appearance of the object. Section~\ref{sec:3DRecon_Rep} outlines concrete representations of the proposed model. Section~\ref{sec:3DRecon_Exp} provides examples of expressing common 3D reconstruction problems using the proposed model and representations. These following four layers represent the description of our accessible 3D reconstruction framework: Definition, Representation, Model, and Expression.
 
@@ -97,12 +97,16 @@ $$
 Models and representations are fundamental for vision problem solving. Models select characteristic properties of an object, and representation describes the model selected object properties to facilitate a solution of a class of problem. A model facilitates the representation of aspects in reality that are useful in a particular problem domain~\cite{bolles19863dpo}. For instance, surface orientation is one component of the surface geometry model, and the corresponding representation can be surface normal or curvature. Another example is colour, which is a component of a material model, and where RGB space is the corresponding representation of the colour.
 
 We select the subset of properties used for object taxonomy in Chapter~\ref{ch:3DRecon_Taxo} as the main components of our model. The model consisting of these key properties is shown in Table~\ref{tab:3DRecon_model}.
-\begin{table}[h]
+\begin{table}[!htbp]
   \centering
-  \begin{tabular}{l|*{5}{c}}
-  \hline
-  \textbf{Property} & Texture & Lightness & Reflectance & Roughness & Concavity\\
-  \hline
+  \begin{tabular}{l|l}
+  \toprule
+  \multirow{5}{*}{Model} & Texture\\
+  & Lightness\\
+  & Reflectance\\
+  & Roughness\\
+  & Concavity\\
+  \bottomrule
   \end{tabular}
   \caption{Model of the 3D reconstruction problem. Properties are selected from the taxonomy in Chapter~\ref{ch:3DRecon_Taxo}.}
   \label{tab:3DRecon_model}
@@ -160,7 +164,7 @@ Although texture is an important component in computer vision, there is no preci
 
 % For s regular textures, there are two basic dimensions on which it may be described. The first dimension is for describing the primitives out of which the texture is composed, and the second dimension is for the description of the spatial dependence or interaction between the primitives of an image texture. The first property is concerned with tonal primitives and local properties, and the second dimension is concerned with the spatial organization of the tonal primitives.
 
-There are various properties that make texture distinguishable: scale/size/granularity, orientation, homogeneity, randomness, etc. However, due to the diverse and complexe nature of textures, it is a challenging task to generate a synthetic texture solely from these semantic properties, or the other way around, derive parameters from a given texture. The stereo vision community often takes a simplified approach, classifying textures into two categories, regular and stochastic, by degree of randomness. A regular texture is formed by regular tiling of easily identifiable elements (texels) organized into strong periodic patterns. A stochastic texture exhibits less noticeable elements and displays rather random patterns. Most of the real world textures are mixtures of these two categories. In this thesis, we adopt this simplification and consider \textit{texture randomness}, which is the amount of distortion in the texture. Thus, a uniform texture has low \textit{texture randomness} whereas a highly textured surface has \textit{texture randomness}.
+There are various properties that make texture distinguishable: scale/size/granularity, orientation, homogeneity, randomness, etc. However, due to the diverse and complexe nature of textures, it is a challenging task to generate a synthetic texture solely from these semantic properties, or the other way around, derive parameters from a given texture. The stereo vision community often takes a simplified approach, classifying textures into two categories, regular and stochastic, by degree of randomness. A regular texture is formed by regular tiling of easily identifiable elements (texels) organized into strong periodic patterns. A stochastic texture exhibits less noticeable elements and displays rather random patterns. Most of the real world textures are mixtures of these two categories. In this thesis, we adopt this simplification and consider \textit{texture randomness}, which is the amount of distortion in the texture. Thus, a uniform texture has no/low \textit{texture randomness} whereas a highly textured surface has high \textit{texture randomness}.
 
 % Most texture synthetic research has focused on data-driven or statistical approaches. For the data-driven approach, the generated texture is not general enough whereas it's not intuitive enough for the statistical approach. Thus we turn to an approach that is more tailored to the stereo vision problem. Based on the observations from practical tests, stereo algorithms work well under the condition of non-uniform texture, even for textures caused by shadow. This is theoretically plausible as stereo vision tries to find the correspondence based on the `distinctiveness' of the texture. Therefore, as long as the surface is covered by distinct texture, it doesn't matter what the basic texture element is. Thus the most significant attributes of the texture is coverage, \ie the percent of the surface that is covered, and it's the focus of this thesis.
 
@@ -169,32 +173,15 @@ There are various properties that make texture distinguishable: scale/size/granu
 % Here we only consider visual textures, which is the result of shape and reflection. Therefore, a surface with varying reflectance property can produces a textured surface, a flat surface with fixed reflectance property under different illuminations can also achieve textured effect. Even very weak texture can be a strong cue to object reconstruction as manifested by the Middlebury `Dino' dataset.
 
 \subsection{Lightness}
-When light strikes a surface, it may be reflected, transmitted, absorbed, or scattered; usually, a combination of these effects occurs. The intensity/colour information received by a sensor is thus determined, among other factors, by the amount of light available after these interactions. Here, we consider intensity as caused solely by reflection, since this is one of most common phenomena experienced and is the easiest to analyze. Generally, we assume that all effects are local, thus global effects such as interreflection and transmission, among others, are omitted. This is called a \textbf{local interaction model}. 
+When light strikes a surface, it may be reflected, transmitted, absorbed, or scattered; usually, a combination of these effects occurs. The intensity/colour information received by a sensor is thus determined, among other factors, by the amount of light available after these interactions. Here, we consider intensity as caused solely by reflection, since this is one of the most common phenomena experienced and is the easiest to analyze. Generally, we assume that all effects are local, thus global effects such as inter-reflection and transmission, among others, are omitted. This is called a \textbf{local interaction model}. 
 % Lightness ranges from `black' to `white' in the grey scale axis, and colour is a superset of intensity, which takes into account the spectral composition of light. Both lightness and colour depend on illumination, surface normal, surface reflectance, and viewing direction.
 
 In order to understand the contributing factors of pixel intensity/colour, we need an in-depth understanding of reflection, \ie how light is reflected off of a surface patch, and the relation between material and intensity values. The radiometric formation of an image consists of three separate processes, \textit{light-matter interaction}, \textit{light-lens interaction}, and \textit{light-sensor interaction}.
 
-\subsubsection{Definition of Radiometric Terms}
-Below is a list of radiometry terms, see Figure~\ref{fig:radiometry_terms} for an illustration:
-\begin{itemize}
-\item Solid angle ($d\omega$): 3D counterpart of angle, $d\omega=\frac{dA \cos\theta_i}{R^2}\mathit{ (steradian)}$.
-\item Projected solid angle ($d\Omega$): $d\Omega = \cos\theta d\omega$.
-\item Incident radiance ($\mathbf{L_i(\theta_i, \phi_i)}$): light flux received from the direction $(\theta_i, \phi_i)$ on a unit surface area, unit $\mathit{ (watt\cdot m^{-2}\cdot steradian^{-1})}$.
-\item Irradiance ($\mathbf{E_i(\theta_i, \phi_i)}$): light Flux (power) incident per unit surface area from all direction, $\mathbf{E_i(\theta_i, \phi_i)}=\int_{\Omega_i} L_i(\theta_i, \phi_i) d\Omega_i \mathit{ (watt/m^2)}$.
-\item Surface radiance ($\mathbf{L_r(\theta_r, \phi_r)}$): light flux emmited from a unit surface area in the direction $(\theta_r, \phi_r)$, unit $\mathit{ (watt\cdot m^{-2}\cdot steradian^{-1})}$.
-\end{itemize}
-
-\begin{figure}[!htbp]
-\centering
-\includegraphics[width=0.5\textwidth]{model/radiometry_terms.png}
-\caption{Illustration of light-matter interaction.}
-\label{fig:radiometry_terms}
-\end{figure}
-
 \subsubsection{Light-matter interaction}
-The relation between the incoming illumination and reflected light is modelled using the \textit{bidirectional reflectance distribution function} (BRDF). The BRDF is defined as
+The relation between the incoming illumination and reflected light is modelled using the \textit{bidirectional reflectance distribution function} (BRDF). The BRDF is defined as:
 
-\noindent\textbf{Definition (BRDF)} the ratio of the surface radiance $\mathbf{L_r(\theta_r, \phi_r)}$ to the irradiance $\mathbf{E_i(\theta_i, \phi_i)}$, \ie $f(\theta_i, \phi_i, \theta_r, \phi_r)=\frac{E^{surface}(\theta_i, \phi_i)}{L^{surface}(\theta_r, \phi_r)}$.
+\noindent\textbf{Definition (BRDF)} the ratio of the scene radiance $\mathbf{L_r(\theta_r, \phi_r)}$ to the irradiance $\mathbf{E_i(\theta_i, \phi_i)}$, \ie $f(\theta_i, \phi_i, \theta_r, \phi_r)=\frac{E^{surface}(\theta_i, \phi_i)}{L^{surface}(\theta_r, \phi_r)}$.
 \begin{figure}[!htbp]
 \centering
 \begin{tikzpicture}[node distance=2cm, auto]
@@ -204,15 +191,15 @@ The relation between the incoming illumination and reflected light is modelled u
 \draw [arrow] (light_rad) -- (material);
 \draw [arrow] (material) -- (scene_rad);
 \end{tikzpicture}
-\caption{The light-matter interaction.}
+\caption{The light-matter interaction. Scene radiance is linear related to incident radiance.}
 \label{fig:light_matter_interact}
 \end{figure}
 
-\textit{Diffuse albedo} or surface albedo is the proportion of incident light that is reflected by the surface. 
+For Lambertian model, BRDF can be simplified as \textit{Diffuse albedo} or surface albedo, which is the proportion of incident light that is reflected by the surface. 
 % It should be noted that albedo is not an intrinsic property of a surface. Instead, for any surface, the albedo depends on the spectral and angular distributions of the incident light.
 
 \subsubsection{Light lens interaction}
-The assumption made in vision is that radiance is constant as it propagates along a ray. Therefore, the scene radiance is the same as the radiance passing through the lens. It can be further shown that the image irradiance received by the sensor is proportional to the scene radiance, thus the relation between \textit{scene radiance} and \textit{image irradiance} is linear.
+A common assumption made in vision community is that radiance is constant as it propagates along a ray. Therefore, the scene radiance is the same as the radiance passing through the lens, which is the same as the radiance received by the sensor. Since image irradiance is the radiance accumulated on a unit surface, it follows that image irradiance is proportional to the scene radiance. Thus, the relation between \textit{scene radiance} and \textit{image irradiance} is linear.
 \begin{figure}[!ht]
 \centering
 \begin{tikzpicture}[node distance=2cm, auto]
@@ -222,7 +209,7 @@ The assumption made in vision is that radiance is constant as it propagates alon
 \draw [arrow] (scene_rad) -- (lens);
 \draw [arrow] (lens) -- (irradiance);
 \end{tikzpicture}
-\caption{The light-lens interaction.}
+\caption{The light-lens interaction. Image irradiance is linearly related to scene radiance.}
 \label{fig:light_lens_interact}
 \end{figure}
 
@@ -237,11 +224,11 @@ The camera response function relating image irradiance at the image plane to mea
 \draw [arrow] (irradiance) -- (sensor);
 \draw [arrow] (sensor) -- (intensity);
 \end{tikzpicture}
-\caption{The light-sensor interaction.}
+\caption{The light-sensor interaction. Pixel intensity is linearly related to image irradiance assuming linear radiometric mapping.}
 \label{fig:light_sensor_interact}
 \end{figure}
 
-In conclusion, as long as the \textit{light-sensor interaction} is considered as a linear mapping (as most vision algorithms do) or calibrated in a pre-processing step, the pixel intensity value is linearly related to surface reflectance, which is characterized by BRDF. There are 4 DoF in spatially-invariant BRDF, and for a simplified case - Lambertian reflectance, the BRDF is degenerated to \textit{diffuse albedo}, which is the representation we adopt for the property of intensity.
+In conclusion, as long as the \textit{light-sensor interaction} is considered as a linear mapping (as most vision algorithms do) or calibrated in a pre-processing step, the pixel intensity value is linearly related to surface reflectance, which is characterized by BRDF. There are 4 DoF in spatially-invariant BRDF, and for the simplified case - Lambertian reflectance, the BRDF is degenerated to \textit{diffuse albedo}, which is the representation we adopt for lightness.
 
 % The reflectance of light also depends on the incident direction. Specifically, light that lands on a surface at a grazing angle will be much more likely to reflect, see Figure~\ref{fig:alb_ang}. We take into account the Fresnel effect in the synthetic stage, thus we consider the albedo with small incident angle.
 % \begin{figure}[h]
@@ -252,7 +239,8 @@ In conclusion, as long as the \textit{light-sensor interaction} is considered as
 % \end{figure}
 
 \subsection{Specularity}
-Specular surfaces reflect light in nearly a single direction when the microscopic surface irregularities are small compared to light wavelength, and no subsurface scattering is present~\cite{nayar1989surface}. Unlike diffuse reflections, where we experience the lightness and colour of an object, specular reflections carry information about the structure, intensity, and spectral content of the illumination field. In other words, specular reflection is simply an image of the environment, or the illumination field, distorted by the geometry of the reflecting surface. In Figure~\ref{fig:spec_ref}, the image no longer reflects the original colour of the surface, which is red. Instead it shows a distorted image of the environment. A purely specular surface is a mirror, which is rare in nature. Most natural materials exhibit a mixture of specular and diffuse reflections. Variations in microscopic surface geometry can cause specular reflections to be scattered, blurring the image of the environment in an amount proportional to surface roughness. We use a numeric \textit{specular} value to denote the proportion of a material's specularity, with 0 being completely diffuse, and 1 being completely specular (mirror like).
+Specular surfaces reflect light in nearly a single direction when microscopic surface irregularities are small compared to light wavelength, and no subsurface scattering is present~\cite{nayar1989surface}. Unlike diffuse reflections, where we experience the lightness and colour of an object, specular reflections carry information about the structure, intensity, and spectral content of the illumination field. In other words, specular reflection is simply an image of the environment, or the illumination field, distorted by the geometry of the reflecting surface. For instance, the specular sphere in Figure~\ref{fig:spec_ref} shows a distorted image of the environment instead of the underlying surface colour. A purely specular surface is a mirror, which is rare in nature. Most natural materials exhibit a mixture of specular and diffuse reflections. A commonly used model treats mixed reflectance as a weighted combination of diffuse and specular component. Thus the ratio of incident light that is specularly reflected is considered as the representation of sepcularity, with 0 being completely diffuse, and 1 being completely specular (mirror like).
+%  We use a numeric \textit{specular} value to denote the proportion of a material's specularity.
 \begin{figure}[!htbp]
 \centering
 \includegraphics[width=0.3\textwidth]{model/spec_ref}
@@ -261,9 +249,9 @@ Specular surfaces reflect light in nearly a single direction when the microscopi
 \end{figure}
 
 \subsection{Roughness}
-Roughness, which refers to the microscopic shape characteristics of a surface, contributes to the way in which light is reflected off of a surface. A smooth surface may reflect incident light in a single direction, while a rough surface may scatter the light in various directions. We need prior knowledge of the microscopic surface irregularities, or a model of the surface itself, to determine the reflection of incident light.
+Roughness, which refers to the microscopic shape characteristics of a surface, contributes to the way in which light is reflected off of a surface. A smooth surface may reflect incident light in a single direction, while a rough surface may scatter the light in various directions. Thus, variations in microscopic surface geometry can cause specular reflections to be scattered, blurring the image of the environment in an amount proportional to surface roughness. We need prior knowledge of the microscopic surface irregularities, or a model of the surface itself, to determine the reflection of incident light.
 
-Possible surface models are divided into 2 categories: surfaces with exact known profiles and surfaces with random irregularities. An exact profile may be determined by measuring the height at each point on the surface by means of a sensor such as the stylus profilometer. This method tends to be cumbersome and impractical, hence, it is more reasonable to model the surface as a random process, where it is described by a statistical distribution of either its height above a certain mean level, or its slope with respect to its mean (macroscopic) slope. We will use the second statistical approach in this section.
+Possible surface models are divided into 2 categories: surfaces with exact known profiles and surfaces with random irregularities. An exact profile may be determined by measuring the height at each point on the surface by means of a sensor such as the stylus profilometer. This method tends to be cumbersome and impractical, hence, it is more reasonable to model the surface as a random process, where it is described by a statistical distribution of either its height above a certain mean level, or its slope with respect to its mean (macroscopic) slope. We use the second statistical approach as the representation of roughness.
 
 % \textit{Height Distribution Model} The height coordinate of the surface is expressed as random function of the coordinates $x$ and $y$.
 % \begin{figure}[h]
@@ -311,28 +299,47 @@ Possible surface models are divided into 2 categories: surfaces with exact known
 % surface roughness will affect the fresnel and specularity
 
 \subsection{Concavity}
-Concavity can cause self-shadow or interreflection effects, which can severely impede the accuracy of active methods. Since concavity is invisible in the silhouette images, methods that utilize silhouette information may also fail to reconstruct concavities. Concavity can be measured by \textit{surface curvature}, which is defined as the inverse of the radius of a tangentially intersecting circle/sphere. We include concavity in our model for the sake of completeness. However, we decide to omit this property since concavity will introduce global light transport including cast shadow and interreflection, and so on, which violates our assumption of a \textbf{local interaction model}.
+Concavity can be measured by \textit{surface curvature}, which is defined as the inverse of the radius of a tangentially intersecting circle/sphere. We include concavity in our model for the sake of completeness. However, we decide to omit this property in the following discussion since it will introduce global light transport including cast shadow and inter-reflection, and so on, which violates our assumption of \textbf{local interaction model}. Global light transport can severely worsen the accuracy of active methods. Besides, methods that utilize silhouette information may also fail to reconstruct concavities since concavity is invisible in the silhouette images.
 
 % \subsubsection{Silhouette}
 % \textbf{Concavity} is not shown in the silhouette image, thus methods that utilize silhouette information may fail to reconstruct concavities. Concavity is measured by \textit{surface curvature}.
 
-\section{Expression}
-\label{sec:3DRecon_Exp}
-Now that we have a proposed model and representation of 3D reconstruction problem, we can express the six proposed object classes using this description. The expression of the reconstruction problem is shown in table~\ref{tab:express}.
+\subsection{Summary}
+The model and corresponding rerpesentations are shown in Table~\ref{tab:3DRecon_model_repre}.
 \begin{table}[!htbp]
   \centering
-  \begin{tabular}{l*{5}{c}}
-  \hline
-  \textbf{Class \#} & Texture randomness & Albedo & Specularity & Roughness & Concavity\\
-  \hline
-  Class 1 & 0.2 & 0.8 & 0.2 & 0.8 & 0.2\\
-  Class 2 & 0.2 & 0.8 & 0.5 & 0.2 & 0.2\\
-  Class 3 & 0.8 & 0.8 & 0.2 & 0.8 & 0.2\\
-  Class 4 & 0.8 & 0.2 & 0.2 & 0.8 & 0.2\\
-  Class 5 & 0.8 & 0.8 & 0.5 & 0.2 & 0.2\\
-  Class 6 & 0.8 & 0.2 & 0.5 & 0.2 & 0.2\\
-  \hline
+  \begin{tabular}{l|l}
+  \toprule
+  \textbf{Model} & \textbf{Representation}\\
+  \midrule
+  Texture & \textit{Texture randomness}\\
+  Lightness & \textit{Albedo}\\
+  Specularity & \textit{Specular/diffuse ratio}\\
+  Roughness & \textit{SD of facet slopes}\\
+  Concavity & \textit{Surface curvature}\\
+  \bottomrule
   \end{tabular}
-  \caption{Expression of 3D reconstruction problem for the object classss proposed in Chapter~\ref{ch:3DRecon_Taxo}.}
+  \caption{A Model and corresponding representations of the 3D reconstruction problem.}
+  \label{tab:3DRecon_model_repre}
+\end{table}
+
+\section{Expression}
+\label{sec:3DRecon_Exp}
+Now that we have a proposed model and representations of 3D reconstruction problem, we can express the six proposed object classes using this description. The expression of the reconstruction problem is shown in table~\ref{tab:express}. Given that all properties in Figure~\ref{fig:six_class} are vaguely described, for instance, textured/textureless, dark/bright, we use three discrete scales to parameterize these properties: \textit{low} (0.2), \textit{medium} (0.5), and \textit{high} (0.8).
+\begin{table}[!htbp]
+  \centering
+  \begin{tabular}{l*{4}{p{1cm}}l}
+  \toprule
+  \textbf{Object} & Texture & Albedo & Specular & Rough & \textbf{Label}\\
+  \midrule
+  Class 1 & low/med & high & low/med & high & Tl-B-D-R\\
+  Class 2 & low/med & high & high & low/med & Tl-B-M-S\\
+  Class 3 & high & high & low/med & high & T-B-D-R\\
+  Class 4 & high & high & high & low/med & T-B-M-S\\
+  Class 5 & high & low/med & low/med & high & T-D-D-R\\
+  Class 6 & high & low/med & high & low/med & T-D-M-S\\
+  \bottomrule
+  \end{tabular}
+  \caption{Expression of the reconstruction problem for the object classss in Section~\ref{ch:3DRecon_Taxo}.}
   \label{tab:express}
 \end{table}
