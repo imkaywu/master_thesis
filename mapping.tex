@@ -3,39 +3,44 @@
 
 \chapter{A Mapping of 3D Reconstruction}
 \label{ch:3DRecon_Mapping}
-Most vision work focuses on developing algorithmic novelties, and as we have mentioned, very few investigate the rigorous conditions under which the algorithms themselves work. Thus, this knowledge is only known empirically, without a rigorous definition of the application domain or problem conditions. This section builds upon the 3D description proposed in Chapter~\ref{ch:3DRecon_Desc}, and attempts to find the problem conditions surrounding each algorithm.
+Most vision work focuses on developing algorithmic novelties, and as we have mentioned, very few investigates the rigorous conditions under which the algorithms themselves work. Thus, this knowledge is only known empirically, without a rigorous definition of the application domain or problem conditions. This section builds upon the 3D description proposed in Chapter~\ref{ch:3DRecon_Desc}, and attempts to find the problem conditions surrounding each algorithm.
 
-To achieve this goal, we need a dataset to evaluate the performance of each algorithm under varied conditions, which is not available since most 3D benchmarks, to the best of our knowledge, focus on one specific class of algorithms, and do not have objects with changing properties. For example, the Middlebury dataset targets MVS algorithms~\cite{seitz2006comparison}, and the `DiLiGenT' dataset targets Photometric Stereo algorithms~\cite{shi2016benchmark}. This makes such benchmarks only suitable for the evaluation of within-category algorithms. There are no datasets that evaluate 3D reconstruction across differ categories, nor are there any datasets that cover a range of properties of materials and geometry and their combinations. Reasons for the lack of such a dataset are: 1) it is already tedious to create a real-world dataset for one specific category of algorithms, so it would be even more challenging to create a dataset for a larger range of algorithms with ground truth; 2) it's practically impossible to change one property, \eg surface texture, material, \etc, while fixing others when creating a real-world dataset.
+To achieve this goal, we need a dataset to evaluate the performance of each algorithm under varied conditions, which is not available since most 3D benchmarks, to the best of our knowledge, focus on one specific class of algorithms. For example, the Middlebury dataset targets MVS algorithms~\cite{seitz2006comparison}, and the `DiLiGenT' dataset targets Photometric Stereo algorithms~\cite{shi2016benchmark}. This makes such benchmarks only suitable for evaluation of within-category algorithms. Besides, there are no datasets with objects that cover a range of properties of materials and geometry. The reason for the lack of such a dataset is that it is practically impossible to change one property, \eg surface texture, material, and so on, while fixing others when creating a real-world dataset.
 
-In response to these challenges, we propose a synthetic dataset created by phiyically-based rendering software (Blender), to evaluate the 3D reconstruction algorithms. Our dataset includes a collection of images of a scene under different materials and lighting conditions. The camera/projector's intrinsic and extrinsic parameters are computed directly from the configurations of the synthetic setup, and the ground truth, including the 3D model point cloud and normal map, are generated directly from Blender.
+In response to these challenges, we use synthetic datasets created by phiyical-based rendering software (Blender), to evaluate the 3D reconstruction algorithms. Our dataset includes a collection of images of a scene under different materials and lighting conditions. The camera/projector's intrinsic and extrinsic parameters are computed directly from the configurations of the synthetic setup, and the ground truth, including the 3D model point cloud and normal map, are generated directly from Blender.
 
 \section{Synthetic setup}
-We use Blender's physically-based rendering engine, Cycles, to generate the synthetic dataset. For each technique, the configuration of the camera remains fixed. The image resolution is 1280$\times$720, with a focal length of $35mm$ or $1400pix$.
+We use Blender's physical-based rendering engine, Cycles, to generate the synthetic dataset. For each technique, the configuration of the camera remains fixed. The image resolution is 1280$\times$720, with a focal length of $35mm$ or $1400pix$.
 
 For the Multi-View Stereo setup, there are five rings of cameras, of which the elevation angles are $15^\circ$, $30^\circ$, $45^\circ$, $60^\circ$, $90^\circ$. The between-angles of two neighbouring cameras are $30^\circ$, $30^\circ$, $45^\circ$, $45^\circ$, and $360^\circ$. Thus, there are in total $12+12+8+8+1=41$ cameras.
 
-For the photometric stereo setup, since increasing the number of images is only important up to a point, the experimental results showed that most algorithms reaches their optimum when 15 images are used~\cite{Berkiten:2016:ARB}. To strike a balance between algorithm performance and rendering time, we use 25 light sources, which are distributed on four different rings with elevation angles of $90^\circ$, $85^\circ$, $60^\circ$, and $45^\circ$. The azimuth angle between two neighbouring light sources is $45^\circ$.
+For the Photometric Stereo setup, since increasing the number of images is only important up to a point, the experimental results showed that most algorithms reaches their optimum when 15 images are used~\cite{Berkiten:2016:ARB}. To strike a balance between algorithm performance and rendering time, we use 25 light sources, which are distributed on four rings with elevation angle of $90^\circ$, $85^\circ$, $60^\circ$, and $45^\circ$. The azimuth angle between two neighbouring light sources is $45^\circ$. Thus, the total number of images is $1+8*3=25$.
 
-For the structured light setup, the baseline angle between the camera and the projector is $10^\circ$, and only one camera is used, thus only a portion of the object is visible. The resolution of the projector is $1024\times768$, thus 10 Gray code patterns are needed. To counter the effect of inter-reflection, each pattern and its inverse are projected, which descreases sensitivity to scattered light.
-
-\section{Structure of Datasets}
-Due to the number of properties and levels for each property, it would be unrealistic to render all their combinations. For instance, if there are $N$ properties and each is discretized into $L$ levels, the number of different combinations is $L^N$, and for each combination, there are in total $41+25+42=108$ images to render. Therefore, we take another approach: 1) we investigate the \textit{effective problem domain} which consists of only the \textit{effective} and \textit{dependent} properties; 2) we generate synthetic images for the \textit{effective} and \textit{dependent} properties and all of their combinations. The structure of the dataset is as follows:
+For the Structured Light setup, the baseline angle between the camera and the projector is $10^\circ$. The resolution of the projector is $1024\times768$, thus 10 Gray code patterns are needed. To counter the effect of inter-reflection, each pattern and its inverse are projected, which descreases sensitivity to scattered light. Two additional image with lights on and off are generated to help the decoding process. Thus the total number of images is $(10+10)*2+2=42$.
 \begin{figure}[!htbp]
 \centering
-\includegraphics[width=0.5\textwidth]{mapping/dataset_structure}
+\begin{tabular}{ccc}
+\includegraphics[width=0.3\textwidth]{mapping/setup/mvs_setup} &
+\includegraphics[width=0.3\textwidth]{mapping/setup/ps_setup} &
+\includegraphics[width=0.3\textwidth]{mapping/setup/sl_setup}\\
+MVS & PS & SL\\
+\end{tabular}
+\caption{Setups of the syntheic dataset}
+\label{fig:setup}
+\end{figure}
+
+\section{Structure of Datasets}
+All synthetic datasets used in this thesis share the similar structure, as shown in Figure~\ref{fig:dataset_structure}. \textit{Prop Comb} represents one combination of properties, which consists of no less than two properties. For instance, \textit{texture and albedo}, or \textit{albedo, and specularity}. Note that the diretory structure of PS and SL is the same as that of MVS.
+% Due to the number of properties and levels for each property, it would be unrealistic to render all their combinations. For instance, if there are $N$ properties and each is discretized into $L$ levels, the number of different combinations is $L^N$, and for each combination, there are in total $41+25+42=108$ images to render. Therefore, we take another approach: 1) we investigate the \textit{effective problem domain} which consists of only the \textit{effective} and \textit{dependent} properties; 2) we generate synthetic images for the \textit{effective} and \textit{dependent} properties and all of their combinations. The structure of the dataset is as follows:
+\begin{figure}[!htbp]
+\centering
+\includegraphics[width=0.6\textwidth]{mapping/dataset_structure}
 \caption{Structure of the synthetic dataset.}
 \label{fig:dataset_structure}
 \end{figure}
 
-\section{Evaluation metrics}
-We use the metric proposed in \cite{seitz2006comparison} to evaluate MVS and SL algorithms. More specifically, we compute the accuracy and completeness of the reconstruction. For accuracy, the distance between the points in the reconstruction $R$ and the nearest points on ground truth $G$ is computed, and the distance $d$ such that $X\%$ of the points on $R$ are within distance $d$ of $G$ is considered as accuracy. Thus the lower the accuracy value, the better the reconstruction result. For completeness, we compute the distance from $G$ to $R$. Intuitively, points on $G$ are not ``covered'' if no suitable nearest points on $R$ are found. A more practical approach computes the fraction of points of $G$ that are within an allowable distance $d$ of $R$.
-Note that as the accuracy improves, the ``accuracy value'' goes down, whereas as the completeness improves, the ``completeness value'' goes up.
- % but the ``accuracy'' is often claimed as improved, which is contradictory at first glance. To make it more consistent to the natural context, we say the accuracy goes up when the reconstruction gets better.
-
-For photometric stereo, depth information is lost since only one viewpoint is used. Thus, the previous metrics are not applicable. Here we employ another evaluation criteria that is widely adopted, which is based on the statistics of angular error. For each pixel, the angular error is calculated as the angle between the estimated and ground truth normal, \ie $arccos$($n_g^T n$), where $n_g$ and $n$ are the ground truth and estimated normals respectively. In addition to the mean angular error, we also calculate the standard deviation, minimum, maximum, median, first quartile, and third quartile of angular errors for each estimated normal map.
-
 \section{Selected methods}
-We have selected one representative algorithm from three major classes of algorithms presented in Chapter~\ref{ch:3DRecon_Taxo}: the PMVS proposed in~\cite{furukawa2010accurate}, the example-based photometric stereo proposed in~\cite{hertzmann2005example}, and the Gray code structured light technique. See Table~\ref{tab:selected_algos} for a summary of the selected algorithms. The current implementation of SL projects both column and row patterns, and depth values are computed using these two kinds of patterns individually. A depth consistency checking step is performed to reject erroneous triangulations.
+We have selected one representative algorithm from three major classes of algorithms presented in Chapter~\ref{ch:3DRecon_Taxo}: the PMVS proposed in~\cite{furukawa2010accurate}, the example-based Photometric Stereo proposed in~\cite{hertzmann2005example}, and the Gray-code Structured Light technique. See Table~\ref{tab:selected_algos} for a summary of the selected algorithms. The current implementation of SL projects both column and row patterns, and depth values are computed using these two kinds of patterns individually. A depth consistency step is performed to reject erroneous triangulations.
 \begin{table}[!htbp]
 \centering
 \begin{tabular}{c|c|c|c|c}
@@ -78,39 +83,32 @@ LLS-PS & - & High & Low & High\\
 \caption{Summary of the baseline algorithms for the framework, and the corresponding working conditions in theory.}
 \label{tab:selected_baseline_algos}
 \end{table}
-A baseline algorithm that works sufficiently well under most conditions should be chosen so that it is possible to determine the performance of a selected algorithm within the framework. We choose the Visual Hull technique as one of our baseline algorithms since it works relatively well as long as the silhouette of the object can be reliably extracted, thus being insensitive to material properties. In addition, the true scene is always enclosed by the reconstruction result, so the outcome is always predictable.
+A baseline algorithm that works sufficiently well under most conditions should be chosen so that it is possible to determine the performance of a selected algorithm within the interface. We choose Visual Hull as one of the baseline algorithms since it works relatively well as long as the silhouette of the object can be reliably extracted, thus being insensitive to material properties. In addition, the true scene is always enclosed by the reconstruction result, so the outcome is always predictable. A simple linear least squares based Photometric Stereo (LLS-PS) is selected to evaluate Photometric Stereo algorithms. However, there is currently no such PS algorithms that work reasonably well under various conditions. Thus, we run this baseline algorithm under the optimal condition to ensure a best possible result.
 
-A simple linear least squares based Photometric Stereo (LLS-PS) is selected to evaluate Photometric Stereo algorithms. However, there is currently no such algorithm that works reasonably well under various conditions. Thus, we run this baseline algorithm under the optimal condition to ensure that a best possible result is achieved. To assess the performance of the selected PS algorithm against the baseline, we compare the following characteristics of the angular error:
+\section{Quantitative measures}
+We use the metrics proposed in \cite{seitz2006comparison} to evaluate MVS and SL algorithms. More specifically, we compute the accuracy and completeness of the reconstruction. For accuracy, the distance between the points in the reconstruction $R$ and the nearest points on ground truth $G$ is computed, and the distance $d$ such that $X\%$ of the points on $R$ are within distance $d$ of $G$ is considered as accuracy. Thus the lower the accuracy value, the better the reconstruction result. For completeness, we compute the distance from $G$ to $R$. Intuitively, points on $G$ are not ``covered'' if no suitable nearest points on $R$ are found. A more practical approach computes the fraction of points of $G$ that are within an allowable distance $d$ of $R$.
+Note that as the accuracy improves, the ``accuracy value'' goes down, whereas as the completeness improves, the ``completeness value'' goes up.
+ % but the ``accuracy'' is often claimed as improved, which is contradictory at first glance. To make it more consistent to the natural context, we say the accuracy goes up when the reconstruction gets better.
+
+For photometric stereo, depth information is lost since only one viewpoint is used. Thus, the previous metrics are not applicable. Here we employ another evaluation criteria that is widely adopted, which is based on the statistics of angular error. For each pixel, the angular error is calculated as the angle between the estimated and ground truth normal, \ie $arccos$($n_g^T n$), where $n_g$ and $n$ are the ground truth and estimated normals respectively. In addition to the mean angular error, we also calculate the standard deviation, minimum, maximum, median, first quartile, and third quartile of angular errors for each estimated normal map.
+
+\subsection{Criteria}
+We compare the quantitative measures of a result to those of the baseline method to determine if it is a successful reconstruction. The following rules determines if a specific algorithm returns a successful reconstruction.
+
+For results of MVS and SL, we use both accuracy and completeness to determine if a result is successful. However, methods that return accurate results do not necessarily produce complete results. Thus, we consider a result successful if the accuracy is better while completeness is comparable to that of the baseline.
+
+For results of PS algorithms, we use the central value, variation, and skewness of angular error to determine if a result if successful. The rationale is explained below:
 
 \subsubsection{Measures of Central Tendency}
-Mean and median are both valid measures of central tendency, but as the skewness increases, the mean is dragged in the direction of the skew. As a result, the median is generally considered to be the best representative of the central location of the data. The more skewed the distribution, the greater the difference between the median and mean, and the greater the emphasis should be placed on using the median as opposed to the mean. See Figure~\ref{fig:ang_diff_skew}.
-\begin{figure}[!htbp]
-\centering
-\includegraphics[width=0.4\textwidth]{mapping/skewed}
-\caption{A right-skewed distribution, which is a typical graph of the angular error.}
-\label{fig:ang_diff_skew}
-\end{figure}
+Mean and median are both valid measures of central tendency, but as the skewness increases, the mean is dragged in the direction of the skew. As a result, the median is generally considered to be a better representative of the central location of the data. The more skewed the distribution, the greater the difference between the median and mean, and the greater the emphasis should be placed on using the median as opposed to the mean.
 
 \subsubsection{Variation}
 The variation of the angular error is measured by both \textit{interquatile range} ($Q_3 - Q_1$) and \textit{standard deviation} ($std$).
-% \begin{itemize}
-%   \item Interquatile range %: $Q_{(3 - 1)} < 3$;
-%   \item Standard deviation %: canslightly larger than $Q_3$
-% \end{itemize}
   
 \subsubsection{Skewness (right/positive-skewness)}
-The normal estimation is less sensitive to angular error when the mean and median are close. The shape can be recovered relatively well with a mean/median angular error of $10^\circ$ (see Figure~\ref{fig:ps_criteria} (a)-(f)). The normal estimation becomes more susceptible as the difference between the mean and median increases (see Figure~\ref{fig:ps_criteria} (g)-(l)). This can be explained as follows: when the normals are reliably estimated, the angular error should follow a Gaussian distribution. Therefore, the mean and median are close to each other. However, if normals are poorly recovered, the mean would become larger since large angular errors exist, while the median would change far less since only a small amount of pixels are affected. Thus, the difference between mean and median would be larger when surface normals are poorly recovered.
-
+The normal estimation becomes worse as the difference between mean and median increases (see Figure~\ref{fig:ps_criteria} (g)-(l)). This can be explained as follows: assuming the angular error follows a Gaussian distrubtion, then mean and median are close when the normals are reliably estimated. However, if normals are poorly recovered, the mean would increase since larger angular errors exist, while the median would change far less since only a small amount of pixels are poorly estimated. Thus, the difference between mean and median is a good indicator of the quality of normal estimation.
 \begin{figure}[!htbp]
 \begin{tabular}{ccc}
-\includegraphics[width=0.33\textwidth]{mapping/ps_criteria/mu_med_0_0.png} &
-\includegraphics[width=0.33\textwidth]{mapping/ps_criteria/mu_med_5_5.png} &
-\includegraphics[width=0.33\textwidth]{mapping/ps_criteria/mu_med_10_10.png} \\
-(a) $\mu=0, \text{med}=0$ & (b) $\mu=5, \text{med}=5$ & (c) $\mu=10, \text{med}=10$\\
-\includegraphics[width=0.33\textwidth]{mapping/ps_criteria/knight_0_0.png} &
-\includegraphics[width=0.33\textwidth]{mapping/ps_criteria/knight_5_5.png} &
-\includegraphics[width=0.33\textwidth]{mapping/ps_criteria/knight_10_10.png} \\
-(d) $\mu=0, \text{med}=0$ & (e) $\mu=5, \text{med}=5$ & (f) $\mu=10, \text{med}=10$\\
 \includegraphics[width=0.33\textwidth]{mapping/ps_criteria/mu_med_5_5.png} &
 \includegraphics[width=0.33\textwidth]{mapping/ps_criteria/mu_med_5_6.png} &
 \includegraphics[width=0.33\textwidth]{mapping/ps_criteria/mu_med_5_7.png} \\
@@ -122,9 +120,11 @@ The normal estimation is less sensitive to angular error when the mean and media
 % (j) $\mu=5, \text{med}=5$ & (k) $\mu=5, \text{med}=6$ & (l) $\mu=5, \text{med}=8$\\
 (j) $\mu=5, \text{med}=5$ & (k) $\mu=6, \text{med}=5$ & (l) $\mu=8, \text{med}=5$\\
 \end{tabular}
-\caption{Shape estimation results with varied mean and median values. (a) - (f): the algorithm is less sensitive to large mean or median values when mean and median are close. (g) - (l): as the difference between the mean and median increases, the estimated shape becomes more susceptible to error, as shown by the spikes in the reconstruction.}
+\caption{Shape estimation results with varied mean and median values. (g) - (l): as the difference between mean and median increases, the estimated shape becomes more susceptible to error, as shown by the spikes in the reconstruction.}
 \label{fig:ps_criteria}
 \end{figure}
+
+% The normal estimation is less sensitive to angular error when the mean and median are close. The shape can be recovered relatively well with a mean/median angular error of $10^\circ$ (see Figure~\ref{fig:ps_criteria} (a)-(f)). 
 
 % However, as we will be shown in Chapter~\ref{ch:3DRecon_Interp}, the actual thresholds of the angular error might vary from shape to shape. Therefore, it's impractical to use a categorical numeric value to determine the quality of reconstruction. The metrics mentioned above provide the guidelines when it comes to assess the performance of the algorithm, but the actual thresholds are by no means and should not be fixed.
 
@@ -144,12 +144,13 @@ The normal estimation is less sensitive to angular error when the mean and media
 % \end{table}
 
 \section{Effective Problem Domain (EPD)}
-The greatest challenge in constructing a mapping from problem space to algorithms is the large variations in shapes and material properties, which results in a problem space that is too large to cope with. Suppose there are $N$ properties, each with $L$ discrete levels, then there are in total $L^N$ different problem conditions. Thus, the first step, discussed in Section~\ref{sec:mvs_epd}, is to reduce the dimensions of problem space by establishing the \textit{effective problem domain} (EPD), which consists of only effective properties. Then, Section~\ref{sec:mvs_training} evaluates performance of selected algorithms within EPD.
+The greatest challenge in constructing a mapping from problem space to algorithms is the large variations in shapes and material properties, which results in a problem space that is too large to cope with. Suppose there are $N$ properties, each with $L$ discrete levels, then there are in total $L^N$ different problem conditions. Thus, the first step, discussed in Section~\ref{sec:mvs_epd},~\ref{sec:ps_epd},~\ref{sec:sl_epd}, is to reduce the dimensions of problem space by establishing the \textit{effective problem domain} (EPD), which consists of only effective properties. Then, Section~\ref{sec:mvs_training},~\ref{sec:ps_training},~\ref{sec:sl_training} evaluate performance of selected algorithms within the corresponding EPD.
 
-A naive way of finding the \textit{effective properties} would be evaluating algorithmic performance by changing one property at a time. However, this approach ignores the dependency between properties, \ie the effect of property \textit{A} might be insignificant when property \textit{B} is absent. Thus, we investigate the pairwise relation between any two properties. The process is demonstrated using PMVS as an example. More details on the analysis and results for the other chosen techniques can be found in the supplementary material.
+A naive way of finding the \textit{effective properties} would be evaluating algorithmic performance by changing one property at a time. However, this approach ignores the dependency between properties, \ie the effect of property \textit{A} might be insignificant when property \textit{B} is absent. Thus, we investigate the pairwise relation between any two properties.
 
-\subsection{EPD of PMVS}
-We evaluate the performance of PMVS in terms of accuracy and completeness under varied combinations of properties. The settings of these properties are listed in Table~\ref{tab:mvs_depend_check_params}.
+\subsection{EPD: PMVS}
+\label{sec:mvs_epd}
+We investigate the impact of each property on the performance of PMVS in terms of accuracy and completeness under varied combinations of properties. The settings of these properties are listed in Table~\ref{tab:mvs_depend_check_params}.
 \begin{table}[!htbp]
   \centering
   \begin{tabular}{l*{4}{c}}
@@ -183,14 +184,11 @@ We evaluate the performance of PMVS in terms of accuracy and completeness under 
 \label{fig:mvs_depend_check}
 \end{sidewaysfigure}
 
-\subsubsection{Effective and Dependent Properties}
-In this section, we investigate how each property affects the reconstruction in terms of accuracy and completeness.
-
 \textbf{(a) Texture and Albedo} 
 texture has a positive effect on the reconstruction in terms of accuracy and completeness, while the effect of albedo is negligible.
 
-\textbf{(b) Texture and Speculariry} 
-specularity has a negative effect on both the accuracy and completeness of the reconstruction. However, the level of impact varies as the texture varies. More specifically, the effect of specularity is more substantial on a less textured surface than on one of higher textured. This can be explained as follows: the specular lobe can only be observed by cameras positioned and oriented towards the specular lobe, such as camera $V_2$ shown in Figure~\ref{fig:mvs_spec} (a) and (c). Cameras positioned otherwise would observe the true surface, such as camera $V_1$ shown in Figure~\ref{fig:mvs_spec} (a) and (b). The algorithm would then exploit the texture information provided by views like $V_1$, and thus would be able to reconstruct a specular surface.
+\textbf{(b) Texture and Specularity} 
+specularity has a negative effect on both the accuracy and completeness of the reconstruction. However, the level of impact varies as the texture varies. More specifically, the effect of specularity is more substantial on a less textured surface, as shown in Figure~\ref{fig:mvs_depend_check} (b). This can be explained as follows: the specular lobe can only be observed by cameras positioned and oriented towards the specular lobe, such as camera $V_2$ shown in Figure~\ref{fig:mvs_spec} (a) and (c). Cameras positioned otherwise would observe the true surface, such as camera $V_1$ shown in Figure~\ref{fig:mvs_spec} (a) and (b). The algorithm would then exploit the texture information provided by views like $V_1$, and thus would be able to reconstruct a specular surface.
 \begin{figure}[!htbp]
 \begin{tabular}{ccc}
 \includegraphics[width=0.33\textwidth]{mapping/mvs_spec/mvs_spec}&
@@ -206,7 +204,7 @@ specularity has a negative effect on both the accuracy and completeness of the r
 roughness doesn't have a significant effect on the results.
 
 \textbf{(d) Albedo and Specular} 
-albedo has a positive effect whereas specular has a negative effect on the reconstruction. Furthermore, the effect of specular is far more substantial on a lower albedo surface than that on a higher albedo surface. This can be explained as follows: according to the energy conservation law, as the specular component increases, the diffuse component decreases, resulting in a less discernible diffuse area. See Figure~\ref{fig:mvs_alb_spec} (a)-(c). Increasing the diffuse albedo can counteract the effect of specularity and make the texture visible again. See Figure~\ref{fig:mvs_alb_spec} (d)-(f).
+albedo has a positive effect whereas specular has a negative effect on the reconstruction. Furthermore, the positive effect of albedo is more significant on a higher specular surface while the negative effect of specular is far more substantial on a lower albedo surface. This can be explained as follows: according to the energy conservation law, as the specular component increases, the diffuse component decreases, resulting in a less discernible diffuse area. See Figure~\ref{fig:mvs_alb_spec} (a)-(c). Increasing the diffuse albedo can counteract the effect of specularity and make the texture visible again. See Figure~\ref{fig:mvs_alb_spec} (d)-(f).
 \begin{figure}[!htbp]
 \centering
 \begin{tabular}{ccc}
@@ -224,14 +222,13 @@ albedo has a positive effect whereas specular has a negative effect on the recon
 \end{figure}
 
 \textbf{(e) Albedo and Roughness}
-the albedo and roughness have a negligible effect on the results.
+albedo and roughness have a negligible effect on the results.
 
 \textbf{(f) Specular and Roughness} 
-surface roughness can effectively diminish the specular component and make the surface appear more diffuse. Thus, in theory, roughness should have a positive impact on the reconstruction. However, this is valid for surfaces with medium texture since this is the only case where specularity has a significant impact, as shown in Figure~\ref{fig:mvs_depend_check}(b). Further, since medium specular, high roughness surfaces visually resemble low specular surfaces (and achieve similar reconstruction results as well), it makes sense to incorporate the effect of roughness to specularity, and ignore roughness for simplicity.
-% surface roughness can effectively diminish the specular component and make the surface appear more diffuse. Since specular has a negative impact on the reconstruction, in theory, roughness should have a positive impact on the reconstruction. However, this effect is closely related to surface texture, and surface reconstruction is always poor for low textured surfaces and good for highly textured surfaces regardless of the amount of specular component. This is as shown in Figure~\ref{fig:mvs_depend_check} (b). The result shown in Figure~\ref{fig:mvs_depend_check} (f) happens to be tested in highly textured surface, and achieves consistently good results. Since high specular, high roughness surfaces visually resemble low specular surfaces (and achieve similar reconstruction results as well), we only consider specular, and ignore roughness for simplicity.
+surface roughness can effectively diminish the specular component and make the surface appear more diffuse. Thus, in theory, roughness should have a positive impact on the reconstruction. However, since specularity is only effective on surface with medium level texture, see Figure~\ref{fig:mvs_depend_check} (b), then roughness is only effective in this case as well. Further, since higher specular, high roughness surfaces visually resemble lower specular surfaces, and achieve similar reconstruction results as well, it makes sense to incorporate the effect of roughness to specularity, and omit roughness for simplicity.
 
-\subsubsection{Summary} 
-The effective properties of PMVS are: texture, albedo, and specular, of which texture is the most important. Specularity can deteriorate the reconstruction for lower textured and lower albedo surfaces. The effective problem domain is shown in Table~\ref{tab:mvs_depend_prop}.
+\subsubsection{Effective Properties: PMVS} 
+The effective properties of PMVS are: texture, albedo, and specular, as shown in Table~\ref{tab:mvs_depend_prop}. Interestingly, we discovered that specularity has a more substantially negative impact on less textured, lower albedo surfaces. For instance, high specularity does not have a severely negative impact on highly textured surfaces.
 \begin{table}[!htbp]
   \centering
   \begin{tabular}{l*{4}{c}}
@@ -246,8 +243,9 @@ The effective properties of PMVS are: texture, albedo, and specular, of which te
   \label{tab:mvs_depend_prop}
 \end{table}
 
-\subsection{EPD of EPS}
-We evaluate the performance of example-based PS in terms of angular error under varied combinations of properties. The statistical measures that we used include median, mean, standard deviation, and the first and third quartiles of the angular error. We investigate two properties at a time. The settings of the properties are listed in Table~\ref{tab:ps_depend_check_params}.
+\subsection{EPD: EPS}
+\label{sec:ps_epd}
+We investigate the impact of each property on the performance of example-based PS in terms of angular error under varied combinations of properties. The settings of the properties are listed in Table~\ref{tab:ps_depend_check_params}.
 \begin{table}[!htbp]
   \centering
   \begin{tabular}{l*{4}{c}}
@@ -281,14 +279,11 @@ We evaluate the performance of example-based PS in terms of angular error under 
 \label{fig:ps_depend_check}
 \end{sidewaysfigure}
 
-\subsubsection{Effective and Dependent Properties}
-We investigate how each property affects reconstruction in terms of the statistics of the angular difference.
-
 \textbf{(a) Texture and Albedo} 
-texture has no effect on angular difference while albedo has a positive effect on normal estimation.
+texture has no significant effect while albedo has a positive effect on normal estimation.
 
-\textbf{(b) Texture and Specular} 
-texture has no effect on angular difference while specular has a negative effect on normal estimation since the difference of mean and median gets larger as the specular increases. This can be explained as follows: as the specular increases, only the specular regions exhibit erroneous normal estimation while the rest of the surface is reliably estimated. See Figure~\ref{fig:ps_tex_spec}. This is why the median value exhibits far less change, while the mean value increases significantly as shown in Figure~\ref{fig:ps_depend_check} (b).
+\textbf{(b) Texture and Specularity} 
+texture has no effect while specularity has a negative effect on normal estimation, which is manifested by the increased interquartile range and skewness. The explaination is as follows: normals in the specular regions are poorly estimated while the rest of the surface is reliably estimated, as shown in Figure~\ref{fig:ps_tex_spec}. This explains the increased mean and interquartile values as shown in Figure~\ref{fig:ps_depend_check} (b).
 \begin{figure}[!htbp]
 \centering
 \begin{tabular}{c|ccc}
@@ -310,12 +305,12 @@ Image & Normal map & Height map & Angular error\\
 \includegraphics[width=0.06\textwidth]{mapping/ps_tex_spec/0508_ang_error}\\
  & spec: 0.8 & \\
 \end{tabular}
-\caption{(a)-(c). The texture is set as 0.5. The estimated normal map and recovered surface becomes consistently worse as the specular level rises.}
+\caption{(a)-(c). The texture is set as 0.5. The estimated normal map and recovered surface becomes consistently worse as the specular level rises, which is consistent with the quantitative results from Figure~\ref{fig:ps_depend_check} (b).}
 \label{fig:ps_tex_spec}
 \end{figure}
 
 \textbf{(c) Texture and Roughness} 
-texture has no effect on angular difference while roughness has a positive effect on normal estimation.
+texture has no effect while roughness has a positive effect on normal estimation.
 
 \textbf{(d) Albedo and Specular} 
 the albedo has a positive impact on normal estimation (see Figure~\ref{fig:ps_alb_spec} (a)-(c)), whereas the specularity has a negative impact on normal estimation (see Figure~\ref{fig:ps_alb_spec} (d)-(f)).
@@ -355,7 +350,7 @@ Image & Normal map & Height map & Angular error\\
 \includegraphics[width=0.06\textwidth]{mapping/ps_alb_spec/0208_ang_error}\\
  & (e) albedo: 0.2, spec: 0.8 & \\
 \end{tabular}
-\caption{According to energy conservation, as the specular component increases, the diffuse component decreases. (a)-(c): the estimated normal map and recovered height map become consistently worse as the albedo decreases; (c)-(e): the estimated normal map and recovered height map become consistently worse as the specular increases.}
+\caption{According to energy conservation, as the specular component increases, the diffuse component decreases. (a)-(c): the estimated normal map and recovered height map become consistently worse as the albedo decreases; (c)-(e): the estimated normal map and recovered height map become consistently worse as the specularity increases.}
 \label{fig:ps_alb_spec}
 \end{figure}
 
@@ -363,8 +358,8 @@ Image & Normal map & Height map & Angular error\\
 both albedo and roughness have a positive effect on normal estimation.
 
 \textbf{(f) Specular and Roughness} 
-the specular has a negative impact on normal estimation, while roughness has a more complicated effect. We observed that the reconstruction becomes worse when roughness is 0.5, which is counter-intuitive at first sight. However, we argue that it's because the roughness is not strong enough to counteract the specular component, the result is a smoothed and blurred specular lobe with a larger area, leading to a poorer reconstruction result. This effect is also demonstrated in the training stage. See Figure~\ref{fig:ps_spec_rough} for visual examples.
-\begin{figure}[h!]
+specularity has a negative impact on normal estimation, while the effect of roughness is more complicated. We observed that the reconstruction becomes worse for medium roughness, which is counter-intuitive at first sight. However, we argue that it's because the roughness is not strong enough to counteract the specular component, causing a smoothed and blurred specular region with larger area, thus leading to a poorer normal estimation. See Figure~\ref{fig:ps_spec_rough} for visual examples.
+\begin{figure}[!htbp]
 \centering
 \begin{tabular}{c|ccc}
   Image & Normal map & Height map & Angular error\\
@@ -385,12 +380,12 @@ the specular has a negative impact on normal estimation, while roughness has a m
   \includegraphics[width=0.06\textwidth]{mapping/ps_spec_rough/0808_ang_error}\\
   & (c). rough: 0.8\\
 \end{tabular}
-\caption{The `peculiar' effect of roughness on PS. Albedo is set as 0.8, and specular is set as 0.8. (b) demonstrates that a medium level roughness would lead to worse normal estimation since it blurs the specular lobe.}
+\caption{The effect of roughness on PS. Albedo is set as 0.8, and specular is set as 0.8. (b) demonstrates that a medium level roughness would lead to worse normal estimation since it blurs the specular lobe.}
 \label{fig:ps_spec_rough}
 \end{figure}
 
-\subsubsection{Summary} 
-The properties that have an effect on EPS are: albedo, specular, and roughness, as shown in Table~\ref{tab:ps_depend_prop}. Therefore, we will only consider these three properties for all forthcoming discussion of EPS.
+\subsubsection{Effective Properties: EPS} 
+The properties that have an impact on EPS are: albedo, specularity, and roughness, as shown in Table~\ref{tab:ps_depend_prop}. Interestingly, we have discovered that medium level roughness can have a negative impact on normal estimation by blur the specular lobe, as shown in Figure~\ref{fig:ps_spec_rough}.
 \begin{table}[!htbp]
   \centering
   \begin{tabular}{l*{5}{c}}
@@ -400,12 +395,13 @@ The properties that have an effect on EPS are: albedo, specular, and roughness, 
   Angle difference & \ding{55} & \checkmark & \checkmark & \checkmark\\
   \hline
   \end{tabular}
-  \caption{The \textit{effective problem domain} of EPS in terms of the \textit{angular difference}.}
+  \caption{The \textit{effective problem domain} of EPS in terms of the \textit{angular error}.}
   \label{tab:ps_depend_prop}
 \end{table}
 
-\subsection{EPD of GSL}
-We evaluate the performance of Gray-code SL in terms of accuracy and completeness under a varied combination of properties. The settings of the properties are listed in Table~\ref{tab:sl_depend_check_params}.
+\subsection{EPD: GSL}
+\label{sec:sl_epd}
+We investigate the impact of each property on the performance of Gray-code SL in terms of accuracy and completeness under a varied combination of properties. The settings of properties are listed in Table~\ref{tab:sl_depend_check_params}.
 \begin{table}[!htbp]
   \centering
   \begin{tabular}{l*{4}{c}}
@@ -439,20 +435,17 @@ We evaluate the performance of Gray-code SL in terms of accuracy and completenes
 \label{fig:sl_depend_check}
 \end{sidewaysfigure}
 
-\subsubsection{Effective and Dependent Properties}
-We investigate how each property affects the reconstruction in terms of accuracy and completeness. A depth check step is performed to remove erroneous depth, causing the accuracy to remain nearly constant across all cases.
-
 \textbf{(a) Texture and Albedo} 
 texture has no significant effect, whereas albedo has a positive effect on completeness. Both properties have no significant effect on accuracy.
 
 \textbf{(b) Texture and Specular} 
-texture has no significant effect whereas specular has a negative effect, on completeness. Both properties have no significant effect on accuracy.
+texture has no significant effect whereas specular has a negative effect on completeness. Both properties have no significant effect on accuracy.
 
 \textbf{(c) Texture and Roughness} 
-texture has no significant effect whereas roughness has a slightly positive effect on completeness. Both properties have no significant effect on accuracy.
+neither texture nor roughness has a significant effect on accuracy and completeness.
 
 \textbf{(d) Albedo and Specularity} 
-albedo has a positive effect (see Figure~\ref{fig:sl_alb_spec} (a)-(c)) whereas specularity has a negative effect on completeness (see Figure~\ref{fig:sl_alb_spec} (d)-(f)). The effect of specular becomes less substantial as albedo increases (see Figure~\ref{fig:sl_depend_check} (d)). We conclude that the effect of specularity is most significant when the albedo is low. Neither property has a significant effect on accuracy.
+albedo has a positive effect (see Figure~\ref{fig:sl_alb_spec} (a)-(c)) whereas specularity has a negative effect on completeness (see Figure~\ref{fig:sl_alb_spec} (d)-(f)). Interestingly, similar to EPS, the positive effect of albedo gets more significant with higher specularity while the negative effect of specularity becomes less substantial as albedo increases (see Figure~\ref{fig:sl_depend_check} (d)). Neither property has a significant effect on accuracy.
 \begin{figure}[!htbp]
 \centering
 \begin{tabular}{ccc}
@@ -470,10 +463,10 @@ albedo has a positive effect (see Figure~\ref{fig:sl_alb_spec} (a)-(c)) whereas 
 \end{figure}
 
 \textbf{(e) Albedo and Roughness} 
-albedo has a positive effect, whereas roughness has a slightly positive effect on completeness. Both properties have no significant effect on accuracy.
+albedo has a positive effect, whereas roughness has a negligible effect on completeness. Both properties have no significant effect on accuracy.
 
 \textbf{(f) Specular and Roughness} 
-specular has a negative effect (see Figure~\ref{fig:sl_spec_rough} (a)-(c)) whereas roughness has a positive effect on completeness (see Figure~\ref{fig:sl_spec_rough} (d)-(f)). Neither property has a significant effect on accuracy.
+specular has a negative effect (see Figure~\ref{fig:sl_spec_rough} (a)-(c)). Interestingly, the effect of roughness also resembles that of EPS, \ie medium level roughness has a negative impact on completeness (see Figure~\ref{fig:sl_spec_rough} (d)-(f)). Neither property has a significant effect on accuracy.
 \begin{figure}[!htbp]
 \centering
 \begin{tabular}{ccc}
@@ -490,8 +483,8 @@ specular has a negative effect (see Figure~\ref{fig:sl_spec_rough} (a)-(c)) wher
 \label{fig:sl_spec_rough}
 \end{figure}
 
-\subsubsection{Summary}
-The properties that have an effect on the GSL are: texture, albedo, specular, as shown in Table~\ref{tab:sl_depend_prop}. Therefore, we will only consider these three properties for all forthcoming discussion of GSL.
+\subsubsection{Effective Properties: GSL}
+The properties that have an effect on the GSL are: texture, albedo, specular, as shown in Table~\ref{tab:sl_depend_prop}. The albedo has a more significant impact with lower specularity, while specularity has a more substantial impact with low albedo. Roughness can cause a blurred specular region, thus leading to decreased completeness.
 \begin{table}[!htbp]
   \centering
   \begin{tabular}{l*{4}{c}}
@@ -507,10 +500,11 @@ The properties that have an effect on the GSL are: texture, albedo, specular, as
 \end{table}
 
 \section{Mapping Construction}
-Once we have discovered the EPD, the algorithm is evaluated solely within the EPD. We present the results as follows: the $27(3^3)$ results are divided into three plots. Each plot illustrates the results of one fixed property $P_1$, and two changing properties $P_2$ and $P_3$. To have a better understanding of the pairwise relation between any two properties, each effective property would be chosen as $P_1$ once. Therefore, we end up with three groups of graphs, each consisting of three plots, as shown in Figure~\ref{fig:mvs_training},~\ref{fig:ps_training}, and~\ref{fig:sl_training}.
+Once we have discovered the EPD, the algorithm is evaluated solely within the EPD. Since there are three \textit{effective properties}, each with 3 discreate levels, thus there are 27 problem conditions. We present the quantitative results of the conditions as follows: results are divided into three plots. In each plot there are one fixed property $P_1$, and two changing properties $P_2$ and $P_3$. To have a better understanding of the pairwise relation between any two properties, each \textit{effective property} would be chosen as $P_1$ once. Therefore, we end up with three groups of graphs, each consisting of three plots, as shown in Figure~\ref{fig:mvs_training},~\ref{fig:ps_training}, and~\ref{fig:sl_training}.
 
-\subsection{Mapping of PMVS}
-The performances of PMVS under different combinations of property values are shown in Figure~\ref{fig:mvs_training}, along with the performance of the baseline method. The conditions under which PMVS works well are listed in Table~\ref{tab:mvs_training_result}. We make the following observations from the training results:
+\subsection{Mapping: PMVS}
+\label{sec:mvs_training}
+The performances of PMVS under different problem conditions are shown in Figure~\ref{fig:mvs_training}, along with the performance of the baseline method. We make the following observations from the results: accuracy and completeness improves consistently as the \textit{texture} level increases. Accuracy and completeness results deteriorate consistently as \textit{specularity} increases, and this negative impact is most significant when texture level is medium or albedo value is low. The effect of \textit{albedo} on a surface with low texture is negligible. However, albedo has a noticeably more significant positive impact on completeness as the texture of a specular surface increases.
 \begin{figure}[!htbp]
 \begin{tabular}{ccc}
 \includegraphics[width=0.33\textwidth]{mapping/training/mvs_train_spec_02}&
@@ -530,23 +524,22 @@ The performances of PMVS under different combinations of property values are sho
 \label{fig:mvs_training}
 \end{figure}
 
-We make the following observations from the results: accuracy and completeness improves consistently as the \textit{texture} level increases. Accuracy and completeness results deteriorate consistently as \textit{specularity} increases, and this negative impact is most significant when texture level is medium or albedo value is low. The effect of \textit{albedo} on a surface with low texture is negligible. However, albedo has a noticeably more significant positive impact on completeness as the texture of a specular surface increases.
-
 % \noindent\textbf{(a)-(c) Texture}: as the texture level increases, the completeness increases consistently. Accuracy also improves for medium/high albedo and low-medium specular surfaces.
 
 % \noindent\textbf{(d)-(f) Albedo}: for medium/high textured surfaces, albedo can effectively counteract the effect of specular, \ie improve both the accuracy and completeness of the reconstruction. See the red and green lines in Figure~\ref{fig:mvs_training} (d)-(f). As for low textured surfaces, the effect of albedo is less significant (see the blue line in Figure~\ref{fig:mvs_training} (d)-(f)).
 
 % \noindent\textbf{(g)-(i) Specularity}: the effect of specularity is closely related to albedo: surface with higher albedo are able to endure a higher specular component. See the performance difference between the red (alb = 0.5) and green (alb = 0.8) liness in Figure~\ref{fig:mvs_training} (g) - (i). For low/medium textured surfaces, specularity has a consistently negative impact whereas the effect is almost neutralized for highly textured surfaces. This aligns with the previous observation illustrated in Figure~\ref{fig:mvs_spec}.
 
-We can derive from the training results the problem conditions under which PMVS can perform reliably. These conditions are listed in Table~\ref{tab:mvs_training_result}.
+We derive from the results, as shown in Figure~\ref{fig:mvs_training}, the problem conditions under which PMVS performs reliably, as shown in Table~\ref{tab:mvs_training_result}. The reliability is determined by comparing to the results of the baseline method.
 \begin{table}[!htbp]
   \centering
   \begin{tabular}{l*{4}{c}}
-  \hline
+  \toprule
   \textbf{Metric} & Texture & Albedo & Specular & Roughness\\
-  \hline
+  \midrule
   Accuracy & 0.5 & 0.5 & 0.2 & -\\
-           & 0.5 & 0.8 & 0.2 & -\\
+  \&Completeness & 0.5 & 0.8 & 0.2 & -\\
+           & 0.5 & 0.8 & 0.5 & -\\
            & 0.8 & 0.2 & 0.2 & -\\
            & 0.8 & 0.5 & 0.2 & -\\
            & 0.8 & 0.8 & 0.2 & -\\
@@ -554,25 +547,15 @@ We can derive from the training results the problem conditions under which PMVS 
            & 0.8 & 0.8 & 0.5 & -\\
            & 0.8 & 0.5 & 0.8 & -\\
            & 0.8 & 0.8 & 0.8 & -\\
-  \hline
-  Completeness & 0.5 & 0.5 & 0.2 & -\\
-               & 0.5 & 0.8 & 0.2 & -\\
-               & 0.5 & 0.8 & 0.5 & -\\
-               & 0.8 & 0.2 & 0.2 & -\\
-               & 0.8 & 0.5 & 0.2 & -\\
-               & 0.8 & 0.8 & 0.2 & -\\
-               & 0.8 & 0.5 & 0.5 & -\\
-               & 0.8 & 0.8 & 0.5 & -\\
-               & 0.8 & 0.5 & 0.8 & -\\
-               & 0.8 & 0.8 & 0.8 & -\\
-  \hline
+  \bottomrule
   \end{tabular}
-  \caption{The condition matrix of PMVS in terms of the two metrics \textit{accuracy} and \textit{completeness}.}
+  \caption{The working problem conditions of PMVS in terms of the two metrics \textit{accuracy} and \textit{completeness}.}
   \label{tab:mvs_training_result}
 \end{table}
 
-\subsection{Mapping of EPS}
-The performances of example-based PS under different combinations of properties are shown in Figure~\ref{fig:ps_training}, along with the result of te baseline method. The conditions under which example-based PS works well are listed in Table~\ref{tab:ps_training_result}. We make the following observations from the training results:
+\subsection{Mapping: EPS}
+\label{sec:ps_training}
+The performances of example-based PS under different problem conditions are shown in Figure~\ref{fig:ps_training}, along with the result of te baseline method. We make the following observations from the results: \textit{albedo} has a consistently positive effect on normal estimation; \textit{specularity} has a consistently negative impact on normal estimation; and medium level \textit{roughness} will lead to a worse normal estimation.
 \begin{figure}[!htbp]
 \begin{tabular}{cccc}
 \includegraphics[width=0.3\textwidth]{mapping/training/ps_rough_02}&
@@ -595,13 +578,13 @@ The performances of example-based PS under different combinations of properties 
 \label{fig:ps_training}
 \end{figure}
 
-\noindent\textbf{(a)-(c) Albedo}: albedo has a consistently positive effect on the reconstruction.
+% \noindent\textbf{(a)-(c) Albedo}: albedo has a consistently positive effect on the reconstruction.
 
-\noindent\textbf{(d)-(f) Specular}: specular has a consistently negative impact on the normal estimation, which is manifested by the increasing variation represented by interquartile range and standard deviation.
+% \noindent\textbf{(d)-(f) Specular}: specular has a consistently negative impact on the normal estimation, which is manifested by the increasing variation represented by interquartile range and standard deviation.
 
-\noindent\textbf{(g)-(i) Roughness}: roughness has a more complicated effect on reconstruction as illustrated in Figure~\ref{fig:ps_spec_rough}. For example, medium roughness blurs the specular area, and leads to poor normal estimation and shape recovery.
+% \noindent\textbf{(g)-(i) Roughness}: roughness has a more complicated effect on reconstruction as illustrated in Figure~\ref{fig:ps_spec_rough}. For example, medium roughness blurs the specular area, and leads to poor normal estimation and shape recovery.
 
-We could derive from the training results the problem conditions under which EPS could perform reliably. These conditions are in Table~\ref{tab:ps_training_result}.
+We derive from the results, as shown in Figure~\ref{fig:ps_training}, the problem conditions under which EPS performs reliably, as shown in Table~\ref{tab:ps_training_result}. The reliability is determined by comparing to the results of the baseline method.
 \begin{table}[!htbp]
   \centering
   \begin{tabular}{l*{4}{c}}
@@ -622,12 +605,13 @@ We could derive from the training results the problem conditions under which EPS
                    & - & 0.8 & 0.8 & 0.8\\
   \hline
   \end{tabular}
-  \caption{The condition matrix of example-based PS in terms of the metric \textit{angular error}.}
+  \caption{The working conditions of example-based PS in terms of the metric \textit{angular error}.}
   \label{tab:ps_training_result}
 \end{table}
 
-\subsection{Mapping of GSL}
-The performances of Gray-code SL under different combinations of property values are shown in Figure~\ref{fig:sl_training}, along with the results of the baseline method. Only a portion of the scene is visible since there is only one camera, and the percentage of visible surface varies from object to object. This value can be approximated by the completeness value obtained under the optimal reconstruction condition. In this case, we claim that a completeness of $60\%$ of that of the baseline is acceptable. The conditions under which GSL works well are listed in Table~\ref{tab:sl_training_result}. We make the following observations:
+\subsection{Mapping: GSL}
+\label{sec:sl_training}
+The performances of Gray-code SL under different problem conditions are shown in Figure~\ref{fig:sl_training}, along with the results of the baseline method. Note that only a portion of the object is visible because of one viewpoint. The percentage of the visible surface ($\alpha$) varies from object to object, and is approximated by the completeness value obtained under the optimal reconstruction condition. The performance of GSL is determined by comparing the completeness to $alpha$ that of the baseline. We make the following observations: \textit{albedo} has a consistently positive effect on completeness; medium level \textit{roughness} has a negative effect due to a blurred specular region. In most case, \textit{specularity} does have a negative effect on completeness, as shown in Figure~\ref{fig:sl_alb_spec} (d)-(f). However, we did notice in some cases that the completeness of the reconstruction improves as specular level increases. There are two contributing factors to completeness: 1) specularity decreases the completeness since the pattern can no longer be decoded in the glossy area, thus causing incomplete reconstruction; 2) large roughness can spread the specular lobe into a larger area, leading to a brighter surface, thus increasing the completeness of the reconstruction. These two contradicting factors together determine the completeness of the reconstruction. If the first factor is more substantial, the completeness will decrease whereas if the second factor is more significant, the completeness will increase.
 \begin{figure}[!htbp]
 \begin{tabular}{ccc}
 \includegraphics[width=0.33\textwidth]{mapping/training/sl_train_rough_02}&
@@ -647,17 +631,17 @@ The performances of Gray-code SL under different combinations of property values
 \label{fig:sl_training}
 \end{figure}
 
-\noindent\textbf{(a)-(i)} accuracy remains almost fixed, and is thus irrelevant to all properties.
+% \noindent\textbf{(a)-(i)} accuracy remains almost fixed, and is thus irrelevant to all properties.
 
-\noindent\textbf{(a)-(c) Albedo} has a consistently positive effect on the completeness of the reconstruction.
+% \noindent\textbf{(a)-(c) Albedo} has a consistently positive effect on the completeness of the reconstruction.
 
-\noindent\textbf{(d)-(f) Specular} has a negative effect on completeness, as shown in Figure~\ref{fig:sl_alb_spec} (d)-(f). However, we did notice in some cases that the completeness of the reconstruction improves as specular level increases. There are two contributing factors to completeness: 1) specularity decreases the completeness since the pattern can no longer be decoded in the glossy area, thus causing incomplete reconstruction; 2) large roughness can spread the specular lobe into a larger area, leading to a brighter surface, thus increasing the completeness of the reconstruction. These two contradicting factors together determine the completeness of the reconstruction. If the first factor is more substantial, the completeness will decrease whereas if the second factor is more significant, the completeness will increase.
+% \noindent\textbf{(d)-(f) Specular} has a negative effect on completeness, as shown in Figure~\ref{fig:sl_alb_spec} (d)-(f). However, we did notice in some cases that the completeness of the reconstruction improves as specular level increases. There are two contributing factors to completeness: 1) specularity decreases the completeness since the pattern can no longer be decoded in the glossy area, thus causing incomplete reconstruction; 2) large roughness can spread the specular lobe into a larger area, leading to a brighter surface, thus increasing the completeness of the reconstruction. These two contradicting factors together determine the completeness of the reconstruction. If the first factor is more substantial, the completeness will decrease whereas if the second factor is more significant, the completeness will increase.
 
-\noindent\textbf{(g)-(i) Roughness} has a similar effect to what we found when considering EPS, \ie medium roughness would blur the specular lobe to a larger area, thus causing larger holes in the reconstruction. See Figure~\ref{fig:ps_spec_rough} (d)-(f). Large roughness can effectively counteract the impact of specular, thus improving the completeness of the reconstruction.
+% \noindent\textbf{(g)-(i) Roughness} has a similar effect to what we found when considering EPS, \ie medium roughness would blur the specular lobe to a larger area, thus causing larger holes in the reconstruction. See Figure~\ref{fig:ps_spec_rough} (d)-(f). Large roughness can effectively counteract the impact of specular, thus improving the completeness of the reconstruction.
 
 % However, we realize that the metric completeness doesn't always faithfully reflect the true quality of the reconstruction. Let's consider the following two cases: 1). with low albedo, high specular, 2). low albedo, median specular. We can see from the quantitative results that case 1 has higher completeness. However, case 2 has better reconstruction. The reason is that high specular would increase the lightness of the surface, and high lightness would lead to more reliably reconstructed points. Therefore, even though high specular leads to hole, these two factors eventually cancels out. Therefore, when deriving the mapping and comparing the results of SL. We should consider both the qualitative and quantitative results.
 
-We can derive from the training results the problem conditions under which GSL could perform reliably by considering both the quantitative and qualitative results. These conditions are listed in Table~\ref{tab:sl_training_result}.
+We derive from the results, as shown in Figure~\ref{fig:sl_training}, the problem conditions under which GSL could perform reliably by considering both the quantitative and qualitative results, as shown in Table~\ref{tab:sl_training_result}. The reliability is determined by comparing to the results of the baseline method.
 \begin{table}[!htbp]
   \centering
   \begin{tabular}{l*{4}{c}}
@@ -679,80 +663,4 @@ We can derive from the training results the problem conditions under which GSL c
 \end{table}
 
 \section{Summary}
-The development of mapping is an on-going process. For instance, we can include more quantitative metrics such as colour accuracy, `ghost reconstruction', and so on. In order to make the mapping applicable to objects with more complex shapes, we need to consider more sophisticated geometric properties besides roughness, such as concavity, depth-discontinuity, occlusion, etc. Furthermore, the incorporation of more algorithms is another way to ensure that the problem space is well covered.
-
-
-% \begin{table}[!htbp]
-%   \centering
-%   \begin{tabular}{*{7}{c}}
-%   \hline
-%   \multirow{2}{*}{Texture} & \multirow{2}{*}{Albedo} & \multirow{2}{*}{Specular} & \multirow{2}{*}{Roughness} & \multicolumn{3}{c}{Metrics}\\
-%   & & & & Accuracy & Completeness & Ang Diff\\
-%   0.8 & 0.2 & 0.2 & 0.2 & PMVS & PMVS & -\\
-%   0.8 & 0.2 & 0.2 & 0.5 & PMVS & PMVS & -\\
-%   0.8 & 0.2 & 0.2 & 0.8 & PMVS & PMVS & EPS\\
-%   0.8 & 0.2 & 0.5 & 0.2 & PMVS & PMVS & -\\
-%   0.8 & 0.2 & 0.5 & 0.5 & PMVS & PMVS & -\\
-%   0.8 & 0.2 & 0.5 & 0.8 & PMVS, GSL & PMVS, GSL & EPS\\
-%   0.8 & 0.2 & 0.8 & 0.2 & PMVS & PMVS & -\\
-%   0.8 & 0.2 & 0.8 & 0.5 & PMVS & PMVS & -\\
-%   0.8 & 0.2 & 0.8 & 0.8 & PMVS, GSL & PMVS, GSL & EPS\\
-%   0.8 & 0.5 & 0.5 & 0.2 & PMVS & PMVS & -\\
-%   0.8 & 0.5 & 0.5 & 0.5 & PMVS & PMVS & -\\
-%   0.8 & 0.5 & 0.5 & 0.8 & PMVS, GSL & PMVS, GSL & EPS\\
-%   0.8 & 0.5 & 0.8 & 0.2 & PMVS & PMVS & -\\
-%   0.8 & 0.5 & 0.8 & 0.5 & PMVS & PMVS & -\\
-%   0.8 & 0.5 & 0.8 & 0.8 & PMVS, GSL & PMVS, GSL & EPS\\
-%   0.8 & 0.8 & 0.5 & 0.2 & PMVS & PMVS & EPS\\
-%   0.8 & 0.8 & 0.5 & 0.5 & PMVS, GSL & PMVS, GSL & -\\
-%   0.8 & 0.8 & 0.5 & 0.8 & PMVS, GSL & PMVS, GSL & EPS\\
-%   0.8 & 0.8 & 0.8 & 0.2 & PMVS & PMVS & EPS\\
-%   0.8 & 0.8 & 0.8 & 0.5 & PMVS, GSL & PMVS, GSL & -\\
-%   0.8 & 0.8 & 0.8 & 0.8 & PMVS, GSL & PMVS, GSL & EPS\\
-%   \hline
-%   \hline
-%   \end{tabular}
-%   \caption{The condition matrix of Gray code SL in terms of the two metrics \textit{accuracy} and \textit{completeness}.}
-%   \label{tab:sl_traing_result}
-% \end{table}
-
-% \section{Mapping of 3D Reconstruction}
-% From the training results, we can derive a mapping between problem conditions and optimal algorithms, as shown in Table~\ref{tab:mapping}.
-% \begin{table}[!htbp]
-%   \centering
-%   \begin{tabular}{*{7}{c}}
-%   \hline
-%   Texture & Albedo & Specular & Roughness & Accuracy & Completeness & Ang Diff\\
-%   \hline
-%   0.2 & 0.2 & 0.2 & \\
-%   0.2 & 0.2 & 0.5 & \\
-%   0.2 & 0.2 & 0.8 & \\
-%   0.2 & 0.5 & 0.2 & \\
-%   0.2 & 0.5 & 0.5 & \\
-%   0.2 & 0.5 & 0.8 & \\
-%   0.2 & 0.8 & 0.2 & \\
-%   0.2 & 0.8 & 0.5 & \\
-%   0.2 & 0.8 & 0.8 & \\
-%   0.5 & 0.2 & 0.2 & \\
-%   0.5 & 0.2 & 0.5 & \\
-%   0.5 & 0.2 & 0.8 & \\
-%   0.5 & 0.5 & 0.2 & \\
-%   0.5 & 0.5 & 0.5 & \\
-%   0.5 & 0.5 & 0.8 & \\
-%   0.5 & 0.8 & 0.2 & \\
-%   0.5 & 0.8 & 0.5 & \\
-%   0.5 & 0.8 & 0.8 & \\
-%   0.8 & 0.2 & 0.2 & \\
-%   0.8 & 0.2 & 0.5 & \\
-%   0.8 & 0.2 & 0.8 & \\
-%   0.8 & 0.5 & 0.2 & \\
-%   0.8 & 0.5 & 0.5 & \\
-%   0.8 & 0.5 & 0.8 & \\
-%   0.8 & 0.8 & 0.2 & \\
-%   0.8 & 0.8 & 0.5 & \\
-%   0.8 & 0.8 & 0.8 & \\
-%   \hline
-%   \end{tabular}
-%   \caption{The mapping from property conditions to algorithms.}
-%   \label{tab:mapping}
-% \end{table}
+It is a non-trivial task to find a mapping from problem conditions to algorithms based on the description. By no means is the aforementioned approach the only way, or a perfect way, since it potentially has the problem of suffering from property scaling issue. Nonetheless, the pairwise analysis remains a valuable approach to obtain insights of the \textit{effective properties} of a specific algorithm. The development of the mapping is an on-going process. For instance, we can include more quantitative metrics such as colour accuracy, `ghost reconstruction', and so on. In order to make the mapping applicable to objects with more complex shapes, we need to consider more sophisticated geometric properties besides roughness, such as concavity, depth-discontinuity, occlusion, etc. Furthermore, the incorporation of more algorithms is another way to ensure that the problem space is well covered.
