@@ -2,12 +2,21 @@
 %%!TEX root = diss.tex
 
 \chapter{Conclusions}
-\label{sec:conclusion}
+\label{ch:conclusion}
+The main contribution of this thesis is the development and application of an accessible interface to 3D reconstruction problem. The significance of this thesis is that not only does it provide a means to reconstruct more general objects, but also does so without requiring knowledge of vision expertise. With the increased sophistication of the vision algorithms, comes the increased barriers to applying these algorithms in real-world applications. Just as personal computer did not become mainstream until the graphical user interface, computer vision algorithm will not become game changing until creative minds from all discplines can take advantage of these amazing technologies without needing expertise knowledge. To address this challenge, we proposed a three layer interface consisting of algorithms, interpreter, and description.
 
-% \section{Summary}
+In the thesis we have presented a taxonomy for 3D reconstruction algorithms based on the conditions surrounding the problem. This object centric taxonomy allows application developers access to advanced vision techniques without requiring sophisticated vision knowledge of the underlying algorithms.
 
+We then discuss a description to 3D reconstruction building upon the proposed taxonomy, which provides an abstraction layer above the underlying vision algorithms. The proposed description provides a formal and definitive way to represent the problem conditions of a 3D reconstruction problem, and based on which, the performance of the algorithm can be evaluated, allowing for a better understanding of the working conditions surround the specific algorithm. 
+
+Once we obtained the means to represent problem conditions, we set out to investigate the optimal working conditions surrounding algorithms. This information provides a deeper understanding of performance of algorithms and potentially providing insights into how they may be improved. 
+
+Lastly, we demonstrate the usage of the interface by a proof-of-concept interpreter, which returns a successful reconstruction result given a valid description of object's visual and geometric properties.
+
+Extending beyong 3D reconstruction, our proposed general framework of vision is designed to allow all vision tasks more accessible to application developers by providing a description of vision which allows for the description of the problem conditions. In order to provide such accessibility, a representation of the problem space and a means to find the optimal problem space must be well defined. This is a non-trivial task and requires an understanding of the field and an ability to abstract away algorithmic complexity.
 
 \section{Future directions}
+3D reconstruction has been one of the most important sub-fields in vision for decades with a range of applications. This thesis focuses on the accessibility of these algorithms instead of developing algorithm novelties. We make several assumptions and simplifications in this thesis, and thus this opens up some potential future directions that can improve the work completed in this thesis.
 
 \subsection{Geometric Model}
 The current geometric model fails to capture the complexity of real world objects and focuses mainly on visual properties. Thus, one of the future directions is to develop intuitive geometric models to better describe complex objects.
@@ -24,4 +33,5 @@ The construction of mapping requires an evaluation of the corresponding algorith
 \subsection{Interpreter}
 Currently, implementation of the proof-of-concept interpreter is simplistic and does not fully take advantage of the information we have obtained from the mapping construction process. Therefore, we should develop a more sophisticated interpreter that is more powerful and offers more flexibility.
 
-% \section{Concluding remarks}
+\section{Closure}
+Nowadays, computer vision has been playing a increasing important role in a variety of fields. However, it also takes application developers increasing expertise to apply these technologies to a specific domain. We hope that the efforts in the vision community can be directed to not only develop more advanced algorithms, but to easier access to these algorithms as well.
