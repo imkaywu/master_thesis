@@ -112,11 +112,6 @@ University of British Columbia \\ % Your institution for the title page
 \titlepage % Print the title page as the first slide
 \end{frame}
 
-\begin{frame}
-\frametitle{Overview} % Table of contents slide, comment this block out to remove it
-\tableofcontents % Throughout your presentation, if you choose to use \section{} and \subsection{} commands, these will automatically be printed on this slide as an overview of your presentation
-\end{frame}
-
 %----------------------------------------------------------------------------------------
 %	PRESENTATION SLIDES
 %----------------------------------------------------------------------------------------
@@ -147,8 +142,13 @@ This contribution is significant because:
 \end{itemize}
 \end{frame}
 
+\begin{frame}
+\frametitle{Table of Contents} % Table of contents slide, comment this block out to remove it
+\tableofcontents % Throughout your presentation, if you choose to use \section{} and \subsection{} commands, these will automatically be printed on this slide as an overview of your presentation
+\end{frame}
+
 %------------------------------------------------
-\section{Overview} % Sections can be created in order to organize your presentation into discrete blocks, all sections and subsections are automatically printed in the table of contents as an overview of the talk
+% \section{Overview} % Sections can be created in order to organize your presentation into discrete blocks, all sections and subsections are automatically printed in the table of contents as an overview of the talk
 %------------------------------------------------
 
 % \begin{frame}
@@ -160,16 +160,16 @@ This contribution is significant because:
 
 %------------------------------------------------
 
-\begin{frame}
-\frametitle{Overview}
+% \begin{frame}
+% \frametitle{Overview}
 
-\begin{itemize}
-\item \textbf{Taxonomy}: change the way of viewing algorithms, not from an algorithmic viewpoint, but from a problem-oriented (object-centered) viewpoint.
-\item \textbf{Description}: how to describe a sub-space in the $n-$dimensional problem space so that the conditions that an algorithm works reliably can be well defined;
-\item \textbf{Mapping}: discover the mapping between algorithms and the sub-spaces in the $n-$dimensional problem space.
-\item \textbf{Interpretation}: test the interpretability of the interface using synthetic and real-world datasets.
-\end{itemize}
-\end{frame}
+% \begin{itemize}
+% \item \textbf{Taxonomy}: change the way of viewing algorithms, not from an algorithmic viewpoint, but from a problem-oriented (object-centered) viewpoint.
+% \item \textbf{Description}: how to describe a sub-space in the $n-$dimensional problem space so that the conditions that an algorithm works reliably can be well defined;
+% \item \textbf{Mapping}: discover the mapping between algorithms and the sub-spaces in the $n-$dimensional problem space.
+% \item \textbf{Interpretation}: test the interpretability of the interface using synthetic and real-world datasets.
+% \end{itemize}
+% \end{frame}
 
 %------------------------------------------------
 \section{Related Work} % Sections can be created in order to organize your presentation into discrete blocks, all sections and subsections are automatically printed in the table of contents as an overview of the talk
@@ -200,7 +200,7 @@ Previous algorithm taxonomy based on visual/geometric cues.
 \end{frame}
 
 %------------------------------------------------
-\section{A Taxonomy to 3D Reconstruction} % Sections can be created in order to organize your presentation into discrete blocks, all sections and subsections are automatically printed in the table of contents as an overview of the talk
+\section{A Taxonomy of 3D Reconstruction} % Sections can be created in order to organize your presentation into discrete blocks, all sections and subsections are automatically printed in the table of contents as an overview of the talk
 %------------------------------------------------
 
 % \begin{frame}
@@ -229,16 +229,16 @@ Previous algorithm taxonomy based on visual/geometric cues.
 \frametitle{Taxonomy (cont'd)}
 Analyze the working conditions of various classes of algorithms based on literature reports:
 \begin{table}
-\begin{tabular}{l|ccccc}
+\begin{tabular}{l|cccc}
 \toprule
-Algo. & Texture & Brightness & Reflectance & Roughness & Concavity\\
+Algo. & Texture & Brightness & Reflectance & Roughness\\
 \midrule
-MVS & Textured & - & Mixed & - & -\\
-SfS & - & Bright & Lambertian & - & Convex\\
-L-PS &  - & Bright & Lambertian & - & Convex\\
-NL-PS & - & Bright & Mixed & - & Convex\\
-SL & - & Bright & Diffuse & - & Convex\\
-VH & - & - & - & - & -\\
+MVS & Textured & - & Lambertian & -\\
+SfS & Textureless & Bright & Lambertian & -\\
+L-PS & - & Bright & Lambertian & -\\
+NL-PS & - & Bright & Mixed & -\\
+SL & - & Bright & Diffuse & -\\
+VH & - & - & - & -\\
 \bottomrule
 \end{tabular}
 \caption{Problem conditions of six categories of algorithms based on literature reports. ``L'' stands for Lambertian, and ``NL'' for Non-Lambertian.}
@@ -284,7 +284,7 @@ The \textit{object-centered} taxonomy of the six categories of algorithms.
 % \end{frame}
 
 %------------------------------------------------
-\section{A Description to 3D Reconstruction} % Sections can be created in order to organize your presentation into discrete blocks, all sections and subsections are automatically printed in the table of contents as an overview of the talk
+\section{A Description of 3D Reconstruction} % Sections can be created in order to organize your presentation into discrete blocks, all sections and subsections are automatically printed in the table of contents as an overview of the talk
 %------------------------------------------------
 
 % \begin{frame}
@@ -332,7 +332,7 @@ The \textit{object-centered} taxonomy of the six categories of algorithms.
   Lightness & \textit{Albedo} & \raisebox{-.3\height}{\includegraphics[width=0.4\textwidth]{images/alb.png}}\\
   Specularity & \textit{Specular/diffuse ratio} & \raisebox{-.3\height}{\includegraphics[width=0.4\textwidth]{images/spec.png}}\\
   Roughness & \textit{SD of facet slopes} & \raisebox{-.3\height}{\includegraphics[width=0.4\textwidth]{images/rough.png}}\\
-  Concavity & \textit{Surface curvature}\\
+  % Concavity & \textit{Surface curvature}\\
   \bottomrule
   \end{tabular}
   \caption{A Model and corresponding representations of the 3D reconstruction problem.}
@@ -365,7 +365,7 @@ We use three discrete scales to parameterize these properties: \textit{low} (0.2
 \end{frame}
 
 %------------------------------------------------
-\section{A Mapping to 3D Reconstruction} % Sections can be created in order to organize your presentation into discrete blocks, all sections and subsections are automatically printed in the table of contents as an overview of the talk
+\section{A Mapping of 3D Reconstruction} % Sections can be created in order to organize your presentation into discrete blocks, all sections and subsections are automatically printed in the table of contents as an overview of the talk
 %------------------------------------------------
 
 % \begin{frame}
