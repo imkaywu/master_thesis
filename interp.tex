@@ -381,14 +381,16 @@ We use the aforementioned methods to retrieve the parameters of each property. T
 \begin{table}[!htbp]
   \centering
   \begin{tabular}{lllllll}
-  \hline
+  \toprule
   C\# & Object & Texture & Albedo & Specular & Rough & Mapping\\
-  \hline
+  \midrule
   1 & statue & 0.2 & 0.8 & 0.2 & 0.8 & EPS, GSL\\
   2 & cup & 0.2 & 0.8 & 0.5 & 0.2 & EPS, GSL\\
   3 & pot & 0.8 & 0.8 (0.2) & 0.2 & 0.2 & PMVS, GSL\\
-  4 & vase & 0.8 & 0.8 (0.2) & 0.5 & 0.2 & PMVS\\
-  \hline
+  4 & cat0 & 0.8 & 0.5 & 0.2 & 0.2 & PMVS\\
+  5 & vase & 0.8 & 0.8 (0.2) & 0.5 & 0.2 & PMVS\\
+  6 & cat1 & 0.2 & 0.2 & 0.5 & 0.2 & None\\
+  \bottomrule
   \end{tabular}
   \caption{Problem conditions and mapping for the real-world objects}
   \label{tab:real_data_prop_list}
@@ -447,34 +449,43 @@ Description 1 matches partially with object \textit{pot} since it has both high 
 
 \begin{figure*}[!htbp]
 \centering
-\begin{tabular}{lccccr}
+\begin{tabular}{lcccr}
 \toprule
-Desc \# & Statue & Cup & Pot & Vase & Selected Algo.\\
+Desc \# & Statue & Cup & Pot & Selected Algo.\\
 \midrule
 1 &
-\fcolorbox{green}{white}{\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/real_interp/statue/statue_sl}}}&
-\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/real_interp/cup/cup_sl}}&
-\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/real_interp/pot/pot_sl}}&
-\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/real_interp/vase/vase_sl}}&
+\fcolorbox{green}{white}{\raisebox{-.5\height}{\includegraphics[width=0.2\textwidth]{interp/real_interp/statue/statue_sl}}}&
+\raisebox{-.5\height}{\includegraphics[width=0.2\textwidth]{interp/real_interp/cup/cup_sl}}&
+\raisebox{-.5\height}{\includegraphics[width=0.2\textwidth]{interp/real_interp/pot/pot_sl}}&
 GSL\\
 2 &
-\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/real_interp/statue/statue_ps}}&
-\fcolorbox{green}{white}{\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/real_interp/cup/cup_ps}}}&
-\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/real_interp/pot/pot_ps}}&
-\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/real_interp/vase/vase_ps}}&
+\raisebox{-.5\height}{\includegraphics[width=0.2\textwidth]{interp/real_interp/statue/statue_ps}}&
+\fcolorbox{green}{white}{\raisebox{-.5\height}{\includegraphics[width=0.2\textwidth]{interp/real_interp/cup/cup_ps}}}&
+\raisebox{-.5\height}{\includegraphics[width=0.2\textwidth]{interp/real_interp/pot/pot_ps}}&
 EPS\\
 3 &
-\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/real_interp/statue/statue_sl}}&
-\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/real_interp/cup/cup_sl}}&
-\fcolorbox{green}{white}{\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/real_interp/pot/pot_sl}}}&
-\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/real_interp/vase/vase_sl}}&
+\raisebox{-.5\height}{\includegraphics[width=0.2\textwidth]{interp/real_interp/statue/statue_sl}}&
+\raisebox{-.5\height}{\includegraphics[width=0.2\textwidth]{interp/real_interp/cup/cup_sl}}&
+\fcolorbox{green}{white}{\raisebox{-.5\height}{\includegraphics[width=0.2\textwidth]{interp/real_interp/pot/pot_sl}}}&
 GSL\\
+\midrule
+Desc \# & Cat0 & Vase & Cat1 & Selected Algo.\\
+\midrule
 4 &
-\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/real_interp/statue/statue_mvs}}&
-\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/real_interp/cup/cup_mvs}}&
-\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/real_interp/pot/pot_mvs}}&
-\fcolorbox{green}{white}{\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/real_interp/vase/vase_mvs}}}&
+\fcolorbox{green}{white}{\raisebox{-.5\height}{\includegraphics[width=0.2\textwidth]{interp/real_interp/cat0/cat0_mvs}}}&
+\raisebox{-.5\height}{\includegraphics[width=0.2\textwidth]{interp/real_interp/vase/vase_mvs}}&
+\raisebox{-.5\height}{\includegraphics[width=0.2\textwidth]{interp/real_interp/cat1/cat1_mvs}}&
 PMVS\\
+5 &
+\raisebox{-.5\height}{\includegraphics[width=0.2\textwidth]{interp/real_interp/cat0/cat0_mvs}}&
+\fcolorbox{green}{white}{\raisebox{-.5\height}{\includegraphics[width=0.2\textwidth]{interp/real_interp/vase/vase_mvs}}}&
+\raisebox{-.5\height}{\includegraphics[width=0.2\textwidth]{interp/real_interp/cat1/cat1_mvs}}&
+PMVS\\
+6 &
+\raisebox{-.5\height}{\includegraphics[width=0.2\textwidth]{interp/real_interp/cat0/cat0_sc}}&
+\raisebox{-.5\height}{\includegraphics[width=0.2\textwidth]{interp/real_interp/vase/vase_sc}}&
+\fcolorbox{green}{white}{\raisebox{-.5\height}{\includegraphics[width=0.2\textwidth]{interp/real_interp/cat1/cat1_sc}}}&
+None\\
 \bottomrule
 \end{tabular}
 \caption{The evaluation of interpreter using real-world objects. The first column presents the description provided to the interpreter. Description $i$ matches with condition $i$ in Table~\ref{tab:real_data_prop_list}. The last column is the algorithm selected by the interpreter. The object of which the condition matches the description is labeled in green rectangle. Since the interpreter would return a successful reconstruction given a description that matches the condition, the quality of reconstruction of the labeled objects indicate the success/failure of the interpreter.}
