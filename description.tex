@@ -9,89 +9,6 @@ In this chapter, we attempt to extend this taxonomy by providing a description o
 
 % Computer vision problems require, among other factors, a model of the problem domain~\cite{little1985phdthesis} and appropriate representations. The model characterizes the relevant properties of the elements in the domain and analyze their relations. The representations describe an object's properties selected by the model to facilitate a solution of the problem.
 
-\section{Definition}
-\label{sec:3DRecon_Def}
-We will first provide definitions of some basic concepts, which include general computer vision concepts such as scene, camera, and image. We then define a few other terms that are closely related to the reconstruction problem. We then provide reasonable approximations for a more practical definition of the problem as a whole.
-
-\subsection{Basic notations}
-We will use the following notations: $\{C_n\}_{n=0}^{N-1}$ represents the camera set, which includes both intrinsic and extrinsic parameters; $\{I_n\}_{n=0}^{N-1}$ represents the set of all images; $\{L_n\}_{n=0}^{N-1}$ represents the set of light sources.
-
-\noindent\textbf{Definition 1 (Scene)} The scene $S$ is the four-dimensional joint spatio-temporal target of interest.
-
-\noindent\textbf{Definition 2 (Image)} The image refers to the 2D observation of the 3D scene $S$ on the image plane of camera $C_i$ at time $t_0$, which is modelled as: $I_i = T(S, C_i, L_0, t_0)$, or on the image plane of $C_0$  under the light source $L_i$ at time $t_i$, $I_i= T(S, C_0, L_i, t_i)$, where $T$ is the geometric/radiometric transformation.
-
-$T$ can be a geometric transformation which determines the 2D coordinates of a 3D point, or a radiometric transformation which determines the intensity/irradiance information from the information of illumination, viewing direction and surface orientation.
-
-\subsection{Segment and Scell}
-\noindent\textbf{Definition 3 (Segment)} A segment ($seg$) is a distinct region in the image, and is the most basic element in the image, which can be considered as a generalized pixel. 
-
-For instance, a segment can be a pixel, a window area, an edge, a contour, or a region of arbitrary size and shape.
-
-\noindent\textbf{Definition 4 (Cue)} Cues are the visual or geometric characteristics of the segments $seg$ that can be used for reconstruction, denoted as $cue(seg)$.
-
-For instance, the cue can be the texture within a window area, the intensity/colour value of a pixel, or the object contour, etc.
-
-\noindent\textbf{Definition 5 (Scell)} A scell (scene element, denoted as $sc$) is a volume in the scene which corresponds to at least one segment. A scell can be considered as a generalization of a voxel.
- % However, a scell is not necessarily distinct since
-
-\noindent\textbf{Definition 6 (Property)} Properties are the visual and geometric characteristics of the scell $sc$, which would influence the cues of a segment, denoted as $prop(sc)$.
-
-The property of the scell can be the 3D position or orientation information, visual texture, reflectance, surface orientation, roughness, convacity, etc.
-
-The relation between the terms defined above is shown in Figure~\ref{fig:scell_seg}.
-\begin{figure}[!htbp]
-\centering
-\includegraphics[width=0.5\textwidth]{model/seg_scell}
-\caption{Relation between a scell and a segment}
-\label{fig:scell_seg}
-\end{figure}
-
-% \textbf{Definition (Representation)} The scell can be represented as a voxel, a depth value, a 3D point/patch, or a surface normal, etc, which is denoted as $rep(sc)$.
-
-\subsection{Consistency}
-Every photograph of a 3D scene taken from a camera $C_i$ partitions the set of all possible scenes into two families, those that reproduce the photograph and those that do not. We characterize this constraint for a given shape and a given radiance assignment by the notion of \textit{consistency}.
-
-\noindent\textbf{Definition 7 (Consistency criterion)} The consistency criterion checks whether the properties of a scell $sc$ can produce the cues observed in the corresponding segment $seg$.
-\begin{align*}
-consist(prop(sc), cue(seg)) = 1 &\Rightarrow \textit{consistent}\\
-consist(prop(sc), cue(seg)) = 0 &\Rightarrow \textit{not consistent}
-\end{align*}
-
-\noindent\textbf{Definition 8 (Segment consistency)} Let $S$ be the scene. A scell $s\in S$ that is visible from $C_i$ is consistent with the image $I_i$ if and only if the consistency criterion is true.
-
-\noindent\textbf{Definition 9 (Image consistency)} A scene $S$ is image consistent with image $I_i$ if any scell $\forall s\in S$ visible from the camera $C_i$ is segment consistent with this image.
-
-\noindent\textbf{Definition 10 (Scene consistency)} A scene $S$ is scene consistent with a set of images $\{I_n\}_{n=0}^{N-1}$ if it's image consistency with each image $I_i\in \{I_n\}_{n=0}^{N-1}$ in the set.
-
-\subsection{Formal Definition}
-\noindent\textbf{Definition 11 (3D reconstruction problem)} Given a set of images $\{I_n\}_{n=0}^{N-1}$ captured by cameras $\{C_n\}_{n=0}^{N-1}$, or under a set of light sources $\{L_n\}_{n=0}^{N-1}$, find a set of scells $\{sc_m\}_{m=0}^{M-1}$ such that any scell is consistent with the visible images in the set $\{I_n\}_{n=0}^{N-1}$, \ie $\forall sc_i\in \{sc_m\}_{m=0}^{M-1}$, we the have following:
-\begin{align*}
-consist(prop(sc_i), cue(seg_{(i, j)})) = 1.
-\end{align*}
-where $seg_{(i, j)}$ is the corresponding segment of $sc_i$ in camera $C_j$. Alternatively, 3D reconstruction tries to find a set of scells $\{sc_m\}_{m=0}^{M-1}$ that are scene consistent with the image set $\{I_n\}_{n=0}^{N-1}$
-
-\subsection{Applied Definition}
-While the definition presented above gives a formal definition of the problem of 3D reconstruction, it is not necessarily applicable in a practical setting. In this section, we extend this formal definition to an approximate, yet applied version.
-
-\noindent\textbf{Definition 12 (Consistency score)} The consistency score measures the similarity betweem a scell $sc$ and the corresponding segment $seg$.
-\begin{align*}
-consist(prop(sc), cue(seg)) &= x \text{, } x\in[0, 1]\\
-consist(prop(sc), cue(seg)) &= 1 \Rightarrow \textit{consistent}\\
-consist(prop(sc), cue(seg)) &= 0 \Rightarrow \textit{not consistent}
-\end{align*}
-
-\noindent\textbf{Definition 13 (Applied consistency criterion)} A scell $sc$ and a segment $seg$ are considered consistent if the the consistency score is above a pre-defined threshold $\epsilon$.
-$$
-consist(prop(sc), cue(seg)) > \epsilon
-$$
-
-% \noindent\textbf{Some more definitions} $\sum_{n\in I'}consist(prop(sc_i), cue(seg_{(i, n)}))$
-
-\noindent\textbf{Definition 14 (Applied 3D Reconstruction Problem)} Given a set of images $\{I_n\}_{n=0}^{N-1}$ captured by cameras $\{C_n\}_{n=0}^{N-1}$, or under a set of light sources $\{L_n\}_{n=0}^{N-1}$, find a set of scells $\{sc_m\}_{m=0}^{M-1}$ such that the consistency score between the set of scells and their corresponding segments $\{seg_{(i, j)}\}_{i=0,j=0}^{M-1,N-1}$ are maximized.
-$$
-\mbox{maximize} \quad \sum_{j=0}^{N-1}\sum_{i=0}^{M-1} consist(prop(sc_i), cue(seg_{(i, j)}))
-$$
-
 \section{Model}
 \label{sec:3DRecon_Model}
 Models and representations are fundamental for vision problem solving. Models select characteristic properties of an object, and representation describes the model selected object properties to facilitate a solution of a class of problem. A model facilitates the representation of aspects in reality that are useful in a particular problem domain~\cite{bolles19863dpo}. For instance, surface orientation is one component of the surface geometry model, and the corresponding representation can be surface normal or curvature. Another example is colour, which is a component of a material model, and where RGB space is the corresponding representation of the colour.
@@ -325,7 +242,7 @@ The model and corresponding rerpesentations are shown in Table~\ref{tab:3DRecon_
 
 \section{Expression}
 \label{sec:3DRecon_Exp}
-Now that we have a proposed model and representations of 3D reconstruction problem, we can express the six proposed object classes using this description. The expression of the reconstruction problem is shown in table~\ref{tab:express}. Given that all properties in Figure~\ref{fig:six_class} are vaguely described, for instance, textured/textureless, dark/bright, we use three discrete scales to parameterize these properties: \textit{low} (0.2), \textit{medium} (0.5), and \textit{high} (0.8).
+Now that we have a proposed model and representations of 3D reconstruction problem, we can express the six proposed object classes using this description. The expression of the reconstruction problem is shown in table~\ref{tab:express}. Given that all properties in Figure~\ref{fig:prob_cond} are vaguely described, for instance, textured/textureless, dark/bright, we use three discrete scales to parameterize these properties: \textit{low} (0.2), \textit{medium} (0.5), and \textit{high} (0.8).
 \begin{table}[!htbp]
   \centering
   \begin{tabular}{l*{4}{p{1cm}}l}

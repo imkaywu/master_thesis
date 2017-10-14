@@ -257,13 +257,7 @@ We can conclude that the mapping to PMVS and GSL are robust with respect to conc
 Our interface consists of three separate layers. The upper layer is the description of the problem condition. The middle layer is the interpreter which receives a description from the user and return an acceptable result. The bottom layer is the actual implementation of the algorithms. The interpreter is responsible for choosing an appropriate 3D reconstruction algorithm based on the description of the problem domain and additional requirements. Thus, it requires an understanding of algorithmic performance across difference ranges of problem space to create a suitable interpreter. There are many ways to use the mapping to interpret the problem description. We proposed a proof of concetp interpreter that consists of two components: mapping and constraints.
 \begin{figure}[!htbp]
 \centering
-\begin{tikzpicture}[node distance=1.2cm, auto]
-
-\node (mapping) [data_nonfixed] {Mapping};
-\node (constraint) [data_nonfixed, right of=mapping, xshift=1cm] {Constraints};
-\draw[red,thick,solid] ($(mapping.north west)+(-0.3,0.3)$)  rectangle ($(constraint.south east)+(0.3,-0.3)$);
-
-\end{tikzpicture}
+\includegraphics[width=0.8\textwidth]{interp/interpreter.pdf}
 \caption{Two components of the Interpreter layer.}
 \label{fig:interpreter_layer}
 \end{figure}
@@ -344,37 +338,22 @@ Description 1 matches with object \textit{barrel}, which has a reliable reconstr
 We use similar setups to the synthetic counterparts and captured a real world dataset of nine objects~\ref{fig:test_real_world_6class}. The property of these objects are listed in Table~\ref{tab:real_data_prop_list}. Since we do not have the ground truth here, we resort to visual analysis to see if the appropriate algorithm gives an acceptable reconstruction compared to that of the baseline method.
 \begin{figure}[!htbp]
 \centering
-\begin{tabular}{c|lcc}
+\begin{tabular}{c|*{4}{p{2cm}}}
+\toprule
+class \# & 1 & 2 & 3 & 4\\
+\midrule
+  & textureless & textureless & textured & textured\\
+description & diffuse & mixed d/s & diffuse & mixed d/s\\
+  & bright & bright & dark/bright & dark/bright\\
 \hline
-class \# & Description & Object & Material\\
-\hline
-  & textureless
-  & \multirow{3}{*}{\includegraphics[width=0.22\textwidth]{interp/real_world_img/statue/statue}}
-  & \multirow{1}{*}{\includegraphics[width=0.08\textwidth]{interp/real_world_img/statue/base_00}}\\[2.5ex] 
-1 & diffuse\\[2.5ex]
-  & bright\\[2.5ex]
-\hline
-  & textureless
-  & \multirow{3}{*}{\includegraphics[width=0.22\textwidth]{interp/real_world_img/cup/cup}}
-  & \multirow{1}{*}{\includegraphics[width=0.08\textwidth]{interp/real_world_img/cup/base_00}}\\[2.5ex] 
-2 & mixed diffuse/specular\\[2.5ex]
-  & bright\\[2.5ex]
-\hline
-     & textured
-     & \multirow{3}{*}{\includegraphics[width=0.22\textwidth]{interp/real_world_img/pot/pot}}
-     & \multirow{1}{*}{\includegraphics[width=0.08\textwidth]{interp/real_world_img/pot/base_00}}\\[2.5ex] 
-3\&4 & diffuse & & \multirow{1}{*}{\includegraphics[width=0.08\textwidth]{interp/real_world_img/pot/base_01}}\\[2.5ex]
-     & dark/bright\\[2.5ex]
-\hline
-     & textured
-     & \multirow{3}{*}{\includegraphics[width=0.22\textwidth]{interp/real_world_img/vase/vase}}
-     & \multirow{1}{*}{\includegraphics[width=0.08\textwidth]{interp/real_world_img/vase/base_00}}\\[2.5ex] 
-5\&6 & mixed diffuse/specular & & \multirow{1}{*}{\includegraphics[width=0.08\textwidth]{interp/real_world_img/vase/base_01}}\\[2.5ex]
-     & dark/bright\\[2.6ex]
-\hline
+object & 
+\raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/real_world_img/statue/statue}} &
+\raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/real_world_img/cup/cup}} &
+\raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/real_world_img/pot/pot}} &
+\raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/real_world_img/vase/vase}}\\
+\bottomrule
 \end{tabular}
-\caption{The rerepsentatives of the six classes of objects used for evaluation.}
-\label{fig:test_real_world_6class}
+\caption{The rerepsentatives of the four classes of objects used for evaluation.}
 \end{figure}
 
 We use the aforementioned methods to retrieve the parameters of each property. The decomposition of material for each object is presented in Figure~\ref{fig:real_data_material}. The property settings of each object is listed in Table~\ref{tab:real_data_prop_list}.
@@ -387,9 +366,7 @@ We use the aforementioned methods to retrieve the parameters of each property. T
   1 & statue & 0.2 & 0.8 & 0.2 & 0.8 & EPS, GSL\\
   2 & cup & 0.2 & 0.8 & 0.5 & 0.2 & EPS, GSL\\
   3 & pot & 0.8 & 0.8 (0.2) & 0.2 & 0.2 & PMVS, GSL\\
-  4 & cat0 & 0.8 & 0.5 & 0.2 & 0.2 & PMVS\\
-  5 & vase & 0.8 & 0.8 (0.2) & 0.5 & 0.2 & PMVS\\
-  6 & cat1 & 0.2 & 0.2 & 0.5 & 0.2 & None\\
+  4 & vase & 0.8 & 0.8 (0.2) & 0.5 & 0.2 & PMVS\\
   \bottomrule
   \end{tabular}
   \caption{Problem conditions and mapping for the real-world objects}
@@ -449,43 +426,34 @@ Description 1 matches partially with object \textit{pot} since it has both high 
 
 \begin{figure*}[!htbp]
 \centering
-\begin{tabular}{lcccr}
+\begin{tabular}{lccccr}
 \toprule
-Desc \# & Statue & Cup & Pot & Selected Algo.\\
+Desc \# & Statue & Cup & Pot & Vase & Selected Algo.\\
 \midrule
 1 &
-\fcolorbox{green}{white}{\raisebox{-.5\height}{\includegraphics[width=0.2\textwidth]{interp/real_interp/statue/statue_sl}}}&
-\raisebox{-.5\height}{\includegraphics[width=0.2\textwidth]{interp/real_interp/cup/cup_sl}}&
-\raisebox{-.5\height}{\includegraphics[width=0.2\textwidth]{interp/real_interp/pot/pot_sl}}&
+\fcolorbox{green}{white}{\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/real_interp/statue/statue_sl}}}&
+\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/real_interp/cup/cup_sl}}&
+\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/real_interp/pot/pot_sl}}&
+\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/real_interp/vase/vase_sl}}&
 GSL\\
 2 &
-\raisebox{-.5\height}{\includegraphics[width=0.2\textwidth]{interp/real_interp/statue/statue_ps}}&
-\fcolorbox{green}{white}{\raisebox{-.5\height}{\includegraphics[width=0.2\textwidth]{interp/real_interp/cup/cup_ps}}}&
-\raisebox{-.5\height}{\includegraphics[width=0.2\textwidth]{interp/real_interp/pot/pot_ps}}&
+\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/real_interp/statue/statue_ps}}&
+\fcolorbox{green}{white}{\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/real_interp/cup/cup_ps}}}&
+\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/real_interp/pot/pot_ps}}&
+\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/real_interp/vase/vase_ps}}&
 EPS\\
 3 &
-\raisebox{-.5\height}{\includegraphics[width=0.2\textwidth]{interp/real_interp/statue/statue_sl}}&
-\raisebox{-.5\height}{\includegraphics[width=0.2\textwidth]{interp/real_interp/cup/cup_sl}}&
-\fcolorbox{green}{white}{\raisebox{-.5\height}{\includegraphics[width=0.2\textwidth]{interp/real_interp/pot/pot_sl}}}&
+\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/real_interp/statue/statue_sl}}&
+\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/real_interp/cup/cup_sl}}&
+\fcolorbox{green}{white}{\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/real_interp/pot/pot_sl}}}&
+\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/real_interp/vase/vase_sl}}&
 GSL\\
-\midrule
-Desc \# & Cat0 & Vase & Cat1 & Selected Algo.\\
-\midrule
 4 &
-\fcolorbox{green}{white}{\raisebox{-.5\height}{\includegraphics[width=0.2\textwidth]{interp/real_interp/cat0/cat0_mvs}}}&
-\raisebox{-.5\height}{\includegraphics[width=0.2\textwidth]{interp/real_interp/vase/vase_mvs}}&
-\raisebox{-.5\height}{\includegraphics[width=0.2\textwidth]{interp/real_interp/cat1/cat1_mvs}}&
+\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/real_interp/statue/statue_mvs}}&
+\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/real_interp/cup/cup_mvs}}&
+\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/real_interp/pot/pot_mvs}}&
+\fcolorbox{green}{white}{\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/real_interp/vase/vase_mvs}}}&
 PMVS\\
-5 &
-\raisebox{-.5\height}{\includegraphics[width=0.2\textwidth]{interp/real_interp/cat0/cat0_mvs}}&
-\fcolorbox{green}{white}{\raisebox{-.5\height}{\includegraphics[width=0.2\textwidth]{interp/real_interp/vase/vase_mvs}}}&
-\raisebox{-.5\height}{\includegraphics[width=0.2\textwidth]{interp/real_interp/cat1/cat1_mvs}}&
-PMVS\\
-6 &
-\raisebox{-.5\height}{\includegraphics[width=0.2\textwidth]{interp/real_interp/cat0/cat0_sc}}&
-\raisebox{-.5\height}{\includegraphics[width=0.2\textwidth]{interp/real_interp/vase/vase_sc}}&
-\fcolorbox{green}{white}{\raisebox{-.5\height}{\includegraphics[width=0.2\textwidth]{interp/real_interp/cat1/cat1_sc}}}&
-None\\
 \bottomrule
 \end{tabular}
 \caption{The evaluation of interpreter using real-world objects. The first column presents the description provided to the interpreter. Description $i$ matches with condition $i$ in Table~\ref{tab:real_data_prop_list}. The last column is the algorithm selected by the interpreter. The object of which the condition matches the description is labeled in green rectangle. Since the interpreter would return a successful reconstruction given a description that matches the condition, the quality of reconstruction of the labeled objects indicate the success/failure of the interpreter.}

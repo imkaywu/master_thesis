@@ -84,6 +84,7 @@
 \usepackage{multirow}
 \usepackage{rotating}
 \usepackage{pifont}
+\usepackage{listings}
 %
 \fboxsep=0pt
 \fboxrule=2pt
@@ -138,14 +139,14 @@ University of British Columbia \\ % Your institution for the title page
 \includegraphics[width=0.8\textwidth]{images/traditional_3d_vision.pdf}
 \end{figure}
 
+Challenges:
 \begin{itemize}
-\item Hardware setup: calibration, controlled environment
+\item Hardware: controlled environment, calibration
 \item Algorithms: vision background
 \item Results: keep trying until an acceptable result
 \end{itemize}
 
 \end{frame}
-
 
 %------------------------------------------------
 \begin{frame}
@@ -221,20 +222,74 @@ This contribution is significant because:
 
 %------------------------------------------------
 \begin{frame}
-\frametitle{Related Work}
+\frametitle{Related Work: softwares}
 
-Previous algorithm taxonomy based on visual/geometric cues.
+Some noteable examples of open source or commercial softwares:
+
 \begin{figure}
-\begin{tabular}{cccc}
-\includegraphics[width=0.25\textwidth]{images/mvs.png} &
-\includegraphics[width=0.2\textwidth]{images/sfs.png} & 
-\includegraphics[width=0.25\textwidth]{images/vh.jpg}\\
-\includegraphics[width=0.25\textwidth]{images/sl.jpg} & 
-\includegraphics[width=0.25\textwidth]{images/ps.png} &
-\includegraphics[width=0.25\textwidth]{images/vh_1.png}\\
-(a). Stereo & (b). Shading & (c) Silhouette \\
+\centering
+\begin{tabular}{p{1.5cm}p{2cm}*{2}{c}p{3cm}}
+\toprule
+Case & Software & \multicolumn{2}{c}{Example} & Problem\\
+\midrule
+General VL & 
+OpenCV &
+\multicolumn{2}{c}{Mat findHomography();} &
+Generic APIs\\
+\midrule
+Software bundles & 
+SfM + MVS &
+\raisebox{-.5\height}{\includegraphics[height=1.5cm]{interp/real_interp/pot/pot_mvs}} &
+\raisebox{-.5\height}{\includegraphics[height=1.5cm]{interp/real_interp/cup/cup_mvs}} &
+Cater to specific objects\\
+\bottomrule
 \end{tabular}
 \end{figure}
+
+\begin{block}{Challenge}
+Not that we don't have enough tools, but the barrier to take advantage of these tools is high.
+\end{block}
+
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}
+\frametitle{Related Work: algorithms}
+
+\begin{figure}
+\begin{tabular}{ccc}
+\toprule
+Category & Method & Problem \\
+\midrule
+\multirow{2}{*}{Shape from Stereo} & 
+\raisebox{-.5\height}{\includegraphics[height=1cm]{images/mvs.png}} &
+Texture, Specular \\
+&  \raisebox{-.5\height}{\includegraphics[height=1cm]{images/sl.jpg}} &
+Albedo, Specular \\
+\multirow{2}{*}{Shape from Intensity} & 
+\raisebox{-.5\height}{\includegraphics[height=1cm]{images/sfs.png}} &
+Albedo, Specular, Geomtry \\
+& \raisebox{-.5\height}{\includegraphics[height=1cm]{images/ps.png}} &
+Albedo, Geoemtry \\
+\multirow{2}{*}{Shape from Silhouette} &
+\raisebox{-.5\height}{\includegraphics[height=1cm]{images/vh.jpg}} &
+Geoemtry\\
+& \raisebox{-.5\height}{\includegraphics[height=1cm]{images/vh_1.png}} &
+Geoemtry\\
+\bottomrule
+\end{tabular}
+\end{figure}
+
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}
+\frametitle{Related Work: algorithms}
+
+\begin{block}{Challenges}
+1. No algorithm works for objects with diverse properties;\\
+2. The knowledge of whether an algorithm works is not known a priori.
+\end{block}
 
 \end{frame}
 
@@ -245,6 +300,18 @@ Previous algorithm taxonomy based on visual/geometric cues.
 \tableofcontents[currentsection,currentsubsection, 
     hideothersubsections, 
     sectionstyle=show/shaded,]
+\end{frame}
+
+%------------------------------------------------
+\subsection{Roadmap}
+%------------------------------------------------
+\begin{frame}
+\frametitle{Roadmap}
+\begin{itemize}
+\item Taxonomy: understand the problem space;
+\item Description: describe the problem space;
+\item Mapping: discover the connection between a sub-volume in problem space to algorithm.
+\end{itemize}
 \end{frame}
 
 %------------------------------------------------
@@ -266,10 +333,16 @@ Previous algorithm taxonomy based on visual/geometric cues.
 
 %------------------------------------------------
 \begin{frame}
-\frametitle{Taxonomy: six problem conditions}
+\frametitle{Taxonomy: problem conditions}
+
+Assumptions:
+\begin{itemize}
+\item Active methods require high surface albedo (bright), in order to demonstrate the effectiveness of these methods, we focus on bright surfaces only.
+\item Diffuse is caused solely by surface roughness since sub-surface scattering is ignored.
+\end{itemize}
 
 \begin{figure}[h]
-\includegraphics[width=0.6\textwidth]{taxo/six_class}
+\includegraphics[width=0.7\textwidth]{taxo/prob_cond}
 \end{figure}
 
 \end{frame}
@@ -284,12 +357,12 @@ Previous algorithm taxonomy based on visual/geometric cues.
   \centering
   \begin{tabular}{l|ll}
   \toprule
-  \textbf{Model} & \textbf{Representation} & \textbf{Visualization}\\
+  \textbf{Model} & \textbf{Representation}\\
   \midrule
-  Texture & \textit{Texture randomness} & \raisebox{-.3\height}{\includegraphics[width=0.4\textwidth]{images/tex.png}}\\
-  Lightness & \textit{Albedo} & \raisebox{-.3\height}{\includegraphics[width=0.4\textwidth]{images/alb.png}}\\
-  Specularity & \textit{Specular/diffuse ratio} & \raisebox{-.3\height}{\includegraphics[width=0.4\textwidth]{images/spec.png}}\\
-  Roughness & \textit{SD of facet slopes} & \raisebox{-.3\height}{\includegraphics[width=0.4\textwidth]{images/rough.png}}\\
+  Texture & \textit{Texture randomness}\\
+  Lightness & \textit{Albedo}\\
+  Specularity & \textit{Specular/diffuse ratio}\\
+  Roughness & \textit{SD of facet slopes}\\
   \bottomrule
   \end{tabular}
   \caption{Representations of the 3D reconstruction problem.}
@@ -332,7 +405,7 @@ Investigate the problem conditions under which the algorithms can reliably work.
 
 \begin{figure}
 \centering
-\includegraphics[width=0.8\textwidth]{images/mapping_3d_vision.pdf}
+\includegraphics[width=0.6\textwidth]{images/mapping_3d_vision.pdf}
 \end{figure}
 
 % \begin{itemize}
@@ -345,200 +418,83 @@ Investigate the problem conditions under which the algorithms can reliably work.
 
 %------------------------------------------------
 \begin{frame}
-\frametitle{Mapping: algorithms and baseline}
+\frametitle{Mapping: notable findings 1}
 
-\begin{table}[!htbp]
-\centering
-\begin{tabular}{p{4cm}|c|c|c|c}
-\toprule
-Technique & Texture & Albedeo & Specular & Roughness\\
-\midrule
-PMVS: patch-based, seed points propagation MVS. & High & - & Low & -\\
-\midrule
-EPS: example-based Photometric Stereo & - & High & Low & High \\
-\midrule
-GSL: Gray-code Structured Light technique & - & High & Low & High\\
-\midrule\midrule
-VH: volumetric Visual Hull. & - & - & - & -\\
-\midrule
-LLS-PS: linear least squares Photometric Stereo. & - & High & Low & High\\
-\bottomrule
+\begin{figure}[!htbp]
+\begin{tabular}{cc}
+\includegraphics[width=0.22\textwidth]{mapping/depend_check/mvs_tex_spec}&
+\includegraphics[width=0.22\textwidth]{mapping/mvs_spec/mvs_spec}\\
+(a). Algo. performance & (b) Image formation\\
+\includegraphics[width=0.22\textwidth]{mapping/mvs_spec/mvs_spec_01}&
+\includegraphics[width=0.22\textwidth]{mapping/mvs_spec/mvs_spec_00}\\
+(c) $V_1$ & (d) $V_2$\\
 \end{tabular}
-\caption{Summary of the selected and baseline algorithms.}
-\end{table}
+\caption{(a) shows the algorithm performance w.r.t. texture and specularity. (b) shows the reflection of light off a specular surface. $V_1$ received the diffuse component while $V_2$ receives the specular component. (c), (d) shows the images observed from these two views. The specular area (red circle) observed in $V_2$ is visible in $V_1$.}
+\end{figure}
 
 \end{frame}
 
 %------------------------------------------------
 \begin{frame}
-\frametitle{Mapping: quantitative measures and criteria}
-
-\begin{itemize}
-\item accuracy: the distance $d$ such that $X\%$ of the points on $R$ are within distance $d$ of $G$ is considered as accuracy;
-\item completeness: the percentage of $G$ that is reconstructed by $R$;
-\item angular error: angle between the estimated and ground truth normal, \textit{i.e.,} $arccos(n_g^T n)$.
-\end{itemize}
+\frametitle{Mapping: notable findings 2}
 
 \begin{figure}[!htbp]
-\begin{tabular}{cc}
-\includegraphics[width=0.6\textwidth]{mapping/qm_acc_cmp} &
-\includegraphics[width=0.17\textwidth]{mapping/qm_ang_error}\\
-Accuracy and completeness & angular error
+\centering
+\begin{tabular}{c|ccc}
+  Image & Normal map & Height map & Angular error\\
+  \hline\\
+  \includegraphics[width=0.15\textwidth]{mapping/ps_spec_rough/0802_0001}&
+  \includegraphics[width=0.15\textwidth]{mapping/ps_spec_rough/0802_normal}&
+  \includegraphics[width=0.15\textwidth]{images/0802_dmap}&
+  \includegraphics[width=0.03\textwidth]{mapping/ps_spec_rough/0802_ang_error}\\
+  & (a). rough: 0.2\\
+  \includegraphics[width=0.15\textwidth]{mapping/ps_spec_rough/0805_0001}&
+  \includegraphics[width=0.15\textwidth]{mapping/ps_spec_rough/0805_normal}&
+  \includegraphics[width=0.15\textwidth]{images/0805_dmap}&
+  \includegraphics[width=0.03\textwidth]{mapping/ps_spec_rough/0805_ang_error}\\
+  & (b). rough: 0.5\\
+  \includegraphics[width=0.15\textwidth]{mapping/ps_spec_rough/0808_0001}&
+  \includegraphics[width=0.15\textwidth]{mapping/ps_spec_rough/0808_normal}&
+  \includegraphics[width=0.15\textwidth]{images/0808_dmap}&
+  \includegraphics[width=0.03\textwidth]{mapping/ps_spec_rough/0808_ang_error}\\
+  & (c). rough: 0.8\\
 \end{tabular}
+\caption{The effect of roughness on PS. Albedo is set as 0.8, and specular is set as 0.8. (b) demonstrates that a medium level roughness would lead to worse normal estimation since it blurs the specular lobe.}
 \end{figure}
 
 \end{frame}
 
-% %------------------------------------------------
-% \begin{frame}
-% \frametitle{Mapping: EPD of PMVS}
+%------------------------------------------------
+\begin{frame}
+\frametitle{Mapping: notable findings 3}
 
-% \begin{table}[!htbp]
-%   \centering
-%   \caption{Problem conditions for establishing the \textit{effective problem domain} of PMVS.}
-%   \begin{tabular}{l*{4}{c}}
-%   \hline
-%   \textbf{Cond} & Texture & Albedo & Specular & Roughness\\
-%   \hline
-%   \textbf{(a)} & [0.2, 0.8] & [0.2, 0.8] & 0.0 & 0.0\\
-%   \textbf{(b)} & [0.2, 0.8] & 0.8 & [0.2, 0.8] & 0.0\\
-%   \textbf{(c)} & [0.2, 0.8] & 0.8 & 0.0 & [0.2, 0.8]\\
-%   \textbf{(d)} & 0.8 & [0.2, 0.8] & [0.2, 0.8] & 0.0\\
-%   \textbf{(e)} & 0.8 & [0.2, 0.8] & 0.0 & [0.2, 0.8]\\
-%   \textbf{(f)} & 0.8 & 0.8 & [0.2, 0.8] & [0.2, 0.8]\\
-%   \hline
-%   \end{tabular}
-% \end{table}
+\begin{figure}[!htbp]
+\centering
+\begin{tabular}{ccc}
+\includegraphics[width=0.25\textwidth]{mapping/sl_spec_rough/sl_00050202}&
+\includegraphics[width=0.25\textwidth]{mapping/sl_spec_rough/sl_00050502}&
+\includegraphics[width=0.25\textwidth]{mapping/sl_spec_rough/sl_00050802}\\
+(a) specular: 0.2 & (b) specular: 0.5 & (c) specular: 0.8\\
+\includegraphics[width=0.25\textwidth]{mapping/sl_spec_rough/sl_00050802}&
+\includegraphics[width=0.25\textwidth]{mapping/sl_spec_rough/sl_00050805}&
+\includegraphics[width=0.25\textwidth]{mapping/sl_spec_rough/sl_00050808}\\
+(d) roughness: 0.2 & (e) roughness: 0.5 & (f) roughness: 0.8\\
+\end{tabular}
+\caption{(a)-(c): the roughness is set as 0.2, and specular has a negative effect on completeness; (d)-(e): the specular is set as 0.8, roughness has a positive effect on completeness.}
+\end{figure}
 
-% \textbf{Cond. (a). Texture and Albedo}
-% \begin{figure}[!htbp]
-% \includegraphics[width=0.3\textwidth]{mapping/depend_check/mvs_tex_alb}
-% \end{figure}
+\end{frame}
 
-% \end{frame}
+%------------------------------------------------
+\begin{frame}
+\frametitle{Conclusions}
 
-% %------------------------------------------------
-% \begin{frame}
-% \frametitle{Mapping: EPD of PMVS (cont'd)}
+\begin{itemize}
+\item PMVS can work on specular surfaces;
+\item EPS and GSL fails on highly specular areas, and a blurred specular area causes worse results.
+\end{itemize}
 
-% \textbf{Cond. (b). Texture and Specularity}
-% \begin{figure}[!htbp]
-% \begin{tabular}{cc}
-% \includegraphics[width=0.22\textwidth]{mapping/depend_check/mvs_tex_spec}&
-% \includegraphics[width=0.22\textwidth]{mapping/mvs_spec/mvs_spec}\\
-% (a). Algo. performance & (b) Image formation\\
-% \includegraphics[width=0.22\textwidth]{mapping/mvs_spec/mvs_spec_01}&
-% \includegraphics[width=0.22\textwidth]{mapping/mvs_spec/mvs_spec_00}\\
-% (c) $V_1$ & (d) $V_2$\\
-% \end{tabular}
-% \caption{(a) shows the algorithm performance w.r.t. texture and specularity. (b) shows the reflection of light off a specular surface. $V_1$ received the diffuse component while $V_2$ receives the specular component. (c), (d) shows the images observed from these two views. The specular area (red circle) observed in $V_2$ is visible in $V_1$.}
-% \end{figure}
-
-% \end{frame}
-
-% %------------------------------------------------
-% \begin{frame}
-% \frametitle{Mapping: EPD of PMVS (cont'd)}
-
-% \textbf{Cond. (d). Albedo and Specularity}
-% \begin{figure}
-% \centering
-% \begin{tabular}{ccc}
-% \multirow{2}{*}{
-%   \includegraphics[width=0.25\textwidth]{mapping/depend_check/mvs_alb_spec}
-%   }
-% &
-% \includegraphics[width=0.22\textwidth]{mapping/mvs_alb_spec/alb_spec_0202}&
-% % \includegraphics[width=0.2\textwidth]{mapping/mvs_alb_spec/alb_spec_0205}&
-% \includegraphics[width=0.22\textwidth]{mapping/mvs_alb_spec/alb_spec_0208}\\
-% & (a) spec: 0.2 & (b) spec: 0.8\\
-% &
-% \includegraphics[width=0.22\textwidth]{mapping/mvs_alb_spec/alb_spec_0202}&
-% % \includegraphics[width=0.2\textwidth]{mapping/mvs_alb_spec/alb_spec_0502}&
-% \includegraphics[width=0.22\textwidth]{mapping/mvs_alb_spec/alb_spec_0802}\\
-% & (c) alb: 0.2 & (d) alb: 0.8\\
-% \end{tabular}
-% % \caption{(a)-(b). The albedo is set as 0.2, (c)-(d). The specularity is set as 0.2. According to energy conservation, as the specular component increases, the diffuse component decreases.}
-% \caption{The law of conservation of energy demands that as the specular reflection increases, the diffuse reflection decreases.}
-% \end{figure}
-
-% \end{frame}
-
-% %------------------------------------------------
-% \begin{frame}
-% \frametitle{Mapping: \textit{effective properties} of PMVS}
-
-% \begin{table}[!htbp]
-%   \centering
-%   \begin{tabular}{l*{4}{c}}
-%   \hline
-%   \textbf{Metric} & Texture & Albedo & Specular & Roughness\\
-%   \hline
-%   Accuracy & \checkmark & \checkmark & \checkmark & \ding{55}\\
-%   Completeness & \checkmark & \checkmark & \checkmark & \ding{55}\\
-%   \hline
-%   \end{tabular}
-%   \caption{The \textit{effective problem domain} of PMVS in terms of accuracy and completeness.}
-% \end{table}
-
-% \end{frame}
-
-% %------------------------------------------------
-% \begin{frame}
-% \frametitle{Mapping: mapping construction}
-
-% \begin{itemize}
-% \item Accuracy and completeness improves consistently as the \textit{texture} level increases. 
-% \item Accuracy and completeness results deteriorate consistently as \textit{specularity} increases, and this negative impact is most significant when texture level is medium or albedo value is low. 
-% \item The effect of \textit{albedo} on a surface with low texture is negligible. However, albedo has a noticeably more significant positive impact on completeness as the texture of a specular surface increases.
-% \end{itemize}
-
-% \begin{figure}[!htbp]
-% \begin{tabular}{ccc}
-% \includegraphics[width=0.25\textwidth]{mapping/training/mvs_train_spec_02}&
-% \includegraphics[width=0.25\textwidth]{mapping/training/mvs_train_spec_05}&
-% \includegraphics[width=0.25\textwidth]{mapping/training/mvs_train_spec_08}\\
-% % (a) & (b) & (c)\\
-% % \includegraphics[width=0.25\textwidth]{mapping/training/mvs_train_tex_02}&
-% % \includegraphics[width=0.25\textwidth]{mapping/training/mvs_train_tex_05}&
-% % \includegraphics[width=0.25\textwidth]{mapping/training/mvs_train_tex_08}\\
-% % (d) & (e) & (f)\\
-% % \includegraphics[width=0.25\textwidth]{mapping/training/mvs_train_alb_02}&
-% % \includegraphics[width=0.25\textwidth]{mapping/training/mvs_train_alb_05}&
-% % \includegraphics[width=0.25\textwidth]{mapping/training/mvs_train_alb_08}\\
-% % (g) & (h) & (i)\\
-% \end{tabular}
-% \end{figure}
-
-% \end{frame}
-
-% %------------------------------------------------
-% \begin{frame}
-% \frametitle{Mapping: mapping construction (cont'd)}
-
-% \begin{table}[!htbp]
-%   \centering
-%   \begin{tabular}{l*{4}{c}}
-%   \toprule
-%   \textbf{Metric} & Texture & Albedo & Specular & Roughness\\
-%   \midrule
-%   Accuracy & 0.5 & 0.5 & 0.2 & -\\
-%   \&Completeness & 0.5 & 0.8 & 0.2 & -\\
-%            & 0.5 & 0.8 & 0.5 & -\\
-%            & 0.8 & 0.2 & 0.2 & -\\
-%            & 0.8 & 0.5 & 0.2 & -\\
-%            & 0.8 & 0.8 & 0.2 & -\\
-%            & 0.8 & 0.5 & 0.5 & -\\
-%            & 0.8 & 0.8 & 0.5 & -\\
-%            & 0.8 & 0.5 & 0.8 & -\\
-%            & 0.8 & 0.8 & 0.8 & -\\
-%   \bottomrule
-%   \end{tabular}
-%   \caption{The working problem conditions of PMVS in terms of the two metrics \textit{accuracy} and \textit{completeness}.}
-%   \label{tab:mvs_training_result}
-% \end{table}
-
-% \end{frame}
+\end{frame}
 
 %------------------------------------------------
 \section{Evaluation of Interface}
@@ -680,7 +636,7 @@ PMVS\\
 \centering
 \begin{tabular}{c|*{4}{p{2cm}}}
 \toprule
-class \# & 1 & 2 & 3\&4 & 5\&6\\
+class \# & 1 & 2 & 3 & 4\\
 \midrule
   & textureless & textureless & textured & textured\\
 description & diffuse & mixed d/s & diffuse & mixed d/s\\
@@ -693,7 +649,7 @@ object &
 \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/real_world_img/vase/vase}}\\
 \bottomrule
 \end{tabular}
-\caption{The rerepsentatives of the six classes of objects used for evaluation.}
+\caption{The rerepsentatives of the four classes of objects used for evaluation.}
 \end{figure}
 
 \end{frame}
@@ -738,28 +694,6 @@ PMVS\\
 
 \end{frame}
 
-% %------------------------------------------------
-% \begin{frame}
-% \frametitle{Interpretation: real-world objects}
-
-% \begin{table}[!ht]
-%   \centering
-%   \begin{tabular}{l*{4}{c}p{2cm}}
-%   \hline
-%   \textbf{Property} & Texture & Albedo & Specular & Roughness & Best-suited techniques\\
-%   \hline
-%   (a) & 0.2 & 0.8 & 0.2 & 0.2 & EPS, GSL\\
-%   (b) & 0.2 & 0.8 & 0.8 & 0.2 & EPS, GSL\\
-%   (c) & 0.8 & 0.8, 0.2 & 0.2 & 0.8 & PMVS, GSL\\
-%   (d) & 0.8 & 0.5 & 0.8 & 0.2 & PMVS\\
-%   \hline
-%   \end{tabular}
-%   \caption{Property lists of the test objects.}
-%   \label{tab:prop_list_synth_data}
-% \end{table}
-
-% \end{frame}
-
 %------------------------------------------------
 \section{Conclusions}
 %------------------------------------------------
@@ -774,6 +708,8 @@ PMVS\\
 \frametitle{Conclusions}
 
 \begin{itemize}
+\item the proposed description is able to give correct reconstruction for non-concave objects
+\item To deal with more complicated objects, we need more complicated properties, or ways to describe the objects, but the challenge is the easy mathematical representation might not be available.
 \item Using the simple descriptive language and proof-of-concept interpreter, we demonstrate the possibility of using descriptive properties to hide algorithmic details.
 \end{itemize}
 \end{frame}
@@ -785,6 +721,211 @@ PMVS\\
 Computer vision should focus on more than \\just algorithms, but easier accessibility.
 \end{frame}
 
+%------------------------------------------------
+\section{Supplementary slides}
+%------------------------------------------------
+\begin{frame}
+\tableofcontents[currentsection,currentsubsection, 
+    hideothersubsections, 
+    sectionstyle=show/shaded,]
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}
+\frametitle{Mapping: algorithms and baseline}
+
+\begin{table}[!htbp]
+\centering
+\begin{tabular}{p{4cm}|c|c|c|c}
+\toprule
+Technique & Texture & Albedeo & Specular & Roughness\\
+\midrule
+PMVS: patch-based, seed points propagation MVS. & High & - & Low & -\\
+\midrule
+EPS: example-based Photometric Stereo & - & High & Low & High \\
+\midrule
+GSL: Gray-code Structured Light technique & - & High & Low & High\\
+\midrule\midrule
+VH: volumetric Visual Hull. & - & - & - & -\\
+\midrule
+LLS-PS: linear least squares Photometric Stereo. & - & High & Low & High\\
+\bottomrule
+\end{tabular}
+\caption{Summary of the selected and baseline algorithms.}
+\end{table}
+
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}
+\frametitle{Mapping: quantitative measures and criteria}
+
+\begin{itemize}
+\item accuracy: the distance $d$ such that $X\%$ of the points on $R$ are within distance $d$ of $G$ is considered as accuracy;
+\item completeness: the percentage of $G$ that is reconstructed by $R$;
+\item angular error: angle between the estimated and ground truth normal, \textit{i.e.,} $arccos(n_g^T n)$.
+\end{itemize}
+
+\begin{figure}[!htbp]
+\begin{tabular}{cc}
+\includegraphics[width=0.6\textwidth]{mapping/qm_acc_cmp} &
+\includegraphics[width=0.17\textwidth]{mapping/qm_ang_error}\\
+Accuracy and completeness & angular error
+\end{tabular}
+\end{figure}
+
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}
+\frametitle{Mapping: EPD of PMVS}
+
+\begin{table}[!htbp]
+  \centering
+  \caption{Problem conditions for establishing the \textit{effective problem domain} of PMVS.}
+  \begin{tabular}{l*{4}{c}}
+  \hline
+  \textbf{Cond} & Texture & Albedo & Specular & Roughness\\
+  \hline
+  \textbf{(a)} & [0.2, 0.8] & [0.2, 0.8] & 0.0 & 0.0\\
+  \textbf{(b)} & [0.2, 0.8] & 0.8 & [0.2, 0.8] & 0.0\\
+  \textbf{(c)} & [0.2, 0.8] & 0.8 & 0.0 & [0.2, 0.8]\\
+  \textbf{(d)} & 0.8 & [0.2, 0.8] & [0.2, 0.8] & 0.0\\
+  \textbf{(e)} & 0.8 & [0.2, 0.8] & 0.0 & [0.2, 0.8]\\
+  \textbf{(f)} & 0.8 & 0.8 & [0.2, 0.8] & [0.2, 0.8]\\
+  \hline
+  \end{tabular}
+\end{table}
+
+\textbf{Cond. (a). Texture and Albedo}
+\begin{figure}[!htbp]
+\includegraphics[width=0.3\textwidth]{mapping/depend_check/mvs_tex_alb}
+\end{figure}
+
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}
+\frametitle{Mapping: EPD of PMVS (cont'd)}
+
+\textbf{Cond. (b). Texture and Specularity}
+\begin{figure}[!htbp]
+\begin{tabular}{cc}
+\includegraphics[width=0.22\textwidth]{mapping/depend_check/mvs_tex_spec}&
+\includegraphics[width=0.22\textwidth]{mapping/mvs_spec/mvs_spec}\\
+(a). Algo. performance & (b) Image formation\\
+\includegraphics[width=0.22\textwidth]{mapping/mvs_spec/mvs_spec_01}&
+\includegraphics[width=0.22\textwidth]{mapping/mvs_spec/mvs_spec_00}\\
+(c) $V_1$ & (d) $V_2$\\
+\end{tabular}
+\caption{(a) shows the algorithm performance w.r.t. texture and specularity. (b) shows the reflection of light off a specular surface. $V_1$ received the diffuse component while $V_2$ receives the specular component. (c), (d) shows the images observed from these two views. The specular area (red circle) observed in $V_2$ is visible in $V_1$.}
+\end{figure}
+
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}
+\frametitle{Mapping: EPD of PMVS (cont'd)}
+
+\textbf{Cond. (d). Albedo and Specularity}
+\begin{figure}
+\centering
+\begin{tabular}{ccc}
+\multirow{2}{*}{
+  \includegraphics[width=0.25\textwidth]{mapping/depend_check/mvs_alb_spec}
+  }
+&
+\includegraphics[width=0.22\textwidth]{mapping/mvs_alb_spec/alb_spec_0202}&
+% \includegraphics[width=0.2\textwidth]{mapping/mvs_alb_spec/alb_spec_0205}&
+\includegraphics[width=0.22\textwidth]{mapping/mvs_alb_spec/alb_spec_0208}\\
+& (a) spec: 0.2 & (b) spec: 0.8\\
+&
+\includegraphics[width=0.22\textwidth]{mapping/mvs_alb_spec/alb_spec_0202}&
+% \includegraphics[width=0.2\textwidth]{mapping/mvs_alb_spec/alb_spec_0502}&
+\includegraphics[width=0.22\textwidth]{mapping/mvs_alb_spec/alb_spec_0802}\\
+& (c) alb: 0.2 & (d) alb: 0.8\\
+\end{tabular}
+% \caption{(a)-(b). The albedo is set as 0.2, (c)-(d). The specularity is set as 0.2. According to energy conservation, as the specular component increases, the diffuse component decreases.}
+\caption{The law of conservation of energy demands that as the specular reflection increases, the diffuse reflection decreases.}
+\end{figure}
+
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}
+\frametitle{Mapping: \textit{effective properties} of PMVS}
+
+\begin{table}[!htbp]
+  \centering
+  \begin{tabular}{l*{4}{c}}
+  \hline
+  \textbf{Metric} & Texture & Albedo & Specular & Roughness\\
+  \hline
+  Accuracy & \checkmark & \checkmark & \checkmark & \ding{55}\\
+  Completeness & \checkmark & \checkmark & \checkmark & \ding{55}\\
+  \hline
+  \end{tabular}
+  \caption{The \textit{effective problem domain} of PMVS in terms of accuracy and completeness.}
+\end{table}
+
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}
+\frametitle{Mapping: mapping construction}
+
+\begin{itemize}
+\item Accuracy and completeness improves consistently as the \textit{texture} level increases. 
+\item Accuracy and completeness results deteriorate consistently as \textit{specularity} increases, and this negative impact is most significant when texture level is medium or albedo value is low. 
+\item The effect of \textit{albedo} on a surface with low texture is negligible. However, albedo has a noticeably more significant positive impact on completeness as the texture of a specular surface increases.
+\end{itemize}
+
+\begin{figure}[!htbp]
+\begin{tabular}{ccc}
+\includegraphics[width=0.25\textwidth]{mapping/training/mvs_train_spec_02}&
+\includegraphics[width=0.25\textwidth]{mapping/training/mvs_train_spec_05}&
+\includegraphics[width=0.25\textwidth]{mapping/training/mvs_train_spec_08}\\
+% (a) & (b) & (c)\\
+% \includegraphics[width=0.25\textwidth]{mapping/training/mvs_train_tex_02}&
+% \includegraphics[width=0.25\textwidth]{mapping/training/mvs_train_tex_05}&
+% \includegraphics[width=0.25\textwidth]{mapping/training/mvs_train_tex_08}\\
+% (d) & (e) & (f)\\
+% \includegraphics[width=0.25\textwidth]{mapping/training/mvs_train_alb_02}&
+% \includegraphics[width=0.25\textwidth]{mapping/training/mvs_train_alb_05}&
+% \includegraphics[width=0.25\textwidth]{mapping/training/mvs_train_alb_08}\\
+% (g) & (h) & (i)\\
+\end{tabular}
+\end{figure}
+
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}
+\frametitle{Mapping: mapping construction (cont'd)}
+
+\begin{table}[!htbp]
+  \centering
+  \begin{tabular}{l*{4}{c}}
+  \toprule
+  \textbf{Metric} & Texture & Albedo & Specular & Roughness\\
+  \midrule
+  Accuracy & 0.5 & 0.5 & 0.2 & -\\
+  \&Completeness & 0.5 & 0.8 & 0.2 & -\\
+           & 0.5 & 0.8 & 0.5 & -\\
+           & 0.8 & 0.2 & 0.2 & -\\
+           & 0.8 & 0.5 & 0.2 & -\\
+           & 0.8 & 0.8 & 0.2 & -\\
+           & 0.8 & 0.5 & 0.5 & -\\
+           & 0.8 & 0.8 & 0.5 & -\\
+           & 0.8 & 0.5 & 0.8 & -\\
+           & 0.8 & 0.8 & 0.8 & -\\
+  \bottomrule
+  \end{tabular}
+  \caption{The working problem conditions of PMVS in terms of the two metrics \textit{accuracy} and \textit{completeness}.}
+  \label{tab:mvs_training_result}
+\end{table}
+
+\end{frame}
 
 % %------------------------------------------------
 % \section{Reference}
