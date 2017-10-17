@@ -9,6 +9,11 @@ Section~\ref{sec:Toolbox} discusses the existing toolboxes for 3D reconstruction
 \label{sec:Toolbox}
 There have been many attempts in developing computer vision or image processing frameworks that support rapid development of vision applications. There are multiple general vision libraries in this field including OpenCV~\cite{bradski2008learning}, VLFeat~\cite{vedaldi08vlfeat}, VXL~\cite{vxl17} and multiple Matlab libraries~\cite{KovesiMATLABCode, MariottiniPr_RAM05}. These libraries often provide tools for multiple image processing and computer vision problems, including low-vision tasks such as feature detection and matching, middle-level vision tasks such as segmentation and tracking, and high-level vision problems such as classification and recognition. All of these software frameworks and libraries provide vision components and algorithms without any context of how and when they should be applied. As a result, they often require expert vision knowledge for effective use.
 
+\subsection{General vision libraries}
+
+\subsection{3D vision libraries}
+
+
 \section{3D Reconstruction Techniques}
 \label{sec:3DRecon_Tech}
 Image-based 3D reconstruction attempts to recover the geometry and material (optional) of the object from images under different viewpoints or illuminations. The end goal here can be described as ``given a set of images of an object or a scene, estimate the most likely 3D shape that explains those images, under the assumption of known materials, viewpoints, and lighting conditions''. This definition reveals that if these assumptions are violated, this becomes an ill-posed problem since multiple combinations of geometry, viewpoint and illumination can produce exactly the same images~\cite{poggio1985computational}. Thus this makes for an extremely challenging task.
@@ -36,11 +41,11 @@ The 3D reconstruction technique exploits a variety of visual and geometric cues 
   (De)focus & Shape from (De)focus\\
   \bottomrule
   \end{tabular}
-  \caption{Classes of algorithms that utilize each visual/geometric cue. Note that the abbreviations will be used extensively in the theis.}
+  \caption{Classes of algorithms that utilize each visual/geometric cue. Note that the abbreviations will be used extensively in the thesis.}
   \label{tab:cue_algo}
 \end{table}
 
-\subsection{Stereo Correspondence}
+\subsection{Stereo}
 Stereo correspondence is one of the most widely used visual cues in 3D vision. Passive methods, including stereoscopy, trinocular stereo, and MVS, identify correspondences across different views, and estimate the 3D point by triangulation. However these passive approaches suffer from uniform or periodic surfaces. Active techniques attempt to overcome the correspondence problem by replacing one of the cameras with a controllable illumination source, e.g., single-point laser, slit laser scanner, temporal or spatially modulated Structured Light (SL), etc. Here we refer readers to the survey article by \citeauthor{blais2004review} for recent developments of active methods. We classify the MVS algorithms based on the taxonomy proposed in~\cite{seitz2006comparison}, which divides the field into four classes based on reconstruction method, and categorize the SL algorithms by projection patterns.
 
 \subsubsection{MVS: Volumemetric stereo}
@@ -69,6 +74,13 @@ Structured light is considered one of the most accurate reconstruction technique
 \textbf{Spatial encoding} This technique concentrates all coding into a unique pattern. The codeword that labels a certain pixel is obtained from the neighbourhood of pixels around it. Normally, the visual features gathered in a neighbourhood are the intensity or colour of the pixels or groups of pixels around it.
 
 \textbf{Direct encoding} There are methods to directly represent the codeword in each pixel. To achieve this, we need to use either a large range of colour values or introduce periodicity. However, this kind of pattern is highly sensitive to noise because the ``distance'' between codewords is nearly zero. Moreover, the perceived colour depends not only on the projected colour, but also the intrinsic clour of the surface. Therefore, reference images must be taken. This kind of coding can be classified as: 1). codification based on grey levels; 2). codification based on colour.
+
+\subsection{Summary}
+
+\subsubsection{Texture: textured}
+Multi-view Stereo algorithms take advantage of textural information to establish point correspondences across different views. Thus homogeneous surfaces pose great challenges to MVS algorithms. However, some MVS algorithms tested on a textureless object ``Dino'' in the Middlebury MVS benchmark~\cite{seitz2006comparison} give successful reconstruction results. This demonstrates that MVS algorithms are able to exploit very weak and intricate image textures, most of which come from shading and/or shadowing effects. However, these texture are so weak that images need to have very high quality.
+
+Most MVS algorithms require that the object surface with similar or same appearances from different perspectives, and hence, most of the algorithms assume Lambertian reflectance. While pure Lambertian surfaces are rare in reality, it is empirically verified that MVS algorithms perform reasonably well on non-Lambertian surfaces. As long as the cameras can capture the diffuse reflectance component, and then the photo-consistency function is able to identify and ignore images whose non-diffsue effects (e.g., specular highlights) are strong, then utilize the diffuse component in the remaining images. Further, there are some attempts to overcome this limitation, a pure passive methods was proposed that directly model and analyze non-Lambertian effects for MVS algorithms~\cite{jin2003multi,jin2005multi}.
 
 \subsection{Shading}
 Shading variations can reveal the surface normal orientation, which can be further integrated into a 2.5D height map. Shading variation depends on the shape (surface normal orientation), reflectance (material), and lighting (illumination). Thus an ill-posed problem arises because different shapes illuminated under different light conditions may produce the same image. This leads to a novel technique called Photometric Stereo in which surface orientation is determined from two or more images. The idea of Photometric Stereo is to vary the direction of the incident illumination between successive views while holding the viewing direction constant. This provides enough information to determine surface orientation at each pixel~\cite{woodham1979photometric}. This technique can produce a surface normal map with the same resolution of the input image, \ie to produce the pixel-wise surface normal map. Since the coefficients of the normal map are continuous, the integrated height map can reach an accuracy that cannot be achieved by any triangulation methods. Therefore, the Photometric Stereo technique is more desirable if the intrinsic geometric details are of great importance.
@@ -159,6 +171,16 @@ While parametric reflectance models are very good at reducing the complexity of 
 % - A. Hertzmann and S. Seitz. Example-based photometric stereo: shape reconstruction with general, varying BRDFs.\\
 % - W. M. Silver. Determining shape and reflectance using mul- tiple images. Master’s thesis, MIT, 1980.\\
 
+\subsection{Summary}
+\subsubsection{Lightness: bright}
+Active methods such as SfS utilize reflected light to estimate surface depth or orientation information. In this case, the intensity variation is used to estimate surface normal, thus the surface should have sufficiently high albedo, otherwise, the intensity variation would be hard to detect.
+
+\subsubsection{Reflectance}
+Though other reflectance models are feasible, typical SfS algorithms assume Lambertian reflectance model. The reason is that surface lightness is directly related to surface orietation and reflectance model once the light source and viewing direction are fixed. This is generally an ill-posed problem even with Lambertian model since there is only one intensity value per pixel to solve for surface orientation, which has two DoF. However, even in the simplest case, the survey by Zhang~\cite{zhang1999shape} demonstrate that SfS algorithms generally perform poorly, and none performs well in all cases.
+
+\subsubsection{Concavity: convex}
+Typical shading-based algorithms can not deal with effects caused by global light transport, such as cast shadow, inter-reflection, and so on. The surface lightness would be corrupted by light transported from other surface facets. Thus, objects exhibit any form of concavity will pose great challenge to SfS algorithms.
+
 \subsection{Silhouette}
 In some cases, it's an easy task to perform a foreground segmentation of the object of interest, which leads to a class of techniques that reconstructs a 3D volumetric model from the intersection of the binary silhouettes projected into 3D. The resulting model is called a \textit{visual hull}.
 
@@ -199,36 +221,39 @@ The silhouette is converted into a set of convex or non-convex 2D polygons with 
 
 All of the cues above are most widely used ones, and achieved decent results. These following two cues haven't resulted in as much success. Therefore, we only discuss the general idea rather than the technical details.
 
-\subsection{Texture}
-The basic principle behind shape from texture is the \textit{distortion} of the individual texel. In general, the image formation process introduces three distortion effects: the \textit{distance effect}, which makes objects in view appear larger when they are closer to the image plane; the \textit{position effect} which makes objects appear differently when the angle between the line of sight and the image plane different; and the \textit{forshortening effect}, which distort the objects depending on the angle between the surface normal and the line of sight. Besides, different effects take place under different projection models: the orthographic projection captures only the foreshortending effect whereas the perspective projection captures all three. Therefore, shape from texture methods which use orthographic projection are valid only in a limited domain, where the other two effects can be ignored, and the perspective model captures all three effects, but the resulting algorithms are complicated and involves the solution of nonlinear equations.
-\begin{figure}[h]
-\centering
-\includegraphics[width=0.8\textwidth]{relatedwork/tex_dist}
-\caption{Three distortion effect: distance distortion, position distortion, and foreshortening distortion.}
-\label{fig:tex_dist}
-\end{figure}
+\subsection{Summary}
+Visual Hull algorithms don't rely on material properties as long as the foreground of the image can be reliably segmented, thus is applicable for objects with arbitrary visual properties. However, it fails to carve the concavities on the object surface, thus is unsuitable to concave objects.
 
-To calculate the surface curvature at any point is far from trivial. Therefore, the surface shape is reconstructed by calculating the surface orientation (surface normal). A map of surface normals specifies the surface's orientation only at the points where the normals are computed. But, assuming that the normals are dense enough and the surface is smooth, the map can be used to reconstruct the surface shape.
+% \subsection{Texture}
+% The basic principle behind shape from texture is the \textit{distortion} of the individual texel. In general, the image formation process introduces three distortion effects: the \textit{distance effect}, which makes objects in view appear larger when they are closer to the image plane; the \textit{position effect} which makes objects appear differently when the angle between the line of sight and the image plane different; and the \textit{forshortening effect}, which distort the objects depending on the angle between the surface normal and the line of sight. Besides, different effects take place under different projection models: the orthographic projection captures only the foreshortending effect whereas the perspective projection captures all three. Therefore, shape from texture methods which use orthographic projection are valid only in a limited domain, where the other two effects can be ignored, and the perspective model captures all three effects, but the resulting algorithms are complicated and involves the solution of nonlinear equations.
+% \begin{figure}[h]
+% \centering
+% \includegraphics[width=0.8\textwidth]{relatedwork/tex_dist}
+% \caption{Three distortion effect: distance distortion, position distortion, and foreshortening distortion.}
+% \label{fig:tex_dist}
+% \end{figure}
 
-\subsection{Defocus}
-\textbf{Shape from focus}
-A strong cue for object depth is the amount of blur, which increases as the object moves away from the camera's focusing distance. As shown in Figure~\ref{fig:thin_lens}, moving the object surface away from the focus plane increases the circle of confusion.
+% To calculate the surface curvature at any point is far from trivial. Therefore, the surface shape is reconstructed by calculating the surface orientation (surface normal). A map of surface normals specifies the surface's orientation only at the points where the normals are computed. But, assuming that the normals are dense enough and the surface is smooth, the map can be used to reconstruct the surface shape.
 
-\begin{figure}[h]
-\centering
-\includegraphics[width=0.8\textwidth]{relatedwork/thin_lens}
-\caption{A thin lens of focal length $f$ focuses the light from a plane a distance $z_0$ in front of the lens at a distance $z_i$ behind the lens, where $\frac{1}{z_o}+\frac{1}{z_i}=\frac{1}{f}$. If the sensor plane moved forward $\Delta z_i$, the image are no longer in focus and the \textit{circle of confusion} $c$ depends on the distance of the sensor plane motion $\Delta z_i$ relative to the lens aperture diameter $d$.}
-\label{fig:thin_lens}
-\end{figure}
+% \subsection{Defocus}
+% \textbf{Shape from focus}
+% A strong cue for object depth is the amount of blur, which increases as the object moves away from the camera's focusing distance. As shown in Figure~\ref{fig:thin_lens}, moving the object surface away from the focus plane increases the circle of confusion.
 
-Figure~\ref{fig:thin_lens} shows the basic geometric image formation. The relationship between the object distance $z_o$, focal distance of the lens $f$, and the image distance $z_i$, is given by the Gaussian lens law:
-$$
-\frac{1}{z_o}+\frac{1}{z_i}=\frac{1}{f}
-$$
-All light rays that are radiated from the object and intercepted by the lens to converge at a single point on the image plane, thus a \textit{focused} image $I_f(x, y)$ is formed on the image plane. If, however, the sensor plane does not coincide with the image plane and is displaced from the image plane by a distance $\Delta z_i$, the energy received from the object is uniformly distributed over a circular patch on the sensor plane. The relationship between the radius $c$ of the circle of confusion and the sensor displacement $\Delta z_i$ is as follows:
-$$
-c = \frac{\Delta z_i r}{z_i}
-$$
+% \begin{figure}[h]
+% \centering
+% \includegraphics[width=0.8\textwidth]{relatedwork/thin_lens}
+% \caption{A thin lens of focal length $f$ focuses the light from a plane a distance $z_0$ in front of the lens at a distance $z_i$ behind the lens, where $\frac{1}{z_o}+\frac{1}{z_i}=\frac{1}{f}$. If the sensor plane moved forward $\Delta z_i$, the image are no longer in focus and the \textit{circle of confusion} $c$ depends on the distance of the sensor plane motion $\Delta z_i$ relative to the lens aperture diameter $d$.}
+% \label{fig:thin_lens}
+% \end{figure}
+
+% Figure~\ref{fig:thin_lens} shows the basic geometric image formation. The relationship between the object distance $z_o$, focal distance of the lens $f$, and the image distance $z_i$, is given by the Gaussian lens law:
+% $$
+% \frac{1}{z_o}+\frac{1}{z_i}=\frac{1}{f}
+% $$
+% All light rays that are radiated from the object and intercepted by the lens to converge at a single point on the image plane, thus a \textit{focused} image $I_f(x, y)$ is formed on the image plane. If, however, the sensor plane does not coincide with the image plane and is displaced from the image plane by a distance $\Delta z_i$, the energy received from the object is uniformly distributed over a circular patch on the sensor plane. The relationship between the radius $c$ of the circle of confusion and the sensor displacement $\Delta z_i$ is as follows:
+% $$
+% c = \frac{\Delta z_i r}{z_i}
+% $$
 % where $r$ is the radius of the lens. If we assume that the radius $c$ of the circle of confusion is independent of the position of the object point. Therefore, the \textit{defocused} image $I_d(x, y)$ formed on the sensor plane can also be obtained by convolving the focused image $I_f(x, y)$ with a circular symmetric ``pillbox'' filter
 % $$
 % I_d(x, y)=p(x, y)*I_f(x, y)
@@ -240,17 +265,17 @@ $$
 %     0  & \quad \text{otherwise}\\
 %   \end{cases}
 % $$
-The defocused images can be obtained in three ways: by displacing the sensor with respect to the image plane, by moving the lens, or by moving the object with respect to the object plane. The first two ways cab cause the following problems:
-\begin{itemize}
-\item The magnification of the system varies, thereby causing the image coordinates of the object points to change.
-\item The area on the sensor plane over which light energy is distributed varies, thereby causing a variation in image brightness.
-\end{itemize}
-To address this issue, the degree of focus is changed by moving the object with respect to a fixed configuration of the optical system and sensor. This approach ensures that the focused areas of the image are always subjected to the same magnification.
+% The defocused images can be obtained in three ways: by displacing the sensor with respect to the image plane, by moving the lens, or by moving the object with respect to the object plane. The first two ways cab cause the following problems:
+% \begin{itemize}
+% \item The magnification of the system varies, thereby causing the image coordinates of the object points to change.
+% \item The area on the sensor plane over which light energy is distributed varies, thereby causing a variation in image brightness.
+% \end{itemize}
+% To address this issue, the degree of focus is changed by moving the object with respect to a fixed configuration of the optical system and sensor. This approach ensures that the focused areas of the image are always subjected to the same magnification.
 
-The idea is as follows: the stage is moved in increaments of $\Delta d$, and an image is captured at each stage position ($d=n\Delta d$). By studying the behaviour of the focus measure, an interpolation method is used to compute the accurate depth estimates from a small number of focus measures. An important feature of this method is the local nature, the depth estimate at an image point is computed only from focus measures recorded at that point.
-\begin{figure}[h]
-\centering
-\includegraphics[width=0.8\textwidth]{relatedwork/shape_from_focus}
-\caption{shape from focus}
-\label{fig:shape_from_focus}
-\end{figure}
+% The idea is as follows: the stage is moved in increaments of $\Delta d$, and an image is captured at each stage position ($d=n\Delta d$). By studying the behaviour of the focus measure, an interpolation method is used to compute the accurate depth estimates from a small number of focus measures. An important feature of this method is the local nature, the depth estimate at an image point is computed only from focus measures recorded at that point.
+% \begin{figure}[h]
+% \centering
+% \includegraphics[width=0.8\textwidth]{relatedwork/shape_from_focus}
+% \caption{shape from focus}
+% \label{fig:shape_from_focus}
+% \end{figure}

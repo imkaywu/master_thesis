@@ -3,8 +3,8 @@
 
 \chapter{Abstract}
 
-Advancements in state-of-the-art 3D reconstruction algorithms have sped ahead of the development of interfaces that support the accessibility of these algorithms for application developers, especially to developers who are not experts in the field. 
+Advancements in state-of-the-art 3D reconstruction algorithms have sped ahead of the development of interfaces or application programming interfaces (APIs) for developers, especially to those who are not experts in computer vision.
 
-We present a novel interface, specifically for 3D reconstruction techniques, designed to allow users to reconstruct the shape of an object without knowledge of algorithmic details. The interface hides the details of algorithms by using a description of visual and geometric properties of the object. We show that this description can be interpreted to one appropriate algorithm, which can give a successful reconstruction result. 
+We have designed a novel interface, specifically for 3D reconstruction techniques, which uses a description (covering the conditions of the problem) to allow a user to reconstruct the shape of an object without knowledge of 3D vision algorithms. The interface hides the details of algorithms by using a description of visual and geometric properties of the object. Our interface interprets the description and chooses from a set of algorithms those that satisfy the description. We show that this description can be interpreted to one appropriate algorithm, which can give a successful reconstruction result.
 
-We evaluate the interface through a proof-of-concept interpreter, which interprets the description and invokes one of three underlying algorithms for reconstruction. We demonstrate the robustness of interpreter using a synthetic and real-world dataset where each object has been imaged with the appropriate setup.
+We evaluate the interface through a proof-of-concept interpreter, which interprets the description and invokes one of three underlying algorithms for reconstruction. We demonstrate the link between the description set by the user and the result returned using synthetic and real-world datasets where each object has been imaged with the appropriate setup.

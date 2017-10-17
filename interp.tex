@@ -1,7 +1,7 @@
 %% The following is a directive for TeXShop to indicate the main file
 %%!TEX root = diss.tex
 
-\chapter{An Interpretation of 3D Reconstruction}
+\chapter{Interpretation of 3D Reconstruction}
 \label{ch:3DRecon_Interp}
 So far we have proposed a well-defined problem space for the 3D reconstruction problem, as well as a precise mapping from the problem space to the algorithm space. This section, we validate that the derived mapping can be reliably applied to an object with a different shape, and propose a proof-of-concept interpreter that translates the description to an appropriate algorithm that can give a reliable reconstruction result. In other words, the interpretability from the problem centric description to a reliable reconstruction result must be shown. Both synthetic and real-world datasets are provided to evaluate the performance of the interpreter.
 
@@ -335,7 +335,7 @@ PMVS\\
 Description 1 matches with object \textit{barrel}, which has a reliable reconstruction result. The selected algorithm GSL is also in the mapped algorithms of object \textit{bust}, as shown in Table~\ref{tab:synth_prop_list}. Thus even though \textbf{description 1} doesn't match with the problem condition of \textit{bust}, a satisfactory result is also returned. However, the selected algorithm is not in the mapped algorithms of object \textit{vase0} and \textit{vase1}, thus less successful results are returned.
 
 \subsection{Real-world Datasets}
-We use similar setups to the synthetic counterparts and captured a real world dataset of nine objects~\ref{fig:test_real_world_6class}. The property of these objects are listed in Table~\ref{tab:real_data_prop_list}. Since we do not have the ground truth here, we resort to visual analysis to see if the appropriate algorithm gives an acceptable reconstruction compared to that of the baseline method.
+We use similar setups to the synthetic counterparts and captured a real world dataset of nine objects~\ref{fig:test_real_world}. The property of these objects are listed in Table~\ref{tab:real_data_prop_list}. Since we do not have the ground truth here, we resort to visual analysis to see if the appropriate algorithm gives an acceptable reconstruction compared to that of the baseline method.
 \begin{figure}[!htbp]
 \centering
 \begin{tabular}{c|*{4}{p{2cm}}}
@@ -354,6 +354,7 @@ object &
 \bottomrule
 \end{tabular}
 \caption{The rerepsentatives of the four classes of objects used for evaluation.}
+\label{fig:test_real_world}
 \end{figure}
 
 We use the aforementioned methods to retrieve the parameters of each property. The decomposition of material for each object is presented in Figure~\ref{fig:real_data_material}. The property settings of each object is listed in Table~\ref{tab:real_data_prop_list}.
