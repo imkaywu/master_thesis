@@ -3,44 +3,69 @@
 
 \chapter{Mapping of 3D Reconstruction}
 \label{ch:3DRecon_Mapping}
-Most vision work focuses on developing algorithmic novelties, and as we have mentioned, very few investigates the rigorous conditions under which the algorithms themselves work. Thus, this knowledge is only known empirically, without a rigorous definition of the application domain or problem conditions. This section builds upon the 3D description proposed in Chapter~\ref{ch:3DRecon_Desc}, and attempts to find the problem conditions surrounding each algorithm.
+Most vision work focuses on developing algorithmic novelties, and as we have mentioned, very few investigate the rigorous conditions under which the algorithms themselves work. Thus, this knowledge is only known empirically, without a rigorous definition of the application domain or problem conditions. This section builds upon the 3D description proposed in Chapter~\ref{ch:3DRecon_Desc}, and attempts to find the problem conditions surrounding each algorithm empirically.
 
 To achieve this goal, we need a dataset to evaluate the performance of each algorithm under varied conditions, which is not available since most 3D benchmarks, to the best of our knowledge, focus on one specific class of algorithms. For example, the Middlebury dataset targets MVS algorithms~\cite{seitz2006comparison}, and the `DiLiGenT' dataset targets Photometric Stereo algorithms~\cite{shi2016benchmark}. This makes such benchmarks only suitable for evaluation of within-category algorithms. Besides, there are no datasets with objects that cover a range of properties of materials and geometry. The reason for the lack of such a dataset is that it is practically impossible to change one property, \eg surface texture, material, and so on, while fixing others when creating a real-world dataset.
 
 In response to these challenges, we use synthetic datasets created by phiyical-based rendering software (Blender), to evaluate the 3D reconstruction algorithms. Our dataset includes a collection of images of a scene under different materials and lighting conditions. The camera/projector's intrinsic and extrinsic parameters are computed directly from the configurations of the synthetic setup, and the ground truth, including the 3D model point cloud and normal map, are generated directly from Blender.
 
 \section{Synthetic setup}
-We use Blender's physical-based rendering engine, Cycles, to generate the synthetic dataset. For each technique, the configuration of the camera remains fixed. The image resolution is 1280$\times$720, with a focal length of $35mm$ or $1400pix$.
-
-For the Multi-View Stereo setup, there are five rings of cameras, of which the elevation angles are $15^\circ$, $30^\circ$, $45^\circ$, $60^\circ$, $90^\circ$. The between-angles of two neighbouring cameras are $30^\circ$, $30^\circ$, $45^\circ$, $45^\circ$, and $360^\circ$. Thus, there are in total $12+12+8+8+1=41$ cameras.
-
-For the Photometric Stereo setup, since increasing the number of images is only important up to a point, the experimental results showed that most algorithms reaches their optimum when 15 images are used~\cite{Berkiten:2016:ARB}. To strike a balance between algorithm performance and rendering time, we use 25 light sources, which are distributed on four rings with elevation angle of $90^\circ$, $85^\circ$, $60^\circ$, and $45^\circ$. The azimuth angle between two neighbouring light sources is $45^\circ$. Thus, the total number of images is $1+8*3=25$.
-
-For the Structured Light setup, the baseline angle between the camera and the projector is $10^\circ$. The resolution of the projector is $1024\times768$, thus 10 Gray code patterns are needed. To counter the effect of inter-reflection, each pattern and its inverse are projected, which descreases sensitivity to scattered light. Two additional image with lights on and off are generated to help the decoding process. Thus the total number of images is $(10+10)*2+2=42$.
-\begin{figure}[!htbp]
+We use Blender's physical-based rendering engine, Cycles, to generate the synthetic datasets. For each technique, the configuration of the camera remains fixed. The image resolution is 1280$\times$720, with a focal length of $35mm$ or $1400pix$. The synthetic setups are shown in Table~\ref{tab:synth_setup}, and some example synthetic images generated using the setups are shown in Figure~\ref{fig:synth_setup}.
+\begin{table}[!htbp]
 \centering
-\begin{tabular}{ccc}
-\includegraphics[width=0.3\textwidth]{mapping/setup/mvs_setup} &
-\includegraphics[width=0.3\textwidth]{mapping/setup/ps_setup} &
-\includegraphics[width=0.3\textwidth]{mapping/setup/sl_setup}\\
-MVS & PS & SL\\
+\begin{tabular}{lll}
+\toprule
+Technique & Hardware number & Arrangement\\
+\midrule
+MVS & 41 camera & 5 rings, each having 1, 8, 8, 12, 12 camera\\
+PS & 1 camera+25 lights & 4 rings, each having 1, 8, 8, 8, 8 light sources\\
+SL & 1 camera\&projector & baseline angle: $10^\circ$\\
+\bottomrule
 \end{tabular}
-\caption{Setups of the syntheic dataset}
-\label{fig:setup}
-\end{figure}
+\label{tab:synth_setup}
+\end{table}
 
-\section{Structure of Datasets}
-All synthetic datasets used in this thesis share the similar structure, as shown in Figure~\ref{fig:dataset_structure}. \textit{Prop Comb} represents one combination of properties, which consists of no less than two properties. For instance, \textit{texture and albedo}, or \textit{albedo, and specularity}. Note that the diretory structure of PS and SL is the same as that of MVS.
-% Due to the number of properties and levels for each property, it would be unrealistic to render all their combinations. For instance, if there are $N$ properties and each is discretized into $L$ levels, the number of different combinations is $L^N$, and for each combination, there are in total $41+25+42=108$ images to render. Therefore, we take another approach: 1) we investigate the \textit{effective problem domain} which consists of only the \textit{effective} and \textit{dependent} properties; 2) we generate synthetic images for the \textit{effective} and \textit{dependent} properties and all of their combinations. The structure of the dataset is as follows:
-\begin{figure}[!htbp]
+\begin{figure*}[!htbp]
 \centering
-\includegraphics[width=0.6\textwidth]{mapping/dataset_structure}
-\caption{Structure of the synthetic dataset.}
-\label{fig:dataset_structure}
-\end{figure}
+\begin{tabular}{ll}
+Texture & \raisebox{-.5\height}{\includegraphics[width=0.8\textwidth]{img/mapping/setup/tex.png}}\\
+Albedo & \raisebox{-.5\height}{\includegraphics[width=0.8\textwidth]{img/mapping/setup/alb.png}}\\
+Specular & \raisebox{-.5\height}{\includegraphics[width=0.8\textwidth]{img/mapping/setup/spec.png}}\\
+Roughness & \raisebox{-.5\height}{\includegraphics[width=0.8\textwidth]{img/mapping/setup/rough.png}}
+\end{tabular}
+\label{fig:synth_setup}
+\caption{Example synthetic images. The value of each property ranges from 0.1 to 1.}
+\end{figure*}
 
-\section{Selected methods}
-We have selected one representative algorithm from three major classes of algorithms presented in Chapter~\ref{ch:3DRecon_Taxo}: the PMVS proposed in~\cite{furukawa2010accurate}, the example-based Photometric Stereo proposed in~\cite{hertzmann2005example}, and the Gray-code Structured Light technique. See Table~\ref{tab:selected_algos} for a summary of the selected algorithms. The current implementation of SL projects both column and row patterns, and depth values are computed using these two kinds of patterns individually. A depth consistency step is performed to reject erroneous triangulations.
+% For the Multi-View Stereo setup, there are five rings of cameras, of which the elevation angles are $15^\circ$, $30^\circ$, $45^\circ$, $60^\circ$, $90^\circ$. The between-angles of two neighbouring cameras are $30^\circ$, $30^\circ$, $45^\circ$, $45^\circ$, and $360^\circ$. Thus, there are in total $12+12+8+8+1=41$ cameras.
+
+% For the Photometric Stereo setup, since increasing the number of images is only important up to a point, the experimental results showed that most algorithms reaches their optimum when 15 images are used~\cite{Berkiten:2016:ARB}. To strike a balance between algorithm performance and rendering time, we use 25 light sources, which are distributed on four rings with elevation angle of $90^\circ$, $85^\circ$, $60^\circ$, and $45^\circ$. The azimuth angle between two neighbouring light sources is $45^\circ$. Thus, the total number of images is $1+8*3=25$.
+
+% For the Structured Light setup, the baseline angle between the camera and the projector is $10^\circ$. The resolution of the projector is $1024\times768$, thus 10 Gray code patterns are needed. To counter the effect of inter-reflection, each pattern and its inverse are projected, which descreases sensitivity to scattered light. Two additional image with lights on and off are generated to help the decoding process. Thus the total number of images is $(10+10)*2+2=42$.
+% \begin{figure}[!htbp]
+% \centering
+% \begin{tabular}{ccc}
+% \includegraphics[width=0.3\textwidth]{mapping/setup/mvs_setup} &
+% \includegraphics[width=0.3\textwidth]{mapping/setup/ps_setup} &
+% \includegraphics[width=0.3\textwidth]{mapping/setup/sl_setup}\\
+% MVS & PS & SL\\
+% \end{tabular}
+% \caption{Setups of the syntheic dataset}
+% \label{fig:setup}
+% \end{figure}
+
+% \section{Structure of Datasets}
+% All synthetic datasets used in this thesis share the similar structure, as shown in Figure~\ref{fig:dataset_structure}. \textit{Prop Comb} represents one combination of properties, which consists of no less than two properties. For instance, \textit{texture and albedo}, or \textit{albedo, and specularity}. Note that the diretory structure of PS and SL is the same as that of MVS.
+% Due to the number of properties and levels for each property, it would be unrealistic to render all their combinations. For instance, if there are $N$ properties and each is discretized into $L$ levels, the number of different combinations is $L^N$, and for each combination, there are in total $41+25+42=108$ images to render. Therefore, we take another approach: 1) we investigate the \textit{effective problem domain} which consists of only the \textit{effective} and \textit{dependent} properties; 2) we generate synthetic images for the \textit{effective} and \textit{dependent} properties and all of their combinations. The structure of the dataset is as follows:
+% \begin{figure}[!htbp]
+% \centering
+% \includegraphics[width=0.6\textwidth]{mapping/dataset_structure}
+% \caption{Structure of the synthetic dataset.}
+% \label{fig:dataset_structure}
+% \end{figure}
+
+\section{Selected and baseline methods}
+We have selected one representative algorithm from three major classes of algorithms presented in Chapter~\ref{ch:3DRecon_ProbSpace}: the PMVS proposed in~\cite{furukawa2010accurate}, the example-based Photometric Stereo proposed in~\cite{hertzmann2005example}, and the Gray-code Structured Light technique. See Table~\ref{tab:selected_algos} for a summary of the selected algorithms. The current implementation of SL projects both column and row patterns, and depth values are computed using these two kinds of patterns individually. A depth consistency step is performed to reject erroneous triangulations.
 \begin{table}[!htbp]
 \centering
 \begin{tabular}{c|c|c|c|c}
@@ -58,18 +83,6 @@ EPS & - & High & Low & High \\
 \multicolumn{5}{l}{GSL: Gray code Structured Light technique}\\
 \midrule
 GSL & - & High & Low & High\\
-\bottomrule
-\end{tabular}
-\caption{Summary of the selected algorithms for the framework, and the corresponding working conditions in theory.}
-\label{tab:selected_algos}
-\end{table}
-
-\section{Baseline}
-\begin{table}[!htbp]
-\centering
-\begin{tabular}{c|c|c|c|c}
-\toprule
-Technique & Texture & Albedeo & Specular & Roughness\\
 \midrule
 \multicolumn{5}{l}{VH: volumetric Visual Hull}\\
 \midrule
@@ -80,15 +93,34 @@ VH & - & - & - & -\\
 LLS-PS & - & High & Low & High\\
 \bottomrule
 \end{tabular}
-\caption{Summary of the baseline algorithms for the framework, and the corresponding working conditions in theory.}
-\label{tab:selected_baseline_algos}
+\caption{Summary of the selected and baseline algorithms for the interface, and the corresponding working conditions in theory.}
+\label{tab:selected_algos}
 \end{table}
-A baseline algorithm that works sufficiently well under most conditions should be chosen so that it is possible to determine the performance of a selected algorithm within the interface. We choose Visual Hull as one of the baseline algorithms since it works relatively well as long as the silhouette of the object can be reliably extracted, thus being insensitive to material properties. In addition, the true scene is always enclosed by the reconstruction result, so the outcome is always predictable. A simple linear least squares based Photometric Stereo (LLS-PS) is selected to evaluate Photometric Stereo algorithms. However, there is currently no such PS algorithms that work reasonably well under various conditions. Thus, we run this baseline algorithm under the optimal condition to ensure a best possible result.
+
+% \section{Baseline}
+% \begin{table}[!htbp]
+% \centering
+% \begin{tabular}{c|c|c|c|c}
+% \toprule
+% Technique & Texture & Albedeo & Specular & Roughness\\
+% \midrule
+% \multicolumn{5}{l}{VH: volumetric Visual Hull}\\
+% \midrule
+% VH & - & - & - & -\\
+% \midrule
+% \multicolumn{5}{l}{LLS-PS: linear least squares Photometric Stereo.}\\
+% \midrule
+% LLS-PS & - & High & Low & High\\
+% \bottomrule
+% \end{tabular}
+% \caption{Summary of the baseline algorithms for the framework, and the corresponding working conditions in theory.}
+% \label{tab:selected_baseline_algos}
+% \end{table}
+We use two baseline approaches to compare our results: Visual Hull and a simple linear least squares based PS (LLS-PS). We use Visual Hull as one of the baseline algorithms since it works relatively well as long as the silhouette of the object can be reliably extracted, thus being insensitive to material properties. In addition, the true scene is always enclosed by the reconstruction result, so the outcome is always predictable. We use LLS-PS to evaluate Photometric Stereo algorithms. However, there is currently no such PS algorithms that work reasonably well under various conditions. Thus, we run this baseline algorithm under the optimal condition to ensure a best possible result.
 
 \section{Quantitative measures}
 We use the metrics proposed in \cite{seitz2006comparison} to evaluate MVS and SL algorithms. More specifically, we compute the accuracy and completeness of the reconstruction. For accuracy, the distance between the points in the reconstruction $R$ and the nearest points on ground truth $G$ is computed, and the distance $d$ such that $X\%$ of the points on $R$ are within distance $d$ of $G$ is considered as accuracy. Thus the lower the accuracy value, the better the reconstruction result. For completeness, we compute the distance from $G$ to $R$. Intuitively, points on $G$ are not ``covered'' if no suitable nearest points on $R$ are found. A more practical approach computes the fraction of points of $G$ that are within an allowable distance $d$ of $R$.
 Note that as the accuracy improves, the ``accuracy value'' goes down, whereas as the completeness improves, the ``completeness value'' goes up.
- % but the ``accuracy'' is often claimed as improved, which is contradictory at first glance. To make it more consistent to the natural context, we say the accuracy goes up when the reconstruction gets better.
 
 For photometric stereo, depth information is lost since only one viewpoint is used. Thus, the previous metrics are not applicable. Here we employ another evaluation criteria that is widely adopted, which is based on the statistics of angular error. For each pixel, the angular error is calculated as the angle between the estimated and ground truth normal, \ie $arccos$($n_g^T n$), where $n_g$ and $n$ are the ground truth and estimated normals respectively. In addition to the mean angular error, we also calculate the standard deviation, minimum, maximum, median, first quartile, and third quartile of angular errors for each estimated normal map.
 
@@ -106,51 +138,13 @@ Mean and median are both valid measures of central tendency, but as the skewness
 The variation of the angular error is measured by both \textit{interquatile range} ($Q_3 - Q_1$) and \textit{standard deviation} ($std$).
   
 \subsubsection{Skewness (right/positive-skewness)}
-The normal estimation becomes worse as the difference between mean and median increases (see Figure~\ref{fig:ps_criteria} (g)-(l)). This can be explained as follows: assuming the angular error follows a Gaussian distrubtion, then mean and median are close when the normals are reliably estimated. However, if normals are poorly recovered, the mean would increase since larger angular errors exist, while the median would change far less since only a small amount of pixels are poorly estimated. Thus, the difference between mean and median is a good indicator of the quality of normal estimation.
-\begin{figure}[!htbp]
-\begin{tabular}{ccc}
-\includegraphics[width=0.33\textwidth]{mapping/ps_criteria/mu_med_5_5.png} &
-\includegraphics[width=0.33\textwidth]{mapping/ps_criteria/mu_med_5_6.png} &
-\includegraphics[width=0.33\textwidth]{mapping/ps_criteria/mu_med_5_7.png} \\
-% (g) $\mu=5, \text{med}=5$ & (h) $\mu=5, \text{med}=6$ & (i) $\mu=5, \text{med}=7$\\
-(g) $\mu=5, \text{med}=5$ & (h) $\mu=6, \text{med}=5$ & (i) $\mu=7, \text{med}=5$\\
-\includegraphics[width=0.33\textwidth]{mapping/ps_criteria/knight_5_5.png} &
-\includegraphics[width=0.33\textwidth]{mapping/ps_criteria/knight_5_6.png} &
-\includegraphics[width=0.33\textwidth]{mapping/ps_criteria/knight_5_8.png} \\
-% (j) $\mu=5, \text{med}=5$ & (k) $\mu=5, \text{med}=6$ & (l) $\mu=5, \text{med}=8$\\
-(j) $\mu=5, \text{med}=5$ & (k) $\mu=6, \text{med}=5$ & (l) $\mu=8, \text{med}=5$\\
-\end{tabular}
-\caption{Shape estimation results with varied mean and median values. (g) - (l): as the difference between mean and median increases, the estimated shape becomes more susceptible to error, as shown by the spikes in the reconstruction.}
-\label{fig:ps_criteria}
-\end{figure}
-
-% The normal estimation is less sensitive to angular error when the mean and median are close. The shape can be recovered relatively well with a mean/median angular error of $10^\circ$ (see Figure~\ref{fig:ps_criteria} (a)-(f)). 
-
-% However, as we will be shown in Chapter~\ref{ch:3DRecon_Interp}, the actual thresholds of the angular error might vary from shape to shape. Therefore, it's impractical to use a categorical numeric value to determine the quality of reconstruction. The metrics mentioned above provide the guidelines when it comes to assess the performance of the algorithm, but the actual thresholds are by no means and should not be fixed.
-
-% Therefore, the criteria of an ``acceptable'' normal reconstruction are listed in Table~\ref{tab:ps_criteria}, where $c$ is a constant that varies from object to object, and is normally less then $5^\circ$. For the examples shown in Figure~\ref{fig:ps_criteria}, $c=1^\circ$ for sphere, and $c=2^\circ$ for `knight'.
-% \begin{table}[!htbp]
-% \centering
-% \begin{tabular}{cccc}
-% \hline
-% Mean ($\mu$) & Median (med) & Interquatile & Standard Deviation\\
-% \hline
-% $\mu<10^\circ$ & $\text{med}<10^\circ$ & $Q_{(3-1)}<3^\circ$ & $\sigma \not\gg Q_3$\\
-% $\mu - \text{med} < \text{c}^\circ$\\
-% \hline
-% \end{tabular}
-% \caption{Criteria of an ``acceptable'' normal estimation by Photometric Stereo techniques.}
-% \label{tab:ps_criteria}
-% \end{table}
+The normal estimation becomes worse as the difference between mean and median increases. This can be explained as follows: assuming the angular error follows a Gaussian distrubtion, then mean and median are close when the normals are reliably estimated. However, if normals are poorly recovered, the mean would increase since larger angular errors exist, while the median would change far less since only a small amount of pixels are poorly estimated. Thus, the difference between mean and median is a good indicator of the quality of normal estimation.
 
 \section{Effective Problem Domain (EPD)}
-The greatest challenge in constructing a mapping from problem space to algorithms is the large variations in shapes and material properties, which results in a problem space that is too large to cope with. Suppose there are $N$ properties, each with $L$ discrete levels, then there are in total $L^N$ different problem conditions. Thus, the first step, discussed in Section~\ref{sec:mvs_epd},~\ref{sec:ps_epd},~\ref{sec:sl_epd}, is to reduce the dimensions of problem space by establishing the \textit{effective problem domain} (EPD), which consists of only effective properties. Then, Section~\ref{sec:mvs_training},~\ref{sec:ps_training},~\ref{sec:sl_training} evaluate performance of selected algorithms within the corresponding EPD.
+The greatest challenge in constructing a mapping from problem space to algorithms is the large variations in shapes and material properties, which results in a problem space that is too large to cope with. Suppose there are $N$ properties, each with $L$ discrete levels, then there are in total $L^N$ different problem conditions. Thus, the first step, discussed in Section~\ref{sec:mvs_epd},~\ref{sec:ps_epd},~\ref{sec:sl_epd}, is to reduce the dimensions of problem space by establishing the \textit{effective problem domain} $\text{EPD}=\text{set(}p_i^j\text{)}$, where $i\in\{0, ..., L-1\}$, and $j<\{0, N-1\}$, which consists of only effective properties. Then, Section~\ref{sec:mvs_training},~\ref{sec:ps_training},~\ref{sec:sl_training} evaluate performance of selected algorithms within the corresponding EPD.
 
-A naive way of finding the \textit{effective properties} would be evaluating algorithmic performance by changing one property at a time. However, this approach ignores the dependency between properties, \ie the effect of property \textit{A} might be insignificant when property \textit{B} is absent. Thus, we investigate the pairwise relation between any two properties.
+A naive way of finding the \textit{effective properties} would be evaluating algorithmic performance by changing one property at a time. However, this approach ignores the dependency between properties, \ie the effect of property \textit{A} might be insignificant when property \textit{B} is absent. Thus, we investigate the pairwise relation between any two properties, thus two properties are chosen while the rest are fixed, the configurations of the problem conditions are shown in Table~\ref{tab:pairwise_prob_cond}
 
-\subsection{EPD: PMVS}
-\label{sec:mvs_epd}
-We investigate the impact of each property on the performance of PMVS in terms of accuracy and completeness under varied combinations of properties. The settings of these properties are listed in Table~\ref{tab:mvs_depend_check_params}.
 \begin{table}[!htbp]
   \centering
   \begin{tabular}{l*{4}{c}}
@@ -165,9 +159,13 @@ We investigate the impact of each property on the performance of PMVS in terms o
   \textbf{(f)} & 0.8 & 0.8 & [0.2, 0.8] & [0.2, 0.8]\\
   \hline
   \end{tabular}
-  \caption{Problem conditions for establishing the \textit{effective problem domain} of PMVS.}
-  \label{tab:mvs_depend_check_params}
+  \caption{Problem conditions for establishing the \textit{effective problem domain} of all selected algorithms.}
+  \label{tab:pairwise_prob_cond}
 \end{table}
+
+\subsection{EPD: PMVS}
+\label{sec:mvs_epd}
+We investigate the impact of each property on the performance of PMVS in terms of accuracy and completeness under varied combinations of properties. The settings of these properties are listed in Table~\ref{tab:pairwise_prob_cond}.
 
 \begin{sidewaysfigure}[!htbp]
 \begin{tabular}{ccc}
@@ -245,24 +243,7 @@ The effective properties of PMVS are: texture, albedo, and specular, as shown in
 
 \subsection{EPD: EPS}
 \label{sec:ps_epd}
-We investigate the impact of each property on the performance of example-based PS in terms of angular error under varied combinations of properties. The settings of the properties are listed in Table~\ref{tab:ps_depend_check_params}.
-\begin{table}[!htbp]
-  \centering
-  \begin{tabular}{l*{4}{c}}
-  \hline
-  \textbf{Group} & Texture & Albedo & Specular & Roughness\\
-  \hline
-  \textbf{(a)} & [0.2, 0.8] & [0.2, 0.8] & 0.0 & 0.0\\
-  \textbf{(b)} & [0.2, 0.8] & 0.8 & [0.2, 0.8] & 0.2\\
-  \textbf{(c)} & [0.2, 0.8] & 0.8 & 0.0 & [0.2, 0.8]\\
-  \textbf{(d)} & 0.0 & [0.2, 0.8] & [0.2, 0.8] & 0.2\\
-  \textbf{(e)} & 0.0 & [0.2, 0.8] & 0.0 & [0.2, 0.8]\\
-  \textbf{(f)} & 0.0 & 0.8 & [0.2, 0.8] & [0.2, 0.8]\\
-  \hline
-  \end{tabular}
-  \caption{Problem conditions for establishing the \textit{effective problem domain} of EPS.}
-  \label{tab:ps_depend_check_params}
-\end{table}
+We investigate the impact of each property on the performance of example-based PS in terms of angular error under varied combinations of properties. The settings of the properties are listed in Table~\ref{tab:pairwise_prob_cond}.
 
 \begin{sidewaysfigure}[!htbp]
 \begin{tabular}{ccc}
@@ -401,24 +382,7 @@ The properties that have an impact on EPS are: albedo, specularity, and roughnes
 
 \subsection{EPD: GSL}
 \label{sec:sl_epd}
-We investigate the impact of each property on the performance of Gray-code SL in terms of accuracy and completeness under a varied combination of properties. The settings of properties are listed in Table~\ref{tab:sl_depend_check_params}.
-\begin{table}[!htbp]
-  \centering
-  \begin{tabular}{l*{4}{c}}
-  \hline
-  \textbf{Property} & Texture & Albedo & Specular & Roughness\\
-  \hline
-  \textbf{(a)} & [0.2, 0.8] & [0.2, 0.8] & 0.0 & 0.0\\
-  \textbf{(b)} & [0.2, 0.8] & 0.8 & [0.2, 0.8] & 0.0\\
-  \textbf{(c)} & [0.2, 0.8] & 0.8 & 0.0 & [0.2, 0.8]\\
-  \textbf{(d)} & 0.0 & [0.2, 0.8] & [0.2, 0.8] & 0.0\\
-  \textbf{(e)} & 0.0 & [0.2, 0.8] & 0.0 & [0.2, 0.8]\\
-  \textbf{(f)} & 0.0 & 0.8 & [0.2, 0.8] & [0.2, 0.8]\\
-  \hline
-  \end{tabular}
-  \caption{Problem conditions for establishing the \textit{effective problem domain} of GSL.}
-  \label{tab:sl_depend_check_params}
-\end{table}
+We investigate the impact of each property on the performance of Gray-code SL in terms of accuracy and completeness under a varied combination of properties. The settings of properties are listed in Table~\ref{tab:pairwise_prob_cond}.
 
 \begin{sidewaysfigure}[!htbp]
 \begin{tabular}{ccc}

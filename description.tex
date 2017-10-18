@@ -3,7 +3,7 @@
 
 \chapter{Description of 3D Reconstruction}
 \label{ch:3DRecon_Desc}
-In Chapter~\ref{ch:3DRecon_ProbSpace}, we introduce a taxonomy of 3D reconstruction which categorizes algorithms based on the problem space that they can reliably work under, \ie a mapping from problem space to algorithm space. However, without a formal `language', \ie a model and representations, this mapping would be largely empirical. Expressing the conditions within which an algorithm works well without a formal definition of the problem space prevents formulating a well defined problem.
+In Chapter~\ref{ch:3DRecon_ProbSpace}, we introduce a taxonomy of 3D reconstruction which categorizes algorithms based on the problem space that they can reliably work under, \ie a mapping from problem space to algorithm space. However, without a formal description, \ie a model and representations, this mapping would be largely empirical. Expressing the conditions within which an algorithm works well without a formal definition of the problem space prevents formulating a well defined problem.
 
 In this chapter, we attempt to extend this taxonomy by providing a description of the 3D reconstruction problem which allows for a well defined specification of the conditions surrounding the problem. This description abstracts away from the functional specification of \textit{how} to estimate a reconstruction. We first propose a formal definition of the 3D reconstruction problem in Section~\ref{sec:3DRecon_Def}. Next, section~\ref{sec:3DRecon_Model} proposes a model to 3D reconstruction by selecting various key \textit{aspects} of the problem space that are crucial for describing the appearance of the object. Section~\ref{sec:3DRecon_Rep} outlines concrete representations of the proposed model. Section~\ref{sec:3DRecon_Exp} provides examples of expressing common 3D reconstruction problems using the proposed model and representations. These following four layers represent the description of our accessible 3D reconstruction framework: Definition, Representation, Model, and Expression.
 
@@ -160,8 +160,12 @@ Specular surfaces reflect light in nearly a single direction when microscopic su
 %  We use a numeric \textit{specular} value to denote the proportion of a material's specularity.
 \begin{figure}[!htbp]
 \centering
-\includegraphics[width=0.3\textwidth]{model/spec_ref}
-\caption{A \textbf{red} specular sphere. The surface reflects light in a mirror-like way, showing a distorted environment. Since no diffuse reflection exists, the colour of the surface is no longer visible.}
+\begin{tabular}{cc}
+\includegraphics[width=0.3\textwidth]{model/spec_ref}&
+\includegraphics[width=0.3\textwidth]{model/spec_ref}\\
+(a) & (b)\\
+\end{tabular}
+\caption{(a). A \textbf{red} diffuse sphere; (b). a \textbf{red} specular sphere. The surface reflects light in a mirror-like way, showing a distorted environment. Since no diffuse reflection exists, the colour of the surface is no longer visible.}
 \label{fig:spec_ref}
 \end{figure}
 
@@ -242,7 +246,7 @@ The model and corresponding rerpesentations are shown in Table~\ref{tab:3DRecon_
 
 \section{Expression}
 \label{sec:3DRecon_Exp}
-Now that we have a proposed model and representations of 3D reconstruction problem, we can express the six proposed object classes using this description. The expression of the reconstruction problem is shown in table~\ref{tab:express}. Given that all properties in Figure~\ref{fig:prob_cond} are vaguely described, for instance, textured/textureless, dark/bright, we use three discrete scales to parameterize these properties: \textit{low} (0.2), \textit{medium} (0.5), and \textit{high} (0.8).
+Now that we have a proposed model and representations of 3D reconstruction problem, we can express the four proposed problem conditions using this description. The expression of the reconstruction problem is shown in table~\ref{tab:express}. Given that all properties in Figure~\ref{fig:prob_cond} are coarsely described, for instance, textured/textureless, dark/bright, we use three discrete scales to parameterize these properties: \textit{low} (0.2), \textit{medium} (0.5), and \textit{high} (0.8).
 \begin{table}[!htbp]
   \centering
   \begin{tabular}{l*{4}{p{1cm}}l}
