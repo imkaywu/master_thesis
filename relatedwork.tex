@@ -7,12 +7,11 @@ Section~\ref{sec:Toolbox} discusses the existing toolboxes for 3D reconstruction
 
 \section{Toolboxes}
 \label{sec:Toolbox}
-There have been many attempts in developing computer vision or image processing frameworks that support rapid development of vision applications. There are multiple general vision libraries in this field including OpenCV~\cite{bradski2008learning}, VLFeat~\cite{vedaldi08vlfeat}, VXL~\cite{vxl17} and multiple Matlab libraries~\cite{KovesiMATLABCode, MariottiniPr_RAM05}. These libraries often provide tools for multiple image processing and computer vision problems, including low-vision tasks such as feature detection and matching, middle-level vision tasks such as segmentation and tracking, and high-level vision problems such as classification and recognition. All of these software frameworks and libraries provide vision components and algorithms without any context of how and when they should be applied. As a result, they often require expert vision knowledge for effective use.
+There have been many attempts in developing computer vision or image processing frameworks that support rapid development of vision applications. There are multiple general vision libraries in this field including OpenCV~\cite{bradski2008learning}, VLFeat~\cite{vedaldi08vlfeat}, VXL~\cite{vxl17} and multiple Matlab libraries~\cite{KovesiMATLABCode, MariottiniPr_RAM05}. These libraries often provide tools for multiple image processing and computer vision problems, including low-vision tasks such as feature detection and matching, middle-level vision tasks such as segmentation and tracking, and high-level vision problems such as classification and recognition. All of these software frameworks and libraries provide vision components and algorithms without any context of how and when they should be applied. As a result, they often require expert vision knowledge for effective use. For example, many feature detectors/descriptors are provided by OpenCV but with no indication of under what conditions each works most effectively.
 
-\subsection{General vision libraries}
+We have witnessed many successful softwares in the field of image-based reconstruction, which is a sub-field of 3D reconstruction. One of the most widely used open source softwares is PMVS developed by Furukawa~\cite{furukawa2010accurate}, which is used not only by computer vision/graphics engineers, but also production companies like Industrial Light \& Magic, and Google, etc. It's often used together with Bundler, which is a Structure from Motion software that estimate camera parameters from images developed by Noah Snavely \cite{snavely2006photo}, and Poisson Surface Reconstruction developed by Michael Misha Kazhdan, which is a surface mesh software that estimate the triangulated surface from oriented point cloud~\cite{kazhdan2006poisson}. Some other notable open source softwares include VisualSfM~\cite{wu2011visualsfm}, CMP-MVS~\cite{Heller-etal-MVA-2015}, MVE~\cite{fuhrmann2014mve}, and openMVG~\cite{openMVG}. However, effective use of those software requires a basic understanding of the relevant domain, including feature detection, matching, camera calibration, dense correspondence search, etc.
 
-\subsection{3D vision libraries}
-
+This current situation motivates us to provide an description-based interface for non-vision users to access the state-of-the-art techniques in their own applications.
 
 \section{3D Reconstruction Techniques}
 \label{sec:3DRecon_Tech}
@@ -48,25 +47,33 @@ The 3D reconstruction technique exploits a variety of visual and geometric cues 
 \subsection{Stereo}
 Stereo correspondence is one of the most widely used visual cues in 3D vision. Passive methods, including stereoscopy, trinocular stereo, and MVS, identify correspondences across different views, and estimate the 3D point by triangulation. However these passive approaches suffer from uniform or periodic surfaces. Active techniques attempt to overcome the correspondence problem by replacing one of the cameras with a controllable illumination source, e.g., single-point laser, slit laser scanner, temporal or spatially modulated Structured Light (SL), etc. Here we refer readers to the survey article by \citeauthor{blais2004review} for recent developments of active methods. We classify the MVS algorithms based on the taxonomy proposed in~\cite{seitz2006comparison}, which divides the field into four classes based on reconstruction method, and categorize the SL algorithms by projection patterns.
 
-\subsubsection{MVS: Volumemetric stereo}
+\subsubsection{Multi-View Stereo}
+\textbf{Volumemetric stereo} 
 The first class of MVS algorithms computes the cost function in a 3D volume, then extracts a surface from this volume. One successful example is voxel colouring, which traverses a discretized 3D space in “depth-order” to identify voxels that have a unique colouring, constant across all possible interpretations of the scene~\cite{seitz1997photorealistic}. Another thread of work formulates the problem in the Markov Random Field (MRF) framework and extracts the optimal surface by Graph-Cut algorithms~\cite{roy1998maximum,vogiatzis2005multi,vogiatzis2007multiview}.
 
-\subsubsection{MVS: Surface Evolution}
+\textbf{Surface Evolution} 
 The second class of MVS algorithms works by iteratively evolving a volume or surface to minimize a cost function. This includes methods based on voxels, level set, and surface meshes. The Space Carving technique achieves a least-commitment shape~\cite{marr1982vision} by iteratively removing inconsistent voxels from the scene~\cite{kutulakos2000theory}. Level-set techniques cast the problem as a variational one, and use a set of PDE's as cost functions, which are deformed from an initial set of surfaces towards the detected objects~\cite{faugeras2002variational}. Other approaches use a deformable model and represent the scene as surface meshes that moves as a function of internal and external forces~\cite{esteban2004silhouette}. \citeauthor{hiep2009towards} presented a visibility-based method that transforms a dense point cloud into a surface mesh, which is fed into a mesh-based variational refinement that captures small details, smartly handling photo-consistency, regularization and adaptive resolution.
 
 % Level-set based techniques minimize a set of partial differential equations defined in a volume. Like space carving methods, level-set methods typically start from a initial volume and shrink inward, or outward if the cost function is minimized. \citeauthor{faugeras2002variational} proposed a novel geometric approach based on variational principle, from which a set of PDE's can be deduced. The level set method is used to deform an initial set of surfaces towards the objects to be detected. However, level-set is no long a popular MVS technique, because high quailty models with correct topology can be directly computed from photo-consistency functions without the refinement steps.
 
-\subsubsection{MVS: Region Growing}
+\textbf{Region Growing}
 The third class of MVS algorithms starts with a sparse set of scene points, propagates these points to spatial neighbours, and refine the cost function with respect to position and orientation of the points. \citeauthor{otto1989region} proposed one of the first work on region growing stereo search. The essence of this algorithm is as follows: start with an approximate match between a point in one image and a point in another, use an adaptive least-squares correlation algorithm to produce a more accurate match, and use this to predict approximate matches for points in the neighbourhood of the first match. A two-view quasi-dense approach first sorts the list of point correspondences into a list of seed points by correlation score. At each step of the propagation, a `best' seed point is chosen. Then in the immediate spatial neighborhood of this seed point, new potential matches are checked and the best points are added to the current list of seed points~\cite{lhuillier2002match,lhuillier2005quasi}. This ``best-first'' strategy guarantees convergence by choosing only new matches that have not yet been selected. Further, a patch based approach is proposed that undergoes multiple iterations of matching, propagation, and filtering~\cite{furukawa2010accurate}. A stereoscopic approach called PatchMatch Stereo, which is inspired by an approximate nearest neighbour matching algorithm called PatchMatch~\cite{Barnes:2009:PAR}. This method starts by randomly assigning an oriented plane to each pixel in two views. Next, each pixel is taken through three iterations of propagations and refinement. The plane is propagated to spatial neighbours, the corresponding pixel from another view, and across time. It can achieve sub-pixel accuracy, but is computationally heavy and challenging for parallelism. There has been some efforts to extend PatchMatch Stereo to multi-view scenarios~\cite{galliani2015massively,uh2014efficient,zheng2014patchmatch} and to a proposal of new propagation schemes to increase the computational efficiency~\cite{galliani2015massively}.
 %[has nice math derivations] Shen, Accurate Multiple View 3D Reconstruction Using Patch-Based Stereo for Large-Scale Scenes\\
 
-\subsubsection{MVS: Depthmap Merging}
+\textbf{Depthmap Merging}
 The fourth class of MVS algorithms computes a per-view depthmap. By treating a depthmap as a 2D array of 3D points, multiple depthmaps can be considered as a merged 3D point cloud. A winner-takes-all approach uses a set of discretized depth values and picks the value with the highest photo-consistency score for each pixel independently. Uniform depth sampling may suffice for simple and compact objects. However, for complex and large scenes, a proper sampling scheme is crucial to achieve high speed and quality. More sophisticated cost function are derived to account for occlusion or non-Lambertian effects which may add noise to the photo-consistency score~\cite{goesele2006multi,vogiatzis2007multiview}. In the case of severe occlusion, spatial consistency can be enforced under the assumption that neighbouring pixels have similar depth values. This can be formulated under the Markov Random Field (MRF) framework, where the problem becomes minimizing the sum of a unary $\Phi(\cdot)$ and pairwise term $\Psi(\cdot, \cdot)$. The unary term reflects the photo-consistency score of assigning a depth value $d_p$ from a depth set to the pixel $p$, whereas the pairwise term enforces the spatial regularization, and assigns the cost of setting depth label $k_p$, $k_q$ to a pair of neighbouring pixels $p$ and $q$, respectively.
 $$
 E(\{k_p\})= \sum_p \Phi(k_p) + \sum_{(p,q)\in\mathcal{N}}\Psi(k_p, k_q)
 $$
 
-\subsubsection{Structured Light}
+\subsubsection{Limits: MVS}
+\textbf{Texture} 
+Multi-view Stereo algorithms take advantage of textural information to establish point correspondences across different views. Thus homogeneous surfaces pose great challenges to MVS algorithms. However, some MVS algorithms tested on a textureless object ``Dino'' in the Middlebury MVS benchmark~\cite{seitz2006comparison} give successful reconstruction results. This demonstrates that MVS algorithms are able to exploit very weak and intricate image textures, most of which come from shading and/or shadowing effects. However, these texture are so weak that images need to have very high quality.
+
+\textbf{Reflectance} 
+Most MVS algorithms require that the object surface with similar or same appearances from different perspectives, and hence, most of the algorithms assume Lambertian reflectance. While pure Lambertian surfaces are rare in reality, it is empirically verified that MVS algorithms perform reasonably well on non-Lambertian surfaces. As long as the cameras can capture the diffuse reflectance component, and then the photo-consistency function is able to identify and ignore images whose non-diffsue effects (e.g., specular highlights) are strong, then utilize the diffuse component in the remaining images. Further, there are some attempts to overcome this limitation, a pure passive methods was proposed that directly model and analyze non-Lambertian effects for MVS algorithms~\cite{jin2003multi,jin2005multi}.
+
+\subsection{Structured Light}
 Structured light is considered one of the most accurate reconstruction techniques. It is based on projecting a temporally or spatially modulated pattern onto a surface and viewing the illuminated surface from one or more points of view. The correspondence is easily detected from the projected and imaged pattern, which is triangulated to obtain the a 3D point. Each pixel in the pattern is assigned a unique codeword, and the codeword is encoded by using grey level, colour or geometric representations. Structured light is classified based on the following coding strategy: temporal, spatial and direct codification \cite{salvi2004pattern}. Temporal techniques generate the codeword by projecting a sequence of patterns. Spatial codification represents each codeword in a unique pattern. Direct codification techniques define a codeword for every pixel, which is equal to its grey level or colour.
 
 \textbf{Temporal encoding} For temporally encoded SL, a sequence of patterns is successively projected onto the surface, the codeword for a given pixel is formed by the sequence of illuminaiton values for that pixel across the projected patterns. This kind of pattern can achieve high accuracy due to two factors: 1) the codeword basis is small (e.g., two for binary pattern), therefore, each bit is easily distinguishable; 2) a coarse-to-fine strategy is used, and the position of the pixel becomes more precise as the patterns are successively projected. We further classify these techniques as follows: 1) binary codeword; 2) $n$-ary codeword; 3) gray code combined with phase shifting; 4) hybrid techniques.
@@ -75,12 +82,15 @@ Structured light is considered one of the most accurate reconstruction technique
 
 \textbf{Direct encoding} There are methods to directly represent the codeword in each pixel. To achieve this, we need to use either a large range of colour values or introduce periodicity. However, this kind of pattern is highly sensitive to noise because the ``distance'' between codewords is nearly zero. Moreover, the perceived colour depends not only on the projected colour, but also the intrinsic clour of the surface. Therefore, reference images must be taken. This kind of coding can be classified as: 1). codification based on grey levels; 2). codification based on colour.
 
-\subsection{Summary}
+\subsubsection{Limits: SL}
+\textbf{Brightness} 
+Active methods such as SL utilize reflected light to establish correspondences across different views. Regardless of which projection pattern is used, the most critical component of any SL system is the decoding process, which retrieves per-pixel codeword from the imaged projection pattern. Thus, the surface albedo needs to be strong enough so that sufficient amount of reflected light can reach the camera sensor.
 
-\subsubsection{Texture: textured}
-Multi-view Stereo algorithms take advantage of textural information to establish point correspondences across different views. Thus homogeneous surfaces pose great challenges to MVS algorithms. However, some MVS algorithms tested on a textureless object ``Dino'' in the Middlebury MVS benchmark~\cite{seitz2006comparison} give successful reconstruction results. This demonstrates that MVS algorithms are able to exploit very weak and intricate image textures, most of which come from shading and/or shadowing effects. However, these texture are so weak that images need to have very high quality.
+\textbf{Reflectance} 
+Traditional Structured Light techniques cannot deal with highly specular surfaces since the specular area will exhibit strong reflection regardless of the magnitude of the light source, which will cause errors in the decoding process.
 
-Most MVS algorithms require that the object surface with similar or same appearances from different perspectives, and hence, most of the algorithms assume Lambertian reflectance. While pure Lambertian surfaces are rare in reality, it is empirically verified that MVS algorithms perform reasonably well on non-Lambertian surfaces. As long as the cameras can capture the diffuse reflectance component, and then the photo-consistency function is able to identify and ignore images whose non-diffsue effects (e.g., specular highlights) are strong, then utilize the diffuse component in the remaining images. Further, there are some attempts to overcome this limitation, a pure passive methods was proposed that directly model and analyze non-Lambertian effects for MVS algorithms~\cite{jin2003multi,jin2005multi}.
+\textbf{Concexity} 
+Active methods that assumes a \textbf{local interaction model} such as most SL algorithms can work more reliably on surfaces without casting shadow and interreflection. Thus surfaces with concavities pose a great challenge for this type of techniques since the indensity can be affected by other surface patches.
 
 \subsection{Shading}
 Shading variations can reveal the surface normal orientation, which can be further integrated into a 2.5D height map. Shading variation depends on the shape (surface normal orientation), reflectance (material), and lighting (illumination). Thus an ill-posed problem arises because different shapes illuminated under different light conditions may produce the same image. This leads to a novel technique called Photometric Stereo in which surface orientation is determined from two or more images. The idea of Photometric Stereo is to vary the direction of the incident illumination between successive views while holding the viewing direction constant. This provides enough information to determine surface orientation at each pixel~\cite{woodham1979photometric}. This technique can produce a surface normal map with the same resolution of the input image, \ie to produce the pixel-wise surface normal map. Since the coefficients of the normal map are continuous, the integrated height map can reach an accuracy that cannot be achieved by any triangulation methods. Therefore, the Photometric Stereo technique is more desirable if the intrinsic geometric details are of great importance.
@@ -92,6 +102,19 @@ I(x, y) &= R(p(x, y), q(x, y))\\
 I(x, y) &= \rho(\vec{n},\vec{l})\vec{n}^\top\vec{l} \quad (\text{Lambertian model})
 \end{align*}
 where $(p, q) = (z_x, z_y)$ are surface gradients. Unfortunately, measurements of the brightness at a single pixel only provide one constraint, whereas surface orientation requires two. Thus, additional constraints such as smoothness or integrability are required to estimate $(p, q)$.
+
+\subsubsection{Limits: SfS}
+\textbf{Texture: textureless}
+Typical SfS algorithms asssume surfaces with uniform and known albedo, \ie textureless surfaces.
+
+\textbf{Brightness}
+Active methods such as SfS utilize reflected light to estimate surface depth or orientation information. In this case, the intensity variation is used to estimate surface normal, thus the surface should have sufficiently high albedo, otherwise, the intensity variation would be hard to detect.
+
+\textbf{Reflectance}
+Though other reflectance models are feasible, typical SfS algorithms assume Lambertian reflectance model. The reason is that surface lightness is directly related to surface orietation and reflectance model once the light source and viewing direction are fixed. This is generally an ill-posed problem even with Lambertian model since there is only one intensity value per pixel to solve for surface orientation, which has two DoF. However, even in the simplest case, the survey by Zhang~\cite{zhang1999shape} demonstrate that SfS algorithms generally perform poorly, and none performs well in all cases.
+
+\textbf{Concavity}
+Typical SfS algorithms can not deal with effects caused by global light transport, such as cast shadow, inter-reflection, and so on. The surface lightness would be corrupted by light transported from other surface facets. Thus, objects exhibit any form of concavity will pose great challenge to SfS algorithms.
 
 \subsubsection{Photometric Stereo}
 \begin{table}[h]
@@ -152,6 +175,19 @@ More sophisticated BRDF models can replace the reference objects. An isotropic W
 \textit{Invariants of BRDF} 
 While parametric reflectance models are very good at reducing the complexity of BRDFs, they are usually only valid for a limited class of materials. An alternative is to exploit the invariants of BRDFs, typically including energy conservation, non-negativity, Helmholtz reciprocity, isotropy, etc~\cite{zickler2002helmholtz,alldrin2007toward}.
 
+\subsubsection{Limits: PS}
+\textbf{Texture} 
+Though SfS algorithms require uniform and known albedo, typical PS algorithms can be used easily on surfaces with spatially varying albedo. For instance, the albedo-scaled normal can be estimated, then the albedo is retrieved as the magnitude of the scaled normal~\cite{woodham1980photometric}.
+
+\textbf{Brightness} 
+Active methods such as PS utilize reflected light to estimate surface depth or orientation information. In this case, PS algorithms work more reliably on surfaces with sufficiently strong albedo. This is because the algorithm exploits the intensity variation as a visual cue, which is more challenging to detect on surfaces with low intensity values.
+
+\textbf{Reflectance} % Lambertian PS: uniform reflectance
+The Lambertian PS algorithms can be divided into two groups: calibrated, and uncalibrated method. The original PS proposed by Woodham~\cite{woodham1980photometric} can be considered as calibrated Lambertian PS. Later, more uncalibrated Lambertian PS algorithms have been proposed to avoid this tedious process.
+
+\textbf{Convexity} 
+Active methods that assumes a \textbf{local interaction model}, such as most PS algorithms, can work more reliably on surfaces without casting shadow and inter-reflection. Thus surfaces with concavities pose a great challenge for this type of techniques since the indensity can be affected by other surface patches.
+
 % [Some other papers to read] \\
 % - R. J. Woodham. Photometric method for determining sur-
 % face orientation from multiple images.\\
@@ -171,16 +207,6 @@ While parametric reflectance models are very good at reducing the complexity of 
 % - A. Hertzmann and S. Seitz. Example-based photometric stereo: shape reconstruction with general, varying BRDFs.\\
 % - W. M. Silver. Determining shape and reflectance using mul- tiple images. Master’s thesis, MIT, 1980.\\
 
-\subsection{Summary}
-\subsubsection{Lightness: bright}
-Active methods such as SfS utilize reflected light to estimate surface depth or orientation information. In this case, the intensity variation is used to estimate surface normal, thus the surface should have sufficiently high albedo, otherwise, the intensity variation would be hard to detect.
-
-\subsubsection{Reflectance}
-Though other reflectance models are feasible, typical SfS algorithms assume Lambertian reflectance model. The reason is that surface lightness is directly related to surface orietation and reflectance model once the light source and viewing direction are fixed. This is generally an ill-posed problem even with Lambertian model since there is only one intensity value per pixel to solve for surface orientation, which has two DoF. However, even in the simplest case, the survey by Zhang~\cite{zhang1999shape} demonstrate that SfS algorithms generally perform poorly, and none performs well in all cases.
-
-\subsubsection{Concavity: convex}
-Typical shading-based algorithms can not deal with effects caused by global light transport, such as cast shadow, inter-reflection, and so on. The surface lightness would be corrupted by light transported from other surface facets. Thus, objects exhibit any form of concavity will pose great challenge to SfS algorithms.
-
 \subsection{Silhouette}
 In some cases, it's an easy task to perform a foreground segmentation of the object of interest, which leads to a class of techniques that reconstructs a 3D volumetric model from the intersection of the binary silhouettes projected into 3D. The resulting model is called a \textit{visual hull}.
 
@@ -190,10 +216,10 @@ The basic idea of shape from silhouette algorithms is that the object lies insid
 
 [computational complexity] intersection of many volumes can be slow. Simple polyhedron-polyhedron intersection algorithms are inefficient. To improve performance, most methods 1) quantize volumes, 2) perform intersection computation in 2D instead of 3D.
 
-\subsubsection{Voxel based methods}
+\textbf {Voxel based methods} 
 First the object space is split up into a 3D grid of voxels; each voxel is intersected with each silhouette volume; only voxels that lie inside all silhouette volumes remain part of the final shape.
 
-\subsubsection{Marching intersections based methods}
+\textbf{Marching intersections based methods} 
 The marching intersection (MI) structure consists of 3 orthogonal sets of rays, parallel to the $X$, $Y$, and $Z$ axis, which are arranged in 2D regular arrays, called the $X-rayset$, $Y-rayset$, $Z-rayset$ respectively. Each ray in each rayset is projected to the image plane to find the intersections with the silhouette. These intersections are un-projected to compute the 3D intersection between the ray and the extended silhouette on this ray. This process is repeated for each silhouette, and the un-projected intersections on the same ray are merged by the boolean AND operation.
 
 Once the MI data structure representing the intersection of all extended silhouettes, a triangular mesh is extrated from it. This is done by the MI technique proposed in~\cite{rocchini2001marching} which traverses the ``virtual cells'' implicitly defined by the MI, builds a proper marching cube (MC) entry for them that in turn is used to index a MC's lookup table.
@@ -208,7 +234,7 @@ Once the MI data structure representing the intersection of all extended silhoue
 \label{fig:robust_pc}
 \end{figure}
 
-\subsubsection{Exact polyhedral methods}
+\textbf{Exact polyhedral methods} 
 The silhouette is converted into a set of convex or non-convex 2D polygons with holes allowed. The resulting visual hull with respect to those polygonal silouettes is a polyhedron. The faces of this polyhedron lie on the faces of the original cones. The faces of the original cones are defined by the center of projections and the edges in the input silhouettes. The idea of this method is: for each input silhouette $s_i$ we compute the face of the cone. Then we intersect this face with cones of all other input silhouettes, \ie a polygon-polyhedron intersection. The result of these intersections is a set of polygons that define the surface of the visual hull.
 
 % \subsection{Image based method}
@@ -221,9 +247,8 @@ The silhouette is converted into a set of convex or non-convex 2D polygons with 
 
 All of the cues above are most widely used ones, and achieved decent results. These following two cues haven't resulted in as much success. Therefore, we only discuss the general idea rather than the technical details.
 
-\subsection{Summary}
+\subsection{Limists: VH}
 Visual Hull algorithms don't rely on material properties as long as the foreground of the image can be reliably segmented, thus is applicable for objects with arbitrary visual properties. However, it fails to carve the concavities on the object surface, thus is unsuitable to concave objects.
-
 
 % \subsection{Texture}
 % The basic principle behind shape from texture is the \textit{distortion} of the individual texel. In general, the image formation process introduces three distortion effects: the \textit{distance effect}, which makes objects in view appear larger when they are closer to the image plane; the \textit{position effect} which makes objects appear differently when the angle between the line of sight and the image plane different; and the \textit{forshortening effect}, which distort the objects depending on the angle between the surface normal and the line of sight. Besides, different effects take place under different projection models: the orthographic projection captures only the foreshortending effect whereas the perspective projection captures all three. Therefore, shape from texture methods which use orthographic projection are valid only in a limited domain, where the other two effects can be ignored, and the perspective model captures all three effects, but the resulting algorithms are complicated and involves the solution of nonlinear equations.

@@ -55,16 +55,19 @@ Given a correct description of the object, the algorithm chosen by the proof-of-
 % \subsubsection{Steps}
 % [Collect and retrieve data to answer descriptive questions about the activities of the project/programme/policy, the various results it has had, and the context in which it has been implemented.]
 
-\section{Parameter Setting}
+\section{User interface}
 The first step of using the interface is to estimate the parameters of an object's properties. We use the BRDF explorer developed by Disney Animation~\cite{disnybrdf} to visualize the rendered object with changing properties. A ``try-and-see'' approach was taken to obtain the parameters. More specifically, the user would change the value of each property and see if the rendered result resembles the real object. A similar approach can be found in~\cite{Berkiten:2016:ARB} where \citeauthor{Berkiten:2016:ARB} used a synthetic dataset to find the contributing factors of various Photometric Stereo algorithms.
+
+The lightness of the object is controlled by the albedo value. Albedo is defiend as the ratio of reflected light with respect to incident light. The albedo is set as the value channel of HSV colour space. To determine the specularity and roughness of the object, we experiment with varying parameters to get the most realistic image. We demonstrate the process using the following example data `pot', as shown in Figure~\ref{fig:ui}.
 \begin{figure}[!htbp]
 \centering
-\begin{tabular}{cc}
-  \includegraphics[width=0.4\textwidth]{interp/ui_sphere.PNG}&
-  \includegraphics[width=0.4\textwidth]{interp/ui_teapot.PNG}\\
-  (a) Lit sphere & (b) Lit teapot\\
+\begin{tabular}{ccc}
+  \includegraphics[width=0.3\textwidth]{interp/ui/ui_sphere.png}&
+  \includegraphics[width=0.3\textwidth]{interp/ui/ui_vase.png}&
+  \includegraphics[width=0.3\textwidth]{img/interp/real_world_img/vase/vase.jpg}\\
+  (a). synthetic sphere & (b). synthetic vase & (c). real-world vase\\
 \end{tabular}
-\caption{The UI for determining the property settings, including albedo, specular, and roughness of the surface. The albedo is set as the value channel of HSV colour space. In this case, the albedo is set as 0.8, and the specular and roughness is set as 0.5, 0.2, respectively. (a) demonstrates the effect of the property settings on a sphere while (b) on a teapot.}
+\caption{The UI for determining the property settings, including albedo, specular, and roughness of the surface. In this case shown above, the problem condition is: texture (0.8), albedo (0.8), specular (0.2), roughness(0.2). (a) demonstrates the effect of the property settings on a sphere, (b) on a teapot, and (c) shows the real-world object.}
 \label{fig:ui}
 \end{figure}
 
@@ -271,11 +274,11 @@ Next we turn to defining the constraints of the interface. Constraints are provi
 \item Accuracy-first/completeness-first: methods that achieve high accuracy do not necessary achieve high completeness. In light of this, the user can choose an algorithm based on the priority level of accuracy and completeness.
 \end{itemize}
 
-Under our current interpreter, if a developer-defiend description and constraints have more than one corresponding algorithm available, by default, depth-first has higher priority over quality-first, and accuracy has higher priority over completeness. Since GSL typically generates more accurate resutlts, the order of the algorithms is: GSL $>$ PMVS $>$ EPS.
+Under our current interpreter, if a developer-defined description and constraints have more than one corresponding algorithm available, by default, depth-first has higher priority over quality-first, and accuracy has higher priority over completeness. Since GSL typically generates more accurate resutlts, the order of the algorithms is: GSL $>$ PMVS $>$ EPS.
 
 \section{Evaluation of Interpreter}
 \label{sec:eval_interp}
-This section demonstrates the interpretability of the proof of concept interpreter, which should return a successful result given a valid description, or a less successful one given an incorrect description. We choose four different problem conditions where each desrcibes one of the four major classes of objects and provides demonstrative results.
+This section evaluates the proof of concept interpreter, which should return a successful result given a valid description, or a less successful one given an incorrect description. We choose four different problem conditions where each describes one of the four major classes of objects and provides demonstrative results.
 
 \subsection{Synthetic Datasets}
 We generate a dataset of four objects, each representing one of the four classes discussed in Section~\ref{ch:3DRecon_Taxo}. The mapping from problem conditions to algorithms are summarized in Table~\ref{tab:synth_prop_list}. Given a specific algorihthm, the proof-of-concept interpreter will select an algorithm, and any object that matches this description should be well reconstructed by this algorithm. We use four descriptions that match the four problem conditions listed in Table so that each object should at least return one well reconstructed result. Since a problem condition could be mapped to multiple algorithms, an object that does not match the description could potentially have a satisfactory result as well. The reconstruction results of test objects and those of the baseline method are shown in Figure~\ref{fig:synth_results}.
