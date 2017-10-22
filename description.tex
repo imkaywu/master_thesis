@@ -1,7 +1,7 @@
 %% The following is a directive for TeXShop to indicate the main file
 %%!TEX root = diss.tex
 
-\chapter{Description of 3D Reconstruction}
+\chapter{A Description of 3D Reconstruction}
 \label{ch:3DRecon_Desc}
 In Chapter~\ref{ch:3DRecon_ProbSpace}, we introduce a taxonomy of 3D reconstruction which categorizes algorithms based on the problem space that they can reliably work under, \ie a mapping from problem space to algorithm space. However, without a formal description, \ie a model and representations, this mapping would be largely empirical. Expressing the conditions within which an algorithm works well without a formal definition of the problem space prevents formulating a well defined problem.
 
@@ -222,6 +222,32 @@ Possible surface models are divided into 2 categories: surfaces with exact known
 % \subsection{Concavity}
 % Concavity can be measured by \textit{surface curvature}, which is defined as the inverse of the radius of a tangentially intersecting circle/sphere. We include concavity in our model for the sake of completeness. However, we decide to omit this property in the following discussion since it will introduce global light transport including cast shadow and inter-reflection, and so on, which violates our assumption of \textbf{local interaction model}. Global light transport can severely worsen the accuracy of active methods. Besides, methods that utilize silhouette information may also fail to reconstruct concavities since concavity is invisible in the silhouette images.
 
+\subsection{Perception of properties}
+Human's visual system are extremly good at estimating material properties through vision. Being able to visually distinguish different material and infer their properties by vision is a critical capability for humans. For instance, when determining edibility, we can make subtle visual judgements of material properties to determine whether fruit is ripe, whether soup has bee left to go cold or whether bread is going stale~\cite{fleming2014visual}. There are numerous experimental evidence to support the intuition that human observers are good at recognizing and categorizing materials. For example, \citeauthor{sharan2009material} have shown that subjects can identify a wide range of materials from photographs even with brief presentations. \citeauthor{fleming2013perceptual} showed subjects photographs of materials from different categories and asked them to rate various subjective qualities, such as hardnesss, glossiness and prettiness. Even though subjects were not explicitly informed that the samples belonged to different classes, the subjective ratings of the individual samples were systematically clustered into categories, suggesting that subjects could theoretically classify materials through visual judgements of their properties.
+
+Recently, \citeauthor{fleming2013perceptual} showed subjects photographs of materials from different categories and asked them to rate various subjective qualities, such as hardness, glossiness and prettiness. Even though subjects were not explicitly informed that the samples belonged to different classes, the subjective ratings of the individual samples were systematically clustered into categories, suggesting that subjects could theoretically classify materials through visual judgments of their properties.
+
+There has been many efforts on the visual estimation of specific properties of materials, such as glossiness, translucency or surface roughness. For example, on the topic of glossiness, \citeauthor{nishida1998use} showed that subjects can judge the specular reflectance of computer simulated glossy surfaces.
+
+On the topic of surface roughness, several authors have discussed how the visual system estimates and represents the characteristics of surface relief, although it remains unclear eaxctly which parameters of surface perturbations (e.g., scale, amplitude or profile) determine visual roughness, or indeed whether subjective roughness is a unitary quantity. Others have investigated how visual roughness relates to haptic impressions of roughness, although it is still not clear how the brain compares or integrates the two.
+
+On the topic of perceived lightness, color. However, how the visual system distinguishes shading gradients that are caused by opaque reflectance from those that are caused by sub-surface scattering remains unclear, although shadow regions are likely to play a role, as these are the portions of objects that are most affected by light that has passed through the object.
+
+In addition to visually inspection, we use the BRDF explorer developed by Disney Animation~\cite{disnybrdf} to visualize the rendered object with changing properties. A ``try-and-see'' approach was taken to obtain the parameters. More specifically, the user would change the value of each property and see if the rendered result resembles the real object. A similar approach can be found in~\cite{Berkiten:2016:ARB} where \citeauthor{Berkiten:2016:ARB} used a synthetic dataset to find the contributing factors of various Photometric Stereo algorithms.
+
+The lightness of the object is controlled by the albedo value. Albedo is defiend as the ratio of reflected light with respect to incident light. The albedo is set as the value channel of HSV colour space. To determine the specularity and roughness of the object, we experiment with varying parameters to get the most realistic image. We demonstrate the process using the following example data `pot', as shown in Figure~\ref{fig:ui}.
+\begin{figure}[!htbp]
+\centering
+\begin{tabular}{ccc}
+  \includegraphics[width=0.3\textwidth]{interp/ui/ui_sphere.png}&
+  \includegraphics[width=0.3\textwidth]{interp/ui/ui_vase.png}&
+  \includegraphics[width=0.3\textwidth]{img/interp/real_world_img/vase/vase.jpg}\\
+  (a). synthetic sphere & (b). synthetic vase & (c). real-world vase\\
+\end{tabular}
+\caption{The UI for determining the property settings, including albedo, specular, and roughness of the surface. In this case shown above, the problem condition is: texture (0.8), albedo (0.8), specular (0.2), roughness(0.2). (a) demonstrates the effect of the property settings on a sphere, (b) on a teapot, and (c) shows the real-world object.}
+\label{fig:ui}
+\end{figure}
+
 \subsection{Summary}
 The model and corresponding rerpesentations are shown in Table~\ref{tab:3DRecon_model_repre}.
 \begin{table}[!htbp]
@@ -231,8 +257,8 @@ The model and corresponding rerpesentations are shown in Table~\ref{tab:3DRecon_
   \textbf{Model} & \textbf{Representation}\\
   \midrule
   Texture & \textit{Texture randomness}\\
-  Lightness & \textit{Albedo}\\
-  Specularity & \textit{Specular/diffuse ratio}\\
+  Lightness & \textit{Diffuse albedo}\\
+  Specularity & \textit{Specular reflectance}\\
   Roughness & \textit{SD of facet slopes}\\
   % Concavity & \textit{Surface curvature}\\
   \bottomrule

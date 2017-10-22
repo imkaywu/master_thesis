@@ -1,9 +1,9 @@
 %% The following is a directive for TeXShop to indicate the main file
 %%!TEX root = diss.tex
 
-\chapter{Interpretation of 3D Reconstruction}
+\chapter{An Interpretation of 3D Reconstruction}
 \label{ch:3DRecon_Interp}
-So far we have proposed a well-defined problem space for the 3D reconstruction problem, as well as a precise mapping from the problem space to the algorithm space. This section, we validate that the derived mapping can be reliably applied to an object with a different shape, and propose a proof-of-concept interpreter that translates the description to an appropriate algorithm that can give a reliable reconstruction result. In other words, the interpretability from the problem centric description to a reliable reconstruction result must be shown. Both synthetic and real-world datasets are provided to evaluate the performance of the interpreter.
+So far we have proposed a well-defined problem space for the 3D reconstruction problem, as well as a precise mapping from the problem space to the algorithm space. This section, we propose a proof-of-concept interpreter that translates the description to an appropriate algorithm that can give a reliable reconstruction result. In other words, the interpretation from a problem-centric description to a reliable reconstruction result must be shown. Both synthetic and real-world datasets are provided to evaluate the performance of the interpreter.
 
 However, such an evaluation faces several challenges. First, the mapping does not pose very strict constraints on object's geometry, and an exhaustive evaluation would require a vast number of objects to reach a solid conclusion, which is not a practical approach. Second, we need a selection of algorithms that cover a wide range of problem space so that we can determine more convincingly if an unsuccessful result is due to lack of coverage or the limits of the interface.
 
@@ -11,7 +11,7 @@ To address the first challenge, we assume \textit{local interaction model}, whic
 
 % In Chapter~\ref{ch:3DRecon_Mapping}, we have established a mapping from a well defined problem space to a suite of algorithms by evaluating the performance of the selected algorithms under synthetic conditions. However, the claim that this mapping would help the users obtain a satisfactory reconstruction result given the correct problem conditions is still unclear. Thus a thorough evaluation is needed to validate the proposed interface.
 
-This chapter is organized as follows: Section~\ref{sec:interp_eval_methodology} provides a roadmap of our evaluation that is centered around two key evaluation questions. Section~\ref{sec:eval_mapping} investigates the first question, \ie the robustness of the mapping with respect to the concavity. Section~\ref{sec:interp} proposes a proof-of-concept interpreter. Section~\ref{sec:eval_interp} addresses the second question by  demonstrating the robustness of the interpreter using synthetic and real-world datasets, where a satisfactory reconstruction result is returned given the correct description of the object.
+This chapter is organized as follows: Section~\ref{sec:interp_eval_methodology} provides a roadmap of our evaluation that is centered around one key evaluation question. Section~\ref{sec:interp} proposes a proof-of-concept interpreter. Section~\ref{sec:eval_interp} addresses the evaluation question by demonstrating the robustness of the interpreter using synthetic and real-world datasets, where a satisfactory reconstruction result is returned given the correct description of the object.
 
 % In order to validate the 3D reconstruction mapping derived from Chapter~\ref{ch:3DRecon_Mapping}, evaluation of the object centric model into appropriate solutions must be shown. Our interpreter is based on the direct evaluation of the performance of each 3D reconstruction algorithm under different conditions presented in Chapter~\ref{ch:3DRecon_Mapping}. From this analysis of how algorithms perform on objects which have different visual and geometric properties, an algorithm(s) can be definitively chosen based on which performed best on the training images.
 
@@ -21,7 +21,7 @@ This chapter is organized as follows: Section~\ref{sec:interp_eval_methodology} 
 
 % \subsection{Objective}
 % [Develop a description (or access an existing version) of what is to be evaluated and how it is understood to work.]
-This evaluation intends to 1) validate that the mapping from Chapter~\ref{ch:3DRecon_Mapping} can be applied to objects with different shapes, and demonstrate cases where it succeeds and fails; and 2) demonstrate the robustness of the proof-of-concept interpreter using synthetic and real-world datasets.
+This evaluation intends to demonstrate the robustness of the proof-of-concept interpreter using synthetic and real-world datasets.
 
 % For our first goal, objects with varied degrees of shape (concavity) changes are used, and the corresponding results are compared to the mapping. We attempt to demonstrate if the mapping, to some extent, is robust to the changes of shape, and when it would fail to hold. For the second goal, we use synthetic and real-world objects to demonstrate that the interpreter can return a satisfactory result when provided with a correct description.
 
@@ -37,15 +37,12 @@ This evaluation intends to 1) validate that the mapping from Chapter~\ref{ch:3DR
 
 % The evaluation attempts to \textit{prove that the mapping can be extended to other objects with different geometries}, and \textit{demonstrate that the interface can return a satisfactory reconstruction result given a correct description}.
 
-\subsubsection{1. Is the mapping robust to changes of the shape of objects?}
-The sheer volume of object shapes and geometries makes it practically impossible to validate the applicability of the mapping to objects with varied shapes. Instead, we focus on one geometric property, surface concavity, that can have an impact on the results. We use three synthetic objects with varied degrees of concavity, and verify if the mapping is applicable under all circumstances, and when it would succeed or fail. We use synthetic data to verify the mapping since it would not be practical to change material properties using real world objects. We verify the robustness of the mapping following these two steps: 1) the successful algorithm(s) under each problem condition is identified based on the qualitative and quantitative results; 2) the reliable algorithms under each condition is consistent with the mapping results.
-
 % \noindent\textbf{Data generation} the synthetic data is generated in Blender using the same setups presented in Chapter~\ref{ch:3DRecon_Mapping}. We consider the four property settings that represent four major classes of real-world objects from Chapter~\ref{ch:3DRecon_Taxo}.
 
 % If that is not the case, we need to find out how robust each algorithm in within the mapping is with respect to concavity changes, and how concavity change affects the reconstruction results.
 
-\subsubsection{2. Can the proof-of-concept interpreter return a satisfactory reconstruction given the correct description?}
-Given a correct description of the object, the algorithm chosen by the proof-of-concept interpreter should give a successful reconstruction result. In this case, visual inspection is utilized to determine the quality of reconstruction result. More specifically, the result returned by the interface is compared to that of the baseline algorithm to determine if the quality is acceptable. As previously mentioned, the baseline method is chosen so that it always can provide a decent reconstruction under most circumstances. The real-world setups are as follows: for MVS datasets, a Nikon D70S camera with a $18-70mm$ lens are used; for photometric datasets, a Nikon D70S camera with a $70-200mm$ lens, a handheld lamp, and two reference objects are used (diffuse and glossy); for Structured Light datasets, a Nikon 70S camera and a Sanyo Pro xtraX Multiverse projector are used, which is positioned with a between angle of around $10^\circ$.
+\subsubsection{Can the proof-of-concept interpreter return a satisfactory reconstruction given the correct description?}
+Given a correct description of the object, the algorithm chosen by the proof-of-concept interpreter should give a successful reconstruction result. In this case, visual inspection is utilized to determine the quality of reconstruction result. More specifically, the result returned by the interface is compared to that of the baseline algorithm to determine if the quality is acceptable. As previously mentioned, the baseline method is chosen so that it always can provide a decent reconstruction under most circumstances.
 
 % \noindent\textbf{Validation}: we need to demonstrate that the interpreter would return a reliable reconstructed model given the correct description, and a less successful model given an invalid description. The quality of the reconstruction is determined by comparing the result to the baseline method.
 
@@ -54,206 +51,6 @@ Given a correct description of the object, the algorithm chosen by the proof-of-
 
 % \subsubsection{Steps}
 % [Collect and retrieve data to answer descriptive questions about the activities of the project/programme/policy, the various results it has had, and the context in which it has been implemented.]
-
-\section{User interface}
-The first step of using the interface is to estimate the parameters of an object's properties. We use the BRDF explorer developed by Disney Animation~\cite{disnybrdf} to visualize the rendered object with changing properties. A ``try-and-see'' approach was taken to obtain the parameters. More specifically, the user would change the value of each property and see if the rendered result resembles the real object. A similar approach can be found in~\cite{Berkiten:2016:ARB} where \citeauthor{Berkiten:2016:ARB} used a synthetic dataset to find the contributing factors of various Photometric Stereo algorithms.
-
-The lightness of the object is controlled by the albedo value. Albedo is defiend as the ratio of reflected light with respect to incident light. The albedo is set as the value channel of HSV colour space. To determine the specularity and roughness of the object, we experiment with varying parameters to get the most realistic image. We demonstrate the process using the following example data `pot', as shown in Figure~\ref{fig:ui}.
-\begin{figure}[!htbp]
-\centering
-\begin{tabular}{ccc}
-  \includegraphics[width=0.3\textwidth]{interp/ui/ui_sphere.png}&
-  \includegraphics[width=0.3\textwidth]{interp/ui/ui_vase.png}&
-  \includegraphics[width=0.3\textwidth]{img/interp/real_world_img/vase/vase.jpg}\\
-  (a). synthetic sphere & (b). synthetic vase & (c). real-world vase\\
-\end{tabular}
-\caption{The UI for determining the property settings, including albedo, specular, and roughness of the surface. In this case shown above, the problem condition is: texture (0.8), albedo (0.8), specular (0.2), roughness(0.2). (a) demonstrates the effect of the property settings on a sphere, (b) on a teapot, and (c) shows the real-world object.}
-\label{fig:ui}
-\end{figure}
-
-\section{Evaluation of Mapping}
-\label{sec:eval_mapping}
-The section validates that the derived mapping can be applied to objects with different shapes. Given the description of an object, we use all the implemented techniques for reconstruction, to see if the algorithms that give successful reconstructions in terms of quantitative or qualitative results are consistent to those chosen by the mapping.
-
-\subsection{Synthetic Datasets}
-We use three objects with increasing degree of concavity, which are `bottle', `knight', and `king', as shown in Figure~\ref{fig:synth_data}. We select four property settings representing four object classes discussed in Chapter~\ref{ch:3DRecon_Desc}, as shown in Table~\ref{tab:prop_list_synth_data}. The results of the mapping are included in Table~\ref{tab:prop_list_synth_data} as a reference. The reconstruction results are shown in Figure~\ref{fig:synth_data_results_bottle},~\ref{fig:synth_data_results_knight}, and~\ref{fig:synth_data_results_king}. The mapping results are in the first column, and the algorithms that produce successful results are labeled in the green box. The consistency of the algorithms in green box and the mapping results indicates the robustness of the mapping.
-\begin{table}[!htbp]
-  \centering
-  \begin{tabular}{*{5}{c}|*{3}{r}}
-  \hline
-  & & & & & \multicolumn{3}{c}{Metrics}\\
-  Class & Texture & Albedo & Specular & Rough & Accuracy & Completeness & Ang error\\
-  \hline
-  (a) & 0.2 & 0.8 & 0.2 & 0.8 & GSL & GSL & EPS\\
-  (b) & 0.2 & 0.8 & 0.5 & 0.2 & GSL & - & - \\
-  (c) & 0.8 & 0.8 & 0.2 & 0.8 & PMVS, GSL & PMVS, GSL & EPS \\
-  (d) & 0.8 & 0.8 & 0.5 & 0.2 & PMVS, GSL & PMVS & -\\
-  \hline
-  \end{tabular}
-  \caption{Property settings of the three testing objects: `bottle', `knight', `king', which have increasing degree of concavity.}
-  \label{tab:prop_list_synth_data}
-\end{table}
-
-\begin{figure}[!htbp]
-\centering
-\begin{tabular}{cccc}
-  \includegraphics[width=0.2\textwidth]{interp/synth_data/bottle/bottle_mvs}&
-  \includegraphics[width=0.2\textwidth]{interp/synth_data/bottle/bottle_ps}&
-  \includegraphics[width=0.2\textwidth]{interp/synth_data/bottle/bottle_sl}&
-  \includegraphics[width=0.2\textwidth]{interp/synth_data/bottle/bottle_ps_gt}\\
-  \includegraphics[width=0.2\textwidth]{interp/synth_data/knight/knight_mvs}&
-  \includegraphics[width=0.2\textwidth]{interp/synth_data/knight/knight_ps}&
-  \includegraphics[width=0.2\textwidth]{interp/synth_data/knight/knight_sl}&
-  \includegraphics[width=0.2\textwidth]{interp/synth_data/knight/knight_ps_gt}\\
-  \includegraphics[width=0.2\textwidth]{interp/synth_data/king/king_mvs}&
-  \includegraphics[width=0.2\textwidth]{interp/synth_data/king/king_ps}&
-  \includegraphics[width=0.2\textwidth]{interp/synth_data/king/king_sl}&
-  \includegraphics[width=0.2\textwidth]{interp/synth_data/king/king_ps_gt}\\
-  MVS & PS & SL & Normal groundtruth\\
-\end{tabular}
-\caption{The synthetic dataset and groundtruth for the evaluation of the robustness of the mapping to concavity. Three objects with varied degrees of concavity are selected, each is configured with four properties settings listed in Table~\ref{tab:prop_list_synth_data}.}
-\label{fig:synth_data}
-\end{figure}
-
-% Here is the Table to test the effectiveness of the mapping
-% \begin{figure}[!htbp]
-% \centering
-% \begin{tabular}{cccccc}
-% \hline
-% & & Mapping & \multicolumn{2}{c}{Accu\&Cmplt} & Norm\\
-% \hline
-% \multirow{2}{*}{Obj} & \multirow{2}{*}{Desc} & \multirow{2}{*}{Algo} & PMVS & Gray SL & Example PS\\
-% \includegraphics[width=0.15\textwidth]{interp/synth_data/knight/knight_mvs} &
-% 02080208 & EPS, GSL & 
-% \includegraphics[width=0.15\textwidth]{interp/synth_data/knight/knight_mvs_02080208} &
-% \includegraphics[width=0.15\textwidth]{interp/synth_data/knight/knight_ps_02080208} &
-% \includegraphics[width=0.15\textwidth]{interp/synth_data/knight/knight_sl_02080208}\\
-% \hline
-% \end{tabular}
-% \end{figure}
-
-\subsubsection{Data 1: bottle}
-The object `bottle' has shallow concavities on the surface. Both quantitative and qualitative results are used to determine the successful algorithm under each problem condition. It's clear that the algorithms achieve successful results are consistent with the mapping results under all problem conditions.
-\begin{sidewaysfigure}[!htbp]
-\centering
-\begin{tabular}{c|ccccc}
-  \toprule
-  Mapping & Quantitative results & ~ & Qualitative results & ~\\
-  \midrule
-  EPS, GSL & 
-  \includegraphics[width=0.2\textwidth]{interp/synth_data/bottle/bottle_02080208}&
-  \includegraphics[width=0.2\textwidth]{interp/synth_data/bottle/bottle_mvs_02080208.png}&
-  \fcolorbox{green}{white}{\includegraphics[width=0.2\textwidth]{interp/synth_data/bottle/bottle_ps_02080208.png}}&
-  \fcolorbox{green}{white}{\includegraphics[width=0.2\textwidth]{interp/synth_data/bottle/bottle_sl_02080208.png}}\\
-  & \multicolumn{4}{c}{(a). tex(0.2), alb(0.8), spec(0.2), rough(0.8)}\\
-  EPS &
-  \includegraphics[width=0.2\textwidth]{interp/synth_data/bottle/bottle_02080502}&
-  \includegraphics[width=0.2\textwidth]{interp/synth_data/bottle/bottle_mvs_02080502.png}&
-  \fcolorbox{green}{white}{\includegraphics[width=0.2\textwidth]{interp/synth_data/bottle/bottle_ps_02080502.png}}&
-  \includegraphics[width=0.2\textwidth]{interp/synth_data/bottle/bottle_sl_02080502.png}\\
-  & \multicolumn{4}{c}{(b). tex(0.2), alb(0.8), spec(0.5), rough(0.2)}\\
-  PMVS, EPS, GSL&
-  \includegraphics[width=0.2\textwidth]{interp/synth_data/bottle/bottle_08080208}&
-  \fcolorbox{green}{white}{\includegraphics[width=0.2\textwidth]{interp/synth_data/bottle/bottle_mvs_08080208.png}}&
-  \fcolorbox{green}{white}{\includegraphics[width=0.2\textwidth]{interp/synth_data/bottle/bottle_ps_08080208.png}}&
-  \fcolorbox{green}{white}{\includegraphics[width=0.2\textwidth]{interp/synth_data/bottle/bottle_sl_08080208.png}}\\
-  & \multicolumn{4}{c}{(c). tex(0.8), alb(0.8), spec(0.2), rough(0.8)}\\
-  PMVS, EPS&
-  \includegraphics[width=0.2\textwidth]{interp/synth_data/bottle/bottle_08080502}&
-  \fcolorbox{green}{white}{\includegraphics[width=0.2\textwidth]{interp/synth_data/bottle/bottle_mvs_08080502.png}}&
-  \fcolorbox{green}{white}{\includegraphics[width=0.2\textwidth]{interp/synth_data/bottle/bottle_ps_08080502.png}}&
-  \includegraphics[width=0.2\textwidth]{interp/synth_data/bottle/bottle_sl_08080502.png}\\
-  & \multicolumn{4}{c}{(d). tex(0.8), alb(0.8), spec(0.5), rough(0.2)}\\
-  \bottomrule
-  ~ & ~ & MVS & PS & SL\\
-\end{tabular}
-\caption{The first column shows the best algorithm chosen by the mapping. The quantitative and qualitative performance of each technique on the synthetic dataset is also shown. The red dots represent the ground truth while the black dots represent the reconstruction.}
-\label{fig:synth_data_results_bottle}
-\end{sidewaysfigure}
-
-\subsubsection{Data 2: knight}
-The second object is a knight chess piece with medium concavity. In this case, we can see that the results of PMVS and GSL are still consistent with the mapping. However, EPS fails to return reliable reconstruction in conditions of high specularity, such as (b) and (d), which is manifested by an increased standard deviation and the interquartile range of angular error. Thus, we claim that the mapping to PMVS and GSL, and that to EPS in case of low specularity are robust for surfaces with medium concavity.
-\begin{sidewaysfigure}[!htbp]
-\centering
-\begin{tabular}{c|ccccc}
-  \toprule
-  Mapping & Quantitative results & ~ & Qualitative results & ~\\
-  \midrule
-  EPS, GSL & 
-  \includegraphics[width=0.2\textwidth]{interp/synth_data/knight/knight_02080208}&
-  \includegraphics[width=0.2\textwidth]{interp/synth_data/knight/knight_mvs_02080208.png}&
-  \fcolorbox{green}{white}{\includegraphics[width=0.2\textwidth]{interp/synth_data/knight/knight_ps_02080208.png}}&
-  \fcolorbox{green}{white}{\includegraphics[width=0.2\textwidth]{interp/synth_data/knight/knight_sl_02080208.png}}\\
-  & \multicolumn{4}{c}{(a). tex(0.2), alb(0.8), spec(0.2), rough(0.8)}\\
-  EPS &
-  \includegraphics[width=0.2\textwidth]{interp/synth_data/knight/knight_02080502}&
-  \includegraphics[width=0.2\textwidth]{interp/synth_data/knight/knight_mvs_02080502.png}&
-  \includegraphics[width=0.2\textwidth]{interp/synth_data/knight/knight_ps_02080502.png}&
-  \includegraphics[width=0.2\textwidth]{interp/synth_data/knight/knight_sl_02080502.png}\\
-  & \multicolumn{4}{c}{(b). tex(0.2), alb(0.8), spec(0.5), rough(0.2)}\\
-  PMVS, EPS, GSL&
-  \includegraphics[width=0.2\textwidth]{interp/synth_data/knight/knight_08080208}&
-  \fcolorbox{green}{white}{\includegraphics[width=0.2\textwidth]{interp/synth_data/knight/knight_mvs_08080208.png}}&
-  \fcolorbox{green}{white}{\includegraphics[width=0.2\textwidth]{interp/synth_data/knight/knight_ps_08080208.png}}&
-  \fcolorbox{green}{white}{\includegraphics[width=0.2\textwidth]{interp/synth_data/knight/knight_sl_08080208.png}}\\
-  & \multicolumn{4}{c}{(c). tex(0.8), alb(0.8), spec(0.2), rough(0.8)}\\
-  PMVS, EPS&
-  \includegraphics[width=0.2\textwidth]{interp/synth_data/knight/knight_08080502}&
-  \fcolorbox{green}{white}{\includegraphics[width=0.2\textwidth]{interp/synth_data/knight/knight_mvs_08080502.png}}&
-  \includegraphics[width=0.2\textwidth]{interp/synth_data/knight/knight_ps_08080502.png}&
-  \includegraphics[width=0.2\textwidth]{interp/synth_data/knight/knight_sl_08080502.png}\\
-  & \multicolumn{4}{c}{(d). tex(0.8), alb(0.8), spec(0.5), rough(0.2)}\\
-  \bottomrule
-  ~ & ~ & MVS & PS & SL\\
-\end{tabular}
-\caption{The first column shows the best algorithm chosen by the mapping. The quantitative and qualitative performance of each technique on the synthetic dataset is also shown. The red dots represent the ground truth while the black dot represent the reconstruction.}
-\label{fig:synth_data_results_knight}
-\end{sidewaysfigure}
-
-\subsubsection{Data 3: king}
-The last synthetic object is the king chess piece with high surface concavity. In the case of high concavity, results of PMVS and GSL are still consistent with those of the mapping. However, results of the EPS become inconsistent, which is a result of the cast shadow due to large concavity. Though the result of EPS under conditions (a) and (c) are still better than that of the baseline, the median angular error is above an acceptable threshold, which is $10^\circ$ in most cases. We can see with more clarity from the qualitative results that the cast shadow on the `crown' leads to completely inaccurate normal estimation, which is labeled in red rectangle. Thus, we claim that the mapping to PMVS and GSL remain robust for surfaces with large concavity.
-\begin{sidewaysfigure}[!htbp]
-\centering
-\begin{tabular}{c|ccccc}
-  \toprule
-  Mapping & Quantitative results & ~ & Qualitative results & ~\\
-  \midrule
-  EPS, GSL & 
-  \includegraphics[width=0.2\textwidth]{interp/synth_data/king/king_02080208}&
-  \includegraphics[width=0.2\textwidth]{interp/synth_data/king/king_mvs_02080208.png}&
-  \includegraphics[width=0.2\textwidth]{interp/synth_data/king/king_ps_02080208.png}&
-  \fcolorbox{green}{white}{\includegraphics[width=0.2\textwidth]{interp/synth_data/king/king_sl_02080208.png}}\\
-  & \multicolumn{4}{c}{(a). tex(0.2), alb(0.8), spec(0.2), rough(0.8)}\\
-  EPS &
-  \includegraphics[width=0.2\textwidth]{interp/synth_data/king/king_02080502}&
-  \includegraphics[width=0.2\textwidth]{interp/synth_data/king/king_mvs_02080502.png}&
-  \includegraphics[width=0.2\textwidth]{interp/synth_data/king/king_ps_02080502.png}&
-  \includegraphics[width=0.2\textwidth]{interp/synth_data/king/king_sl_02080502.png}\\
-  & \multicolumn{4}{c}{(b). tex(0.2), alb(0.8), spec(0.5), rough(0.2)}\\
-  PMVS, GSL, EPS&
-  \includegraphics[width=0.2\textwidth]{interp/synth_data/king/king_08080208}&
-  \fcolorbox{green}{white}{\includegraphics[width=0.2\textwidth]{interp/synth_data/king/king_mvs_08080208.png}}&
-  \includegraphics[width=0.2\textwidth]{interp/synth_data/king/king_ps_08080208.png}&
-  \fcolorbox{green}{white}{\includegraphics[width=0.2\textwidth]{interp/synth_data/king/king_sl_08080208.png}}\\
-  & \multicolumn{4}{c}{(c). tex(0.8), alb(0.8), spec(0.2), rough(0.8)}\\
-  PMVS, EPS&
-  \includegraphics[width=0.2\textwidth]{interp/synth_data/king/king_08080502}&
-  \fcolorbox{green}{white}{\includegraphics[width=0.2\textwidth]{interp/synth_data/king/king_mvs_08080502.png}}&
-  \includegraphics[width=0.2\textwidth]{interp/synth_data/king/king_ps_08080502.png}&
-  \includegraphics[width=0.2\textwidth]{interp/synth_data/king/king_sl_08080502.png}\\
-  & \multicolumn{4}{c}{(d). tex(0.8), alb(0.8), spec(0.5), rough(0.2)}\\
-  \bottomrule
-  ~ & ~ & MVS & PS & SL\\
-\end{tabular}
-\caption{The first column shows the best algorithm chosen by the mapping. The quantitative and qualitative performance of each technique on the synthetic dataset is also shown. The green dots represent the ground truth while the black dots represent the reconstruction.}
-\label{fig:synth_data_results_king}
-\end{sidewaysfigure}
-
-\subsubsection{Summary}
-We can conclude that the mapping to PMVS and GSL are robust with respect to concavity, whereas EPS is relatively more sensitive to concavity due to cast shadows. Therefore, we should redirect more research efforts to developing Photometric Stereo algorithms that can reliably deal with cast shadow so that they can be reliably applied to more complex shapes.
-% \textbf{(a), (b)} In Figure~\ref{fig:synth_data_results} (a), the mapping predicts that EPS and GSL can give satisfactory results, which is consistent to the quantitative result shown in column 2 and the qualitative resulted labeled in green rectangle. The completeness of the PMVS is low due to the lack of texture.
-
-% \textbf{(c), (d)} In Figure~\ref{fig:synth_data_results} (a), the mapping predicts that all three methods can give satisfactory results, which is consistent to the quantitative result shown in column 2 and the qualitative resulted labeled in green rectangle.
 
 \section{Interpreter}
 \label{sec:interp}
@@ -275,6 +72,25 @@ Next we turn to defining the constraints of the interface. Constraints are provi
 \end{itemize}
 
 Under our current interpreter, if a developer-defined description and constraints have more than one corresponding algorithm available, by default, depth-first has higher priority over quality-first, and accuracy has higher priority over completeness. Since GSL typically generates more accurate resutlts, the order of the algorithms is: GSL $>$ PMVS $>$ EPS.
+
+\section{Overview of Datasets}
+In this section, we introduce a synthetic and real-world dataset to evaluate the performance of the interpreter under varied problem conditions. To the best of our knowledge, there is few publicly available dataset that captures images for algorithms across different categories.
+
+The synthetic dataset contains four objects, and the real-world dataset contains nine objects, as shown in Figure~\ref{}. It covers materials that represents the four problem conditions proposed in Chapter~\ref{ch:3DRecon_ProbSpace}: textureless, diffuse, bright (statue), textureless, mixed, bright (cup), textured, diffuse, bright (pot), textured, mixed, bright (vase). In terms of surface shapes, we have focused mainly on objects with simple geometric properties, namely, smoothly curved surfaces, surfaces with shallow concavities.
+
+\subsection{Data capture}
+The images are captured using Nikon D70S camera with a $18-70mm$ lens. All images have a resolution of $3004\times 2000$. 
+
+For MVS, we capture the dataset by positioning the camera in three different heights. The objects are about $30-50cm$ away from the camera, and is fixed on a turntable. We have followed the following three steps to acquire data: 1) put the camera at a different height, adjust the orientation so that the object in at the center of the frame; 2) take pictures while rotating the table. The table rotates approximately $30^\circ$ every time. We rotate it 12 times and in total, we can obtain 12 image per height.
+
+For PS, a $70-200mm$ lens, a handheld lamp, and two reference objects (diffuse and glossy) are used. The objects are positioned about $3m$ from the camera to approximate orthographic projection. To avoid inter-reflection, all data are captured in a dark room with everying covered by black cloth except the target object. We use a hand-held lamp as the light source and choose close to frontal angle to avoid severe self-shadowing effect. We take 20 images per object and select 15 plus images depending on the severity of the self-shadow effect.
+
+For SL, we use a Sanyo Pro xtraX Multiverse projector with a resolution of $1024\times 768$. The baseline angle is approximately $10^\circ$. To avoid the interference of ambient light, and inter-reflection, the objects are captured with room lights off.
+
+\subsection{Calibration}
+For MVS, a fixed random pattern is imaged with the object, which is used for camera calibration using SfM. The focal length is known and fixed, thus the extrinsic parameters of the camera can be retrieved up to a similarity transformation. Thus, the reconstruction is a metric/euclidean recontruction.
+
+For SL, a opensource calibration software developed by~\citeauthor{moreno2012simple} is used for camera-projector calibration. This technique works by projecting temporal patterns on the object, and uses local homography to individually translate each checkerboard corner from the camera plane to the projector plane.
 
 \section{Evaluation of Interpreter}
 \label{sec:eval_interp}
@@ -334,8 +150,14 @@ PMVS\\
 \label{fig:synth_results}
 \end{figure*}
 
-\subsubsection{Data 1: Barrel}
+\subsubsection{Data 1: Bust}
+
+\subsubsection{Data 2: Vase1}
+
+\subsubsection{Data 3: Barrel}
 Description 1 matches with object \textit{barrel}, which has a reliable reconstruction result. The selected algorithm GSL is also in the mapped algorithms of object \textit{bust}, as shown in Table~\ref{tab:synth_prop_list}. Thus even though \textbf{description 1} doesn't match with the problem condition of \textit{bust}, a satisfactory result is also returned. However, the selected algorithm is not in the mapped algorithms of object \textit{vase0} and \textit{vase1}, thus less successful results are returned.
+
+\subsubsection{Data 4: Vase2}
 
 \subsection{Real-world Datasets}
 We use similar setups to the synthetic counterparts and captured a real world dataset of nine objects~\ref{fig:test_real_world}. The property of these objects are listed in Table~\ref{tab:real_data_prop_list}. Since we do not have the ground truth here, we resort to visual analysis to see if the appropriate algorithm gives an acceptable reconstruction compared to that of the baseline method.
@@ -413,8 +235,14 @@ We use the aforementioned methods to retrieve the parameters of each property. T
 %   \label{fig:real_data_material}
 % \end{table}
 
+\subsubsection{Data 1: statue}
+
+\subsubsection{Data 2: cup}
+
 \subsubsection{Data 3: pot}
 Description 1 matches partially with object \textit{pot} since it has both high and low albedo surface areas. The surface area with high albedo is well reconstructed whereas the surface with low albedo, which doesn't match the description is not reconstructed at all. The selected algorithm is also in the mapped algorithms of object \textit{statue} and \textit{cup}, thus satisfactory results are returned as well. However, this is not the case for object \textit{vase}, thus a very sparse reconstruction is returned.
+
+\subsubsection{Data 4: vase}
 
 % \subsubsection{Data 1: statue}
 % The first real-world object is a statue with low texture, low specular component, medium roughness, and high albedo. PMVS produces a very noisy reconstruction due to the lack of surface texture, whereas the other two techniques (EPS and GSL) return satisfactory results. The interpreter would thus return the appropriate result based on user specified constraints.
