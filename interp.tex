@@ -3,7 +3,7 @@
 
 \chapter{An Interpretation of 3D Reconstruction}
 \label{ch:3DRecon_Interp}
-Now that we have proposed a well-defined problem space of the 3D reconstruction problem, as well as a mapping from the problem space to algorithms, the interpretation from the problem-centric description to appropriate algorithms must be shown. There are many possible ways to interpret the description, our proof of concept interpreter is based on the direct evaluation of the performance of each 3D reconstruction algorithm under different problem conditions presented in Chapter~\ref{ch:3DRecon_Mapping}. This mapping from problem space to algorithms and additional constraints allow an appropriate algorithm to be definitively selected.
+Now that we have proposed a well-defined problem space of 3D reconstruction problem, as well as a mapping from the problem space to algorithms, the interpretation from the problem-centric description to appropriate algorithms must be shown. There are many possible ways to interpret the description, our proof of concept interpreter is based on the direct evaluation of the performance of each 3D reconstruction algorithm under different problem conditions presented in Chapter~\ref{ch:3DRecon_Mapping}. This mapping from problem space to algorithms and additional constraints allow an appropriate algorithm to be definitively selected.
 
 The three algorithms and two baseline methods introduced in Chapter~\ref{ch:3DRecon_Mapping} have been implemented and integrated into the interpreter, providing basic but well rounded reconstruction capabilities. Although more algorithms can potentially be added, these methods are sufficient to validate the interface's ability to translate descriptions into reconstruction solutions. The integration of new algorithms that are more appropriate under particular situations requires only that they be evaluated by the same process discussed in Chapter~\ref{ch:3DRecon_Mapping}, as shown in Figure~\ref{fig:embed_algo}. This allows researchers to contribute novel algorithms to the interpretation of the interface easily. 
 
@@ -25,9 +25,7 @@ This chapter is organized as follows: Section~\ref{sec:interp_eval_methodology} 
 
 % \subsection{Objective}
 % [Develop a description (or access an existing version) of what is to be evaluated and how it is understood to work.]
-This evaluation intends to demonstrate the robustness of the proof of concept interpreter by demonstrating that: 
-
-% For our first goal, objects with varied degrees of shape (concavity) changes are used, and the corresponding results are compared to the mapping. We attempt to demonstrate if the mapping, to some extent, is robust to the changes of shape, and when it would fail to hold. For the second goal, we use synthetic and real-world objects to demonstrate that the interpreter can return a satisfactory result when provided with a correct description.
+This thesis proposed a description-based interface to 3D reconstruction problem that hides algorithmic details. The goal of our evaluation is to validate if the proposed interface can translate a user-specified description into an algorithm that gives a successful reconstruction result.
 
 % \subsection{Frame}
 % Set the parameters of the evaluation its purposes, key evaluation questions and the criteria and standards to be used.
@@ -36,48 +34,48 @@ This evaluation intends to demonstrate the robustness of the proof of concept in
 % [What are the primary purposes and intended uses of the evaluation?]
 % The evaluation intends to find out that the derived mapping can indeed find the algorithm that produces the best possible result from a suite of algorithms.
 
-% \subsection{Key Evaluation Questions and Steps}
+\subsection{Evaluation question}
 % [What are the high level questions the evaluation will seek to answer? How can these be developed?]
+\textbf{Can the proof of concept interpreter return an appropriate algorithm that achieves a successful reconstruction given the correct description?}
 
-% The evaluation attempts to \textit{prove that the mapping can be extended to other objects with different geometries}, and \textit{demonstrate that the interface can return a satisfactory reconstruction result given a correct description}.
+The interface to be evaluated consists of three separate layers, a description, an interpreter, and an algorithm layer. The interpreter is responsible for selecting an appropriate algorithm for reconstruction based on user-specified description. We provide a correct description for each object, and see if the algorithm selected by the interpreter will give an acceptable reconstruction result. The criteria for determining acceptance is detailed below, along with the evaluation steps.
 
-% \noindent\textbf{Data generation} the synthetic data is generated in Blender using the same setups presented in Chapter~\ref{ch:3DRecon_Mapping}. We consider the four property settings that represent four major classes of real-world objects from Chapter~\ref{ch:3DRecon_Taxo}.
-
-% If that is not the case, we need to find out how robust each algorithm in within the mapping is with respect to concavity changes, and how concavity change affects the reconstruction results.
-
-\textbf{The proof of concept interpreter can return a satisfactory reconstruction given the correct description.}
-
-Given a correct description of the object, the algorithm chosen by the proof-of-concept interpreter should give a successful reconstruction result. In this case, visual inspection is utilized to determine the quality of reconstruction result. More specifically, the result returned by the interface is compared to that of the baseline algorithm to determine if the quality is acceptable. As previously mentioned, the baseline method is chosen so that it always can provide a decent reconstruction under most circumstances.
-
-For each object, we will provide a correct description of this object, and see if the algorithm selected by the interpreter will give an acceptable reconstruction result. The acceptance is determiend by visually comparing the result to the baseline method. Thus, the normal map estimated from the PS methods are integrated to get a height map.
-
-% \noindent\textbf{Validation}: we need to demonstrate that the interpreter would return a reliable reconstructed model given the correct description, and a less successful model given an invalid description. The quality of the reconstruction is determined by comparing the result to the baseline method.
-
-% \subsubsection{Criteria}
+\subsection{Criteria}
 % Determine what `success' look like? What should be the criteria and standards for judging performance? Whose criteria and standards matter? What process should be used to develop agreement about these?
+Given a correct description of the object, the algorithm chosen by the proof-of-concept interpreter would give a successful reconstruction result. In this thesis, visual inspection is utilized to determine the quality of reconstruction results. More specifically, the result returned by the interface is compared to that of the baseline algorithms to determine if the quality is acceptable. As previously mentioned, the baseline method is chosen so that it always can provide a decent reconstruction under most circumstances.
 
-% \subsubsection{Steps}
+The reason that qualitative comparison is sufficient is that we are less interested in developing novel algorithms or improving algorithm performance. If that is the goal, we do need a quantitative comparision among algorithms. However, the goal is to validate if the proposed interface can translate a description into an acceptable result, thus we are more interested in showing that this user-specified description can indeed be interpreted and invoke a good-enough algorithm.
+
+% We need to demonstrate that the interpreter would return a reliable reconstructed model given the correct description, and a less successful model given an invalid description. The quality of the reconstruction is determined by comparing the result to the baseline method.
+
+\subsection{Roadmap}
 % [Collect and retrieve data to answer descriptive questions about the activities of the project/programme/policy, the various results it has had, and the context in which it has been implemented.]
+We first need to propose a proof of concept interpreter that is responsible for selecting an appropriate algorithm for reconstruction based on user-specified description. Then we discuss the creation of datasets that are used for evaluation. Finally, we demonstrate the performance of the interpreter by showing the reconstruction results by interpreter-selected algorithm of both synthetic and real-world datasets.
+
+% \subsubsection{Interpreter}
+
+% \subsubsection{Dataset}
+
 
 \section{Interpreter}
 \label{sec:interp}
-Our interface consists of three separate layers. The upper layer is the description of the problem condition. The middle layer is the interpreter which receives a description from the user and return an acceptable result. The bottom layer is the actual implementation of the algorithms. The interpreter is responsible for choosing an appropriate 3D reconstruction algorithm based on the description of the problem domain and additional requirements. Thus, it requires an understanding of algorithmic performance across difference ranges of problem space to create a suitable interpreter. 
+Our interface consists of three separate layers. The upper layer is the description of the problem condition. The middle layer is the interpreter which receives a description from the user and return an acceptable result. The bottom layer is the actual implementation of the algorithms. The interpreter is responsible for choosing an appropriate 3D reconstruction algorithm based on the description of the problem domain and additional requirements. Thus, it requires an understanding of algorithmic performance across difference ranges of problem space to create a suitable interpreter.
 
-However, if the interpreter relies solely on the mapping, it is possible that a user-specified description has more then one corresponding algorithm available. We propose to use two additional constraints so that only one appropriate algorithm is selected.
+However, if the interpreter relies solely on the mapping, it is possible that a user-specified description has more than one corresponding algorithm available. We propose to use two additional constraints so that only one appropriate algorithm is selected.
 
-The first constraint is metric-first or shape-first. There are generally two groups of reconstruction results: euclidean/metric reconstruction, and shape reconstruction. The former reconstructs a scene with true metric information, but generally gives noisier results. The latter can achieve quality that is only matched by laser scanners but lack the depth information. The default is metric-first constraint.
+The first constraint is metric-first or shape-first. There are generally two types of reconstruction results: euclidean/metric reconstruction, and shape reconstruction. The former reconstructs a scene with metric information, but generally gives noisier results. The latter can achieve quality that is only matched by laser scanners but lack the depth information. The default setting of this constraint is metric-first.
 
 The second constraint is accuracy-first or completeness-first. Methods that achieve high accuracy do not necessary achieve high completeness. In light of this, the user can choose an algorithm based on the priority level of accuracy and completeness. If multiple algorithm with comparable accuracy or completeness exists, we use a simple ranking system: if one algorithm has the same accuracy but is more complete, or more complete and equally accurate, it is chosen over the others. The default is the accuracy-first constraint.
 
-The proposed proof of concept interpreter that consists of two components, mapping and constraints, is shown in Figure~\ref{fig:interpreter}. Note that there are many ways of using this information to create an interpreter and by no means, is the proposed on the optimal interpreter. 
+Thus, the proposed proof of concept interpreter that consists of two components, mapping and constraints, as shown in Figure~\ref{fig:interpreter}. Note that there are many ways of using this mapping information to create an interpreter, and by no means is the proposed one the optimal interpreter. 
 \begin{figure}[!htbp]
 \centering
 \includegraphics[width=0.8\textwidth]{interp/interpreter.pdf}
-\caption{Two components of the Interpreter layer.}
+\caption{Two components of the Interpreter layer. The metric comparator compares the quantitative measures based on the constraints. If `acc-first' is selected, the comparator favours algorithms with lower accuracy value, whereas if `cmplt-first' is selected, the comparator favours algorithms with higher completeness. If `shape-first' is selected, the comparator favours algorithms with lower angular error.}
 \label{fig:interpreter}
 \end{figure}
 
-[demonstrate with an example.]
+% [demonstrate with an example.]
 
 % The mapping constructed using the synthetic datasets from Chapter~\ref{ch:3DRecon_Mapping} provides us with a detailed understanding of the performance of algorithms under varied problem conditions. This allows us to select an appropriate algorithm based on a description of properties.
 
@@ -92,41 +90,41 @@ The proposed proof of concept interpreter that consists of two components, mappi
 \section{Overview of Datasets}
 In this section, we introduce a synthetic and a real-world dataset to evaluate the performance of the interpreter under varied problem conditions. To the best of our knowledge, there is few publicly available dataset that captures images for algorithms across different categories.
 
-The synthetic dataset contains four objects, and the real-world dataset contains nine objects, as shown in Figure~\ref{fig:real_world_dataset}. It covers materials that represents the four problem conditions proposed in Chapter~\ref{ch:3DRecon_ProbSpace}: textureless, diffuse, bright (statue), textureless, mixed, bright (cup), textured, diffuse, bright (pot), textured, mixed, bright (vase). In terms of surface shapes, we have focused mainly on objects with simple geometric properties, namely, smoothly curved surfaces, surfaces with shallow concavities.
+The synthetic dataset contains four objects, as shown in Figure~\ref{fig:synth_real_dataset}, and the real-world dataset contains nine objects, four of which are shown in Figure~\ref{fig:synth_real_dataset}. Please refer to Figure~\ref{fig:real_data_material} for the complete dataset. It covers materials that are representative of four problem conditions proposed in Chapter~\ref{ch:3DRecon_ProbSpace}: textureless-diffuse-bright (bust, statue), textureless-mixed-bright (vase0, cup), textured-diffuse-bright (barrel, pot), textured-mixed-bright (vase1, vase). In terms of surface shapes, we have focused mainly on objects with simple geometric properties, namely, smoothly curved surfaces with shallow concavities.
 
 \begin{figure*}[!htbp]
 \centering
-\begin{tabular}{ccc}
-\includegraphics[width=0.3\textwidth]{interp/real_world_img/box/box} &
-\includegraphics[width=0.3\textwidth]{interp/real_world_img/cat0/cat0} &
-\includegraphics[width=0.3\textwidth]{interp/real_world_img/cat1/cat1} \\
-(a). box & (b). cat0 & (c). cat1\\
-\includegraphics[width=0.3\textwidth]{interp/real_world_img/cup/cup} &
-\includegraphics[width=0.3\textwidth]{interp/real_world_img/dino/dino} &
-\includegraphics[width=0.3\textwidth]{interp/real_world_img/house/house}\\
-(d). cup & (e). dino & (f). house\\
-\includegraphics[width=0.3\textwidth]{interp/real_world_img/pot/pot} &
-\includegraphics[width=0.3\textwidth]{interp/real_world_img/statue/statue} &
-\includegraphics[width=0.3\textwidth]{interp/real_world_img/vase/vase} \\
-(g). pot & (h). statue & (i). vase\\
+\begin{tabular}{cccc}
+\includegraphics[width=0.2\textwidth]{interp/synth_dataset/bust} &
+\includegraphics[width=0.2\textwidth]{interp/synth_dataset/vase0} &
+\includegraphics[width=0.2\textwidth]{interp/synth_dataset/barrel} &
+\includegraphics[width=0.2\textwidth]{interp/synth_dataset/vase1}\\
+(a). bust & (b). vase0 & (c). barrel & (d). vase1\\
+\includegraphics[width=0.2\textwidth]{interp/real_world_img/statue/statue} &
+\includegraphics[width=0.2\textwidth]{interp/real_world_img/cup/cup} &
+\includegraphics[width=0.2\textwidth]{interp/real_world_img/pot/pot} &
+\includegraphics[width=0.2\textwidth]{interp/real_world_img/vase/vase} \\
+(e). statue & (f). cup & (g). pot & (h). vase\\
 \end{tabular}
-\caption{Real-world dataset.}
-\label{fig:real_world_dataset}
+\caption{(a)-(d): Synthetic dataset, and (e)-(h) real-world dataset for evaluation.}
+\label{fig:synth_real_dataset}
 \end{figure*}
 
 \subsection{Data capture}
-The images are captured using Nikon D70S camera with a $18-70mm$ lens. All images have a resolution of $3004\times 2000$. 
+The creation of synthetic dataset is largely the same as that discussed in Chapter~\ref{ch:3DRecon_Mapping}, thus is omitted in this section. The images of real-world dataset are captured using a Nikon D70S camera with a $18-70mm$ lens. All images have a resolution of $3004\times 2000$.
 
-For MVS, we capture the dataset by positioning the camera in three different heights. The objects are about $30-50cm$ away from the camera, and is fixed on a turntable. We have followed the following three steps to acquire data: 1) put the camera at a different height, adjust the orientation so that the object in at the center of the frame; 2) take pictures while rotating the table. The table rotates approximately $30^\circ$ every time. We rotate it 12 times and in total, we can obtain 12 image per height.
+For MVS, we capture the dataset by positioning the camera in three different heights. The objects are about $30-50cm$ away from the camera, and stays fixed on a turntable. We have followed the following three steps to acquire data: 1) put the camera at a different height, adjust the orientation so that the object in at the center of the frame; 2) take pictures while rotating the table. The table rotates approximately $30^\circ$ every time. We rotate it 12 times and in total, we can obtain 12 image per height.
 
 For PS, a $70-200mm$ lens, a handheld lamp, and two reference objects (diffuse and glossy) are used. The objects are positioned about $3m$ from the camera to approximate orthographic projection. To avoid inter-reflection, all data are captured in a dark room with everying covered by black cloth except the target object. We use a hand-held lamp as the light source and choose close to frontal angle to avoid severe self-shadowing effect. We take 20 images per object and select 15 plus images depending on the severity of the self-shadow effect.
 
 For SL, we use a Sanyo Pro xtraX Multiverse projector with a resolution of $1024\times 768$. The baseline angle is approximately $10^\circ$. To avoid the interference of ambient light, and inter-reflection, the objects are captured with room lights off.
 
 \subsection{Calibration}
-For MVS, a fixed random pattern is imaged with the object, which is used for camera calibration using SfM. The focal length is known and fixed, thus the extrinsic parameters of the camera can be retrieved up to a similarity transformation. Thus, the reconstruction is a metric/euclidean recontruction.
+For MVS, a calibration pattern proposed in~\cite{li2013multiple} is imaged under the object, which is used for calibrating the camera position and orientation by Structure from Motion softwares, such as VisualSfM~\cite{wu2011visualsfm}. The focal length is known a priori and fixed, thus the extrinsic parameters of the camera can be retrieved up to a similarity transformation. Thus, the reconstruction is a metric/euclidean recontruction.
 
-For SL, a opensource calibration software developed by~\citeauthor{moreno2012simple} is used for camera-projector calibration. This technique works by projecting temporal patterns on the object, and uses local homography to individually translate each checkerboard corner from the camera plane to the projector plane.
+For PS, though it is preferable to correct the non-linear response of camera,~\citeauthor{hertzmann2005example} discovered that it was unnecessary for EPS. Thus, we did not perform the radiometric calibration step.
+
+For SL, a opensource camera-projector calibration software developed by~\citeauthor{moreno2012simple} is used for calibration. This technique works by projecting temporal patterns onto the object, and uses local homography to individually translate each checkerboard corner from the camera plane to the projector plane. This technique can estimate both the intrinsic parameter and camera and projector, and the relative position and orientation.
 
 \section{Evaluation of Interpreter}
 \label{sec:eval_interp}
