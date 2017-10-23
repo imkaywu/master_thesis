@@ -128,23 +128,23 @@ For SL, a opensource camera-projector calibration software developed by~\citeaut
 
 \section{Evaluation of Interpreter}
 \label{sec:eval_interp}
-This section evaluates the proof of concept interpreter, which should return a successful result given a valid description, or a less successful one given an incorrect description. We choose four different problem conditions where each describes one of the four major classes of objects and provides demonstrative results.
+This section evaluates the proof of concept interpreter, which should return a successful result given a valid description, or a less successful one given an incorrect description. We provide demonstrative results of the interpreter using the synthetic and real-world dataset that represent the four problem conditions proposed in Chapter~\ref{ch:3DRecon_ProbSpace}.
 
 \subsection{Synthetic Datasets}
-Each object in the synthetic dataset represents one of the four problem conditions discussed in Section~\ref{ch:3DRecon_ProbSpace}. The descriptions of problem conditions of synthetic objects are shown in Table~\ref{tab:synth_prop_list}, as well as the appropriate algorithm selected by the interpreter. Given a user specified description, the proof of concept interpreter will select an algorithm, and any object that matches this description should be well reconstructed by this selected algorithm. Since a description could be mapped to multiple algorithms, an object that does not match the description could potentially have a successful reconstruction result as well. The reconstruction results of synthetic objects and those of the baseline method are shown in Figure~\ref{fig:synth_results}.
+Each object in the synthetic dataset represents one of the four problem conditions discussed in Section~\ref{ch:3DRecon_ProbSpace}. The description of problem condition of each synthetic object is shown in Table~\ref{tab:synth_prop_list}, as well as the appropriate algorithm selected by the interpreter. Given a user specified description, the proof of concept interpreter will select an algorithm, and any object that matches this description should be well reconstructed by this selected algorithm. Since a description could be mapped to multiple algorithms, an object that does not match the description could potentially have a successful reconstruction result as well. The reconstruction results of synthetic objects and those of the baseline method are shown in Figure~\ref{fig:synth_results}.
 \begin{table}[!htbp]
   \centering
   \begin{tabular}{lllllll}
   \hline
-  \textbf{Desc\#} & \textbf{Object} & Texture & Albedo & Spec & Rough & Interp Algo\\
+  \textbf{Desc\#} & \textbf{Object} & Texture & Albedo & Spec & Rough & Mapping Algo\\
   \hline
-  1 & bust & 0.2 & 0.8 & 0.2 & 0.8 & GSL\\ % EPS, 
-  2 & vase1 & 0.2 & 0.8 & 0.8 & 0.2 & EPS\\
-  3 & barrel & 0.8 & 0.8 & 0.2 & 0.8 & GSL\\ % PMVS, EPS, 
-  4 & vase0 & 0.8 & 0.8 & 0.8 & 0.2 & PMVS\\ % , EPS
+  1 & bust & 0.2 & 0.8 & 0.2 & 0.8 & EPS, GSL\\
+  2 & vase0 & 0.2 & 0.8 & 0.8 & 0.2 & EPS\\
+  3 & barrel & 0.8 & 0.8 & 0.2 & 0.8 & PMVS, EPS, GSL\\
+  4 & vase1 & 0.8 & 0.8 & 0.8 & 0.2 & PMVS, EPS\\
   \hline
   \end{tabular}
-  \caption{Problem conditions and interpreted algorithm of the synthetic objects. The description matches the problem condition of corresponding object. The last column shows the algorithm selected by the interpreter.}
+  \caption{Problem conditions and interpreted algorithm of the synthetic objects. The description matches the problem condition of corresponding object. The last column shows the algorithm returned by the mapping, from which the interpreter will select one appropriate algorithm.}
   \label{tab:synth_prop_list}
 \end{table}
 
@@ -152,7 +152,7 @@ Each object in the synthetic dataset represents one of the four problem conditio
 \centering
 \begin{tabular}{lccccr}
 \toprule
-Desc \# & Bust & Vase1 & Barrel & Vase0 & Interp Algo.\\
+Desc \# & Bust & Vase0 & Barrel & Vase1 & Interp Algo.\\
 \midrule
 1 & 
 \fcolorbox{green}{white}{\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/beethoven_sl}}}&
@@ -185,13 +185,16 @@ PMVS\\
 \end{figure*}
 
 \subsubsection{Description 1: Bust}
+Description 1 matches with object \textit{bust}, thus the algorithm selected by the interpreter achieves successful reconstruction result. The problem condition of object \textit{barrel} is also mapped to algorithm GSL, that is why the reconstruction result of \textit{barrel} is also successful.
 
-\subsubsection{Description 2: Vase1}
+\subsubsection{Description 2: Vase0}
+Description 2 matches with object \textit{vase0}, thus the algorithm selected by the interpreter achieves successful reconstruction result. The problem condition of all objects mapped to EPS, that is why the all reconstruction results by EPS are successful.
 
 \subsubsection{Description 3: Barrel}
-Description 1 matches with object \textit{barrel}, which has a reliable reconstruction result. The selected algorithm GSL is also in the mapped algorithms of object \textit{bust}, as shown in Table~\ref{tab:synth_prop_list}. Thus even though \textbf{description 1} doesn't match with the problem condition of \textit{bust}, a satisfactory result is also returned. However, the selected algorithm is not in the mapped algorithms of object \textit{vase0} and \textit{vase1}, thus less successful results are returned.
+Description 3 matches with object \textit{barrel}, which has a reliable reconstruction result. The selected algorithm GSL is also in the mapped algorithms of object \textit{bust}, as shown in Table~\ref{tab:synth_prop_list}. Thus even though \textbf{description 3} doesn't match with the problem condition of \textit{bust}, a satisfactory result is also returned. However, the selected algorithm is not in the mapped algorithms of object \textit{vase0} and \textit{vase1}, thus less successful results are returned.
 
-\subsubsection{Description 4: Vase2}
+\subsubsection{Description 4: Vase1}
+Description 4 matches with object \textit{vase1}, thus the algorithm selected by the interpreter achieves successful reconstruction result. The problem condition of object \textit{barrel} is also mapped to algorithm PMVS, that is why the reconstruction result of \textit{barrel} is also successful.
 
 \subsection{Real-world Datasets}
 We select four real-world objects, each represents the one of the four problem condtiions proposed in Chapter~\ref{ch:3DRecon_ProbSpace}, as shown in Figure~\ref{fig:test_real_world}. The descriptions of problem conditions of real-world objects are shown in Table~\ref{tab:real_data_prop_list}, as well as the appropriate algorithm selected by the interpreter. Given a user specified description, the proof of concept interpreter will select an algorithm, and any object that matches this description should be well reconstructed by this selected algorithm. Since a description could be mapped to multiple algorithms, an object that does not match the description could potentially have a successful reconstruction result as well. The reconstruction results of synthetic objects and those of the baseline method are shown in Figure~\ref{fig:real_results}. Since we do not have the ground truth here, we resort to visual analysis to see if the appropriate algorithm gives an acceptable reconstruction compared to that of the baseline method.
@@ -221,15 +224,15 @@ We use the aforementioned methods to retrieve the parameters of each property. T
   \centering
   \begin{tabular}{lllllll}
   \toprule
-  C\# & Object & Texture & Albedo & Specular & Rough & Interp Algo\\
+  C\# & Object & Texture & Albedo & Specular & Rough & Mapping Algo\\
   \midrule
-  1 & statue & 0.2 & 0.8 & 0.2 & 0.8 & GSL\\ % EPS, 
-  2 & cup & 0.2 & 0.8 & 0.5 & 0.2 & EPS\\ % , GSL
-  3 & pot & 0.8 & 0.8 (0.2) & 0.2 & 0.2 & GSL\\ % PMVS, 
+  1 & statue & 0.2 & 0.8 & 0.2 & 0.8 & EPS, GSL\\
+  2 & cup & 0.2 & 0.8 & 0.5 & 0.2 & EPS, GSL\\
+  3 & pot & 0.8 & 0.8 (0.2) & 0.2 & 0.2 & PMVS, GSL\\
   4 & vase & 0.8 & 0.8 (0.2) & 0.5 & 0.2 & PMVS\\
   \bottomrule
   \end{tabular}
-  \caption{Problem conditions and interpreted algorithm of the real-world objects. The description matches the problem condition of corresponding object. The last column shows the algorithm selected by the interpreter.}
+  \caption{Problem conditions and interpreted algorithm of the real-world objects. The description matches the problem condition of corresponding object. The last column shows the algorithm returned by the mapping, from which the interpreter will select one appropriate algorithm.}
   \label{tab:real_data_prop_list}
 \end{table}
 
@@ -270,13 +273,16 @@ We use the aforementioned methods to retrieve the parameters of each property. T
 % \end{table}
 
 \subsubsection{Description 1: statue}
+Description 1 matches with object \textit{statue}, thus the algorithm selected by the interpreter achieves successful reconstruction result. The problem condition of object \textit{cup} and \textit{pot} are also mapped to algorithm GSL, that is why the reconstruction result of these two objects are also successful.
 
 \subsubsection{Description 2: cup}
+Description 2 matches with object \textit{cup}, thus the algorithm selected by the interpreter achieves successful reconstruction result. The problem condition of \textit{statue} is mapped to EPS, that is why the all reconstruction result of \textit{statue} by EPS is successful.
 
 \subsubsection{Description 3: pot}
-Description 1 matches partially with object \textit{pot} since it has both high and low albedo surface areas. The surface area with high albedo is well reconstructed whereas the surface with low albedo, which doesn't match the description is not reconstructed at all. The selected algorithm is also in the mapped algorithms of object \textit{statue} and \textit{cup}, thus satisfactory results are returned as well. However, this is not the case for object \textit{vase}, thus a very sparse reconstruction is returned.
+Description 3 matches partially with object \textit{pot} since it has both high and low albedo surface areas. The surface area with high albedo is well reconstructed whereas the surface with low albedo, which doesn't match the description is not reconstructed at all. The selected algorithm is also in the mapped algorithms of object \textit{statue} and \textit{cup}, thus satisfactory results are returned as well. However, this is not the case for object \textit{vase}, thus a very sparse reconstruction is returned.
 
 \subsubsection{Description 4: vase}
+Description 4 matches with object \textit{vase}, thus the algorithm selected by the interpreter achieves successful reconstruction result. The problem condition of object \textit{pot} is also mapped to algorithm PMVS, that is why the reconstruction result of \textit{pot} is also successful.
 
 % \subsubsection{Data 1: statue}
 % The first real-world object is a statue with low texture, low specular component, medium roughness, and high albedo. PMVS produces a very noisy reconstruction due to the lack of surface texture, whereas the other two techniques (EPS and GSL) return satisfactory results. The interpreter would thus return the appropriate result based on user specified constraints.
