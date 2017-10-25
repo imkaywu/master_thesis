@@ -15,6 +15,13 @@
 \usepackage{xspace}
 \newcommand{\themename}{\textbf{\textsc{metropolis}}\xspace}
 
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric, arrows, fit, positioning, calc}
+\tikzstyle{data} = [rectangle, rounded corners, minimum width=2.5cm, minimum height=0.8cm, text centered, text width=2.5cm, draw=black, fill=blue!30]
+
+\usepackage{relsize}
+\tikzset{fontscale/.style = {font=\relsize{#1}}}
+
 \usepackage{multirow}
 
 {%
@@ -54,31 +61,36 @@ kaywu@ece.ubc.ca \\ % Your email address
 %------------------------------------------------
 \section{Motivation}
 %------------------------------------------------
-\begin{frame}{Motivation: traditional 3D Reconstruction}
+\begin{frame}{Motivation: traditional 3D reconstruction}
 
 \begin{figure}
 \centering
-\includegraphics[width=0.8\textwidth]{images/traditional_3d_vision.pdf}
+\includegraphics[width=0.6\textwidth]{images/3d_recon_tradition.pdf}
 \end{figure}
 
-Challenges:
-\begin{itemize}
-\item Hardware: controlled environment, calibration
-\item Algorithms: vision background
-\item Results: keep trying until an acceptable result
-\end{itemize}
+\begin{alertblock}{Challenges}
+  \begin{itemize}
+    \item Algorithms: vision background, doesn't scale well
+    \item Approach: \textit{try-and-see}
+  \end{itemize}
+\end{alertblock}
 
 \end{frame}
 
 %------------------------------------------------
-\begin{frame}{Motivation: interface to 3D Reconstruction}
-
-What if we can create an interface above the 3D algorithms, which can select an appropriate algorithm based on users' description, and achieve a successful reconstruction result.
+\begin{frame}{Motivation: interface to 3D reconstruction}
 
 \begin{figure}
 \centering
-\includegraphics[width=0.8\textwidth]{images/interface_3d_vision.pdf}
+\includegraphics[width=0.6\textwidth]{images/3d_recon_interface.pdf}
 \end{figure}
+
+\begin{exampleblock}{Strengths}
+  \begin{itemize}
+    \item Algorithms: no vision background needed, embeding new algorithms is easy
+    \item Approach: a definitive algorithm is chosen
+  \end{itemize}
+\end{exampleblock}
 
 \end{frame}
 
@@ -87,7 +99,7 @@ What if we can create an interface above the 3D algorithms, which can select an 
 %------------------------------------------------
 \begin{frame}{Contribution}
 
-Development of an interface for 3D reconstruction problem, which hides algorithmic details and allows users to describe conditions surrounding the problem. This description can be interpreteded so that an appropriate algorithm is chosen to obtain a successful reconstruction result.
+Development of an interface for 3D reconstruction problem, which hides algorithmic details and allows users to describe conditions surrounding the problem. This description can be interpreteded so that an appropriate algorithm is chosen to achieve a successful reconstruction result.
 
 \end{frame}
 
@@ -96,8 +108,8 @@ Development of an interface for 3D reconstruction problem, which hides algorithm
 
 This contribution is significant because:
 \begin{itemize}
-\item No single algorithm can work for a diverse categories of objects. The interface, to some extent, can cover a wider range of object categories by incorporating multiple algorithms.
-\item An description is provides that hides the algorithmic details, thus understanding of the algorithm, or conditions to apply a specific algorithm is not a prerequisite.
+\item Few algorithms can work for a diverse categories of objects. The interface, to some extent, can cover a wider range of object categories by incorporating multiple algorithms.
+\item An description of object problem condition is provided to hide the algorithmic details, thus understanding of the algorithm, or conditions of applying algorithms are not a prerequisite.
 \end{itemize}
 
 \end{frame}
@@ -107,108 +119,151 @@ This contribution is significant because:
 %------------------------------------------------
 \begin{frame}{Related Work: softwares}
 
-Some noteable examples of open source or commercial softwares:
+Some noteable open source general vision libraries and softwares:
 
-\begin{figure}
-\centering
-\begin{tabular}{p{1.5cm}p{2cm}*{2}{c}p{3cm}}
-\toprule
-Case & Software & \multicolumn{2}{c}{Example} & Problem\\
-\midrule
-General VL & 
-OpenCV &
-\multicolumn{2}{c}{Mat findHomography();} &
-Generic APIs\\
-\midrule
-Software bundles & 
-SfM + MVS &
-\raisebox{-.5\height}{\includegraphics[height=1.5cm]{interp/real_interp/pot/pot_mvs}} &
-\raisebox{-.5\height}{\includegraphics[height=1.5cm]{interp/real_interp/cup/cup_mvs}} &
-Cater to specific objects\\
-\bottomrule
-\end{tabular}
-\end{figure}
+\begin{exampleblock}{General vision libraries}
+\begin{itemize}
+  \item Example: OpenCV, VXL, VLFeat, and so on
+  \item Problem: provide APIs for vision routines
+\end{itemize}
+\end{exampleblock}
 
-\begin{block}{Challenge}
-Not that we don't have enough tools, but the barrier to take advantage of these tools is high.
-\end{block}
+\begin{exampleblock}{3D vision softwares}
+  \begin{itemize}
+    \item Example: PMVS; Bundler, VisualSfM, TheiaSfM; Poisson Recon;
+    \item Problem: cater to specific objects, not applicable for textureless surface
+  \end{itemize}
+\end{exampleblock}
+
+\begin{alertblock}{Challenges}
+1. Not that we don't have enough tools, but the barrier to take advantage of these tools is high. \\
+\end{alertblock}
 
 \end{frame}
 
 %------------------------------------------------
 \begin{frame}{Related Work: algorithms}
 
-\begin{figure}
-\begin{tabular}{ccc}
-\toprule
-Category & Method & Problem \\
-\midrule
-\multirow{2}{*}{Shape from Stereo} & 
-\raisebox{-.5\height}{\includegraphics[height=1cm]{images/mvs.png}} &
-Texture, Specular \\
-&  \raisebox{-.5\height}{\includegraphics[height=1cm]{images/sl.jpg}} &
-Albedo, Specular \\
-\multirow{2}{*}{Shape from Intensity} & 
-\raisebox{-.5\height}{\includegraphics[height=1cm]{images/sfs.png}} &
-Albedo, Specular, Geomtry \\
-& \raisebox{-.5\height}{\includegraphics[height=1cm]{images/ps.png}} &
-Albedo, Geoemtry \\
-\multirow{2}{*}{Shape from Silhouette} &
-\raisebox{-.5\height}{\includegraphics[height=1cm]{images/vh.jpg}} &
-Geoemtry\\
-& \raisebox{-.5\height}{\includegraphics[height=1cm]{images/vh_1.png}} &
-Geoemtry\\
-\bottomrule
-\end{tabular}
-\end{figure}
+\begin{exampleblock}{Shape from Stereo}
+  \begin{itemize}
+    \item Example: Multi-View Stereo, Structured Light
+    \item Problem: Texture, reflectance
+  \end{itemize}
+\end{exampleblock}
 
-\end{frame}
+\begin{exampleblock}{Shape from Intensity}
+  \begin{itemize}
+    \item Example: Shape from Shading, Photometric Stereo
+    \item Problem: Lightness, shape
+  \end{itemize}
+\end{exampleblock}
 
-%------------------------------------------------
-\begin{frame}{Related Work: algorithms}
+\begin{exampleblock}{Shape from Silhouette}
+  \begin{itemize}
+    \item Example: Visual Hull, Space Carving
+    \item Problem: Shape, reflectance
+  \end{itemize}
+\end{exampleblock}
 
-\begin{block}{Challenges}
-1. No algorithm works for objects with diverse properties;\\
-2. The knowledge of whether an algorithm works is not known a priori.
-\end{block}
+% \begin{figure}
+% \begin{tabular}{lll}
+% \toprule
+% Class & Method & Problem \\
+% \midrule
+% \multirow{2}{*}{Shape from Stereo} & 
+% Multi-View Stereo &
+% \multirow{2}{*}{Texture, reflectance} \\
+% & Structured Light \\
+% \multirow{2}{*}{Shape from Intensity} & 
+% Shape from Shading & 
+% \multirow{2}{*}{Lightness, shape} \\
+% & Photometric Stereo \\
+% \multirow{2}{*}{Shape from Silhouette} &
+% Visual Hull & 
+% \multirow{2}{*}{Shape, reflectance}\\
+% & Space Carving \\
+% \bottomrule
+% \end{tabular}
+% \end{figure}
+
+% \begin{figure}
+% \begin{tabular}{ccc}
+% \toprule
+% Class & Method & Problem \\
+% \midrule
+% \multirow{2}{*}{Shape from Stereo} & 
+% \raisebox{-.5\height}{\includegraphics[height=1cm]{images/mvs.png}} &
+% Texture, Specular \\
+% &  \raisebox{-.5\height}{\includegraphics[height=1cm]{images/sl.jpg}} &
+% Albedo, Specular \\
+% \multirow{2}{*}{Shape from Intensity} & 
+% \raisebox{-.5\height}{\includegraphics[height=1cm]{images/sfs.png}} &
+% Albedo, Specular, Geomtry \\
+% & \raisebox{-.5\height}{\includegraphics[height=1cm]{images/ps.png}} &
+% Albedo, Geoemtry \\
+% \multirow{2}{*}{Shape from Silhouette} &
+% \raisebox{-.5\height}{\includegraphics[height=1cm]{images/vh.jpg}} &
+% Geoemtry\\
+% & \raisebox{-.5\height}{\includegraphics[height=1cm]{images/vh_1.png}} &
+% Geoemtry\\
+% \bottomrule
+% \end{tabular}
+% \end{figure}
+
+\begin{alertblock}{Challenges}
+1. Few algorithm works for objects with diverse range of properties;\\
+2. The range of problem conditions under which an algorithm works is not known a priori.
+\end{alertblock}
 
 \end{frame}
 
 %------------------------------------------------
 \section{Development of Interface}
 %------------------------------------------------
+\begin{frame}{Overview}
+\begin{figure}
+\centering
+\begin{tikzpicture}[node distance=0.8cm, auto]
 
-%------------------------------------------------
-\subsection{Roadmap}
-%------------------------------------------------
-\begin{frame}{Roadmap}
+\node (desc) [data, font=\small] {L3: Description};
+\node (interp) [data, below of=desc, font=\small] {L2: Interpreter};
+\node (algo) [data, below of=interp, font=\small] {L1: Algorithm};
 
-\begin{itemize}
-\item Taxonomy: understand the problem space;
-\item Description: describe the problem space;
-\item Mapping: discover the connection between a sub-volume in problem space to algorithm.
-\end{itemize}
+\end{tikzpicture}
+\caption{3-layer interface to 3D reconstruction.}
+\end{figure}
+
+\begin{exampleblock}{Description}
+  1. define problem space; \\
+  2. describe problem condition.
+\end{exampleblock}
+\begin{exampleblock}{Interpreter: translate description to an appropriate algorithm.}
+  Mapping: discover the relation between problem space and algorithm.
+\end{exampleblock}
+\begin{exampleblock}{Algorithm}
+  Embed algorithms into the interface
+\end{exampleblock}
 
 \end{frame}
 
 %------------------------------------------------
 \subsection{Problem Space of 3D Reconstruction}
 %------------------------------------------------
-\begin{frame}{Taxonomy: properties of problem space}
+\begin{frame}{Problem space}
 
 \begin{itemize}
-\item \textit{algorithm-centered} taxonomy categorizes algorithms based on algorithmic details, as discussed in \textbf{Related Work};
+\item \textit{algorithm-centered} approach categorizes algorithms based on algorithmic details, as discussed in \textbf{Related Work};
 \item \textit{object-centered} taxonomy categorizes algorithms based on the problem conditions that the algorithm can reliably works under.
 \end{itemize}
 
-\begin{figure}[h]
+\begin{figure}
 \includegraphics[width=0.7\textwidth]{taxo/obj_class}
 \end{figure}
 
 \end{frame}
 
 %------------------------------------------------
-\begin{frame}{Taxonomy: problem conditions}
+\begin{frame}{Problem space: four problem conditions}
 
 Assumptions:
 \begin{itemize}
@@ -234,8 +289,8 @@ Assumptions:
   \textbf{Model} & \textbf{Representation}\\
   \midrule
   Texture & \textit{Texture randomness}\\
-  Lightness & \textit{Albedo}\\
-  Specularity & \textit{Specular/diffuse ratio}\\
+  Lightness & \textit{Diffuse albedo}\\
+  Specularity & \textit{Specular reflectance}\\
   Roughness & \textit{SD of facet slopes}\\
   \bottomrule
   \end{tabular}
@@ -252,18 +307,15 @@ We use three discrete scales to parameterize these properties: \textit{low} (0.2
   \centering
   \begin{tabular}{l*{4}{p{1cm}}l}
   \toprule
-  \textbf{Object} & Texture & Albedo & Specular & Rough & \textbf{Label}\\
+  \textbf{Prob cond} & Texture & Albedo & Specular & Rough & \textbf{Label}\\
   \midrule
-  Class 1 & low/med & high & low/med & high & Tl-B-D-R\\
-  Class 2 & low/med & high & high & low/med & Tl-B-M-S\\
-  Class 3 & high & high & low/med & high & T-B-D-R\\
-  Class 4 & high & high & high & low/med & T-B-M-S\\
-  Class 5 & high & low/med & low/med & high & T-D-D-R\\
-  Class 6 & high & low/med & high & low/med & T-D-M-S\\
+  1 & low/med & high & low/med & high & Tl-B-D-R\\
+  2 & low/med & high & high & low/med & Tl-B-M-S\\
+  3 & high & high & low/med & high & T-B-D-R\\
+  4 & high & high & high & low/med & T-B-M-S\\
   \bottomrule
   \end{tabular}
-  \caption{Expression of the reconstruction problem for the object classss.}
-  \label{tab:express}
+  \caption{Expression of the four problem conditions.}
 \end{table}
 
 \end{frame}
@@ -273,7 +325,7 @@ We use three discrete scales to parameterize these properties: \textit{low} (0.2
 %------------------------------------------------
 \begin{frame}{Mapping}
 
-Investigate the problem conditions under which the algorithms can reliably work. This strucure of this chapter is as follows
+Investigate the problem conditions under which the algorithms can reliably work.
 
 \begin{figure}
 \centering
@@ -285,6 +337,11 @@ Investigate the problem conditions under which the algorithms can reliably work.
 % \item Evaluate algorithmic performance within EPD
 % \item Derive mapping from problem conditions to algorithms.
 % \end{itemize}
+
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}{Mapping: dataset creation}
 
 \end{frame}
 
@@ -355,7 +412,7 @@ Investigate the problem conditions under which the algorithms can reliably work.
 \end{frame}
 
 %------------------------------------------------
-\begin{frame}{Conclusions}
+\begin{frame}{Mapping: discussion}
 
 \begin{itemize}
 \item PMVS can work on specular surfaces;
@@ -364,75 +421,32 @@ Investigate the problem conditions under which the algorithms can reliably work.
 
 \end{frame}
 
-%------------------------------------------------
-\section{Evaluation of Interface}
-%------------------------------------------------
-\begin{frame}{Interpretation: Key Evaluation Questions}
 
-\begin{itemize}
-\item Evaluation of mapping: is the mapping robust to changes of shape?
-\item Evaluation of interpreter: can the proof-of-concept interpreter return a successful reconstruction given the correct description?
-\end{itemize}
+%------------------------------------------------
+\section{Evaluation of interface}
+%------------------------------------------------
+\begin{frame}{Interpretation: evaluation methodology}
+
+\begin{exampleblock}{Evaluation question}
+  Can the proof of concept interpreter return an appropriate algorithm that achieves a successful reconstruction given the correct description?
+\end{exampleblock}
+
+\begin{exampleblock}{Criteria}
+  Visual comparison to results of baseline method.
+\end{exampleblock}
+
+\begin{exampleblock}{Roadmap}
+  \begin{itemize}
+    \item proof of concept interpreter;
+    \item dataset creation;
+    \item results of interpreter.
+  \end{itemize}
+\end{exampleblock}
 
 \end{frame}
 
 %------------------------------------------------
-\begin{frame}{Interpretation: evaluation of mapping}
-
-\begin{itemize}
-\item Shape variation: too vast and complicated to model;
-\item Instead focus on one geometric property: surface concavity, and see how robust is the mapping with respect to concavity changes.
-\end{itemize}
-
-\end{frame}
-
-%------------------------------------------------
-\begin{frame}{Interpretation: evaluation of mapping (cont'd)}
-
-\begin{figure}[!htbp]
-\centering
-\begin{tabular}{*{4}{c}}
-  \toprule
-  Quantitative results & ~ & Qualitative results & ~\\
-  \midrule
-  \includegraphics[width=0.2\textwidth]{interp/synth_data/bottle/bottle_08080208}&
-  \fcolorbox{green}{white}{\includegraphics[width=0.15\textwidth]{interp/synth_data/bottle/bottle_mvs_08080208.png}}&
-  \fcolorbox{green}{white}{\includegraphics[width=0.2\textwidth]{interp/synth_data/bottle/bottle_ps_08080208.png}}&
-  \fcolorbox{green}{white}{\includegraphics[width=0.15\textwidth]{interp/synth_data/bottle/bottle_sl_08080208.png}}\\
-  \includegraphics[width=0.2\textwidth]{interp/synth_data/knight/knight_08080208}&
-  \fcolorbox{green}{white}{\includegraphics[width=0.15\textwidth]{interp/synth_data/knight/knight_mvs_08080208.png}}&
-  \fcolorbox{green}{white}{\includegraphics[width=0.2\textwidth]{interp/synth_data/knight/knight_ps_08080208.png}}&
-  \fcolorbox{green}{white}{\includegraphics[width=0.15\textwidth]{interp/synth_data/knight/knight_sl_08080208.png}}\\
-  \includegraphics[width=0.2\textwidth]{interp/synth_data/king/king_08080208}&
-  \fcolorbox{green}{white}{\includegraphics[width=0.15\textwidth]{interp/synth_data/king/king_mvs_08080208.png}}&
-  \includegraphics[width=0.2\textwidth]{interp/synth_data/king/king_ps_08080208.png}&
-  \fcolorbox{green}{white}{\includegraphics[width=0.15\textwidth]{interp/synth_data/king/king_sl_08080208.png}}\\
-  \bottomrule
-  ~ & PMVS & EPS & GSL\\
-\end{tabular}
-\caption{Problem condition: 08080208, mapped algorithms: PMVS, EPS, GSL.}
-\end{figure}
-
-\end{frame}
-
-%------------------------------------------------
-\begin{frame}{Interpretation: evaluation of mapping (cont'd)}
-
-Conclusion:
-\begin{itemize}
-\item Mappings to PMVS and GSL are robust to concavity changes whereas those to EPS are not.
-\end{itemize}
-
-Suggestions:
-\begin{itemize}
-\item Develop more advanced description, incorporating concavity into the description
-\item Use more underlying algorithms that are robust to concavity changes.
-\end{itemize}
-
-\end{frame}
-
-%------------------------------------------------
-\begin{frame}{Proof-of-concept interpreter}
+\begin{frame}{Interpretation: proof of concept interpreter}
 
 An interpreter selects an appropriate algorithm based on description of problem condition and constraints.
 
@@ -444,13 +458,67 @@ An interpreter selects an appropriate algorithm based on description of problem 
 \end{frame}
 
 %------------------------------------------------
+\begin{frame}{Interpretation: dataset creation}
+
+\begin{exampleblock}{Capture}
+  \begin{table}
+    \begin{tabular}{l|l|l}
+    method & hardware & configuration \\
+    \midrule
+    MVS+VH & camera & 3 heights, $30^\circ$ baseline angle \\
+    PS & camera, lamp, 2 ref objs & \\
+    SL & camera, projector & $10^\circ$ baseline angle\\
+    \end{tabular}
+  \end{table}
+\end{exampleblock}
+
+\begin{exampleblock}{Calibration}
+  \begin{table}
+    \begin{tabular}{l|l}
+    method & calibration \\
+    \midrule
+    MVS+VH & focal length from EXIF, extrinsics using SfM \\
+    PS & no radiometric calibration performed \\
+    SL & camera-projector calibration using local homography \\
+    \end{tabular}
+  \end{table}
+\end{exampleblock}
+
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}{Interpretation: synthetic objects}
+
+\begin{figure}[!htbp]
+\centering
+\begin{tabular}{l|*{4}{p{1.5cm}}}
+\toprule
+prob cond\# & 1 & 2 & 3 & 4\\
+\midrule
+  & textureless & textureless & textured & textured\\
+description & diffuse & mixed d/s & diffuse & mixed d/s\\
+  & bright & bright & dark/bright & dark/bright\\
+\hline
+object & 
+\raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/synth_dataset/bust}} &
+\raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/synth_dataset/vase0}} &
+\raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/synth_dataset/barrel}} &
+\raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/synth_dataset/vase1}}\\
+\bottomrule
+\end{tabular}
+\caption{The rerepsentative synthetic objects of the four problem conditions for evaluation.}
+\end{figure}
+
+\end{frame}
+
+%------------------------------------------------
 \begin{frame}{Interpretation: evaluation of interpreter}
 
 \begin{figure}[!htbp]
 \centering
 \begin{tabular}{lccccr}
 \toprule
-Desc \# & Bust & Vase1 & Barrel & Vase0 & Selected Algo.\\
+Desc \# & Bust & Vase1 & Barrel & Vase0 & Interp Algo.\\
 \midrule
 1 & 
 \fcolorbox{green}{white}{\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/beethoven_sl}}}&
@@ -487,13 +555,13 @@ PMVS\\
 
 \begin{figure}[!htbp]
 \centering
-\begin{tabular}{c|*{4}{p{2cm}}}
+\begin{tabular}{l|*{4}{p{1.5cm}}}
 \toprule
-class \# & 1 & 2 & 3 & 4\\
+prob cond\# & 1 & 2 & 3 & 4\\
 \midrule
   & textureless & textureless & textured & textured\\
 description & diffuse & mixed d/s & diffuse & mixed d/s\\
-  & bright & bright & dark/bright & dark/bright\\
+  & bright & bright & bright & bright\\
 \hline
 object & 
 \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/real_world_img/statue/statue}} &
@@ -502,7 +570,7 @@ object &
 \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/real_world_img/vase/vase}}\\
 \bottomrule
 \end{tabular}
-\caption{The rerepsentatives of the four classes of objects used for evaluation.}
+\caption{The rerepsentative real-world objects of the four problem conditions for evaluation.}
 \end{figure}
 
 \end{frame}
@@ -514,7 +582,7 @@ object &
 \centering
 \begin{tabular}{lccccr}
 \toprule
-Desc \# & Statue & Cup & Pot & Vase & Selected Algo.\\
+Desc \# & Statue & Cup & Pot & Vase & Interp Algo.\\
 \midrule
 1 &
 \fcolorbox{green}{white}{\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/real_interp/statue/statue_sl}}}&
@@ -543,6 +611,11 @@ PMVS\\
 \bottomrule
 \end{tabular}
 \end{figure}
+
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}{Interpretation: discussion}
 
 \end{frame}
 
