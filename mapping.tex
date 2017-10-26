@@ -154,31 +154,32 @@ A naive way of finding the \textit{effective properties} would be evaluating alg
 \label{sec:mvs_epd}
 We investigate the impact of each property on the performance of PMVS in terms of accuracy and completeness under varied combinations of properties. The settings of these properties are listed in Table~\ref{tab:pairwise_prob_cond}.
 
-\begin{sidewaysfigure}[!htbp]
-\begin{tabular}{ccc}
-\includegraphics[width=0.3\textwidth]{mapping/depend_check/mvs_tex_alb}&
-\includegraphics[width=0.3\textwidth]{mapping/depend_check/mvs_tex_spec}&
-\includegraphics[width=0.3\textwidth]{mapping/depend_check/mvs_tex_rough}\\
-(a) & (b) & (c)\\
-\includegraphics[width=0.3\textwidth]{mapping/depend_check/mvs_alb_spec}&
-\includegraphics[width=0.3\textwidth]{mapping/depend_check/mvs_alb_rough}&
-\includegraphics[width=0.3\textwidth]{mapping/depend_check/mvs_spec_rough}\\
-(d) & (e) & (f)\\
+\begin{figure}[!htbp]
+\begin{tabular}{cc}
+\includegraphics[width=0.45\textwidth]{mapping/pairwise/mvs_tex_alb} &
+\includegraphics[width=0.45\textwidth]{mapping/pairwise/mvs_tex_spec}\\
+(a) & (b)\\
+\includegraphics[width=0.45\textwidth]{mapping/pairwise/mvs_tex_rough} &
+\includegraphics[width=0.45\textwidth]{mapping/pairwise/mvs_alb_spec}\\
+(c) & (d)\\
+\includegraphics[width=0.45\textwidth]{mapping/pairwise/mvs_alb_rough} &
+\includegraphics[width=0.45\textwidth]{mapping/pairwise/mvs_spec_rough}\\
+(e) & (f)\\
 \end{tabular}
-\caption{Performance of PMVS under six pairwise conditions. For instance, (a) shows the performance under changing \textit{texture} and \textit{albedo} values, while the others are fixed. The property values are set based on settings in Table~\ref{tab:mvs_depend_check_params}.}
-\label{fig:mvs_depend_check}
-\end{sidewaysfigure}
+\caption{Performance of PMVS under four problem conditions. For instance, (a) shows the performance under changing \textit{texture} and \textit{albedo} values, while the others are fixed. The property values are set based on settings in Table~\ref{tab:pairwise_prob_cond}.}
+\label{fig:mvs_pairwise}
+\end{figure}
 
 \textbf{(a) Texture and Albedo} 
 texture has a positive effect on the reconstruction in terms of accuracy and completeness, while the effect of albedo is negligible.
 
 \textbf{(b) Texture and Specularity} 
-specularity has a negative effect on both the accuracy and completeness of the reconstruction. However, the level of impact varies as the texture varies. More specifically, the effect of specularity is more substantial on a less textured surface, as shown in Figure~\ref{fig:mvs_depend_check} (b). This can be explained as follows: the specular lobe can only be observed by cameras positioned and oriented towards the specular lobe, such as camera $V_2$ shown in Figure~\ref{fig:mvs_spec} (a) and (c). Cameras positioned otherwise would observe the true surface, such as camera $V_1$ shown in Figure~\ref{fig:mvs_spec} (a) and (b). The algorithm would then exploit the texture information provided by views like $V_1$, and thus would be able to reconstruct a specular surface.
+specularity has a negative effect on both the accuracy and completeness of the reconstruction. However, the level of impact varies as the texture varies. More specifically, the effect of specularity is more substantial on a less textured surface, as shown in Figure~\ref{fig:mvs_pairwise} (b). This can be explained as follows: the specular lobe can only be observed by cameras positioned and oriented towards the specular lobe, such as camera $V_2$ shown in Figure~\ref{fig:mvs_spec} (a) and (c). Cameras positioned otherwise would observe the true surface, such as camera $V_1$ shown in Figure~\ref{fig:mvs_spec} (a) and (b). The algorithm would then exploit the texture information provided by views like $V_1$, and thus would be able to reconstruct a specular surface.
 \begin{figure}[!htbp]
 \begin{tabular}{ccc}
-\includegraphics[width=0.33\textwidth]{mapping/mvs_spec/mvs_spec}&
-\includegraphics[width=0.33\textwidth]{mapping/mvs_spec/mvs_spec_01}&
-\includegraphics[width=0.33\textwidth]{mapping/mvs_spec/mvs_spec_00}\\
+\includegraphics[width=0.3\textwidth]{mapping/mvs_spec/mvs_spec}&
+\includegraphics[width=0.3\textwidth]{mapping/mvs_spec/mvs_spec_01}&
+\includegraphics[width=0.3\textwidth]{mapping/mvs_spec/mvs_spec_00}\\
 (a) Image formation & (b) $V_1$ & (c) $V_2$\\
 \end{tabular}
 \caption{(a) shows the reflection of light off a specular surface. $V_1$ received the diffuse component while $V_2$ receives the specular component. (b), (c) shows the images observed from these two views. The specular area (red circle) observed in $V_2$ is visible in $V_1$.}
@@ -190,27 +191,27 @@ roughness doesn't have a significant effect on the results.
 
 \textbf{(d) Albedo and Specular} 
 albedo has a positive effect whereas specular has a negative effect on the reconstruction. Furthermore, the positive effect of albedo is more significant on a higher specular surface while the negative effect of specular is far more substantial on a lower albedo surface. This can be explained as follows: according to the energy conservation law, as the specular component increases, the diffuse component decreases, resulting in a less discernible diffuse area. See Figure~\ref{fig:mvs_alb_spec} (a)-(c). Increasing the diffuse albedo can counteract the effect of specularity and make the texture visible again. See Figure~\ref{fig:mvs_alb_spec} (d)-(f).
-\begin{figure}[!htbp]
-\centering
-\begin{tabular}{ccc}
-\includegraphics[width=0.33\textwidth]{mapping/mvs_alb_spec/alb_spec_0202}&
-\includegraphics[width=0.33\textwidth]{mapping/mvs_alb_spec/alb_spec_0205}&
-\includegraphics[width=0.33\textwidth]{mapping/mvs_alb_spec/alb_spec_0208}\\
-(a) spec: 0.2 & (b) spec: 0.5 & (c) spec: 0.8\\
-\includegraphics[width=0.33\textwidth]{mapping/mvs_alb_spec/alb_spec_0202}&
-\includegraphics[width=0.33\textwidth]{mapping/mvs_alb_spec/alb_spec_0502}&
-\includegraphics[width=0.33\textwidth]{mapping/mvs_alb_spec/alb_spec_0802}\\
-(d) alb: 0.2 & (e) alb: 0.5 & (f) alb: 0.8\\
-\end{tabular}
-\caption{(a)-(c). The albedo is set as 0.2, (d)-(f). The specularity is set as 0.2. According to energy conservation, as the specular component increases, the diffuse component decreases.}
-\label{fig:mvs_alb_spec}
-\end{figure}
+% \begin{figure}[!htbp]
+% \centering
+% \begin{tabular}{ccc}
+% \includegraphics[width=0.33\textwidth]{mapping/mvs_alb_spec/alb_spec_0202}&
+% \includegraphics[width=0.33\textwidth]{mapping/mvs_alb_spec/alb_spec_0205}&
+% \includegraphics[width=0.33\textwidth]{mapping/mvs_alb_spec/alb_spec_0208}\\
+% (a) spec: 0.2 & (b) spec: 0.5 & (c) spec: 0.8\\
+% \includegraphics[width=0.33\textwidth]{mapping/mvs_alb_spec/alb_spec_0202}&
+% \includegraphics[width=0.33\textwidth]{mapping/mvs_alb_spec/alb_spec_0502}&
+% \includegraphics[width=0.33\textwidth]{mapping/mvs_alb_spec/alb_spec_0802}\\
+% (d) alb: 0.2 & (e) alb: 0.5 & (f) alb: 0.8\\
+% \end{tabular}
+% \caption{(a)-(c). The albedo is set as 0.2, (d)-(f). The specularity is set as 0.2. According to energy conservation, as the specular component increases, the diffuse component decreases.}
+% \label{fig:mvs_alb_spec}
+% \end{figure}
 
 \textbf{(e) Albedo and Roughness}
 albedo and roughness have a negligible effect on the results.
 
 \textbf{(f) Specular and Roughness} 
-surface roughness can effectively diminish the specular component and make the surface appear more diffuse. Thus, in theory, roughness should have a positive impact on the reconstruction. However, since specularity is only effective on surface with medium level texture, see Figure~\ref{fig:mvs_depend_check} (b), then roughness is only effective in this case as well. Further, since higher specular, high roughness surfaces visually resemble lower specular surfaces, and achieve similar reconstruction results as well, it makes sense to incorporate the effect of roughness to specularity, and omit roughness for simplicity.
+surface roughness can effectively diminish the specular component and make the surface appear more diffuse. Thus, in theory, roughness should have a positive impact on the reconstruction. However, since specularity is only effective on surface with medium level texture, see Figure~\ref{fig:mvs_pairwise} (b), then roughness is only effective in this case as well. Further, since higher specular, high roughness surfaces visually resemble lower specular surfaces, and achieve similar reconstruction results as well, it makes sense to incorporate the effect of roughness to specularity, and omit roughness for simplicity.
 
 \subsubsection{Effective Properties: PMVS} 
 The effective properties of PMVS are: texture, albedo, and specular, as shown in Table~\ref{tab:mvs_depend_prop}. Interestingly, we discovered that specularity has a more substantially negative impact on less textured, lower albedo surfaces. For instance, high specularity does not have a severely negative impact on highly textured surfaces.
@@ -232,125 +233,126 @@ The effective properties of PMVS are: texture, albedo, and specular, as shown in
 \label{sec:ps_epd}
 We investigate the impact of each property on the performance of example-based PS in terms of angular error under varied combinations of properties. The settings of the properties are listed in Table~\ref{tab:pairwise_prob_cond}.
 
-\begin{sidewaysfigure}[!htbp]
-\begin{tabular}{ccc}
-\includegraphics[width=0.3\textwidth]{mapping/depend_check/ps_tex_alb}&
-\includegraphics[width=0.3\textwidth]{mapping/depend_check/ps_tex_spec}&
-\includegraphics[width=0.3\textwidth]{mapping/depend_check/ps_tex_rough}\\
-(a) & (b) &(c)\\
-\includegraphics[width=0.3\textwidth]{mapping/depend_check/ps_alb_spec}&
-\includegraphics[width=0.3\textwidth]{mapping/depend_check/ps_alb_rough}&
-\includegraphics[width=0.3\textwidth]{mapping/depend_check/ps_spec_rough}\\
-(d) & (e) & (f)\\
+\begin{figure}[!htbp]
+\begin{tabular}{cc}
+\includegraphics[width=0.45\textwidth]{mapping/pairwise/ps_tex_alb}&
+\includegraphics[width=0.45\textwidth]{mapping/pairwise/ps_tex_spec}\\
+(a) & (b)\\
+\includegraphics[width=0.45\textwidth]{mapping/pairwise/ps_tex_rough}&
+\includegraphics[width=0.45\textwidth]{mapping/pairwise/ps_alb_spec}\\
+(c) & (d)\\
+\includegraphics[width=0.45\textwidth]{mapping/pairwise/ps_alb_rough}&
+\includegraphics[width=0.45\textwidth]{mapping/pairwise/ps_spec_rough}\\
+(e) & (f)\\
 \end{tabular}
-\caption{Performance of Example-based PS under six pairwise conditions. For instance, (a) shows the performance under changing \textit{texture} and \textit{albedo} values. The property values are assigned based on the settings in Table~\ref{tab:ps_depend_check_params} (a).}
-\label{fig:ps_depend_check}
-\end{sidewaysfigure}
+\caption{Performance of Example-based PS under six pairwise conditions. For instance, (a) shows the performance under changing \textit{texture} and \textit{albedo} values. The property values are assigned based on the settings in Table~\ref{tab:pairwise_prob_cond} (a).}
+\label{fig:ps_pairwise}
+\end{figure}
 
 \textbf{(a) Texture and Albedo} 
 texture has no significant effect while albedo has a positive effect on normal estimation.
 
 \textbf{(b) Texture and Specularity} 
-texture has no effect while specularity has a negative effect on normal estimation, which is manifested by the increased interquartile range and skewness. The explaination is as follows: normals in the specular regions are poorly estimated while the rest of the surface is reliably estimated, as shown in Figure~\ref{fig:ps_tex_spec}. This explains the increased mean and interquartile values as shown in Figure~\ref{fig:ps_depend_check} (b).
-\begin{figure}[!htbp]
-\centering
-\begin{tabular}{c|ccc}
-Image & Normal map & Height map & Angular error\\
-\hline\\
-\includegraphics[width=0.33\textwidth]{mapping/ps_tex_spec/0502_0001}&
-\includegraphics[width=0.33\textwidth]{mapping/ps_tex_spec/0502_normal}&
-\includegraphics[width=0.25\textwidth]{mapping/ps_tex_spec/0502_dmap}&
-\includegraphics[width=0.06\textwidth]{mapping/ps_tex_spec/0502_ang_error}\\
- & spec: 0.2 & \\
-\includegraphics[width=0.33\textwidth]{mapping/ps_tex_spec/0505_0001}&
-\includegraphics[width=0.33\textwidth]{mapping/ps_tex_spec/0505_normal}&
-\includegraphics[width=0.25\textwidth]{mapping/ps_tex_spec/0505_dmap}&
-\includegraphics[width=0.06\textwidth]{mapping/ps_tex_spec/0505_ang_error}\\
- & spec: 0.5 & \\
-\includegraphics[width=0.33\textwidth]{mapping/ps_tex_spec/0508_0001}&
-\includegraphics[width=0.33\textwidth]{mapping/ps_tex_spec/0508_normal}&
-\includegraphics[width=0.25\textwidth]{mapping/ps_tex_spec/0508_dmap}&
-\includegraphics[width=0.06\textwidth]{mapping/ps_tex_spec/0508_ang_error}\\
- & spec: 0.8 & \\
-\end{tabular}
-\caption{(a)-(c). The texture is set as 0.5. The estimated normal map and recovered surface becomes consistently worse as the specular level rises, which is consistent with the quantitative results from Figure~\ref{fig:ps_depend_check} (b).}
-\label{fig:ps_tex_spec}
-\end{figure}
+texture has no effect while specularity has a negative effect on normal estimation, which is manifested by the increased interquartile range and skewness. The explaination is as follows: normals in the specular regions are poorly estimated while the rest of the surface is reliably estimated, as shown in Figure~\ref{fig:ps_tex_spec}. This explains the increased mean and interquartile values as shown in Figure~\ref{fig:ps_pairwise} (b).
+% \begin{figure}[!htbp]
+% \centering
+% \begin{tabular}{c|ccc}
+% Image & Normal map & Height map & Angular error\\
+% \hline\\
+% \includegraphics[width=0.33\textwidth]{mapping/ps_tex_spec/0502_0001}&
+% \includegraphics[width=0.33\textwidth]{mapping/ps_tex_spec/0502_normal}&
+% \includegraphics[width=0.25\textwidth]{mapping/ps_tex_spec/0502_dmap}&
+% \includegraphics[width=0.06\textwidth]{mapping/ps_tex_spec/0502_ang_error}\\
+%  & spec: 0.2 & \\
+% \includegraphics[width=0.33\textwidth]{mapping/ps_tex_spec/0505_0001}&
+% \includegraphics[width=0.33\textwidth]{mapping/ps_tex_spec/0505_normal}&
+% \includegraphics[width=0.25\textwidth]{mapping/ps_tex_spec/0505_dmap}&
+% \includegraphics[width=0.06\textwidth]{mapping/ps_tex_spec/0505_ang_error}\\
+%  & spec: 0.5 & \\
+% \includegraphics[width=0.33\textwidth]{mapping/ps_tex_spec/0508_0001}&
+% \includegraphics[width=0.33\textwidth]{mapping/ps_tex_spec/0508_normal}&
+% \includegraphics[width=0.25\textwidth]{mapping/ps_tex_spec/0508_dmap}&
+% \includegraphics[width=0.06\textwidth]{mapping/ps_tex_spec/0508_ang_error}\\
+%  & spec: 0.8 & \\
+% \end{tabular}
+% \caption{(a)-(c). The texture is set as 0.5. The estimated normal map and recovered surface becomes consistently worse as the specular level rises, which is consistent with the quantitative results from Figure~\ref{fig:ps_pairwise} (b).}
+% \label{fig:ps_tex_spec}
+% \end{figure}
 
 \textbf{(c) Texture and Roughness} 
 texture has no effect while roughness has a positive effect on normal estimation.
 
 \textbf{(d) Albedo and Specular} 
 the albedo has a positive impact on normal estimation (see Figure~\ref{fig:ps_alb_spec} (a)-(c)), whereas the specularity has a negative impact on normal estimation (see Figure~\ref{fig:ps_alb_spec} (d)-(f)).
-\begin{figure}[!htbp]
-\centering
-\begin{tabular}{c|ccc}
-Image & Normal map & Height map & Angular error\\
-\hline\\
+% \begin{figure}[!htbp]
+% \centering
+% \begin{tabular}{c|ccc}
+% Image & Normal map & Height map & Angular error\\
+% \hline\\
+% % \includegraphics[width=0.33\textwidth]{mapping/ps_alb_spec/0202_0001}&
+% % \includegraphics[width=0.33\textwidth]{mapping/ps_alb_spec/0202_normal}&
+% % \includegraphics[width=0.25\textwidth]{mapping/ps_alb_spec/0202_dmap}&
+% % \includegraphics[width=0.06\textwidth]{mapping/ps_alb_spec/0202_ang_error}\\
+% %  & (a) albedo: 0.2, spec: 0.2 & \\
+% \includegraphics[width=0.33\textwidth]{mapping/ps_alb_spec/0802_0001}&
+% \includegraphics[width=0.33\textwidth]{mapping/ps_alb_spec/0802_normal}&
+% \includegraphics[width=0.25\textwidth]{mapping/ps_alb_spec/0802_dmap}&
+% \includegraphics[width=0.06\textwidth]{mapping/ps_alb_spec/0802_ang_error}\\
+%  & (a) albedo: 0.8, spec: 0.2 & \\
+% \includegraphics[width=0.33\textwidth]{mapping/ps_alb_spec/0502_0001}&
+% \includegraphics[width=0.33\textwidth]{mapping/ps_alb_spec/0502_normal}&
+% \includegraphics[width=0.25\textwidth]{mapping/ps_alb_spec/0502_dmap}&
+% \includegraphics[width=0.06\textwidth]{mapping/ps_alb_spec/0502_ang_error}\\
+%  & (b) albedo: 0.5, spec: 0.2 & \\
 % \includegraphics[width=0.33\textwidth]{mapping/ps_alb_spec/0202_0001}&
 % \includegraphics[width=0.33\textwidth]{mapping/ps_alb_spec/0202_normal}&
 % \includegraphics[width=0.25\textwidth]{mapping/ps_alb_spec/0202_dmap}&
 % \includegraphics[width=0.06\textwidth]{mapping/ps_alb_spec/0202_ang_error}\\
-%  & (a) albedo: 0.2, spec: 0.2 & \\
-\includegraphics[width=0.33\textwidth]{mapping/ps_alb_spec/0802_0001}&
-\includegraphics[width=0.33\textwidth]{mapping/ps_alb_spec/0802_normal}&
-\includegraphics[width=0.25\textwidth]{mapping/ps_alb_spec/0802_dmap}&
-\includegraphics[width=0.06\textwidth]{mapping/ps_alb_spec/0802_ang_error}\\
- & (a) albedo: 0.8, spec: 0.2 & \\
-\includegraphics[width=0.33\textwidth]{mapping/ps_alb_spec/0502_0001}&
-\includegraphics[width=0.33\textwidth]{mapping/ps_alb_spec/0502_normal}&
-\includegraphics[width=0.25\textwidth]{mapping/ps_alb_spec/0502_dmap}&
-\includegraphics[width=0.06\textwidth]{mapping/ps_alb_spec/0502_ang_error}\\
- & (b) albedo: 0.5, spec: 0.2 & \\
-\includegraphics[width=0.33\textwidth]{mapping/ps_alb_spec/0202_0001}&
-\includegraphics[width=0.33\textwidth]{mapping/ps_alb_spec/0202_normal}&
-\includegraphics[width=0.25\textwidth]{mapping/ps_alb_spec/0202_dmap}&
-\includegraphics[width=0.06\textwidth]{mapping/ps_alb_spec/0202_ang_error}\\
- & (c) albedo: 0.2, spec: 0.2 & \\
-\includegraphics[width=0.33\textwidth]{mapping/ps_alb_spec/0205_0001}&
-\includegraphics[width=0.33\textwidth]{mapping/ps_alb_spec/0205_normal}&
-\includegraphics[width=0.25\textwidth]{mapping/ps_alb_spec/0205_dmap}&
-\includegraphics[width=0.06\textwidth]{mapping/ps_alb_spec/0205_ang_error}\\
- & (d) albedo: 0.2, spec: 0.5 & \\
-\includegraphics[width=0.33\textwidth]{mapping/ps_alb_spec/0208_0001}&
-\includegraphics[width=0.33\textwidth]{mapping/ps_alb_spec/0208_normal}&
-\includegraphics[width=0.25\textwidth]{mapping/ps_alb_spec/0208_dmap}&
-\includegraphics[width=0.06\textwidth]{mapping/ps_alb_spec/0208_ang_error}\\
- & (e) albedo: 0.2, spec: 0.8 & \\
-\end{tabular}
-\caption{According to energy conservation, as the specular component increases, the diffuse component decreases. (a)-(c): the estimated normal map and recovered height map become consistently worse as the albedo decreases; (c)-(e): the estimated normal map and recovered height map become consistently worse as the specularity increases.}
-\label{fig:ps_alb_spec}
-\end{figure}
+%  & (c) albedo: 0.2, spec: 0.2 & \\
+% \includegraphics[width=0.33\textwidth]{mapping/ps_alb_spec/0205_0001}&
+% \includegraphics[width=0.33\textwidth]{mapping/ps_alb_spec/0205_normal}&
+% \includegraphics[width=0.25\textwidth]{mapping/ps_alb_spec/0205_dmap}&
+% \includegraphics[width=0.06\textwidth]{mapping/ps_alb_spec/0205_ang_error}\\
+%  & (d) albedo: 0.2, spec: 0.5 & \\
+% \includegraphics[width=0.33\textwidth]{mapping/ps_alb_spec/0208_0001}&
+% \includegraphics[width=0.33\textwidth]{mapping/ps_alb_spec/0208_normal}&
+% \includegraphics[width=0.25\textwidth]{mapping/ps_alb_spec/0208_dmap}&
+% \includegraphics[width=0.06\textwidth]{mapping/ps_alb_spec/0208_ang_error}\\
+%  & (e) albedo: 0.2, spec: 0.8 & \\
+% \end{tabular}
+% \caption{According to energy conservation, as the specular component increases, the diffuse component decreases. (a)-(c): the estimated normal map and recovered height map become consistently worse as the albedo decreases; (c)-(e): the estimated normal map and recovered height map become consistently worse as the specularity increases.}
+% \label{fig:ps_alb_spec}
+% \end{figure}
 
 \textbf{(e) Albedo and Roughness} 
 both albedo and roughness have a positive effect on normal estimation.
 
 \textbf{(f) Specular and Roughness} 
 specularity has a negative impact on normal estimation, while the effect of roughness is more complicated. We observed that the reconstruction becomes worse for medium roughness, which is counter-intuitive at first sight. However, we argue that it's because the roughness is not strong enough to counteract the specular component, causing a smoothed and blurred specular region with larger area, thus leading to a poorer normal estimation. See Figure~\ref{fig:ps_spec_rough} for visual examples.
-\begin{figure}[!htbp]
-\centering
-\begin{tabular}{c|ccc}
-  Image & Normal map & Height map & Angular error\\
-  \hline\\
-  \includegraphics[width=0.33\textwidth]{mapping/ps_spec_rough/0802_0001}&
-  \includegraphics[width=0.33\textwidth]{mapping/ps_spec_rough/0802_normal}&
-  \includegraphics[width=0.25\textwidth]{mapping/ps_spec_rough/0802_dmap}&
-  \includegraphics[width=0.06\textwidth]{mapping/ps_spec_rough/0802_ang_error}\\
-  & (a). rough: 0.2\\
-  \includegraphics[width=0.33\textwidth]{mapping/ps_spec_rough/0805_0001}&
-  \includegraphics[width=0.33\textwidth]{mapping/ps_spec_rough/0805_normal}&
-  \includegraphics[width=0.25\textwidth]{mapping/ps_spec_rough/0805_dmap}&
-  \includegraphics[width=0.06\textwidth]{mapping/ps_spec_rough/0805_ang_error}\\
-  & (b). rough: 0.5\\
-  \includegraphics[width=0.33\textwidth]{mapping/ps_spec_rough/0808_0001}&
-  \includegraphics[width=0.33\textwidth]{mapping/ps_spec_rough/0808_normal}&
-  \includegraphics[width=0.25\textwidth]{mapping/ps_spec_rough/0808_dmap}&
-  \includegraphics[width=0.06\textwidth]{mapping/ps_spec_rough/0808_ang_error}\\
-  & (c). rough: 0.8\\
-\end{tabular}
-\caption{The effect of roughness on PS. Albedo is set as 0.8, and specular is set as 0.8. (b) demonstrates that a medium level roughness would lead to worse normal estimation since it blurs the specular lobe.}
-\label{fig:ps_spec_rough}
-\end{figure}
+% \begin{figure}[!htbp]
+% \centering
+% \begin{tabular}{c|ccc}
+%   Image & Normal map & Height map & Angular error\\
+%   \hline\\
+%   \includegraphics[width=0.33\textwidth]{mapping/ps_spec_rough/0802_0001}&
+%   \includegraphics[width=0.33\textwidth]{mapping/ps_spec_rough/0802_normal}&
+%   \includegraphics[width=0.25\textwidth]{mapping/ps_spec_rough/0802_dmap}&
+%   \includegraphics[width=0.06\textwidth]{mapping/ps_spec_rough/0802_ang_error}\\
+%   & (a). rough: 0.2\\
+%   \includegraphics[width=0.33\textwidth]{mapping/ps_spec_rough/0805_0001}&
+%   \includegraphics[width=0.33\textwidth]{mapping/ps_spec_rough/0805_normal}&
+%   \includegraphics[width=0.25\textwidth]{mapping/ps_spec_rough/0805_dmap}&
+%   \includegraphics[width=0.06\textwidth]{mapping/ps_spec_rough/0805_ang_error}\\
+%   & (b). rough: 0.5\\
+%   \includegraphics[width=0.33\textwidth]{mapping/ps_spec_rough/0808_0001}&
+%   \includegraphics[width=0.33\textwidth]{mapping/ps_spec_rough/0808_normal}&
+%   \includegraphics[width=0.25\textwidth]{mapping/ps_spec_rough/0808_dmap}&
+%   \includegraphics[width=0.06\textwidth]{mapping/ps_spec_rough/0808_ang_error}\\
+%   & (c). rough: 0.8\\
+% \end{tabular}
+% \caption{The effect of roughness on PS. Albedo is set as 0.8, and specular is set as 0.8. (b) demonstrates that a medium level roughness would lead to worse normal estimation since it blurs the specular lobe.}
+% \label{fig:ps_spec_rough}
+% \end{figure}
 
 \subsubsection{Effective Properties: EPS} 
 The properties that have an impact on EPS are: albedo, specularity, and roughness, as shown in Table~\ref{tab:ps_depend_prop}. Interestingly, we have discovered that medium level roughness can have a negative impact on normal estimation by blur the specular lobe, as shown in Figure~\ref{fig:ps_spec_rough}.
@@ -371,20 +373,21 @@ The properties that have an impact on EPS are: albedo, specularity, and roughnes
 \label{sec:sl_epd}
 We investigate the impact of each property on the performance of Gray-code SL in terms of accuracy and completeness under a varied combination of properties. The settings of properties are listed in Table~\ref{tab:pairwise_prob_cond}.
 
-\begin{sidewaysfigure}[!htbp]
-\begin{tabular}{ccc}
-\includegraphics[width=0.3\textwidth]{mapping/depend_check/sl_tex_alb}&
-\includegraphics[width=0.3\textwidth]{mapping/depend_check/sl_tex_spec}&
-\includegraphics[width=0.3\textwidth]{mapping/depend_check/sl_tex_rough}\\
-(a) & (b) & (c)\\
-\includegraphics[width=0.3\textwidth]{mapping/depend_check/sl_alb_spec}&
-\includegraphics[width=0.3\textwidth]{mapping/depend_check/sl_alb_rough}&
-\includegraphics[width=0.3\textwidth]{mapping/depend_check/sl_spec_rough}\\
-(d) & (e) & (f)\\
+\begin{figure}[!htbp]
+\begin{tabular}{cc}
+\includegraphics[width=0.45\textwidth]{mapping/pairwise/sl_tex_alb}&
+\includegraphics[width=0.45\textwidth]{mapping/pairwise/sl_tex_spec}\\
+(a) & (b) \\
+\includegraphics[width=0.45\textwidth]{mapping/pairwise/sl_tex_rough}&
+\includegraphics[width=0.45\textwidth]{mapping/pairwise/sl_alb_spec}\\
+(c) & (d) \\
+\includegraphics[width=0.45\textwidth]{mapping/pairwise/sl_alb_rough}&
+\includegraphics[width=0.45\textwidth]{mapping/pairwise/sl_spec_rough}\\
+(e) & (f)\\
 \end{tabular}
-\caption{Performance of Gray-encoded SL under six pairwise conditions. For instance, (a) shows the performance under changing \textit{texture} and \textit{albedo} values. The property values are assigned based on settings in Table~\ref{tab:sl_depend_check_params} (a).}
-\label{fig:sl_depend_check}
-\end{sidewaysfigure}
+\caption{Performance of Gray-encoded SL under six pairwise conditions. For instance, (a) shows the performance under changing \textit{texture} and \textit{albedo} values. The property values are assigned based on settings in Table~\ref{tab:pairwise_prob_cond} (a).}
+\label{fig:sl_pairwise}
+\end{figure}
 
 \textbf{(a) Texture and Albedo} 
 texture has no significant effect, whereas albedo has a positive effect on completeness. Both properties have no significant effect on accuracy.
@@ -396,43 +399,43 @@ texture has no significant effect whereas specular has a negative effect on comp
 neither texture nor roughness has a significant effect on accuracy and completeness.
 
 \textbf{(d) Albedo and Specularity} 
-albedo has a positive effect (see Figure~\ref{fig:sl_alb_spec} (a)-(c)) whereas specularity has a negative effect on completeness (see Figure~\ref{fig:sl_alb_spec} (d)-(f)). Interestingly, similar to EPS, the positive effect of albedo gets more significant with higher specularity while the negative effect of specularity becomes less substantial as albedo increases (see Figure~\ref{fig:sl_depend_check} (d)). Neither property has a significant effect on accuracy.
-\begin{figure}[!htbp]
-\centering
-\begin{tabular}{ccc}
-\includegraphics[width=0.33\textwidth]{mapping/sl_alb_spec/sl_00020202}&
-\includegraphics[width=0.33\textwidth]{mapping/sl_alb_spec/sl_00050202}&
-\includegraphics[width=0.33\textwidth]{mapping/sl_alb_spec/sl_00080202}\\
-(a) albedo: 0.2 & (b) albedo: 0.5 & (c) albedo: 0.8\\
-\includegraphics[width=0.33\textwidth]{mapping/sl_alb_spec/sl_00020202}&
-\includegraphics[width=0.33\textwidth]{mapping/sl_alb_spec/sl_00020502}&
-\includegraphics[width=0.33\textwidth]{mapping/sl_alb_spec/sl_00020802}\\
-(d) specular: 0.2 & (e) specular: 0.5 & (f) specular: 0.8\\
-\end{tabular}
-\caption{(a)-(c): the specular is set as 0.2, albedo has a positive effect on completeness; (d)-(e): the albedo is set as 0.2, specular has a negative effect on completeness.}
-\label{fig:sl_alb_spec}
-\end{figure}
+albedo has a positive effect (see Figure~\ref{fig:sl_alb_spec} (a)-(c)) whereas specularity has a negative effect on completeness (see Figure~\ref{fig:sl_alb_spec} (d)-(f)). Interestingly, similar to EPS, the positive effect of albedo gets more significant with higher specularity while the negative effect of specularity becomes less substantial as albedo increases (see Figure~\ref{fig:sl_pairwise} (d)). Neither property has a significant effect on accuracy.
+% \begin{figure}[!htbp]
+% \centering
+% \begin{tabular}{ccc}
+% \includegraphics[width=0.33\textwidth]{mapping/sl_alb_spec/sl_00020202}&
+% \includegraphics[width=0.33\textwidth]{mapping/sl_alb_spec/sl_00050202}&
+% \includegraphics[width=0.33\textwidth]{mapping/sl_alb_spec/sl_00080202}\\
+% (a) albedo: 0.2 & (b) albedo: 0.5 & (c) albedo: 0.8\\
+% \includegraphics[width=0.33\textwidth]{mapping/sl_alb_spec/sl_00020202}&
+% \includegraphics[width=0.33\textwidth]{mapping/sl_alb_spec/sl_00020502}&
+% \includegraphics[width=0.33\textwidth]{mapping/sl_alb_spec/sl_00020802}\\
+% (d) specular: 0.2 & (e) specular: 0.5 & (f) specular: 0.8\\
+% \end{tabular}
+% \caption{(a)-(c): the specular is set as 0.2, albedo has a positive effect on completeness; (d)-(e): the albedo is set as 0.2, specular has a negative effect on completeness.}
+% \label{fig:sl_alb_spec}
+% \end{figure}
 
 \textbf{(e) Albedo and Roughness} 
 albedo has a positive effect, whereas roughness has a negligible effect on completeness. Both properties have no significant effect on accuracy.
 
 \textbf{(f) Specular and Roughness} 
 specular has a negative effect (see Figure~\ref{fig:sl_spec_rough} (a)-(c)). Interestingly, the effect of roughness also resembles that of EPS, \ie medium level roughness has a negative impact on completeness (see Figure~\ref{fig:sl_spec_rough} (d)-(f)). Neither property has a significant effect on accuracy.
-\begin{figure}[!htbp]
-\centering
-\begin{tabular}{ccc}
-\includegraphics[width=0.33\textwidth]{mapping/sl_spec_rough/sl_00050202}&
-\includegraphics[width=0.33\textwidth]{mapping/sl_spec_rough/sl_00050502}&
-\includegraphics[width=0.33\textwidth]{mapping/sl_spec_rough/sl_00050802}\\
-(a) specular: 0.2 & (b) specular: 0.5 & (c) specular: 0.8\\
-\includegraphics[width=0.33\textwidth]{mapping/sl_spec_rough/sl_00050802}&
-\includegraphics[width=0.33\textwidth]{mapping/sl_spec_rough/sl_00050805}&
-\includegraphics[width=0.33\textwidth]{mapping/sl_spec_rough/sl_00050808}\\
-(d) roughness: 0.2 & (e) roughness: 0.5 & (f) roughness: 0.8\\
-\end{tabular}
-\caption{(a)-(c): the roughness is set as 0.2, and specular has a negative effect on completeness; (d)-(e): the specular is set as 0.8, roughness has a positive effect on completeness.}
-\label{fig:sl_spec_rough}
-\end{figure}
+% \begin{figure}[!htbp]
+% \centering
+% \begin{tabular}{ccc}
+% \includegraphics[width=0.33\textwidth]{mapping/sl_spec_rough/sl_00050202}&
+% \includegraphics[width=0.33\textwidth]{mapping/sl_spec_rough/sl_00050502}&
+% \includegraphics[width=0.33\textwidth]{mapping/sl_spec_rough/sl_00050802}\\
+% (a) specular: 0.2 & (b) specular: 0.5 & (c) specular: 0.8\\
+% \includegraphics[width=0.33\textwidth]{mapping/sl_spec_rough/sl_00050802}&
+% \includegraphics[width=0.33\textwidth]{mapping/sl_spec_rough/sl_00050805}&
+% \includegraphics[width=0.33\textwidth]{mapping/sl_spec_rough/sl_00050808}\\
+% (d) roughness: 0.2 & (e) roughness: 0.5 & (f) roughness: 0.8\\
+% \end{tabular}
+% \caption{(a)-(c): the roughness is set as 0.2, and specular has a negative effect on completeness; (d)-(e): the specular is set as 0.8, roughness has a positive effect on completeness.}
+% \label{fig:sl_spec_rough}
+% \end{figure}
 
 \subsubsection{Effective Properties: GSL}
 The properties that have an effect on the GSL are: texture, albedo, specular, as shown in Table~\ref{tab:sl_depend_prop}. The albedo has a more significant impact with lower specularity, while specularity has a more substantial impact with low albedo. Roughness can cause a blurred specular region, thus leading to decreased completeness.
@@ -458,17 +461,17 @@ Once we have discovered the EPD, the algorithm is evaluated solely within the EP
 The performances of PMVS under different problem conditions are shown in Figure~\ref{fig:mvs_training}, along with the performance of the baseline method. We make the following observations from the results: accuracy and completeness improves consistently as the \textit{texture} level increases. Accuracy and completeness results deteriorate consistently as \textit{specularity} increases, and this negative impact is most significant when texture level is medium or albedo value is low. The effect of \textit{albedo} on a surface with low texture is negligible. However, albedo has a noticeably more significant positive impact on completeness as the texture of a specular surface increases.
 \begin{figure}[!htbp]
 \begin{tabular}{ccc}
-\includegraphics[width=0.33\textwidth]{mapping/training/mvs_train_spec_02}&
-\includegraphics[width=0.33\textwidth]{mapping/training/mvs_train_spec_05}&
-\includegraphics[width=0.33\textwidth]{mapping/training/mvs_train_spec_08}\\
+\includegraphics[width=0.3\textwidth]{mapping/training/mvs_train_spec_02}&
+\includegraphics[width=0.3\textwidth]{mapping/training/mvs_train_spec_05}&
+\includegraphics[width=0.3\textwidth]{mapping/training/mvs_train_spec_08}\\
 (a) & (b) & (c)\\
-\includegraphics[width=0.33\textwidth]{mapping/training/mvs_train_tex_02}&
-\includegraphics[width=0.33\textwidth]{mapping/training/mvs_train_tex_05}&
-\includegraphics[width=0.33\textwidth]{mapping/training/mvs_train_tex_08}\\
+\includegraphics[width=0.3\textwidth]{mapping/training/mvs_train_tex_02}&
+\includegraphics[width=0.3\textwidth]{mapping/training/mvs_train_tex_05}&
+\includegraphics[width=0.3\textwidth]{mapping/training/mvs_train_tex_08}\\
 (d) & (e) & (f)\\
-\includegraphics[width=0.33\textwidth]{mapping/training/mvs_train_alb_02}&
-\includegraphics[width=0.33\textwidth]{mapping/training/mvs_train_alb_05}&
-\includegraphics[width=0.33\textwidth]{mapping/training/mvs_train_alb_08}\\
+\includegraphics[width=0.3\textwidth]{mapping/training/mvs_train_alb_02}&
+\includegraphics[width=0.3\textwidth]{mapping/training/mvs_train_alb_05}&
+\includegraphics[width=0.3\textwidth]{mapping/training/mvs_train_alb_08}\\
 (g) & (h) & (i)\\
 \end{tabular}
 \caption{Performance of PMVS under varied conditions of changing property values. The baseline method serves as the guidelines to determine the performance of PMVS.}
@@ -568,17 +571,17 @@ We derive from the results, as shown in Figure~\ref{fig:ps_training}, the proble
 The performances of Gray-code SL under different problem conditions are shown in Figure~\ref{fig:sl_training}, along with the results of the baseline method. Note that only a portion of the object is visible because of one viewpoint. The percentage of the visible surface ($\alpha$) varies from object to object, and is approximated by the completeness value obtained under the optimal reconstruction condition. The performance of GSL is determined by comparing the completeness to $alpha$ that of the baseline. We make the following observations: \textit{albedo} has a consistently positive effect on completeness; medium level \textit{roughness} has a negative effect due to a blurred specular region. In most case, \textit{specularity} does have a negative effect on completeness, as shown in Figure~\ref{fig:sl_alb_spec} (d)-(f). However, we did notice in some cases that the completeness of the reconstruction improves as specular level increases. There are two contributing factors to completeness: 1) specularity decreases the completeness since the pattern can no longer be decoded in the glossy area, thus causing incomplete reconstruction; 2) large roughness can spread the specular lobe into a larger area, leading to a brighter surface, thus increasing the completeness of the reconstruction. These two contradicting factors together determine the completeness of the reconstruction. If the first factor is more substantial, the completeness will decrease whereas if the second factor is more significant, the completeness will increase.
 \begin{figure}[!htbp]
 \begin{tabular}{ccc}
-\includegraphics[width=0.33\textwidth]{mapping/training/sl_train_rough_02}&
-\includegraphics[width=0.33\textwidth]{mapping/training/sl_train_rough_05}&
-\includegraphics[width=0.33\textwidth]{mapping/training/sl_train_rough_08}\\
+\includegraphics[width=0.3\textwidth]{mapping/training/sl_train_rough_02}&
+\includegraphics[width=0.3\textwidth]{mapping/training/sl_train_rough_05}&
+\includegraphics[width=0.3\textwidth]{mapping/training/sl_train_rough_08}\\
 (a) & (b) & (c)\\
-\includegraphics[width=0.33\textwidth]{mapping/training/sl_train_alb_02}&
-\includegraphics[width=0.33\textwidth]{mapping/training/sl_train_alb_05}&
-\includegraphics[width=0.33\textwidth]{mapping/training/sl_train_alb_08}\\
+\includegraphics[width=0.3\textwidth]{mapping/training/sl_train_alb_02}&
+\includegraphics[width=0.3\textwidth]{mapping/training/sl_train_alb_05}&
+\includegraphics[width=0.3\textwidth]{mapping/training/sl_train_alb_08}\\
 (d) & (e) & (f)\\
-\includegraphics[width=0.33\textwidth]{mapping/training/sl_train_spec_02}&
-\includegraphics[width=0.33\textwidth]{mapping/training/sl_train_spec_05}&
-\includegraphics[width=0.33\textwidth]{mapping/training/sl_train_spec_08}\\
+\includegraphics[width=0.3\textwidth]{mapping/training/sl_train_spec_02}&
+\includegraphics[width=0.3\textwidth]{mapping/training/sl_train_spec_05}&
+\includegraphics[width=0.3\textwidth]{mapping/training/sl_train_spec_08}\\
 (g) & (h) & (i)\\
 \end{tabular}
 \caption{Performance of GSL under varied conditions of changing property values. The baseline method serves as the guideline to determine the performance of GSL.}
