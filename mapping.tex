@@ -3,7 +3,7 @@
 
 \chapter{A Mapping of 3D Reconstruction}
 \label{ch:3DRecon_Mapping}
-Most vision work focuses on developing algorithmic novelties, and as we have mentioned, very few investigate the rigorous conditions under which the algorithms themselves work. Thus, this knowledge is only known empirically, without a rigorous definition of the application domain or problem conditions. This relation between problem space and algorithms (termed as \textit{mapping}) is one of the key components of the interpreter, and is responsible for selecting one of the best possible algorithms based on described problem condition. This section builds upon the 3D description proposed in Chapter~\ref{ch:3DRecon_Desc}, and attempts to find the problem conditions surrounding each algorithm empirically. 
+Most vision work focuses on developing algorithmic novelties, and as we have mentioned, very few investigate the rigorous conditions under which the algorithms themselves work. Thus, this knowledge is only known empirically, without a rigorous definition of the application domain or problem conditions. This relation between problem space and algorithms (termed as \textit{mapping}) is one of the key components of the interpreter, and is responsible for selecting one of the best possible algorithms based on described problem condition. The mapping is essentially a look-up table that returns a list of successful algorithms given a problem condition. This section builds upon the 3D description proposed in Chapter~\ref{ch:3DRecon_Desc}, and attempts to find the problem conditions surrounding each algorithm empirically. 
 
 To achieve this goal, we need a dataset to evaluate the performance of each algorithm under varied problem conditions, which is not available since most 3D benchmarks, to the best of our knowledge, focus on one specific class of algorithms. For example, the Middlebury dataset targets MVS algorithms~\cite{seitz2006comparison}, and the `DiLiGenT' dataset targets Photometric Stereo algorithms~\cite{shi2016benchmark}. This makes such benchmarks only suitable for evaluation of within-category algorithms. Besides, there are no datasets with objects that cover a range of properties of materials and geometry. The reason for the lack of such a dataset is that it is practically impossible to change one property, \eg surface texture, material, and so on, while fixing others when creating a real-world dataset.
 
@@ -451,6 +451,29 @@ Figure~\ref{fig:sl_pairwise} demonstrates the main effect of albedo, specularity
 %   \caption{The \textit{effective problem domain} of GSL in terms of accuracy and completeness.}
 %   \label{tab:sl_depend_prop}
 % \end{table}
+
+\section{Construction of Mapping}
+We evaluate the performance of algorithms under the factorial combination of properties that have main effects on performance in terms of accuracy, completeness or angular error. The performance is compared with those of baseline methods. Specifically, the accuracy, completeness, and angular error of baseline methods are subtracted from the selected algorithms. We inverse the results of accuracy so that better reconstruction have positive values. The resulting figures are shown in Figure~\ref{fig:lookup_table}. The conditions where the quantitative measures are above zeros are considered conditions where the corresonding algorithms work. The mapping is essentially a look-up table that returns a list of algorithms that can achieve successful reconstruction given a problem condition. We determine the success of reconstruction by comparing the result to that of baseline methods.
+
+\begin{sidewaysfigure*}[!htbp]
+\centering
+\begin{tabular}{ccc}
+\includegraphics[width=0.3\textwidth]{mapping/lookup_table/mvs_texture_02.eps} &
+\includegraphics[width=0.3\textwidth]{mapping/lookup_table/mvs_texture_05.eps} &
+\includegraphics[width=0.3\textwidth]{mapping/lookup_table/mvs_texture_08.eps}\\
+\multicolumn{3}{c}{(a). Look-up table of PMVS.}\\
+\includegraphics[width=0.3\textwidth]{mapping/lookup_table/ps_albedo_02.eps} &
+\includegraphics[width=0.3\textwidth]{mapping/lookup_table/ps_albedo_05.eps} &
+\includegraphics[width=0.3\textwidth]{mapping/lookup_table/ps_albedo_08.eps}\\
+\multicolumn{3}{c}{(b). Look-up table of EPS.}\\
+\includegraphics[width=0.3\textwidth]{mapping/lookup_table/sl_albedo_02.eps} &
+\includegraphics[width=0.3\textwidth]{mapping/lookup_table/sl_albedo_05.eps} &
+\includegraphics[width=0.3\textwidth]{mapping/lookup_table/sl_albedo_08.eps}\\
+\multicolumn{3}{c}{(c). Look-up table of GSL.}
+\end{tabular}
+\caption{The look-up table of PMVS, EPS, and GSL.}
+\label{fig:lookup_table}
+\end{sidewaysfigure*}
 
 \section{Summary}
 It is a non-trivial task to find a mapping from problem conditions to algorithms based on the description. By no means is the aforementioned approach the only way, or a perfect way, since it potentially has the problem of suffering from property scaling issue. Nonetheless, the pairwise analysis remains a valuable approach to obtain insights of the \textit{effective properties} of a specific algorithm. The development of the mapping is an on-going process. For instance, we can include more quantitative metrics such as colour accuracy, `ghost reconstruction', and so on. In order to make the mapping applicable to objects with more complex shapes, we need to consider more sophisticated geometric properties besides roughness, such as concavity, depth-discontinuity, occlusion, etc. Furthermore, the incorporation of more algorithms is another way to ensure that the problem space is well covered.
