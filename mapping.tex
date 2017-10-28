@@ -3,69 +3,19 @@
 
 \chapter{A Mapping of 3D Reconstruction}
 \label{ch:3DRecon_Mapping}
-Most vision work focuses on developing algorithmic novelties, and as we have mentioned, very few investigate the rigorous conditions under which the algorithms themselves work. Thus, this knowledge is only known empirically, without a rigorous definition of the application domain or problem conditions. This relation between problem space and algorithms (termed as \textit{mapping}) is one of the key components of the interpreter, and is responsible for selecting one of the best possible algorithms based on described problem condition. The mapping is essentially a look-up table that returns a list of successful algorithms given a problem condition. This section builds upon the 3D description proposed in Chapter~\ref{ch:3DRecon_Desc}, and attempts to find the problem conditions surrounding each algorithm empirically. 
+Most vision work focuses on developing algorithmic novelties, and as we have mentioned, very few investigate the rigorous conditions under which the algorithms themselves work. Thus, this knowledge is only known empirically, without a rigorous definition of the application domain or problem conditions. This relation between problem space and algorithms (termed as \textit{mapping}) is one of the key components of the interpreter, and is responsible for selecting one of the best possible algorithms based on described problem condition. The mapping is essentially a look-up table that returns a list of successful algorithms given a problem condition. This section builds upon the 3D description proposed in Chapter~\ref{ch:3DRecon_Desc}, and attempts to find the problem conditions surrounding each algorithm empirically. To achieve this goal, we need to evaluate the performance of algorithms under varied problem conditions.
 
-To achieve this goal, we need a dataset to evaluate the performance of each algorithm under varied problem conditions, which is not available since most 3D benchmarks, to the best of our knowledge, focus on one specific class of algorithms. For example, the Middlebury dataset targets MVS algorithms~\cite{seitz2006comparison}, and the `DiLiGenT' dataset targets Photometric Stereo algorithms~\cite{shi2016benchmark}. This makes such benchmarks only suitable for evaluation of within-category algorithms. Besides, there are no datasets with objects that cover a range of properties of materials and geometry. The reason for the lack of such a dataset is that it is practically impossible to change one property, \eg surface texture, material, and so on, while fixing others when creating a real-world dataset.
+Two challenges need to be addressed, the first of which is: a dataset containing objects captured for between-category algorithms and a variety of problem conditions is needed. To the best of our knowledge, there is no such benchmark available since most 3D benchmarks focus on one specific class of algorithms. For example, the Middlebury dataset targets MVS algorithms~\cite{seitz2006comparison}, and the `DiLiGenT' dataset targets Photometric Stereo algorithms~\cite{shi2016benchmark}. This makes such benchmarks only suitable for evaluation of within-category algorithms. Besides, there are no datasets with objects that cover a range of problem conditions. The reason for the lack of such a dataset is that it is practically impossible to change one property, \eg surface texture, material, and so on, while fixing others when creating a real-world dataset. In response to this challenge, we created a synthetic dataset using the phisical-based rendering engine of Blender to evaluate the 3D reconstruction algorithms. Our dataset includes a collection of images of a scene under different materials and lighting conditions. The camera/projector's intrinsic and extrinsic parameters are computed directly from the configurations of the synthetic setup, and the ground truth, including the 3D model point cloud and normal map, are generated directly from Blender.
 
-In response to these challenges, we use synthetic datasets created by phiyical-based rendering software (Blender), to evaluate the 3D reconstruction algorithms. Our dataset includes a collection of images of a scene under different materials and lighting conditions. The camera/projector's intrinsic and extrinsic parameters are computed directly from the configurations of the synthetic setup, and the ground truth, including the 3D model point cloud and normal map, are generated directly from Blender.
+The second challenge is: the problem space is a $N$ dimensional space, consisting of $N$ properties, each with $L$ levels, thus making the space too vast to cope with. We conduct $\binom{N}{2}$ $L\times L$ factorial studies to determine the properties that have a significant effect on performance of the algorithms, which can effectively reduce the space dimensionality. We illustrate the performance variation under varied conditions as a heatmap so that the main effects and interactions between properties can be easily detected.
 
-\section{Synthetic setup}
-We use Blender's physical-based rendering engine, Cycles, to generate the synthetic datasets. For each technique, the configuration of the camera remains fixed. The image resolution is 1280$\times$720, with a focal length of $35mm$ or $1400pix$. The synthetic setups are shown in Table~\ref{tab:synth_setup}, and some example synthetic images generated using the setups are shown in Figure~\ref{fig:synth_setup}.
-\begin{table}[!htbp]
-\centering
-\begin{tabular}{lll}
-\toprule
-Method & Hardware number & Arrangement\\
-\midrule
-MVS & 41 camera & 5 rings, each having 1, 8, 8, 12, 12 camera\\
-PS & 1 camera+25 lights & 4 rings, each having 1, 8, 8, 8, 8 light sources\\
-SL & 1 camera\&projector & baseline angle: $10^\circ$\\
-\bottomrule
-\end{tabular}
-\caption{Summary of synthetic setups.}
-\label{tab:synth_setup}
-\end{table}
+The chapter is organized as follows: section~\ref{sec:create_synth_dataset} discuss the algorithms selected, and the process of creating the synthetic dataset for the evaluation of the selected algorithms. Section~\ref{sec:prop_effect_interaction} discusses the procedure of finding properties with an effect on the algorithmic performance so that the problem space can be more manageable. Section~\ref{sec:lookup_table} presents the performance of algorithms under varied problem conditions, which is represented as lookup tables.
 
-\begin{figure*}[!htbp]
-\centering
-\begin{tabular}{ll}
-Texture & \raisebox{-.5\height}{\includegraphics[width=0.8\textwidth]{img/mapping/setup/tex.png}}\\
-Albedo & \raisebox{-.5\height}{\includegraphics[width=0.8\textwidth]{img/mapping/setup/alb.png}}\\
-Specular & \raisebox{-.5\height}{\includegraphics[width=0.8\textwidth]{img/mapping/setup/spec.png}}\\
-Roughness & \raisebox{-.5\height}{\includegraphics[width=0.8\textwidth]{img/mapping/setup/rough.png}}
-\end{tabular}
-\caption{Example synthetic images. The value of each property ranges from 0.1 to 1.}
-\label{fig:synth_setup}
-\end{figure*}
+\section{Dataset creation}
+\label{sec:create_synth_dataset}
+This section discusses the creation of a synthetic dataset that is used to evaluate between-class algorithm under varied problem conditions. First we choose three representative algorithms from three algorithm classes, as well as two baseline methods. Then the setups of synthetic capturing systems are presented with example images. Lastly, quantitative measure used to evaluate the performance of algorithms are proposed.
 
-% For the Multi-View Stereo setup, there are five rings of cameras, of which the elevation angles are $15^\circ$, $30^\circ$, $45^\circ$, $60^\circ$, $90^\circ$. The between-angles of two neighbouring cameras are $30^\circ$, $30^\circ$, $45^\circ$, $45^\circ$, and $360^\circ$. Thus, there are in total $12+12+8+8+1=41$ cameras.
-
-% For the Photometric Stereo setup, since increasing the number of images is only important up to a point, the experimental results showed that most algorithms reaches their optimum when 15 images are used~\cite{Berkiten:2016:ARB}. To strike a balance between algorithm performance and rendering time, we use 25 light sources, which are distributed on four rings with elevation angle of $90^\circ$, $85^\circ$, $60^\circ$, and $45^\circ$. The azimuth angle between two neighbouring light sources is $45^\circ$. Thus, the total number of images is $1+8*3=25$.
-
-% For the Structured Light setup, the baseline angle between the camera and the projector is $10^\circ$. The resolution of the projector is $1024\times768$, thus 10 Gray code patterns are needed. To counter the effect of inter-reflection, each pattern and its inverse are projected, which descreases sensitivity to scattered light. Two additional image with lights on and off are generated to help the decoding process. Thus the total number of images is $(10+10)*2+2=42$.
-% \begin{figure}[!htbp]
-% \centering
-% \begin{tabular}{ccc}
-% \includegraphics[width=0.3\textwidth]{mapping/setup/mvs_setup} &
-% \includegraphics[width=0.3\textwidth]{mapping/setup/ps_setup} &
-% \includegraphics[width=0.3\textwidth]{mapping/setup/sl_setup}\\
-% MVS & PS & SL\\
-% \end{tabular}
-% \caption{Setups of the syntheic dataset}
-% \label{fig:setup}
-% \end{figure}
-
-% \section{Structure of Datasets}
-% All synthetic datasets used in this thesis share the similar structure, as shown in Figure~\ref{fig:dataset_structure}. \textit{Prop Comb} represents one combination of properties, which consists of no less than two properties. For instance, \textit{texture and albedo}, or \textit{albedo, and specularity}. Note that the diretory structure of PS and SL is the same as that of MVS.
-% Due to the number of properties and levels for each property, it would be unrealistic to render all their combinations. For instance, if there are $N$ properties and each is discretized into $L$ levels, the number of different combinations is $L^N$, and for each combination, there are in total $41+25+42=108$ images to render. Therefore, we take another approach: 1) we investigate the \textit{effective problem domain} which consists of only the \textit{effective} and \textit{dependent} properties; 2) we generate synthetic images for the \textit{effective} and \textit{dependent} properties and all of their combinations. The structure of the dataset is as follows:
-% \begin{figure}[!htbp]
-% \centering
-% \includegraphics[width=0.6\textwidth]{mapping/dataset_structure}
-% \caption{Structure of the synthetic dataset.}
-% \label{fig:dataset_structure}
-% \end{figure}
-
-\section{Selected and baseline methods}
+\subsection{Selected and baseline methods}
 We have selected one representative algorithm from three major classes of algorithms presented in Chapter~\ref{ch:3DRecon_ProbSpace}: the PMVS proposed in~\cite{furukawa2010accurate}, the example-based Photometric Stereo proposed in~\cite{hertzmann2005example}, and the Gray-code Structured Light technique. See Table~\ref{tab:selected_algos} for a summary of the selected algorithms. The current implementation of SL projects both column and row patterns, and depth values are computed using these two kinds of patterns individually. A depth consistency step is performed to reject erroneous triangulations.
 \begin{table}[!htbp]
 \centering
@@ -106,7 +56,62 @@ LLS-PS & Linear least squares Photometric Stereo.\\
 % \end{table}
 We use two baseline approaches to compare our results: Visual Hull and a simple linear least squares based Photometric Stereo (LLS-PS). We use Visual Hull since it works relatively well as long as the silhouette of the object can be reliably extracted, thus being insensitive to material properties. In addition, the true scene is always enclosed by the reconstruction result, so the outcome is always predictable. We use LLS-PS to evaluate Photometric Stereo algorithms. However, there is currently no such PS algorithms that work reasonably well under a variety of conditions. Thus, we run this baseline algorithm under the optimal condition to ensure a best possible result.
 
-\section{Quantitative measures}
+\subsection{Synthetic setups}
+We use Blender's physical-based rendering engine, Cycles, to generate the synthetic datasets. For each technique, the configuration of the camera remains fixed. The image resolution is 1280$\times$720, with a focal length of $35mm$ or $1400pix$. The synthetic setups are shown in Table~\ref{tab:synth_setup}, and some example synthetic images generated using the setups are shown in Figure~\ref{fig:synth_setup}.
+\begin{table}[!htbp]
+\centering
+\begin{tabular}{lll}
+\toprule
+Method & Hardware number & Arrangement\\
+\midrule
+MVS & 41 camera & 5 rings, each having 1, 8, 8, 12, 12 camera\\
+PS & 1 camera+25 lights & 4 rings, each having 1, 8, 8, 8, 8 light sources\\
+SL & 1 camera\&projector & baseline angle: $10^\circ$\\
+\bottomrule
+\end{tabular}
+\caption{Summary of synthetic setups.}
+\label{tab:synth_setup}
+\end{table}
+\begin{figure*}[!htbp]
+\centering
+\begin{tabular}{ll}
+Texture & \raisebox{-.5\height}{\includegraphics[width=0.8\textwidth]{img/mapping/setup/tex.png}}\\
+Albedo & \raisebox{-.5\height}{\includegraphics[width=0.8\textwidth]{img/mapping/setup/alb.png}}\\
+Specular & \raisebox{-.5\height}{\includegraphics[width=0.8\textwidth]{img/mapping/setup/spec.png}}\\
+Roughness & \raisebox{-.5\height}{\includegraphics[width=0.8\textwidth]{img/mapping/setup/rough.png}}
+\end{tabular}
+\caption{Example synthetic images. The value of each property ranges from 0.1 to 1.}
+\label{fig:synth_setup}
+\end{figure*}
+
+% For the Multi-View Stereo setup, there are five rings of cameras, of which the elevation angles are $15^\circ$, $30^\circ$, $45^\circ$, $60^\circ$, $90^\circ$. The between-angles of two neighbouring cameras are $30^\circ$, $30^\circ$, $45^\circ$, $45^\circ$, and $360^\circ$. Thus, there are in total $12+12+8+8+1=41$ cameras.
+
+% For the Photometric Stereo setup, since increasing the number of images is only important up to a point, the experimental results showed that most algorithms reaches their optimum when 15 images are used~\cite{Berkiten:2016:ARB}. To strike a balance between algorithm performance and rendering time, we use 25 light sources, which are distributed on four rings with elevation angle of $90^\circ$, $85^\circ$, $60^\circ$, and $45^\circ$. The azimuth angle between two neighbouring light sources is $45^\circ$. Thus, the total number of images is $1+8*3=25$.
+
+% For the Structured Light setup, the baseline angle between the camera and the projector is $10^\circ$. The resolution of the projector is $1024\times768$, thus 10 Gray code patterns are needed. To counter the effect of inter-reflection, each pattern and its inverse are projected, which descreases sensitivity to scattered light. Two additional image with lights on and off are generated to help the decoding process. Thus the total number of images is $(10+10)*2+2=42$.
+% \begin{figure}[!htbp]
+% \centering
+% \begin{tabular}{ccc}
+% \includegraphics[width=0.3\textwidth]{mapping/setup/mvs_setup} &
+% \includegraphics[width=0.3\textwidth]{mapping/setup/ps_setup} &
+% \includegraphics[width=0.3\textwidth]{mapping/setup/sl_setup}\\
+% MVS & PS & SL\\
+% \end{tabular}
+% \caption{Setups of the syntheic dataset}
+% \label{fig:setup}
+% \end{figure}
+
+% \section{Structure of Datasets}
+% All synthetic datasets used in this thesis share the similar structure, as shown in Figure~\ref{fig:dataset_structure}. \textit{Prop Comb} represents one combination of properties, which consists of no less than two properties. For instance, \textit{texture and albedo}, or \textit{albedo, and specularity}. Note that the diretory structure of PS and SL is the same as that of MVS.
+% Due to the number of properties and levels for each property, it would be unrealistic to render all their combinations. For instance, if there are $N$ properties and each is discretized into $L$ levels, the number of different combinations is $L^N$, and for each combination, there are in total $41+25+42=108$ images to render. Therefore, we take another approach: 1) we investigate the \textit{effective problem domain} which consists of only the \textit{effective} and \textit{dependent} properties; 2) we generate synthetic images for the \textit{effective} and \textit{dependent} properties and all of their combinations. The structure of the dataset is as follows:
+% \begin{figure}[!htbp]
+% \centering
+% \includegraphics[width=0.6\textwidth]{mapping/dataset_structure}
+% \caption{Structure of the synthetic dataset.}
+% \label{fig:dataset_structure}
+% \end{figure}
+
+\subsection{Quantitative measures}
 We use the metrics proposed in \cite{seitz2006comparison} to evaluate MVS and SL algorithms. More specifically, we compute the accuracy and completeness of the reconstruction. For accuracy, the distance between the points in the reconstruction $R$ and the nearest points on ground truth $G$ is computed, and the distance $d$ such that $X\%$ of the points on $R$ are within distance $d$ of $G$ is considered as accuracy. A reasonable $d$ value is between $[3, 5]mm$, and $X$ is set as $95$. The lower the accuracy value, the better the reconstruction result. For completeness, we compute the distance from $G$ to $R$. Intuitively, points on $G$ are not ``covered'' if no suitable nearest points on $R$ are found. A more practical approach computes the fraction of points of $G$ that are within an allowable distance $d$ of $R$. Note that as the accuracy improves, the ``accuracy value'' goes down, whereas as the completeness improves, the ``completeness value'' goes up.
 
 For photometric stereo, depth information is lost since only one viewpoint is used. Thus, the previous metrics are not applicable. Here we employ another evaluation criteria that is widely adopted, which is based on the statistics of angular error. For each pixel, the angular error is calculated as the angle between the estimated and ground truth normal, \ie $arccos$($n_g^T n$), where $n_g$ and $n$ are the ground truth and estimated normals respectively. In addition to the mean angular error, we also calculate the standard deviation, minimum, maximum, median, first quartile, and third quartile of angular errors for each estimated normal map.
@@ -128,9 +133,10 @@ For photometric stereo, depth information is lost since only one viewpoint is us
 % The normal estimation becomes worse as the difference between mean and median increases. This can be explained as follows: assuming the angular error follows a Gaussian distrubtion, then mean and median are close when the normals are reliably estimated. However, if normals are poorly recovered, the mean would increase since larger angular errors exist, while the median would change far less since only a small amount of pixels are poorly estimated. Thus, the difference between mean and median is a good indicator of the quality of normal estimation.
 
 \section{Main effects and interactions of properties}
+\label{sec:prop_effect_interaction}
 The greatest challenge in constructing a mapping from problem space to algorithms is the large variations in shapes and material properties, which results in a problem space that is too large to cope with. Suppose there are $N$ properties, each with $L$ discrete levels, then there are in total $L^N$ different problem conditions. Thus, the first step, discussed in Section~\ref{sec:mvs_epd},~\ref{sec:ps_epd},~\ref{sec:sl_epd}, is to reduce the dimensions of problem space by discovering the properties that have effects on performance of algorithms.
 
-This study is a $3\times 3$ factorial design with two properties (factors), each with three levels, \ie low (0.2), medium (0.5), and high (0.8). We are interested in one-way interaction (\textit{main effect}) and two-way interaction of the properties (factors).  A \textit{main effect} is the effect of one of the independent variables on the dependent variable, ignoring the effects of all other independent variables. A statistical interaction occurs when the effect of one independent variable on the dependent variable changes depending on the level of another independent variable. In our current design, this is equivalent to asking whether the effect of property $i$ changes depending on property $j$, where $i\neq j, i, j\in\{1, 2, 3, 4\}$. To determine if this is the case, we need to look at the \textit{simple main effects}: the main effect of one independent variable (e.g., property $i$) at each level of another independent variable (e.g., property $j$). The easiest way to communicate an interaction is to discuss it in terms of the \textit{simple main effects}. Describe one simple main effect, then describe the other in such a way that it is clear how the two are different. We choose to interpret the main effects and interactions through figures. We choose to use heatmaps to illustrate the effects of two properties on various metrics. There is a main effect of a property if there is color variation along the corresponding axis. If color changes monotonically along the diagonal, then there is no interaction between the two properties, otherwise, there is an interaction effect. 
+This study is a $3\times 3$ factorial design with two properties (factors), each with three levels, \ie low (0.2), medium (0.5), and high (0.8). We are interested in one-way interaction (\textit{main effect}) and two-way interaction of the properties (factors).  A \textit{main effect} is the effect of one of the independent variables on the dependent variable, ignoring the effects of all other independent variables. A statistical interaction occurs when the effect of one independent variable on the dependent variable changes depending on the level of another independent variable. In our current design, this is equivalent to asking whether the effect of property $i$ changes depending on property $j$, where $i\neq j, i, j\in\{1, 2, 3, 4\}$. To determine if this is the case, we need to look at the \textit{simple main effects}: the main effect of one independent variable (e.g., property $i$) at each level of another independent variable (e.g., property $j$). The easiest way to communicate an interaction is to discuss it in terms of the \textit{simple main effects}. Describe one simple main effect, then describe the other in such a way that it is clear how the two are different. We choose to interpret the main effects and interactions through figures. We choose to use heatmaps to illustrate the effects of two properties on various metrics. There is a main effect of a property if there is color variation along the corresponding axis. If color changes monotonically along the diagonal, then there is no interaction between the two properties, otherwise, there is an interaction effect. Assume that the error variance is small, so that differences in performance that are apparent on the graph are also statistically significant. we observe an interaction between two factors whenever the simple effects of one change as the levels of the other factor are changed.
 
 % A naive way of finding the \textit{effective properties} would be evaluating algorithmic performance by changing one property at a time. However, this approach ignores the dependency between properties, \ie the effect of property \textit{A} might be insignificant when property \textit{B} is absent. Thus, we investigate the pairwise relation between any two properties, thus two properties are chosen while the rest are fixed, the configurations of the problem conditions are shown in Table~\ref{tab:pairwise_prob_cond}
 
@@ -453,6 +459,7 @@ Figure~\ref{fig:sl_pairwise} demonstrates the main effect of albedo, specularity
 % \end{table}
 
 \section{Construction of Mapping}
+\label{sec:lookup_table}
 We evaluate the performance of algorithms under the factorial combination of properties that have main effects on performance in terms of accuracy, completeness or angular error. The performance is compared with those of baseline methods. Specifically, the accuracy, completeness, and angular error of baseline methods are subtracted from the selected algorithms. We inverse the results of accuracy so that better reconstruction have positive values. The resulting figures are shown in Figure~\ref{fig:lookup_table}. The conditions where the quantitative measures are above zeros are considered conditions where the corresonding algorithms work. The mapping is essentially a look-up table that returns a list of algorithms that can achieve successful reconstruction given a problem condition. We determine the success of reconstruction by comparing the result to that of baseline methods.
 
 \begin{sidewaysfigure*}[!htbp]

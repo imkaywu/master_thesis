@@ -11,7 +11,7 @@ First, we need to have a better understanding of the problem space. In this thes
 We first give an overview of problem space, which consists of visual and geometric properties of real-world objects, as shown in Figure~\ref{fig:obj_class}. These properties can be conceptualized as dimensions/axes of the 3D reconstruction problem space. This approach allows us to think of algorithms pointing to volumes within an $n-$dimensional problem space. Existing algorithms can be incorporated into the interface by evaluating the algorithmic performance within the problem space, as shown in Figure~\ref{fig:embed_algo}. However, by no means are the presented problem space complete. There are many other properties not included that are commonely seen in the real world. For instance, properties such as metalness, emission, occlusion, discontinuity, among others, are not considered. However, the listed set of properties are broad enough to encompass a wide range of real-world objects. To help easy identification of a specific problem condition, we propose the following labels to differentiate object classes.
 \begin{figure}[!htbp]
 \centering
-\includegraphics[width=\textwidth]{taxo/obj_class}\\
+\includegraphics[width=\textwidth]{prob_space/obj_class}\\
 \caption{A list of properties for object classes.}
 \label{fig:obj_class}
 \end{figure}
@@ -33,7 +33,7 @@ To limit the scope of this work, we make the following assumptions:
 We assume \textbf{local interaction model}, \ie global light transport such as transmission, refraction, cast shadow, inter-reflection, metalic are not considered. The rationale behind our choice is that most techniques that have been developed over the past few decades mainly tackle object with an opaque, diffuse or mixed surface. For specular, refractive, and translucent or transparent objects, only very specialized algorithms are applicable for reconstruction~\cite{ihrke2010transparent}. This is a widely used and accepted model in varied areas of computer vision, including shape from stereo, shading, and so on. As more algorithms become available to tackle these types of objects, they can be embedded to the interface using the same approach will be discussed in Chapter~\ref{ch:3DRecon_Mapping}, as shown in Figure~\ref{fig:embed_algo}.
 \begin{figure*}[!htbp]
 \centering
-\includegraphics[width=0.8\textwidth]{img/taxo/embed_algo.pdf}
+\includegraphics[width=0.8\textwidth]{img/prob_space/embed_algo.pdf}
 \caption{Embed algorithms into the interface.}
 \label{fig:embed_algo}
 \end{figure*}
@@ -52,7 +52,7 @@ Existing 3D vision techniques requires distinct cues for reconstruction, be it t
 Four classes of problem conditions are being investigated in depth, as shown in Figure~\ref{fig:prob_cond}. They are selected based on the assumptions, availability of reliable techniques and the diversity of corresponding real-world objects.
 \begin{figure*}[!htbp]
 \centering
-\includegraphics[width=\textwidth]{taxo/prob_cond}
+\includegraphics[width=\textwidth]{prob_space/prob_cond}
 \caption{Four classes of problem conditions of interest with the proposed label.}
 \label{fig:prob_cond}
 \end{figure*}
