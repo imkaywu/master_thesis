@@ -3,17 +3,17 @@
 
 \chapter{A Mapping of 3D Reconstruction}
 \label{ch:3DRecon_Mapping}
-Most vision work focuses on developing algorithmic novelties, and as we have mentioned, very few investigate the rigorous conditions under which the algorithms themselves work. Thus, this knowledge is only known empirically, without a rigorous definition of the application domain or problem conditions. This relation between problem space and algorithms (termed as \textit{mapping}) is one of the key components of the interpreter, and is responsible for selecting one of the best possible algorithms based on described problem condition. The mapping is essentially a look-up table that returns a list of successful algorithms given a problem condition. This section builds upon the 3D description proposed in Chapter~\ref{ch:3DRecon_Desc}, and attempts to find the problem conditions surrounding each algorithm empirically. To achieve this goal, we need to evaluate the performance of algorithms under varied problem conditions.
+Most vision work focuses on developing algorithmic novelties, and as we have mentioned, very few investigate the rigorous conditions under which the algorithms themselves work. Thus, this knowledge is only known empirically, without a rigorous definition of the problem conditions. This relation between problem space and algorithms (termed as \textit{mapping}) is one of the key components of the interpreter, and is responsible for selecting one of the best possible algorithms based on described problem condition. The mapping is essentially a look-up table that returns a list of successful algorithms given a problem condition. This section builds upon the description proposed in Chapter~\ref{ch:3DRecon_Desc}, and attempts to find the problem conditions surrounding each algorithm empirically. To achieve this goal, we need to evaluate the performance of algorithms under varied problem conditions.
 
-Two challenges need to be addressed, the first of which is: a dataset containing objects captured for between-category algorithms and a variety of problem conditions is needed. To the best of our knowledge, there is no such benchmark available since most 3D benchmarks focus on one specific class of algorithms. For example, the Middlebury dataset targets MVS algorithms~\cite{seitz2006comparison}, and the `DiLiGenT' dataset targets Photometric Stereo algorithms~\cite{shi2016benchmark}. This makes such benchmarks only suitable for evaluation of within-category algorithms. Besides, there are no datasets with objects that cover a range of problem conditions. The reason for the lack of such a dataset is that it is practically impossible to change one property, \eg surface texture, material, and so on, while fixing others when creating a real-world dataset. In response to this challenge, we created a synthetic dataset using the phisical-based rendering engine of Blender to evaluate the 3D reconstruction algorithms. Our dataset includes a collection of images of a scene under different materials and lighting conditions. The camera/projector's intrinsic and extrinsic parameters are computed directly from the configurations of the synthetic setup, and the ground truth, including the 3D model point cloud and normal map, are generated directly from Blender.
+Two challenges need to be addressed, the first of which is to evaluate the performance of algorithms under a variety of problem conditions. This requires a dataset containing objects captured for between-category algorithms under a variety of problem conditions. To the best of our knowledge, there is no such benchmark available since most 3D benchmarks focus on one specific class of algorithms. For example, the Middlebury dataset targets MVS algorithms~\cite{seitz2006comparison}, and the `DiLiGenT' dataset targets Photometric Stereo algorithms~\cite{shi2016benchmark}. This makes such benchmarks only suitable for evaluation of within-category algorithms. Besides, there is few dataset with objects that cover a range of problem conditions. The reason for the lack of such a dataset is that it is practically impossible to create multiple versions of the same object with one property, \eg surface texture, material, and so on, varied while everything else is kept constant. In response to this challenge, we created a synthetic dataset using the physical-based rendering engine of Blender to evaluate the 3D reconstruction algorithms. Our dataset includes a collection of images of a scene under different materials and lighting conditions. The camera/projector's intrinsic and extrinsic parameters are computed directly from the configurations of the synthetic setup, and the ground truth, including the 3D model point cloud and normal map, are generated directly from Blender.
 
-The second challenge is: the problem space is a $N$ dimensional space, consisting of $N$ properties, each with $L$ levels, thus making the space too vast to cope with. We conduct $\binom{N}{2}$ $L\times L$ factorial studies to determine the properties that have a significant effect on performance of the algorithms, which can effectively reduce the space dimensionality. We illustrate the performance variation under varied conditions as a heatmap so that the main effects and interactions between properties can be easily detected.
+The second challenge is: the problem space is an $N-$dimensional space, consisting of $N$ properties, each with $L$ levels, thus the total number of combinations is $L^N$, which is too vast of a space to cope with. To make the problem space more tacklable, we adopt the three-point scale (Low = 0.2, Medium = 0.5, and High = 0.8), which leads to $L=3$. Further, We conduct $\binom{N}{2}$ $L\times L$ factorial studies to determine the properties that have a significant effect on performance of the algorithms. We can then reduce the space dimensionality by considering only these significantly effective properties. We illustrate the performance of algorithms under varied conditions as heatmaps so that the main effects and interactions between properties can be easily detected.
 
-The chapter is organized as follows: section~\ref{sec:create_synth_dataset} discuss the algorithms selected, and the process of creating the synthetic dataset for the evaluation of the selected algorithms. Section~\ref{sec:prop_effect_interaction} discusses the procedure of finding properties with an effect on the algorithmic performance so that the problem space can be more manageable. Section~\ref{sec:lookup_table} presents the performance of algorithms under varied problem conditions, which is represented as lookup tables.
+The chapter is organized as follows: section~\ref{sec:create_synth_dataset} discuss the selected algorithms, and the process of creating a synthetic dataset for the evaluation of selected algorithms. Section~\ref{sec:prop_effect_interaction} discusses the procedure of identifying properties with a significant effect on algorithmic performance so that the problem space can become more manageable. Section~\ref{sec:lookup_table} presents the lookup tables, represented by heatmaps, from problem conditions to performance of algorithms, which is served as mapping from problem condition to algorithms.
 
-\section{Dataset creation}
+\section{Construction of Dataset}
 \label{sec:create_synth_dataset}
-This section discusses the creation of a synthetic dataset that is used to evaluate between-class algorithm under varied problem conditions. First we choose three representative algorithms from three algorithm classes, as well as two baseline methods. Then the setups of synthetic capturing systems are presented with example images. Lastly, quantitative measure used to evaluate the performance of algorithms are proposed.
+This section discusses the construction of a synthetic dataset that is used to evaluate between-class algorithms under varied problem conditions. First we choose three representative algorithms from three distinct algorithm classes, as well as two baseline methods. Then the setups of synthetic capturing systems are presented with example images. Lastly, quantitative measure used to evaluate the performance of algorithms are proposed.
 
 \subsection{Selected and baseline methods}
 We have selected one representative algorithm from three major classes of algorithms presented in Chapter~\ref{ch:3DRecon_ProbSpace}: the PMVS proposed in~\cite{furukawa2010accurate}, the example-based Photometric Stereo proposed in~\cite{hertzmann2005example}, and the Gray-code Structured Light technique. See Table~\ref{tab:selected_algos} for a summary of the selected algorithms. The current implementation of SL projects both column and row patterns, and depth values are computed using these two kinds of patterns individually. A depth consistency step is performed to reject erroneous triangulations.
@@ -31,7 +31,7 @@ VH & Volumetric Visual Hull.\\
 LLS-PS & Linear least squares Photometric Stereo.\\
 \bottomrule
 \end{tabular}
-\caption{Summary of the selected and baseline algorithms for the interface, and the corresponding working conditions in theory.}
+\caption{Summary of the selected and baseline algorithms for the interface.}
 \label{tab:selected_algos}
 \end{table}
 
@@ -57,21 +57,23 @@ LLS-PS & Linear least squares Photometric Stereo.\\
 We use two baseline approaches to compare our results: Visual Hull and a simple linear least squares based Photometric Stereo (LLS-PS). We use Visual Hull since it works relatively well as long as the silhouette of the object can be reliably extracted, thus being insensitive to material properties. In addition, the true scene is always enclosed by the reconstruction result, so the outcome is always predictable. We use LLS-PS to evaluate Photometric Stereo algorithms. However, there is currently no such PS algorithms that work reasonably well under a variety of conditions. Thus, we run this baseline algorithm under the optimal condition to ensure a best possible result.
 
 \subsection{Synthetic setups}
-We use Blender's physical-based rendering engine, Cycles, to generate the synthetic datasets. For each technique, the configuration of the camera remains fixed. The image resolution is 1280$\times$720, with a focal length of $35mm$ or $1400pix$. The synthetic setups are shown in Table~\ref{tab:synth_setup}, and some example synthetic images generated using the setups are shown in Figure~\ref{fig:synth_setup}.
+We use the physical-based rendering engine of Blender, Cycles, to generate the synthetic datasets. For each technique, the configuration of the camera remains fixed. The image resolution is 1280$\times$720, with a focal length of $35mm$ or $1400pix$. The synthetic setups are shown in Table~\ref{tab:synth_setup}, and some example synthetic images generated using the setups are shown in Figure~\ref{fig:synth_setup}.
 \begin{table}[!htbp]
 \centering
 \begin{tabular}{lll}
 \toprule
-Method & Hardware number & Arrangement\\
+Method & Hardwares & Arrangement\\
 \midrule
-MVS & 41 camera & 5 rings, each having 1, 8, 8, 12, 12 camera\\
-PS & 1 camera+25 lights & 4 rings, each having 1, 8, 8, 8, 8 light sources\\
+MVS & 41 camera & 5 rings, each has 1, 8, 8, 12, 12 camera\\
+PS & 1 camera+25 light sources & 4 rings, each has 1, 8, 8, 8, 8 light sources\\
 SL & 1 camera\&projector & baseline angle: $10^\circ$\\
 \bottomrule
 \end{tabular}
-\caption{Summary of synthetic setups.}
+\caption{Summary of synthetic capturing systems for three classes of algorithms.}
 \label{tab:synth_setup}
 \end{table}
+
+The effects of properties simulated by the rendering engine are shown in Figure~\ref{fig:synth_example}.
 \begin{figure*}[!htbp]
 \centering
 \begin{tabular}{ll}
@@ -80,8 +82,8 @@ Albedo & \raisebox{-.5\height}{\includegraphics[width=0.8\textwidth]{img/mapping
 Specular & \raisebox{-.5\height}{\includegraphics[width=0.8\textwidth]{img/mapping/setup/spec.png}}\\
 Roughness & \raisebox{-.5\height}{\includegraphics[width=0.8\textwidth]{img/mapping/setup/rough.png}}
 \end{tabular}
-\caption{Example synthetic images. The value of each property ranges from 0.1 to 1.}
-\label{fig:synth_setup}
+\caption{Example synthetic images. The value of each property ranges from 0 to 1.}
+\label{fig:synth_example}
 \end{figure*}
 
 % For the Multi-View Stereo setup, there are five rings of cameras, of which the elevation angles are $15^\circ$, $30^\circ$, $45^\circ$, $60^\circ$, $90^\circ$. The between-angles of two neighbouring cameras are $30^\circ$, $30^\circ$, $45^\circ$, $45^\circ$, and $360^\circ$. Thus, there are in total $12+12+8+8+1=41$ cameras.
@@ -136,52 +138,48 @@ For photometric stereo, depth information is lost since only one viewpoint is us
 \label{sec:prop_effect_interaction}
 The greatest challenge in constructing a mapping from problem space to algorithms is the large variations in shapes and material properties, which results in a problem space that is too large to cope with. Suppose there are $N$ properties, each with $L$ discrete levels, then there are in total $L^N$ different problem conditions. Thus, the first step, discussed in Section~\ref{sec:mvs_epd},~\ref{sec:ps_epd},~\ref{sec:sl_epd}, is to reduce the dimensions of problem space by discovering the properties that have effects on performance of algorithms.
 
-This study is a $3\times 3$ factorial design with two properties (factors), each with three levels, \ie low (0.2), medium (0.5), and high (0.8). We are interested in one-way interaction (\textit{main effect}) and two-way interaction of the properties (factors).  A \textit{main effect} is the effect of one of the independent variables on the dependent variable, ignoring the effects of all other independent variables. A statistical interaction occurs when the effect of one independent variable on the dependent variable changes depending on the level of another independent variable. In our current design, this is equivalent to asking whether the effect of property $i$ changes depending on property $j$, where $i\neq j, i, j\in\{1, 2, 3, 4\}$. To determine if this is the case, we need to look at the \textit{simple main effects}: the main effect of one independent variable (e.g., property $i$) at each level of another independent variable (e.g., property $j$). The easiest way to communicate an interaction is to discuss it in terms of the \textit{simple main effects}. Describe one simple main effect, then describe the other in such a way that it is clear how the two are different. We choose to interpret the main effects and interactions through figures. We choose to use heatmaps to illustrate the effects of two properties on various metrics. There is a main effect of a property if there is color variation along the corresponding axis. If color changes monotonically along the diagonal, then there is no interaction between the two properties, otherwise, there is an interaction effect. Assume that the error variance is small, so that differences in performance that are apparent on the graph are also statistically significant. we observe an interaction between two factors whenever the simple effects of one change as the levels of the other factor are changed.
-
-% A naive way of finding the \textit{effective properties} would be evaluating algorithmic performance by changing one property at a time. However, this approach ignores the dependency between properties, \ie the effect of property \textit{A} might be insignificant when property \textit{B} is absent. Thus, we investigate the pairwise relation between any two properties, thus two properties are chosen while the rest are fixed, the configurations of the problem conditions are shown in Table~\ref{tab:pairwise_prob_cond}
-
+This study is a $3\times 3$ factorial design with two properties (factors), each with three levels, \ie low (0.2), medium (0.5), and high (0.8), see Table~\ref{tab:pairwise_prob_cond}. We are interested in one-way interaction (\textit{main effect}) and two-way interaction of the properties (factors).  A \textit{main effect} is the effect of one of the independent variables on the dependent variable, ignoring the effects of all other independent variables. An \textit{interaction} occurs when the effect of one independent variable on the dependent variable changes depending on the level of another independent variable. In our current design, this is equivalent to asking whether the effect of property $i$ changes depending on property $j$, where $i\neq j, i, j\in\{1, 2, 3, 4\}$. The easiest way to communicate an interaction is to discuss it in terms of the \textit{simple main effects}, which is defined as the main effect of one independent variable (e.g., property $i$) at each level of another independent variable (e.g., property $j$). We observe an interaction between two factors whenever the simple effects of one change as the levels of the other factor are changed. Assume that the error variance is small, so that differences in performance that are apparent on the graph are also statistically significant. Thus, we choose to interpret the main effects and interactions through graphs. There is a main effect of a property if there is color variation along the corresponding axis. If color changes monotonically along the diagonal, then there is no interaction between the two properties, otherwise, there is an interaction effect.
 \begin{table}[!htbp]
-  \centering
-  \begin{tabular}{l*{4}{c}}
-  \hline
-  \textbf{Cond.} & Texture & Albedo & Specular & Roughness\\
-  \hline
-  \textbf{(a)} & [0.2, 0.8] & [0.2, 0.8] & 0.0 & 0.0\\
-  \textbf{(b)} & [0.2, 0.8] & 0.8 & [0.2, 0.8] & 0.0\\
-  \textbf{(c)} & [0.2, 0.8] & 0.8 & 0.0 & [0.2, 0.8]\\
-  \textbf{(d)} & 0.8 & [0.2, 0.8] & [0.2, 0.8] & 0.0\\
-  \textbf{(e)} & 0.8 & [0.2, 0.8] & 0.0 & [0.2, 0.8]\\
-  \textbf{(f)} & 0.8 & 0.8 & [0.2, 0.8] & [0.2, 0.8]\\
-  \hline
-  \end{tabular}
-  \caption{Problem conditions for establishing the \textit{effective problem domain} of all selected algorithms. For instance, cond. (a) considers texture and albedo while specularity and roughness are fixed. The value of both varying properties range from 0.2 to 0.8.}
-  \label{tab:pairwise_prob_cond}
+\centering
+\begin{tabular}{cc|c|c|c|}
+\cline{3-5}
+& & \multicolumn{3}{ c| }{Property $i$} \\ \cline{3-5}
+& & 0.2 & 0.5 & 0.8 \\ \cline{1-5}
+\multicolumn{1}{ |c  }{\multirow{3}{*}{Property $j$} } &
+\multicolumn{1}{ |c| }{0.2} &  &  &     \\ \cline{2-5}
+\multicolumn{1}{ |c  }{}                        	   &
+\multicolumn{1}{ |c| }{0.5} &  &  &     \\ \cline{2-5}
+\multicolumn{1}{ |c  }{}                        	   &
+\multicolumn{1}{ |c| }{0.8} &  &  &     \\ \cline{1-5}
+\end{tabular}
+\caption{This is a $3\times 3$ factorial design. Every two properties are selected to test the main effects and interaction, there are in total $\binom{N}{2}$ combinations.}
+\label{tab:pairwise_prob_cond}
 \end{table}
 
 \subsection{Main effects and interactions: PMVS}
 \label{sec:mvs_epd}
-We interpret the main effects and interactions of properties on the performance of PMVS in terms of accuracy and completeness. The settings of properties are summarized in Table~\ref{tab:pairwise_prob_cond}. The performance of the algorithm in terms of two changing properties are visualized in Figure~\ref{fig:mvs_pairwise}.
+We study the main effects and interaction effects of properties on the performance of PMVS in terms of accuracy and completeness. The performance of the algorithm is visualized in Figure~\ref{fig:mvs_pairwise}.
 \begin{figure}[!htbp]
 \begin{tabular}{cc}
 \includegraphics[width=0.45\textwidth]{mapping/pairwise/mvs_tex_alb} &
 \includegraphics[width=0.45\textwidth]{mapping/pairwise/mvs_tex_spec}\\
-(a) & (b)\\
+(a). Texture and albedo & (b). Texture and specularity\\
 \includegraphics[width=0.45\textwidth]{mapping/pairwise/mvs_tex_rough} &
 \includegraphics[width=0.45\textwidth]{mapping/pairwise/mvs_alb_spec}\\
-(c) & (d)\\
+(c). Texture and roughness & (d). Albedo and specularity\\
 \includegraphics[width=0.45\textwidth]{mapping/pairwise/mvs_alb_rough} &
 \includegraphics[width=0.45\textwidth]{mapping/pairwise/mvs_spec_rough}\\
-(e) & (f)\\
+(e). Albedo and roughness & (f). Specularity and roughness\\
 \end{tabular}
 \caption{Performance of PMVS under four problem conditions. For instance, (a) shows the performance under changing \textit{texture} and \textit{albedo} values, while the others are fixed. The property values are set based on settings in Table~\ref{tab:pairwise_prob_cond}.}
 \label{fig:mvs_pairwise}
 \end{figure}
 
 \textbf{(a) Texture and Albedo} 
-The main effects of texture and albedo on accuracy, and the main effect of albedo on completeness are not significant whereas the effect of texture on completeness is significant such that as surfaces with higher texture leads to results of higher completeness than less textured surfaces. There is not significant interaction between texture and albedo on either accuracy or completeness.
+The main effects of texture and albedo on accuracy, and the main effect of albedo on completeness are not significant whereas the main effect of texture on completeness is significant such that surfaces with higher texture leads to results of higher completeness than less textured surfaces. There is not significant interaction effect between texture and albedo on either accuracy or completeness.
 
 \textbf{(b) Texture and Specularity} 
-The main effects of texture and specularity on both accuracy and completeness are significant such that surfaces with low texture yields lower accuracy value whereas surfaces with high texture leads to lower accuracy value. There is a significant interaction between texture and specularity on accuracy, but not the case on completeness. More specificially, specularity has no effect on accuray for lowly/highly textured surfaces whereas it has a negative effect on surfaces with medium texture. This can be explained as follows: the specular lobe can only be observed by cameras positioned and oriented towards the specular lobe, such as camera $V_2$ shown in Figure~\ref{fig:mvs_spec} (a) and (c). Cameras positioned otherwise would observe the true surface, such as camera $V_1$ shown in Figure~\ref{fig:mvs_spec} (a) and (b). The algorithm would then exploit the texture information provided by views like $V_1$, and thus would be able to reconstruct a specular surface.
+The main effects of texture and specularity on both accuracy and completeness are significant such that surfaces with lower texture or surfaces with higher specularity leads to higher accuracy value. However, we argue that this main effect are caused by the interaction effect between texture and specularity. As we can see, the effect of specularity on both accuracy and completeness are less noticeable for lowly and highly textured surfaces whereas the effect of specularity is most substantial for surfaces with medium texture. This effect can be explained as follows: the specular lobe can only be observed by cameras positioned and oriented towards the specular lobe, such as camera $V_2$ shown in Figure~\ref{fig:mvs_spec} (a) and (c). Cameras positioned otherwise would observe the true surface, such as camera $V_1$ shown in Figure~\ref{fig:mvs_spec} (a) and (b). The algorithm would then exploit the texture information provided by views like $V_1$, and thus would be able to reconstruct a specular surface.
 \begin{figure}[!htbp]
 \begin{tabular}{ccc}
 \includegraphics[width=0.3\textwidth]{mapping/mvs_spec/mvs_spec}&
@@ -194,10 +192,10 @@ The main effects of texture and specularity on both accuracy and completeness ar
 \end{figure}
 
 \textbf{(c) Texture and Roughness} 
-The main effects of texture and roughness, and the main effect of roughness on completeness are not significant. The main effect of texture on completeness is significant such that surfaces with higher textures leads to results with higher completeness. There is no interaction effect between texture and roughness on either accuracy or completeness.
+The main effects of texture and roughness, and that of roughness on completeness are not significant whereas the main effect of texture on completeness is significant such that surfaces with higher textures leads to results with higher completeness. There is no significant interaction effect between texture and roughness on either accuracy or completeness.
 
 \textbf{(d) Albedo and Specularity} 
-The main effects of albedo and specularity on accuracy is not significant whereas the main effects on completeness are significant such that surfaces with higher albedo or lower specularity leads to better reconstruction results in terms of completeness. There is no significant interaction effect between albedo and specularity in terms of accuracy and completeness as the value varies monotonically along the diagonal.
+The main effects of albedo and specularity on accuracy is not significant whereas the main effects of albedo and specularity on completeness are significant such that surfaces with higher albedo or lower specularity leads to higher completeness. There is no significant interaction effect between albedo and specularity in terms of accuracy and completeness as the value varies monotonically along the diagonal.
 
 % albedo has a positive effect whereas specular has a negative effect on the reconstruction. Furthermore, the positive effect of albedo is more significant on a higher specular surface while the negative effect of specular is far more substantial on a lower albedo surface. This can be explained as follows: according to the energy conservation law, as the specular component increases, the diffuse component decreases, resulting in a less discernible diffuse area. See Figure~\ref{fig:mvs_alb_spec} (a)-(c). Increasing the diffuse albedo can counteract the effect of specularity and make the texture visible again. See Figure~\ref{fig:mvs_alb_spec} (d)-(f).
 % \begin{figure}[!htbp]
@@ -217,39 +215,41 @@ The main effects of albedo and specularity on accuracy is not significant wherea
 % \end{figure}
 
 \textbf{(e) Albedo and Roughness}
-The main effects of albedo and roughness on accuracy and completeness are not significant. There is no interaction effect between albedo and roughness either.
+The main effects of albedo and roughness on accuracy and completeness are not significant. There is no interaction effect between albedo and roughness on either accuracy or completeness.
 
 \textbf{(f) Specularity and Roughness} 
-The main effects of specular and roughness on accuracy and completeness are not significant. There is no interaction effect between spcularity and roughness either.
+The main effects of specularity and roughness on accuracy and completeness are not significant. There is no interaction effect between spcularity and roughness on either accuracy or completeness.
 
 % surface roughness can effectively diminish the specular component and make the surface appear more diffuse. Thus, in theory, roughness should have a positive impact on the reconstruction. However, since specularity is only effective on surface with medium level texture, see Figure~\ref{fig:mvs_pairwise} (b), then roughness is only effective in this case as well. Further, since higher specular, high roughness surfaces visually resemble lower specular surfaces, and achieve similar reconstruction results as well, it makes sense to incorporate the effect of roughness to specularity, and omit roughness for simplicity.
 
-\subsubsection{Summary: PMVS} 
-Figure~\ref{fig:mvs_pairwise} demonstrates the main effect of texture, albedo and specularity on accuracy and completeness, and interaction effect between texture and specularity, albedo and specularity.
+\subsubsection{Summary: PMVS}
+For accuracy, specularity has a main effect such that higher specularity leads to higher accuracy value. There are no main effects for other properties. There is a significant effect between texture and specularity such that the effect of specularity is most substantial on surfaces with medium texture. There is also a significant interaction effect between albedo and specularity such that specularity is most substantial on surfaces with low albedo value.
+
+For completeness, there is a significant main effect from texture, and no other main effects observed. There is a significant interaction effects between texture and specularity on completeness such that the negative effect of specularity is most significant on surfaces with medium level texture. There are no other significant interaction effects observed.
 
 % The effective properties of PMVS are: texture, albedo, and specular, as shown in Table~\ref{tab:mvs_depend_prop}. Interestingly, we discovered that specularity has a more substantially negative impact on less textured, lower albedo surfaces. For instance, high specularity does not have a severely negative impact on highly textured surfaces.
 
 \subsection{Main effects and interactions: EPS}
 \label{sec:ps_epd}
-We interpret the main effects and interactions of properties on the performance of EPS in terms of mean and standard deviation (SD) of angular error. The settings of properties are summarized in Table~\ref{tab:pairwise_prob_cond}. The performance of the algorithm in terms of two changing properties are visualized in Figure~\ref{fig:ps_pairwise}.
+We study the main effects and interaction effects of properties on the performance of EPS in terms of mean and standard deviation (SD) of angular error. The performance of the algorithm is visualized in Figure~\ref{fig:ps_pairwise}.
 \begin{figure}[!htbp]
 \begin{tabular}{cc}
 \includegraphics[width=0.45\textwidth]{mapping/pairwise/ps_tex_alb}&
 \includegraphics[width=0.45\textwidth]{mapping/pairwise/ps_tex_spec}\\
-(a) & (b)\\
+(a). Texture and albedo & (b). Texture and specularity\\
 \includegraphics[width=0.45\textwidth]{mapping/pairwise/ps_tex_rough}&
 \includegraphics[width=0.45\textwidth]{mapping/pairwise/ps_alb_spec}\\
-(c) & (d)\\
+(c). Texture and roughness & (d). Albedo and specularity\\
 \includegraphics[width=0.45\textwidth]{mapping/pairwise/ps_alb_rough}&
 \includegraphics[width=0.45\textwidth]{mapping/pairwise/ps_spec_rough}\\
-(e) & (f)\\
+(e). Albedo and roughness & (f). Specularity and roughness\\
 \end{tabular}
-\caption{Performance of Example-based PS under six pairwise conditions. For instance, (a) shows the performance under changing \textit{texture} and \textit{albedo} values. The property values are assigned based on the settings in Table~\ref{tab:pairwise_prob_cond} (a).}
+\caption{Performance of Example-based PS under six problem conditions. For instance, (a) shows the performance under changing \textit{texture} and \textit{albedo} values. The property values are assigned based on the settings in Table~\ref{tab:pairwise_prob_cond} (a).}
 \label{fig:ps_pairwise}
 \end{figure}
 
 \textbf{(a) Texture and Albedo} 
-The main effects of texture on mean and SD of angular error, and the main effect of albedo on SD of angular error are not significant. The main effect of albedo on mean value of angular error is significant such that the angular error decreases as the albedo increases. There is no significant interaction effect between texture and albedo.
+The main effects of texture on mean and SD of angular error, and the main effect of albedo on SD of angular error are not significant. The main effect of albedo on mean value of angular error is significant such that the angular error decreases as the albedo increases. There is no significant interaction effect between texture and albedo on mean and SD of angular error.
 
 \textbf{(b) Texture and Specularity} 
 The main effects of texture on mean and SD of angular error are not significant whereas the main effects of speculairty are significant such that both values increases as specularity increases. There is no significant interaction effect between texture and specularity in terms of mean and SD of angular error.
@@ -281,8 +281,8 @@ The main effects of texture on mean and SD of angular error are not significant 
 \textbf{(c) Texture and Roughness} 
 The main effects of texture on mean and SD of angular error, and the main effect of roughness on SD of angular error are not significant whereas the main effect of roughness on mean of angular error is significant such that the mean angular error decreases as roughness increases. There is no interaction between texture and roughness in terms of mean and SD of angular error.
 
-\textbf{(d) Albedo and Specular} 
-The main effects of albedo and specularity on mean and SD of angular error are significant such that the mean and angular error decreases as albedo increases or specularity decreases. There is no significant interaction effect between albedo and specularity as the colour changes monotonically along the diagonal.
+\textbf{(d) Albedo and Specularity} 
+The main effects of albedo and specularity on mean and SD of angular error are significant such that the mean and angular error decrease as albedo increases or specularity decreases. There is also a significant interaction effect between albedo and specularity such that the effect of specularity on mean and SD of angular error is most significant when the surface albedo is low.
 % the albedo has a positive impact on normal estimation (see Figure~\ref{fig:ps_alb_spec} (a)-(c)), whereas the specularity has a negative impact on normal estimation (see Figure~\ref{fig:ps_alb_spec} (d)-(f)).
 % \begin{figure}[!htbp]
 % \centering
@@ -325,10 +325,10 @@ The main effects of albedo and specularity on mean and SD of angular error are s
 % \end{figure}
 
 \textbf{(e) Albedo and Roughness} 
-The main effects of albedo and roughness on SD of angular error are not significant whereas the main effects on mean of angular error is significant such that the mean angular error increases as the albedo or roughness increases. There is no interaction effect between albedo and roughness.
+The main effects of albedo and roughness on mean of angular error are significant such that the mean angular error decreases as the albedo or roughness increases whereas the main effects on SD of angular error are not significant. There is no significant interaction effect between albedo and roughness.
 
-\textbf{(f) Specular and Roughness} 
-The main effect of specularity on mean and SD of angular error is significant such that the value increases as the specularity increases. There is an interaction effect between specularity and roughness. More specifically, the mean and SD of angular error get worse for medium roughness, which is counter-intuitive at first sight. However, we argue that it's because the roughness is not strong enough to counteract the specular component, causing a smoothed and blurred specular region with larger area, thus leading to a poorer normal estimation. See Figure~\ref{fig:ps_spec_rough} for visual examples.
+\textbf{(f) Specularity and Roughness} 
+The main effect of specularity on mean and SD of angular error is significant such that the values vary as the specularity changes. There is an interaction effect between specularity and roughness. More specifically, the mean and SD of angular error do not decrease monotonically as the roughness increases. More specifically, the angular error becomes worse for surfaces with medium roughness, which is counter-intuitive at first sight. However, we argue that this is because the roughness is not strong enough to counteract the specular highlights, causing a smoothed and blurred specular region with larger area, thus leading to a poorer normal estimation. See Figure~\ref{fig:ps_spec_rough} for visual illustrations.
 \begin{figure}[!htbp]
 \centering
 \begin{tabular}{cccc}
@@ -350,12 +350,12 @@ The main effect of specularity on mean and SD of angular error is significant su
   \includegraphics[width=0.07\textwidth]{mapping/ps_spec_rough/0808_ang_error}\\
   \multicolumn{4}{c}{(c). roughness: 0.8}\\
 \end{tabular}
-\caption{The effect of roughness on PS. Albedo is set as 0.8, and specular is set as 0.8. The first column shows the input images, the second column shows the estimated normal map, the third column shows the integrated surface, and last column shows the angular error. We can see from the qualitative results (normal map and height map), and quantitative result (angular error) that a medium level roughness would lead to worse normal estimation since it blurs the specular lobe.}
+\caption{An example illustrates the effect of roughness on PS. Albedo is set as 0.8, and specular is set as 0.8. The first column shows the input images, the second column shows the estimated normal map, the third column shows the integrated surface, and last column shows the angular error. We can see from the qualitative results (normal map and height map), and quantitative result (angular error) that a medium level roughness would lead to a worse normal estimation since it blurs the specular lobe.}
 \label{fig:ps_spec_rough}
 \end{figure}
 
 \subsubsection{Summary: EPS} 
-Figure~\ref{fig:ps_pairwise} demonstrate the main effect of albedo, specularity ,and roughness on angular error, and interaction effect between specularity and roughness.
+Albedo, specularity, and roughness all have a main effect on angular error. More specifically, higher albedo and roughness lead to lower mean angular error, higher specularity leads to higher mean and SD angular error. There is a significant interaction effect between albedo and specularity such that the effect of specularity is most significant on low albedo surfaces. There is also an interaction between specularity and roughenss such that surfaces with medium roughness lead to higher angular error compared to surface with low or high roughness.
 
 % The properties that have an impact on EPS are: albedo, specularity, and roughness, as shown in Table~\ref{tab:ps_depend_prop}. Interestingly, we have discovered that medium level roughness can have a negative impact on normal estimation by blur the specular lobe, as shown in Figure~\ref{fig:ps_spec_rough}.
 % \begin{table}[!htbp]
@@ -373,34 +373,34 @@ Figure~\ref{fig:ps_pairwise} demonstrate the main effect of albedo, specularity 
 
 \subsection{Main effects and interactions: GSL}
 \label{sec:sl_epd}
-We interpret the main effects and interactions of properties on the performance of PMVS in terms of accuracy and completeness. The settings of properties are summarized in Table~\ref{tab:pairwise_prob_cond}. The performance of the algorithm in terms of two changing properties are visualized in Figure~\ref{fig:sl_pairwise}.
+We interpret the main effects and interactions of properties on the performance of GSL in terms of accuracy and completeness. The performance of the algorithm is visualized in Figure~\ref{fig:sl_pairwise}.
 \begin{figure}[!htbp]
 \begin{tabular}{cc}
 \includegraphics[width=0.45\textwidth]{mapping/pairwise/sl_tex_alb}&
 \includegraphics[width=0.45\textwidth]{mapping/pairwise/sl_tex_spec}\\
-(a) & (b) \\
+(a). Texture and albedo & (b). Texture and specularity \\
 \includegraphics[width=0.45\textwidth]{mapping/pairwise/sl_tex_rough}&
 \includegraphics[width=0.45\textwidth]{mapping/pairwise/sl_alb_spec}\\
-(c) & (d) \\
+(c). Texture and roughness & (d). Albedo and specularity \\
 \includegraphics[width=0.45\textwidth]{mapping/pairwise/sl_alb_rough}&
 \includegraphics[width=0.45\textwidth]{mapping/pairwise/sl_spec_rough}\\
-(e) & (f)\\
+(e). Albedo and roughness & (f). Specularity and roughness\\
 \end{tabular}
-\caption{Performance of Gray-encoded SL under six pairwise conditions. For instance, (a) shows the performance under changing \textit{texture} and \textit{albedo} values. The property values are assigned based on settings in Table~\ref{tab:pairwise_prob_cond} (a).}
+\caption{Performance of Gray-encoded SL under six problem conditions. For instance, (a) shows the performance under changing \textit{texture} and \textit{albedo} values. The property values are assigned based on settings in Table~\ref{tab:pairwise_prob_cond} (a).}
 \label{fig:sl_pairwise}
 \end{figure}
 
 \textbf{(a) Texture and Albedo} 
-The main effect of texture on accuracy and completeness and the main effect of albedo on accuracy is not significant. The main effect of albedo on completeness is significant such that the results increases as the albedo increases. There is no significant interaction effect between texture and albedo.
+The main effect of texture on accuracy and completeness and the main effect of albedo on accuracy are not significant. The main effect of albedo on completeness is significant such that the results increases as the albedo increases. There is no significant interaction effect between texture and albedo in terms of accuracy and completeness.
 
 \textbf{(b) Texture and Specularity} 
-The main effect of texture on accuracy and completeness and the main effect of specularity on accuracy is not significant. The main effect of specularity on completeness is significant such that the results decreases as the specularity increases. There is no significant interaction effect between texture and specularity.
+The main effect of texture on accuracy and completeness and the main effect of specularity on accuracy are not significant. The main effect of specularity on completeness is significant such that the results decreases as the specularity increases. There is no significant interaction effect between texture and specularity in terms of accuracy and completeness.
 
 \textbf{(c) Texture and Roughness} 
-The main effect of texture on accuracy and completeness and the main effect of roughness on accuracy is not significant. The main effect of roughness on completeness is significant such that the results increases as the roughness increases. There is no significant interaction effect between texture and roughness.
+The main effect of texture on accuracy and completeness and the main effect of roughness on accuracy is not significant. The main effect of roughness on completeness is significant such that the results increases as the roughness increases. There is no significant interaction effect between texture and roughness in terms of accuracy and completeness.
 
 \textbf{(d) Albedo and Specularity} 
-The main effects of albedo and specularity on accuracy are not significant whereas the main effects on completeness are significant such that the results increase as albedo increase or specularity decreases. There is no significant interaction effect between albedo and specularity.
+The main effects of albedo and specularity on accuracy are not significant whereas the main effects on completeness are significant such that the results increase as albedo increase or specularity decreases. There is no significant interaction effect between albedo and specularity in terms of accuracy and completeness.
 
 % albedo has a positive effect (see Figure~\ref{fig:sl_alb_spec} (a)-(c)) whereas specularity has a negative effect on completeness (see Figure~\ref{fig:sl_alb_spec} (d)-(f)). Interestingly, similar to EPS, the positive effect of albedo gets more significant with higher specularity while the negative effect of specularity becomes less substantial as albedo increases (see Figure~\ref{fig:sl_pairwise} (d)). Neither property has a significant effect on accuracy.
 % \begin{figure}[!htbp]
@@ -420,10 +420,10 @@ The main effects of albedo and specularity on accuracy are not significant where
 % \end{figure}
 
 \textbf{(e) Albedo and Roughness} 
-The main effects of albedo and roughness on accuracy, and the main effect of roughness on completeness are not significant. The main effect of albedo on completeness is significant such that the results increases as the albedo increases. There is no significant interaction effect between albedo and roughness.
+The main effects of albedo and roughness on accuracy, and the main effect of roughness on completeness are not significant. The main effect of albedo on completeness is significant such that the results increases as the albedo increases. There is no significant interaction effect between albedo and roughness in terms of accuracy and completeness.
 
 \textbf{(f) Specular and Roughness} 
-The main effects of specularity and roughness on accuracy. The main effect of roughness and specularity on completeness is significant such that the results increases as the roughness increases or specularity decreases. There is no significant interaction effect between specularity and roughness.
+The main effects of specularity and roughness on accuracy are not significant whereas the main effect on completeness are significant such that the results increases as the roughness increases or specularity decreases. There is no significant interaction effect between specularity and roughness in terms of accuracy and completeness.
 % specular has a negative effect (see Figure~\ref{fig:sl_spec_rough} (a)-(c)). Interestingly, the effect of roughness also resembles that of EPS, \ie medium level roughness has a negative impact on completeness (see Figure~\ref{fig:sl_spec_rough} (d)-(f)). Neither property has a significant effect on accuracy.
 % \begin{figure}[!htbp]
 % \centering
@@ -442,7 +442,7 @@ The main effects of specularity and roughness on accuracy. The main effect of ro
 % \end{figure}
 
 \subsubsection{Summary: GSL}
-Figure~\ref{fig:sl_pairwise} demonstrates the main effect of albedo, specularity ,and roughness on angular error, and no significant interaction effect is found.
+There is no main effects or interaction effects observed on the algorithm in terms of accuracy. Albedo, specularity, and roughness all have main effects on the algorithm in terms of completeness. There are no interaction effects observed.
 % The properties that have an effect on the GSL are: texture, albedo, specular, as shown in Table~\ref{tab:sl_depend_prop}. The albedo has a more significant impact with lower specularity, while specularity has a more substantial impact with low albedo. Roughness can cause a blurred specular region, thus leading to decreased completeness.
 % \begin{table}[!htbp]
 %   \centering
@@ -460,8 +460,7 @@ Figure~\ref{fig:sl_pairwise} demonstrates the main effect of albedo, specularity
 
 \section{Construction of Mapping}
 \label{sec:lookup_table}
-We evaluate the performance of algorithms under the factorial combination of properties that have main effects on performance in terms of accuracy, completeness or angular error. The performance is compared with those of baseline methods. Specifically, the accuracy, completeness, and angular error of baseline methods are subtracted from the selected algorithms. We inverse the results of accuracy so that better reconstruction have positive values. The resulting figures are shown in Figure~\ref{fig:lookup_table}. The conditions where the quantitative measures are above zeros are considered conditions where the corresonding algorithms work. The mapping is essentially a look-up table that returns a list of algorithms that can achieve successful reconstruction given a problem condition. We determine the success of reconstruction by comparing the result to that of baseline methods.
-
+In the previous section, we have examined the performance of algorithms with two changing properties at a time. This is equivalent to examine the performance of algorithms on a $2-$dimensional plane embedded in a $N-$dimensional space. It gives us insights into which properties have significant impacts on the performance of algorithms. In this section, we examine all properties that have significant main or interaction effects on the algorithms, which is equivalent to explore the whole problem space. The result is a one-to-many mapping from problem condition to algorithms. To determine if an algorithm achieves a successful reconstruction, we compare the quantitative results to those of the baseline methods. More specifically, accuracy, completeness, and angular error of baseline methods are subtracted from those of selected algorithms. To make the results consistent, \ie positive value represents result better than the baseline, we inverse the results of accuracy and angular error. The resulting graphs are shown in Figure~\ref{fig:lookup_table}. The mapping is essentially a look-up table that returns a list of successful algorithms given a problem condition, and these heatmap graphs can be viewed as mapping from problem condition to algorithms: given a problem condition, the users can specify a threshold value $\epsilon$, which is the minimum distance between the quantitative measures of selected algorithms and those of baseline methods. Any algorithm which is at least $\epsilon$ above the baseline methods are considered algorithms that can work reliably under the specified problem condition. By default, $\epsilon = 0$.
 \begin{sidewaysfigure*}[!htbp]
 \centering
 \begin{tabular}{ccc}
@@ -478,9 +477,28 @@ We evaluate the performance of algorithms under the factorial combination of pro
 \includegraphics[width=0.3\textwidth]{mapping/lookup_table/sl_albedo_08.eps}\\
 \multicolumn{3}{c}{(c). Look-up table of GSL.}
 \end{tabular}
-\caption{The look-up table of PMVS, EPS, and GSL.}
+\caption{Performance of PMVS, EPS, and GSL under all problem conditions. These are look-up tables that provide information regarding the performance of selected algorithms compared to baseline methods. Once a threshold value $\epsilon$ is specified, these look-up tables can be used as mapping from problem condition to algorithms, \ie return successful algorithms given a problem condition.}
 \label{fig:lookup_table}
 \end{sidewaysfigure*}
+% \begin{table}[!htbp]
+% \centering
+% \begin{tabular}{ccccr}
+% \toprule
+% Tex & Alb & Spec & Rough & Methods \\
+% 0.5 & 0.5 & 0.2 & - & PMVS \\
+% 0.5 & 0.8 & 0.2 & - & PMVS \\
+% 0.5 & 0.8 & 0.5 & - & PMVS \\
+% 0.8 & 0.2 & 0.2 & - & PMVS \\
+% 0.8 & 0.5 & 0.2 & - & PMVS \\
+% 0.8 & 0.5 & 0.5 & - & PMVS \\
+% 0.8 & 0.5 & 0.8 & - & PMVS \\
+% 0.8 & 0.8 & 0.2 & - & PMVS \\
+% 0.8 & 0.8 & 0.5 & - & PMVS \\
+% 0.8 & 0.8 & 0.8 & - & PMVS \\
+% \end{tabular}\
+% \caption{The mapping from problem space to algorithms. ``-'' means that this property doesn't have a main effect or interaction effect to the algorithm.}
+% \label{fig:mapping}
+% \end{table}
 
 \section{Summary}
-It is a non-trivial task to find a mapping from problem conditions to algorithms based on the description. By no means is the aforementioned approach the only way, or a perfect way, since it potentially has the problem of suffering from property scaling issue. Nonetheless, the pairwise analysis remains a valuable approach to obtain insights of the \textit{effective properties} of a specific algorithm. The development of the mapping is an on-going process. For instance, we can include more quantitative metrics such as colour accuracy, `ghost reconstruction', and so on. In order to make the mapping applicable to objects with more complex shapes, we need to consider more sophisticated geometric properties besides roughness, such as concavity, depth-discontinuity, occlusion, etc. Furthermore, the incorporation of more algorithms is another way to ensure that the problem space is well covered.
+It is a non-trivial task to find a mapping from problem conditions to algorithms based on the description. By no means is the aforementioned approach the only way, or a perfect way, since it potentially has the problem of suffering from property scaling issue. Nonetheless, the factorial studies remains a valuable approach to obtain insights of the \textit{effective properties} of a specific algorithm. The development of the mapping is an on-going process. For instance, we can include more quantitative metrics such as colour accuracy, `ghost reconstruction', and so on. In order to make the mapping applicable to objects with more complex shapes, we need to consider more sophisticated geometric properties besides roughness, such as concavity, depth-discontinuity, occlusion, etc. Furthermore, the incorporation of more algorithms is another way to ensure that the problem space is well covered.
