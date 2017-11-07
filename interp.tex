@@ -36,15 +36,26 @@ This thesis proposed a description-based interface to 3D reconstruction problem 
 
 \subsection{Evaluation question}
 % [What are the high level questions the evaluation will seek to answer? How can these be developed?]
-\textbf{Can the proof of concept interpreter return an appropriate algorithm that achieves a successful reconstruction given the correct description?}
+\textbf{Can the proof of concept interpreter return one of the best-suited algorithms that achieves a successful reconstruction given the correct description?}
 
 The interface to be evaluated consists of three separate layers, a description, an interpreter, and an algorithm layer. The interpreter is responsible for selecting an appropriate algorithm for reconstruction based on user-specified description. We provide a correct description for each object, and see if the algorithm selected by the interpreter will give an acceptable reconstruction result. The criteria for determining acceptance is detailed below, along with the evaluation steps.
 
 \subsection{Criteria}
 % Determine what `success' look like? What should be the criteria and standards for judging performance? Whose criteria and standards matter? What process should be used to develop agreement about these?
-Given a correct description of the object, the algorithm chosen by the proof-of-concept interpreter would give a successful reconstruction result. In this thesis, visual inspection is utilized to determine the quality of reconstruction results. More specifically, the result returned by the interface is compared to that of the baseline algorithms to determine if the quality is acceptable. As previously mentioned, the baseline method is chosen so that it always can provide a decent reconstruction under most circumstances.
+Given a correct description of the object, the algorithm chosen by the proof-of-concept interpreter should give a successful reconstruction result. In this thesis, visual inspection is utilized to determine the quality of reconstruction results. More specifically, the result returned by the interface is compared to that of the baseline algorithms to determine if the quality is acceptable. As previously mentioned, the baseline method is chosen so that it always can provide a decent reconstruction under most circumstances.
 
-The reason that qualitative comparison is sufficient is that we are less interested in developing novel algorithms or improving algorithm performance. If that is the goal, we do need a quantitative comparision among algorithms. However, the goal is to validate if the proposed interface can translate a description into an acceptable result, thus we are more interested in showing that this user-specified description can indeed be interpreted and invoke a good-enough algorithm.
+The reason that qualitative comparison is sufficient is that we are less interested in developing novel algorithms or improving algorithm performance. If that is the goal, we do need a quantitative comparision among algorithms. However, the goal is to validate if the proposed interface can translate a description into an acceptable result, thus we are more interested in showing that this user-specified description can indeed be interpreted and invoke a good-enough algorithm. Instead computing the quantitative values, such as accuracy, completeness, and angular error, we examine the visual phenomena that represent these quantitative measures: the roughness of reconstructed surface indicates accuracy, the lack of surface holes indicates completeness, and surface spike indicates large angular error, see Figure~\ref{fig:vis_quality}.
+\begin{figure*}[!htbp]
+\centering
+\begin{tabular}{ccc}
+\includegraphics[width=0.2\textwidth]{img/interp/real_interp/pot/pot_sc} &
+\includegraphics[width=0.2\textwidth]{img/interp/synth_interp/vase0_sl} &
+\includegraphics[width=0.2\textwidth]{img/interp/real_interp/vase/vase_ps} \\
+Rough surface & Surface hole & Surface spike\\
+\end{tabular}
+\caption{Visual phenomena that indicate the quality of reconstruction results [better images to be changed].}
+\label{fig:vis_quality}
+\end{figure*}
 
 % We need to demonstrate that the interpreter would return a reliable reconstructed model given the correct description, and a less successful model given an invalid description. The quality of the reconstruction is determined by comparing the result to the baseline method.
 
@@ -180,7 +191,7 @@ GSL\\
 PMVS\\
 \bottomrule
 \end{tabular}
-\caption{The evaluation of interpreter using synthetic objects. The first column presents the description provided to the interpreter. Description $i$ matches with the problem condition of synthetic object $i$, which is labeled in green rectangle. The last column is the algorithm selected by the interpreter. Since the interpreter would return a successful reconstruction given a description that matches the problem condition, the quality of reconstruction of the labeled objects indicates success/failure of the interpreter.}
+\caption{The evaluation of interpreter using synthetic objects. The first column presents the description provided to the interpreter. Description $i$ matches with the problem condition of synthetic object in column $i$, which is labeled in green rectangle. The last column is the algorithm selected by the interpreter. Since the interpreter would return a successful reconstruction given a description that matches the problem condition, the quality of reconstruction of the labeled objects indicates success/failure of the interpreter.}
 \label{fig:synth_results}
 \end{figure*}
 
@@ -328,7 +339,7 @@ GSL\\
 PMVS\\
 \bottomrule
 \end{tabular}
-\caption{The evaluation of interpreter using real-world objects. The first column presents the description provided to the interpreter. Description $i$ matches with the problem condition of synthetic object $i$, which is labeled in green rectangle. The last column is the algorithm selected by the interpreter. Since the interpreter would return a successful reconstruction given a description that matches the problem condition, the quality of reconstruction of the labeled objects indicates success/failure of the interpreter.}
+\caption{The evaluation of interpreter using real-world objects. The first column presents the description provided to the interpreter. Description $i$ matches with the problem condition of synthetic object in column $i$, which is labeled in green rectangle. The last column is the algorithm selected by the interpreter. Since the interpreter would return a successful reconstruction given a description that matches the problem condition, the quality of reconstruction of the labeled objects indicates success/failure of the interpreter.}
 \label{fig:real_results}
 \end{figure*}
 

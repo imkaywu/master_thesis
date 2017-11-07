@@ -224,6 +224,7 @@ Possible surface models are divided into 2 categories: surfaces with exact known
 % Concavity can be measured by \textit{surface curvature}, which is defined as the inverse of the radius of a tangentially intersecting circle/sphere. We include concavity in our model for the sake of completeness. However, we decide to omit this property in the following discussion since it will introduce global light transport including cast shadow and inter-reflection, and so on, which violates our assumption of \textbf{local interaction model}. Global light transport can severely worsen the accuracy of active methods. Besides, methods that utilize silhouette information may also fail to reconstruct concavities since concavity is invisible in the silhouette images.
 
 \subsection{Perception of properties}
+\label{sec:prop_percept}
 Different materials can be visually distinguished because they structure light in a particular, characteristic way. The way light is structured depends heavily on the shape of object, reflectance and transmittance properties of material, and illumination field. This process is called the `forward optics' (image formation) process. The material perception problem is, in some sense, the `inverse optics' problem: determining what combination of surface geometry, surface material, and illumination field generated a given image. Thus, in order to recover the reflectance properties of materials, the visual system must somehow disentangle the contributions of the illumination field and geometry. This is arguably the central problem of material perception, though the answer is currently far from clear. But our intuition and many empirical studies support the view that humans are exceptional at material perception.
 
 Everyday experience suggests that, human's visual system are extremly good at estimating material properties. We can effortlessly distinguish numerous different categories of material: textiles, stones, liquids, foodstuffs, and so on, and can recognize many specific materials within each class such as silk, wool and cotton. Besides, being able to visually distinguish between materials and infer their properties by sight, is invaluable for many tasks. For instance, when determining edibility, we can make subtle visual judgements of material properties to determine whether fruit is ripe, whether soup has bee left to go cold or whether bread is going stale~\cite{fleming2014visual}. There are numerous experimental evidence to support this intuition. For example, \citeauthor{sharan2009material} have shown that subjects can identify a wide range of materials from photographs even with brief presentations. \citeauthor{fleming2013perceptual} showed subjects photographs of materials from different categories and asked them to rate various subjective qualities, such as hardnesss, glossiness and prettiness. Even though subjects were not explicitly informed that the samples belonged to different classes, the subjective ratings of the individual samples were systematically clustered into categories, suggesting that subjects could theoretically classify materials through visual judgements of their properties.
@@ -245,8 +246,10 @@ The lightness of the object is controlled by the albedo value. Albedo is defiend
 \label{fig:ui}
 \end{figure}
 
-\subsection{Summary}
-The model and corresponding rerpesentations are shown in Table~\ref{tab:3DRecon_model_repre}.
+
+\section{Expression}
+\label{sec:3DRecon_Exp}
+In this section, we introduce the expression of 3D reconstruction problem using the proposed model and representations, as shown in Table~\ref{tab:3DRecon_model_repre}. As discussed in Section~\ref{sec:prop_percept}, it is intuitive for humans to perceptually estimate material properties. However, as previously discussed, the conditions under which a specific algorithm works in largely unclear, it is practically impossible to fully take advantage of an asortment of vision algorithms without sophisticated vision knowledge.
 \begin{table}[!htbp]
   \centering
   \begin{tabular}{l|l}
@@ -264,8 +267,6 @@ The model and corresponding rerpesentations are shown in Table~\ref{tab:3DRecon_
   \label{tab:3DRecon_model_repre}
 \end{table}
 
-\section{Expression}
-\label{sec:3DRecon_Exp}
 Now that we have a proposed model and representations of 3D reconstruction problem, we can express the four proposed problem conditions using this description. Given that all perceived estimates would likely be low resolution from users, we use three discrete scales to parameterize these properties: \textit{low} (0.2), \textit{medium} (0.5), and \textit{high} (0.8). The expression of the reconstruction problem is shown in table~\ref{tab:express}.
 \begin{table}[!htbp]
   \centering
