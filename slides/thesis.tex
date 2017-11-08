@@ -70,8 +70,9 @@ kaywu@ece.ubc.ca \\ % Your email address
 
 \begin{alertblock}{Challenges}
   \begin{itemize}
-    \item Algorithms: vision background, doesn't scale well
-    \item Approach: \textit{try-and-see}
+    \item Algorithms: vision background, doesn't scale well;
+    \item Parameters: not interpretable;
+    \item Approach: \textit{try-and-error}.
   \end{itemize}
 \end{alertblock}
 
@@ -87,8 +88,9 @@ kaywu@ece.ubc.ca \\ % Your email address
 
 \begin{exampleblock}{Strengths}
   \begin{itemize}
-    \item Algorithms: no vision background needed, embeding new algorithms is easy
-    \item Approach: a definitive algorithm is chosen
+    \item Algorithms: description of appearance, no vision background needed, embeding new algorithms is easy;
+    \item Parameters: property parameters are perceptually interpretable\& meaningful;
+    \item Approach: choose an algorithm based on mapping.
   \end{itemize}
 \end{exampleblock}
 
@@ -257,7 +259,7 @@ Some noteable open source general vision libraries and softwares:
 \end{itemize}
 
 \begin{figure}
-\includegraphics[width=0.7\textwidth]{taxo/obj_class}
+\includegraphics[width=0.7\textwidth]{prob_space/obj_class}
 \end{figure}
 
 \end{frame}
@@ -272,7 +274,7 @@ Assumptions:
 \end{itemize}
 
 \begin{figure}[h]
-\includegraphics[width=0.7\textwidth]{taxo/prob_cond}
+\includegraphics[width=0.7\textwidth]{prob_space/prob_cond}
 \end{figure}
 
 \end{frame}
@@ -350,7 +352,7 @@ Investigate the problem conditions under which the algorithms can reliably work.
 
 \begin{figure}[!htbp]
 \begin{tabular}{cc}
-\includegraphics[width=0.22\textwidth]{mapping/depend_check/mvs_tex_spec}&
+\includegraphics[width=0.22\textwidth]{mapping/pairwise/mvs_tex_spec}&
 \includegraphics[width=0.22\textwidth]{mapping/mvs_spec/mvs_spec}\\
 (a). Algo. performance & (b) Image formation\\
 \includegraphics[width=0.22\textwidth]{mapping/mvs_spec/mvs_spec_01}&
@@ -370,20 +372,20 @@ Investigate the problem conditions under which the algorithms can reliably work.
 \begin{tabular}{c|ccc}
   Image & Normal map & Height map & Angular error\\
   \hline\\
-  \includegraphics[width=0.15\textwidth]{mapping/ps_spec_rough/0802_0001}&
-  \includegraphics[width=0.15\textwidth]{mapping/ps_spec_rough/0802_normal}&
+  \includegraphics[width=0.12\textwidth]{mapping/ps_spec_rough/0802_0001}&
+  \includegraphics[width=0.12\textwidth]{mapping/ps_spec_rough/0802_normal}&
   \includegraphics[width=0.15\textwidth]{images/0802_dmap}&
-  \includegraphics[width=0.03\textwidth]{mapping/ps_spec_rough/0802_ang_error}\\
+  \includegraphics[width=0.05\textwidth]{mapping/ps_spec_rough/0802_ang_error}\\
   & (a). rough: 0.2\\
-  \includegraphics[width=0.15\textwidth]{mapping/ps_spec_rough/0805_0001}&
-  \includegraphics[width=0.15\textwidth]{mapping/ps_spec_rough/0805_normal}&
+  \includegraphics[width=0.12\textwidth]{mapping/ps_spec_rough/0805_0001}&
+  \includegraphics[width=0.12\textwidth]{mapping/ps_spec_rough/0805_normal}&
   \includegraphics[width=0.15\textwidth]{images/0805_dmap}&
-  \includegraphics[width=0.03\textwidth]{mapping/ps_spec_rough/0805_ang_error}\\
+  \includegraphics[width=0.05\textwidth]{mapping/ps_spec_rough/0805_ang_error}\\
   & (b). rough: 0.5\\
-  \includegraphics[width=0.15\textwidth]{mapping/ps_spec_rough/0808_0001}&
-  \includegraphics[width=0.15\textwidth]{mapping/ps_spec_rough/0808_normal}&
+  \includegraphics[width=0.12\textwidth]{mapping/ps_spec_rough/0808_0001}&
+  \includegraphics[width=0.12\textwidth]{mapping/ps_spec_rough/0808_normal}&
   \includegraphics[width=0.15\textwidth]{images/0808_dmap}&
-  \includegraphics[width=0.03\textwidth]{mapping/ps_spec_rough/0808_ang_error}\\
+  \includegraphics[width=0.05\textwidth]{mapping/ps_spec_rough/0808_ang_error}\\
   & (c). rough: 0.8\\
 \end{tabular}
 \caption{The effect of roughness on PS. Albedo is set as 0.8, and specular is set as 0.8. (b) demonstrates that a medium level roughness would lead to worse normal estimation since it blurs the specular lobe.}
@@ -397,13 +399,13 @@ Investigate the problem conditions under which the algorithms can reliably work.
 \begin{figure}[!htbp]
 \centering
 \begin{tabular}{ccc}
-\includegraphics[width=0.25\textwidth]{mapping/sl_spec_rough/sl_00050202}&
-\includegraphics[width=0.25\textwidth]{mapping/sl_spec_rough/sl_00050502}&
-\includegraphics[width=0.25\textwidth]{mapping/sl_spec_rough/sl_00050802}\\
+\includegraphics[width=0.25\textwidth]{trash/mapping/sl_spec_rough/sl_00050202}&
+\includegraphics[width=0.25\textwidth]{trash/mapping/sl_spec_rough/sl_00050502}&
+\includegraphics[width=0.25\textwidth]{trash/mapping/sl_spec_rough/sl_00050802}\\
 (a) specular: 0.2 & (b) specular: 0.5 & (c) specular: 0.8\\
-\includegraphics[width=0.25\textwidth]{mapping/sl_spec_rough/sl_00050802}&
-\includegraphics[width=0.25\textwidth]{mapping/sl_spec_rough/sl_00050805}&
-\includegraphics[width=0.25\textwidth]{mapping/sl_spec_rough/sl_00050808}\\
+\includegraphics[width=0.25\textwidth]{trash/mapping/sl_spec_rough/sl_00050802}&
+\includegraphics[width=0.25\textwidth]{trash/mapping/sl_spec_rough/sl_00050805}&
+\includegraphics[width=0.25\textwidth]{trash/mapping/sl_spec_rough/sl_00050808}\\
 (d) roughness: 0.2 & (e) roughness: 0.5 & (f) roughness: 0.8\\
 \end{tabular}
 \caption{(a)-(c): the roughness is set as 0.2, and specular has a negative effect on completeness; (d)-(e): the specular is set as 0.8, roughness has a positive effect on completeness.}
@@ -428,8 +430,16 @@ Investigate the problem conditions under which the algorithms can reliably work.
 \begin{frame}{Interpretation: evaluation methodology}
 
 \begin{exampleblock}{Evaluation question}
-  Can the proof of concept interpreter return an appropriate algorithm that achieves a successful reconstruction given the correct description?
+  1. Can the proof of concept interpreter return one of the best possible algorithms that achieves a successful reconstruction given the correct description? \\
+  2. Can a specified description give a decent reconstruction result (baseline result)? \\
+  3. Can a better description give a better reconstruction result than a worse description? \\
+  4. Can a wrong description give a poor reconstruction result? \\
 \end{exampleblock}
+
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}{Interpretation: evaluation methodology (cont'd)}
 
 \begin{exampleblock}{Criteria}
   Visual comparison to results of baseline method.
