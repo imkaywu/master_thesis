@@ -163,10 +163,10 @@ We study the main effects and interaction effects of properties on the performan
 \begin{tabular}{cc}
 \includegraphics[width=0.45\textwidth]{mapping/pairwise/mvs_tex_alb} &
 \includegraphics[width=0.45\textwidth]{mapping/pairwise/mvs_tex_spec}\\
-(a). Texture and albedo & (b). Texture and specularity\\
+(a). Texture and albedo & (b). Texture and specularity\\\\
 \includegraphics[width=0.45\textwidth]{mapping/pairwise/mvs_tex_rough} &
 \includegraphics[width=0.45\textwidth]{mapping/pairwise/mvs_alb_spec}\\
-(c). Texture and roughness & (d). Albedo and specularity\\
+(c). Texture and roughness & (d). Albedo and specularity\\\\
 \includegraphics[width=0.45\textwidth]{mapping/pairwise/mvs_alb_rough} &
 \includegraphics[width=0.45\textwidth]{mapping/pairwise/mvs_spec_rough}\\
 (e). Albedo and roughness & (f). Specularity and roughness\\
@@ -236,10 +236,10 @@ We study the main effects and interaction effects of properties on the performan
 \begin{tabular}{cc}
 \includegraphics[width=0.45\textwidth]{mapping/pairwise/ps_tex_alb}&
 \includegraphics[width=0.45\textwidth]{mapping/pairwise/ps_tex_spec}\\
-(a). Texture and albedo & (b). Texture and specularity\\
+(a). Texture and albedo & (b). Texture and specularity\\\\
 \includegraphics[width=0.45\textwidth]{mapping/pairwise/ps_tex_rough}&
 \includegraphics[width=0.45\textwidth]{mapping/pairwise/ps_alb_spec}\\
-(c). Texture and roughness & (d). Albedo and specularity\\
+(c). Texture and roughness & (d). Albedo and specularity\\\\
 \includegraphics[width=0.45\textwidth]{mapping/pairwise/ps_alb_rough}&
 \includegraphics[width=0.45\textwidth]{mapping/pairwise/ps_spec_rough}\\
 (e). Albedo and roughness & (f). Specularity and roughness\\
@@ -378,10 +378,10 @@ We interpret the main effects and interactions of properties on the performance 
 \begin{tabular}{cc}
 \includegraphics[width=0.45\textwidth]{mapping/pairwise/sl_tex_alb}&
 \includegraphics[width=0.45\textwidth]{mapping/pairwise/sl_tex_spec}\\
-(a). Texture and albedo & (b). Texture and specularity \\
+(a). Texture and albedo & (b). Texture and specularity \\\\
 \includegraphics[width=0.45\textwidth]{mapping/pairwise/sl_tex_rough}&
 \includegraphics[width=0.45\textwidth]{mapping/pairwise/sl_alb_spec}\\
-(c). Texture and roughness & (d). Albedo and specularity \\
+(c). Texture and roughness & (d). Albedo and specularity \\\\
 \includegraphics[width=0.45\textwidth]{mapping/pairwise/sl_alb_rough}&
 \includegraphics[width=0.45\textwidth]{mapping/pairwise/sl_spec_rough}\\
 (e). Albedo and roughness & (f). Specularity and roughness\\
@@ -480,25 +480,75 @@ In the previous section, we have examined the performance of algorithms with two
 \caption{Performance of PMVS, EPS, and GSL under all problem conditions. These are look-up tables that provide information regarding the performance of selected algorithms compared to baseline methods. Once a threshold value $\epsilon$ is specified, these look-up tables can be used as mapping from problem condition to algorithms, \ie return successful algorithms given a problem condition.}
 \label{fig:lookup_table}
 \end{sidewaysfigure*}
-% \begin{table}[!htbp]
-% \centering
-% \begin{tabular}{ccccr}
-% \toprule
-% Tex & Alb & Spec & Rough & Methods \\
-% 0.5 & 0.5 & 0.2 & - & PMVS \\
-% 0.5 & 0.8 & 0.2 & - & PMVS \\
-% 0.5 & 0.8 & 0.5 & - & PMVS \\
-% 0.8 & 0.2 & 0.2 & - & PMVS \\
-% 0.8 & 0.5 & 0.2 & - & PMVS \\
-% 0.8 & 0.5 & 0.5 & - & PMVS \\
-% 0.8 & 0.5 & 0.8 & - & PMVS \\
-% 0.8 & 0.8 & 0.2 & - & PMVS \\
-% 0.8 & 0.8 & 0.5 & - & PMVS \\
-% 0.8 & 0.8 & 0.8 & - & PMVS \\
-% \end{tabular}\
-% \caption{The mapping from problem space to algorithms. ``-'' means that this property doesn't have a main effect or interaction effect to the algorithm.}
-% \label{fig:mapping}
-% \end{table}
+
+\begin{table}[!htbp]
+\centering
+\begin{tabular}{l*{4}{c}}
+\toprule
+\textbf{Metric} & Texture & Albedo & Specular & Roughness\\
+\midrule
+Accuracy & 0.5 & 0.5 & 0.2 & -\\
+\&Completeness & 0.5 & 0.8 & 0.2 & -\\
+         & 0.5 & 0.8 & 0.5 & -\\
+         & 0.8 & 0.2 & 0.2 & -\\
+         & 0.8 & 0.5 & 0.2 & -\\
+         & 0.8 & 0.8 & 0.2 & -\\
+         & 0.8 & 0.5 & 0.5 & -\\
+         & 0.8 & 0.8 & 0.5 & -\\
+         & 0.8 & 0.5 & 0.8 & -\\
+         & 0.8 & 0.8 & 0.8 & -\\
+\bottomrule
+\end{tabular}
+\caption{The working problem conditions of PMVS in terms of the two metrics \textit{accuracy} and \textit{completeness}.}
+\label{tab:mvs_training_result}
+\end{table}
+
+\begin{table}[!htbp]
+\centering
+\begin{tabular}{l*{4}{c}}
+\hline
+\textbf{Metric} & Texture & Albedo & Specular & Roughness\\
+\hline
+Angle difference& - & 0.2 & 0.2 & 0.8\\
+                & - & 0.2 & 0.5 & 0.8\\
+                & - & 0.2 & 0.8 & 0.8\\
+                % & - & 0.5 & 0.2 & 0.2\\
+                % & - & 0.5 & 0.2 & 0.5\\
+                & - & 0.5 & 0.2 & 0.8\\
+                % & - & 0.5 & 0.5 & 0.2\\
+                & - & 0.5 & 0.5 & 0.8\\
+                & - & 0.5 & 0.8 & 0.8\\
+                & - & 0.8 & 0.2 & 0.2\\ % can be removed
+                & - & 0.8 & 0.2 & 0.8\\
+                & - & 0.8 & 0.5 & 0.2\\
+                & - & 0.8 & 0.5 & 0.8\\
+                & - & 0.8 & 0.8 & 0.2\\ % can be removed
+                & - & 0.8 & 0.8 & 0.8\\
+\hline
+\end{tabular}
+\caption{The working conditions of example-based PS in terms of the metric \textit{angular error}.}
+\label{tab:ps_training_result}
+\end{table}
+
+\begin{table}[!htbp]
+\centering
+\begin{tabular}{l*{4}{c}}
+\hline
+\textbf{Metric} & Texture & Albedo & Specular & Roughness\\
+\hline
+Accuracy    & - & - & - & -\\
+\hline
+Completeness& - & 0.8 & 0.2 & 0.2\\
+            & - & 0.8 & 0.5 & 0.2\\
+            & - & 0.8 & 0.8 & 0.2\\
+            & - & 0.8 & 0.2 & 0.8\\
+            & - & 0.8 & 0.5 & 0.8\\
+            & - & 0.8 & 0.8 & 0.8\\
+\hline
+\end{tabular}
+\caption{The condition matrix of Gray-code SL in terms of the two metrics \textit{accuracy} and \textit{completeness}.}
+\label{tab:sl_training_result}
+\end{table}
 
 \section{Summary}
 It is a non-trivial task to find a mapping from problem conditions to algorithms based on the description. By no means is the aforementioned approach the only way, or a perfect way, since it potentially has the problem of suffering from property scaling issue. Nonetheless, the factorial studies remains a valuable approach to obtain insights of the \textit{effective properties} of a specific algorithm. The development of the mapping is an on-going process. For instance, we can include more quantitative metrics such as colour accuracy, `ghost reconstruction', and so on. In order to make the mapping applicable to objects with more complex shapes, we need to consider more sophisticated geometric properties besides roughness, such as concavity, depth-discontinuity, occlusion, etc. Furthermore, the incorporation of more algorithms is another way to ensure that the problem space is well covered.

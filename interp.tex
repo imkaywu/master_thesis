@@ -5,7 +5,7 @@
 \label{ch:3DRecon_Interp}
 Now that we have proposed a well-defined problem space of 3D reconstruction problem, as well as a mapping from the problem space to algorithms, the interpretation from the problem-centric description to appropriate algorithms must be shown. There are many possible ways to interpret the description, our proof of concept interpreter is based on the direct evaluation of the performance of each 3D reconstruction algorithm under different problem conditions presented in Chapter~\ref{ch:3DRecon_Mapping}. This mapping from problem space to algorithms and additional constraints allow an appropriate algorithm to be definitively selected.
 
-The three algorithms and two baseline methods introduced in Chapter~\ref{ch:3DRecon_Mapping} have been implemented and integrated into the interpreter, providing basic but well rounded reconstruction capabilities. Although more algorithms can potentially be added, these methods are sufficient to validate the interface's ability to translate descriptions into reconstruction solutions. The integration of new algorithms that are more appropriate under particular situations requires only that they be evaluated by the same process discussed in Chapter~\ref{ch:3DRecon_Mapping}, as shown in Figure~\ref{fig:embed_algo}. This allows researchers to contribute novel algorithms to the interpretation of the interface easily. 
+The three algorithms and two baseline methods introduced in Chapter~\ref{ch:3DRecon_Mapping} have been implemented and integrated into the interpreter, providing basic but well rounded reconstruction capabilities. Although more algorithms can potentially be added, these methods are sufficient to validate the interface's ability to translate descriptions into reconstruction solutions. The integration of new algorithms that are more appropriate under particular situations requires only that they be evaluated by the same process discussed in Chapter~\ref{ch:3DRecon_Mapping}, as shown in Figure~\ref{fig:embed_algo}. This allows researchers to contribute novel algorithms to the interpretation of the interface easily.
 
 Both synthetic and real-world datasets are provided to evaluate the performance of the interpreter. The testbench is made publicly available to encourage the testing of additional reconstruction algorithms. Further, the testbench can be extended to include new visual/geometric properties, thus providing a wider coverage of the problem space.
 
@@ -15,7 +15,7 @@ Both synthetic and real-world datasets are provided to evaluate the performance 
 
 % In Chapter~\ref{ch:3DRecon_Mapping}, we have established a mapping from a well defined problem space to a suite of algorithms by evaluating the performance of the selected algorithms under synthetic conditions. However, the claim that this mapping would help the users obtain a satisfactory reconstruction result given the correct problem conditions is still unclear. Thus a thorough evaluation is needed to validate the proposed interface.
 
-This chapter is organized as follows: Section~\ref{sec:interp_eval_methodology} provides a roadmap of our evaluation that is centered around one key evaluation question. Section~\ref{sec:interp} proposes a proof-of-concept interpreter. Section~\ref{sec:eval_interp} addresses the evaluation question by demonstrating the robustness of the interpreter using synthetic and real-world datasets, where a satisfactory reconstruction result is returned given the correct description of the object.
+This chapter is organized as follows: Section~\ref{sec:interp_eval_methodology} provides a roadmap of our evaluation that is centered around three key evaluation questions. Section~\ref{sec:interp} proposes a proof-of-concept interpreter. Section~\ref{sec:eval_interp} addresses the evaluation question by demonstrating the robustness of the interpreter using synthetic and real-world datasets, where a satisfactory reconstruction result is returned given the correct description of the object.
 
 % In order to validate the 3D reconstruction mapping derived from Chapter~\ref{ch:3DRecon_Mapping}, evaluation of the object centric model into appropriate solutions must be shown. 
 
@@ -34,10 +34,14 @@ This thesis proposed a description-based interface to 3D reconstruction problem 
 % [What are the primary purposes and intended uses of the evaluation?]
 % The evaluation intends to find out that the derived mapping can indeed find the algorithm that produces the best possible result from a suite of algorithms.
 
-\subsection{Evaluation question}
+\subsection{Evaluation questions}
 % [What are the high level questions the evaluation will seek to answer? How can these be developed?]
-\textbf{Can the proof of concept interpreter return one of the best-suited algorithms that achieves a successful reconstruction given the correct description?}
-
+\begin{itemize}
+\item\textbf{1. Can the proof of concept interpreter return one of the best-suited algorithms that achieves a successful reconstruction given the correct description?}
+% \item\textbf{2. Can a unspecified description give a decent reconstruction result (baseline result)?}
+\item\textbf{2. Can a better description give a better reconstruction result than a worse description?}
+\item\textbf{3. Can a wrong description give a poor reconstruction result?}
+\end{itemize}
 The interface to be evaluated consists of three separate layers, a description, an interpreter, and an algorithm layer. The interpreter is responsible for selecting an appropriate algorithm for reconstruction based on user-specified description. We provide a correct description for each object, and see if the algorithm selected by the interpreter will give an acceptable reconstruction result. The criteria for determining acceptance is detailed below, along with the evaluation steps.
 
 \subsection{Criteria}
@@ -106,10 +110,10 @@ The synthetic dataset contains four objects, as shown in Figure~\ref{fig:synth_r
 \begin{figure*}[!htbp]
 \centering
 \begin{tabular}{cccc}
-\includegraphics[width=0.2\textwidth]{interp/synth_dataset/bust} &
-\includegraphics[width=0.2\textwidth]{interp/synth_dataset/vase0} &
-\includegraphics[width=0.2\textwidth]{interp/synth_dataset/barrel} &
-\includegraphics[width=0.2\textwidth]{interp/synth_dataset/vase1}\\
+\includegraphics[width=0.2\textwidth]{interp/synth_data/bust} &
+\includegraphics[width=0.2\textwidth]{interp/synth_data/vase0} &
+\includegraphics[width=0.2\textwidth]{interp/synth_data/barrel} &
+\includegraphics[width=0.2\textwidth]{interp/synth_data/vase1}\\
 (a). bust & (b). vase0 & (c). barrel & (d). vase1\\
 \includegraphics[width=0.2\textwidth]{interp/real_world_img/statue/statue} &
 \includegraphics[width=0.2\textwidth]{interp/real_world_img/cup/cup} &
@@ -137,27 +141,279 @@ For PS, though it is preferable to correct the non-linear response of camera,~\c
 
 For SL, a opensource camera-projector calibration software developed by~\citeauthor{moreno2012simple} is used for calibration. This technique works by projecting temporal patterns onto the object, and uses local homography to individually translate each checkerboard corner from the camera plane to the projector plane. This technique can estimate both the intrinsic parameter and camera and projector, and the relative position and orientation.
 
+\subsection{Synthetic dataset}
+Each object in the synthetic dataset represents one of the four problem conditions discussed in Section~\ref{ch:3DRecon_ProbSpace}. The description of problem condition of each synthetic object is shown in Table~\ref{tab:synth_prop_list}, as well as the appropriate algorithm selected by the interpreter. Given a user specified description, the proof of concept interpreter will select an algorithm, and any object that matches this description should be well reconstructed by this selected algorithm. Since a description could be mapped to multiple algorithms, an object that does not match the description could potentially have a successful reconstruction result as well. The reconstruction results of synthetic objects and those of the baseline method are shown in Figure~\ref{fig:synth_results}.
+\begin{figure}[!htbp]
+\centering
+\begin{tabular}{cl|*{4}{p{2.3cm}}}
+\toprule
+\multicolumn{2}{c}{Class \#} & 1 & 2 & 3 & 4\\
+\midrule
+\parbox[t]{2mm}{\multirow{3}{*}{\rotatebox[origin=c]{90}{Verbal}}}
+& & \tabitem textureless & \tabitem textureless & \tabitem textured & \tabitem textured\\
+& & \tabitem diffuse & \tabitem mixed d/s & \tabitem diffuse & \tabitem mixed d/s\\
+& & \tabitem bright & \tabitem bright & \tabitem bright & \tabitem bright\\ \cline{3-6}
+\parbox[t]{2mm}{\multirow{4}{*}{\rotatebox[origin=c]{90}{Description}}}
+& Tex & 0.2 & 0.2 & 0.8 & 0.8\\
+& Alb & 0.8 & 0.8 & 0.8  & 0.8\\
+& Spec & 0.2 & 0.8 & 0.2 & 0.8\\
+& Rough & 0.8 & 0.2 & 0.2 & 0.2\\ \cline{3-6}
+\parbox[t]{2mm}{\rotatebox[origin=c]{90}{Objects}} & &
+\raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/synth_data/bust}} &
+\raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/synth_data/vase0}} &
+\raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/synth_data/barrel}} &
+\raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/synth_data/vase1}}\\ \cline{3-6}
+\parbox[t]{2mm}{\multirow{2}{*}{\rotatebox[origin=c]{90}{Alg}}}
+& & \tabitem EPS & \tabitem\tc{EPS} & \tabitem PMVS & \tabitem\tc{PMVS} \\
+& & \tabitem\tc{GSL} &  & \tabitem EPS & \tabitem EPS\\
+& & & & \tabitem\tc{GSL} & \\
+\bottomrule
+\end{tabular}
+\caption{Problem conditions and interpreted algorithm of the synthetic objects. The description matches the problem condition of corresponding object. The last column shows the algorithm returned by the mapping, from which the interpreter will select one appropriate algorithm.}
+\label{tab:synth_prop_list}
+\end{figure}
+
+\subsection{Real-world Dataset}
+We select four real-world objects, each represents the one of the four problem condtiions proposed in Chapter~\ref{ch:3DRecon_ProbSpace}, as shown in Figure~\ref{fig:test_real_world}. The descriptions of problem conditions of real-world objects are shown in Table~\ref{tab:real_data_prop_list}, as well as the appropriate algorithm selected by the interpreter. Given a user specified description, the proof of concept interpreter will select an algorithm, and any object that matches this description should be well reconstructed by this selected algorithm. Since a description could be mapped to multiple algorithms, an object that does not match the description could potentially have a successful reconstruction result as well. The reconstruction results of synthetic objects and those of the baseline method are shown in Figure~\ref{fig:real_results}. Since we do not have the ground truth here, we resort to visual analysis to see if the appropriate algorithm gives an acceptable reconstruction compared to that of the baseline method.
+\begin{figure}[!htbp]
+\centering
+\begin{tabular}{cl|*{4}{p{2.3cm}}}
+\toprule
+\multicolumn{2}{c}{Class \#} & 1 & 2 & 3 & 4\\
+\midrule
+\parbox[t]{2mm}{\multirow{3}{*}{\rotatebox[origin=c]{90}{Verbal}}}
+& & \tabitem textureless & \tabitem textureless & \tabitem textured & \tabitem textured\\
+& & \tabitem diffuse & \tabitem mixed d/s & \tabitem diffuse & \tabitem mixed d/s\\
+& & \tabitem bright & \tabitem bright & \tabitem dark/bright & \tabitem dark/bright\\ \cline{3-6}
+\parbox[t]{2mm}{\multirow{4}{*}{\rotatebox[origin=c]{90}{Description}}}
+& Tex & 0.2 & 0.2 & 0.8 & 0.8\\
+& Alb & 0.8 & 0.8 & 0.8 (0.2) & 0.8 (0.2)\\
+& Spec & 0.2 & 0.5 & 0.2 & 0.5\\
+& Rough & 0.8 & 0.2 & 0.2 & 0.2\\ \cline{3-6}
+\parbox[t]{2mm}{\rotatebox[origin=c]{90}{Objects}} & &
+\raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/real_world_img/statue/statue}} &
+\raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/real_world_img/cup/cup}} &
+\raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/real_world_img/pot/pot}} &
+\raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/real_world_img/vase/vase}}\\ \cline{3-6}
+\parbox[t]{2mm}{\multirow{2}{*}{\rotatebox[origin=c]{90}{Alg}}}
+& & \tabitem EPS & \tabitem EPS & \tabitem PMVS & \tabitem\tc{PMVS} \\
+& & \tabitem\tc{GSL} & \tabitem\tc{GSL} & \tabitem\tc{GSL} \\
+\bottomrule
+\end{tabular}
+\caption{The rerepsentatives of the four classes of objects used for evaluation. Problem conditions and interpreted algorithm of the real-world objects. The description matches the problem condition of corresponding object. The last column shows the algorithm returned by the mapping, from which the interpreter will select one appropriate algorithm.}
+\label{fig:test_real_world}
+\end{figure}
+
 \section{Evaluation of Interpreter}
 \label{sec:eval_interp}
 This section evaluates the proof of concept interpreter, which should return a successful result given a valid description, or a less successful one given an incorrect description. We provide demonstrative results of the interpreter using the synthetic and real-world dataset that represent the four problem conditions proposed in Chapter~\ref{ch:3DRecon_ProbSpace}.
 
-\subsection{Synthetic Datasets}
-Each object in the synthetic dataset represents one of the four problem conditions discussed in Section~\ref{ch:3DRecon_ProbSpace}. The description of problem condition of each synthetic object is shown in Table~\ref{tab:synth_prop_list}, as well as the appropriate algorithm selected by the interpreter. Given a user specified description, the proof of concept interpreter will select an algorithm, and any object that matches this description should be well reconstructed by this selected algorithm. Since a description could be mapped to multiple algorithms, an object that does not match the description could potentially have a successful reconstruction result as well. The reconstruction results of synthetic objects and those of the baseline method are shown in Figure~\ref{fig:synth_results}.
-\begin{table}[!htbp]
-  \centering
-  \begin{tabular}{lllllll}
-  \hline
-  \textbf{Desc\#} & \textbf{Object} & Texture & Albedo & Spec & Rough & Mapping Algo\\
-  \hline
-  1 & bust & 0.2 & 0.8 & 0.2 & 0.8 & EPS, GSL\\
-  2 & vase0 & 0.2 & 0.8 & 0.8 & 0.2 & EPS\\
-  3 & barrel & 0.8 & 0.8 & 0.2 & 0.8 & PMVS, EPS, GSL\\
-  4 & vase1 & 0.8 & 0.8 & 0.8 & 0.2 & PMVS, EPS\\
-  \hline
-  \end{tabular}
-  \caption{Problem conditions and interpreted algorithm of the synthetic objects. The description matches the problem condition of corresponding object. The last column shows the algorithm returned by the mapping, from which the interpreter will select one appropriate algorithm.}
-  \label{tab:synth_prop_list}
-\end{table}
+\subsection{Evaluation 1: valid description, success result}
+In this section, we evaluate whether the interpreter can return a successful reconstruction result given a valid description of problem condition. We evaluate the performance of the interpreter using both synthetic and real-world objects. See results in Figure~\ref{fig:eval_1}.
+\begin{figure*}[!htbp]
+\centering
+\begin{tabular}{l|c|c|c|c}
+\toprule
+& \multicolumn{4}{c}{Synth-objects}\\ \cline{2-5}
+& Bust & Vase0 & Barrel & Vase1\\
+\midrule
+\parbox[t]{2mm}{\rotatebox[origin=c]{90}{Algo}}
+& GSL & EPS & GSL & PMVS \\
+\midrule
+\parbox[t]{2mm}{\rotatebox[origin=c]{90}{Results}}
+& \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/synth_interp/beethoven_sl}}
+& \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/synth_interp/vase0_ps}}
+& \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/synth_interp/barrel_sl}}
+& \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/synth_interp/vase1_mvs}}\\
+\midrule
+\parbox[t]{2mm}{\rotatebox[origin=c]{90}{Baseline}}
+& \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/synth_interp/beethoven_vh}}
+& \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/synth_interp/vase0_vh}}
+& \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/synth_interp/barrel_vh}}
+& \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/synth_interp/vase1_vh}}\\
+\midrule
+& \multicolumn{4}{c}{Real-objects}\\ \cline{2-5}
+& Statue & Cup & Pot & Vase \\
+\midrule
+\parbox[t]{2mm}{\rotatebox[origin=c]{90}{Algo.}}
+& GSL & EPS & GSL & PMVS \\
+\midrule
+\parbox[t]{2mm}{\rotatebox[origin=c]{90}{Results}}
+& \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/real_interp/statue/statue_sl}}
+& \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/real_interp/cup/cup_ps}}
+& \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/real_interp/pot/pot_sl}}
+& \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/real_interp/vase/vase_mvs}}\\
+\midrule
+\parbox[t]{2mm}{\rotatebox[origin=c]{90}{Baseline}}
+& \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/real_interp/statue/statue_sc}}
+& \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/real_interp/cup/cup_sc}}
+& \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/real_interp/pot/pot_sc}}
+& \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/real_interp/vase/vase_sc}}\\
+\bottomrule
+\end{tabular}
+\caption{Evaluation 1.}
+\label{fig:eval_1}
+\end{figure*}
+
+% \begin{figure*}[!htbp]
+% \centering
+% \begin{tabular}{llllcc}
+% \toprule
+% Cond \# & Object & Desc \# & Interp Algo. & Result & Baseline \\
+% \midrule
+% \multirow{2}{*}{1} & Bust & & \multirow{2}{*}{GSL} & 
+% \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/synth_interp/beethoven_sl}} &
+% \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/synth_interp/beethoven_vh}}\\
+
+% & Statue & & &
+% \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/real_interp/statue/statue_sl}} &
+% \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/real_interp/statue/statue_sc}}\\
+
+% \multirow{2}{*}{2} & Vase0 & & \multirow{2}{*}{EPS} &
+% \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/synth_interp/vase0_ps}} &
+% \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/synth_interp/vase0_vh}}\\
+
+% & Cup & & &
+% \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/real_interp/cup/cup_ps}} &
+% \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/real_interp/cup/cup_sc}}\\
+
+% \multirow{2}{*}{3} & Barrel & & \multirow{2}{*}{GSL} &
+% \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/synth_interp/barrel_sl}} &
+% \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/synth_interp/barrel_vh}}\\
+
+% & Pot & & &
+% \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/real_interp/pot/pot_sl}} &
+% \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/real_interp/pot/pot_sc}}\\
+
+% \multirow{2}{*}{4} & Vase1 & & \multirow{2}{*}{PMVS} &
+% \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/synth_interp/vase1_mvs}} &
+% \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/synth_interp/vase1_vh}}\\
+
+% & Vase & & &
+% \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/real_interp/vase/vase_mvs}} &
+% \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/real_interp/vase/vase_sc}}\\
+% \bottomrule
+% \end{tabular}
+% \end{figure*}
+
+\subsubsection{Condition 1: Bust, statue}
+Given the correct description to condition 1, the corresponding objects are succesfully reconstructed by GSL, the algorithm selected by the interpreter.
+
+\subsubsection{Condition 2: Vase0, cup}
+Given the correct description to condition 2, the corresponding objects are succesfully reconstructed by EPS, the algorithm selected by the interpreter.
+
+\subsubsection{Condition 3: Barrel, pot}
+Given the correct description to condition 3, the corresponding objects are succesfully reconstructed by GSL, the algorithm selected by the interpreter.
+
+\subsubsection{Condition 4: Vase1, vase}
+Given the correct description to condition 4, the corresponding objects are succesfully reconstructed by PMVS, the algorithm selected by the interpreter.
+
+\subsection{Evaluation 2: better description, better result}
+In this section, we evaluate whether the interpreter can return a better reconstruction result given a better description of problem condition. We evaluate the performance of the interpreter using both synthetic and real-world objects.
+
+For each object, we set the parameter of one property incorrect, and see if the result gets worse. Each time, $\text{Prop}_i$ is incorrectly described in $\text{Desc}_i$.
+\begin{figure*}[!htbp]
+\centering
+\begin{tabular}{c|*{4}{l}|l}
+
+\toprule
+\multirow{2}{*}{Object} & \multicolumn{5}{c}{Descriptions and Results} \\ \cline{2-6}
+& Desc1 & Desc2 & Desc3 & Desc4 & Desc \\
+\midrule
+\multirow{4}{*}{Bust} & \tc{02}020802 & 08\tc{08}0802 & 0802\tc{02}02 & 080208\tc{08} & 02080208 \\
+& \tabitem\tc{BL} & \tabitem PMVS 	 & \tabitem\tc{PMVS} & \tabitem\tc{EPS} & \tabitem EPS 	  \\
+& 		 		  & \tabitem EPS  	 & 	    	 		 & 	 			  	& \tabitem\tc{GSL}\\
+& 		 		  & \tabitem\tc{GSL} & 	    	 		 & 	 			  	& 				  \\
+& \includegraphics[width=0.1\textwidth]{interp/synth_interp/beethoven_vh} &
+  \includegraphics[width=0.1\textwidth]{interp/synth_interp/beethoven_sl} &
+  \includegraphics[width=0.1\textwidth]{interp/synth_interp/beethoven_mvs} &
+  \includegraphics[width=0.1\textwidth]{interp/synth_interp/beethoven_ps} &
+  \includegraphics[width=0.1\textwidth]{interp/synth_interp/beethoven_sl} \\ \cline{2-6}
+\multirow{4}{*}{vase0} & \tc{02}080208 & 08\tc{08}0208 & 0802\tc{08}02 & 080202\tc{02} & 02080802 \\
+& \tabitem EPS 	   & \tabitem PMVS   & \tabitem\tc{BL} & \tabitem\tc{PMVS} & \tabitem\tc{EPS}\\
+& \tabitem\tc{GSL} & \tabitem EPS 	 & 				   & 				   &\\
+& 			   	   & \tabitem\tc{GSL}& 				   & 				   &\\
+& \includegraphics[width=0.1\textwidth]{interp/synth_interp/vase0_sl} &
+  \includegraphics[width=0.1\textwidth]{interp/synth_interp/vase0_sl} &
+  \includegraphics[width=0.1\textwidth]{interp/synth_interp/vase0_vh} &
+  \includegraphics[width=0.1\textwidth]{interp/synth_interp/vase0_mvs} &
+  \includegraphics[width=0.1\textwidth]{interp/synth_interp/vase0_ps} \\ \cline{2-6}
+\multirow{4}{*}{barrel} & \tc{08}020802 & 02\tc{08}0802 & 0202\tc{02}02 & 020208\tc{08} & 08080208 \\
+& \tabitem\tc{PMVS} & \tabitem EPS     & \tabitem\tc{BL} & \tabitem\tc{EPS} & \tabitem PMVS   \\
+& 					& \tabitem\tc{GSL} & 				 & 					& \tabitem EPS    \\
+& 					& 				   & 				 &					& \tabitem\tc{GSL}\\
+& \includegraphics[width=0.1\textwidth]{interp/synth_interp/barrel_mvs} &
+  \includegraphics[width=0.1\textwidth]{interp/synth_interp/barrel_sl} &
+  \includegraphics[width=0.1\textwidth]{interp/synth_interp/barrel_vh} &
+  \includegraphics[width=0.1\textwidth]{interp/synth_interp/barrel_ps} &
+  \includegraphics[width=0.1\textwidth]{interp/synth_interp/barrel_sl} \\ \cline{2-6}
+\multirow{4}{*}{vase1} & \tc{08}020208 & 02\tc{08}0208 & 0202\tc{08}08 & 020202\tc{02} & 08080802 \\
+& \tabitem\tc{PMVS} & \tabitem EPS     & \tabitem\tc{BL} & \tabitem\tc{BL} & \tabitem\tc{PMVS}\\
+& \tabitem EPS 		& \tabitem\tc{GSL} &				 &				   & \tabitem EPS     \\
+& \includegraphics[width=0.1\textwidth]{interp/synth_interp/vase1_mvs} &
+  \includegraphics[width=0.1\textwidth]{interp/synth_interp/vase1_sl} &
+  \includegraphics[width=0.1\textwidth]{interp/synth_interp/vase1_vh} &
+  \includegraphics[width=0.1\textwidth]{interp/synth_interp/vase1_vh} &
+  \includegraphics[width=0.1\textwidth]{interp/synth_interp/vase1_mvs}\\
+\bottomrule
+\end{tabular}
+\caption{Evaluation 2: better description, better result}
+\label{fig:eval_21}
+\end{figure*}
+
+In Figure~\ref{fig:eval_21}, we can see that given a incorrect description, for instance, for the object \textit{vase0}, the reconstruction results are less optimal compared to the result returned by the interpreter. However, for some objects, such as \textit{barrel}, the incorrect description doesn't seem to have a serious negative impact. The reason is that there are multiple algorithms that work successfully for this object, thus if an algorithm other than the interpreted one is chosen, a successful reconstruction result is still achievable. The take-away message is that for incorrect description, the reconstruction results are generally worse than that of the interpreted result. However, for conditions that have multiple working algorithms, there may very well be an acceptable result.
+
+\begin{figure*}[!htbp]
+\centering
+\begin{tabular}{c|*{4}{l}|l}
+
+\toprule
+\multirow{2}{*}{Object} & \multicolumn{5}{c}{Descriptions and Results} \\ \cline{2-6}
+& Desc1 & Desc2 & Desc3 & Desc4 & Desc \\
+\midrule
+\multirow{4}{*}{statue} & \tc{02}020802 & 08\tc{08}0802 & 0802\tc{02}02 & 080208\tc{08} & 02080208 \\
+& \tabitem\tc{BL} & \tabitem PMVS 	 & \tabitem\tc{PMVS} & \tabitem\tc{EPS} & \tabitem EPS 	  \\
+& 		 		  & \tabitem EPS  	 & 	    	 		 & 	 			  	& \tabitem\tc{GSL}\\
+& 		 		  & \tabitem\tc{GSL} & 	    	 		 & 	 			  	&\\
+& \includegraphics[width=0.1\textwidth]{interp/real_interp/statue/statue_sc} &
+  \includegraphics[width=0.1\textwidth]{interp/real_interp/statue/statue_sl} &
+  \includegraphics[width=0.1\textwidth]{interp/real_interp/statue/statue_mvs} &
+  \includegraphics[width=0.1\textwidth]{interp/real_interp/statue/statue_ps} &
+  \includegraphics[width=0.1\textwidth]{interp/real_interp/statue/statue_sl} \\ \cline{2-6}
+\multirow{4}{*}{cup} & \tc{02}080208 & 08\tc{08}0208 & 0802\tc{08}02 & 080202\tc{02} & 02080802 \\
+& \tabitem EPS 	   & \tabitem PMVS   & \tabitem\tc{BL} & \tabitem\tc{PMVS} & \tabitem\tc{EPS}\\
+& \tabitem\tc{GSL} & \tabitem EPS 	 & 				   & \\
+& 			   	   & \tabitem\tc{GSL}& 				   & 				   &\\
+& \includegraphics[width=0.1\textwidth]{interp/real_interp/cup/cup_sl} &
+  \includegraphics[width=0.1\textwidth]{interp/real_interp/cup/cup_sl} &
+  \includegraphics[width=0.1\textwidth]{interp/real_interp/cup/cup_sc} &
+  \includegraphics[width=0.1\textwidth]{interp/real_interp/cup/cup_mvs} &
+  \includegraphics[width=0.1\textwidth]{interp/real_interp/cup/cup_ps} \\ \cline{2-6}
+\multirow{4}{*}{pot} & \tc{08}020802 & 02\tc{08}0802 & 0202\tc{02}02 & 020208\tc{08} & 08080208 \\
+& \tabitem\tc{PMVS} & \tabitem EPS     & \tabitem\tc{BL} & \tabitem\tc{EPS} & \tabitem PMVS   \\
+& 					& \tabitem\tc{GSL} & 				 & 					& \tabitem EPS    \\
+& 					& 				   & 				 &					& \tabitem\tc{GSL}\\
+& \includegraphics[width=0.1\textwidth]{interp/real_interp/pot/pot_mvs} &
+  \includegraphics[width=0.1\textwidth]{interp/real_interp/pot/pot_sl} &
+  \includegraphics[width=0.1\textwidth]{interp/real_interp/pot/pot_sc} &
+  \includegraphics[width=0.1\textwidth]{interp/real_interp/pot/pot_ps} &
+  \includegraphics[width=0.1\textwidth]{interp/real_interp/pot/pot_sl} \\ \cline{2-6}
+\multirow{4}{*}{vase} & \tc{08}020208 & 02\tc{08}0208 & 0202\tc{08}08 & 020202\tc{02} & 08080802 \\
+& \tabitem\tc{PMVS} & \tabitem EPS     & \tabitem\tc{BL} & \tabitem\tc{BL} & \tabitem\tc{PMVS}\\
+& \tabitem EPS 		& \tabitem\tc{GSL} &				 &				   & \tabitem EPS     \\
+& \includegraphics[width=0.1\textwidth]{interp/real_interp/vase/vase_mvs} &
+  \includegraphics[width=0.1\textwidth]{interp/real_interp/vase/vase_sl} &
+  \includegraphics[width=0.1\textwidth]{interp/real_interp/vase/vase_sc} &
+  \includegraphics[width=0.1\textwidth]{interp/real_interp/vase/vase_sc} &
+  \includegraphics[width=0.1\textwidth]{interp/real_interp/vase/vase_mvs}\\
+\bottomrule
+\end{tabular}
+\caption{Evaluation 2: better description, better result}
+\label{fig:eval_22}
+\end{figure*}
+
+\subsection{Evaluation 3: wrong description, poor result}
+In this section, we evaluate whether the interpreter can return a poor reconstruction result given a invalid description of problem condition. We evaluate the performance of the interpreter using both synthetic and real-world objects.
 
 \begin{figure*}[!htbp]
 \centering
@@ -169,25 +425,25 @@ Desc \# & Bust & Vase0 & Barrel & Vase1 & Interp Algo.\\
 \fcolorbox{green}{white}{\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/beethoven_sl}}}&
 \raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/vase0_sl}}&
 \raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/barrel_sl}}&
-\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/vase2_sl}}&
+\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/vase1_sl}}&
 GSL\\
 2 & 
 \raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/beethoven_ps}}&
 \fcolorbox{green}{white}{\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/vase0_ps}}}&
 \raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/barrel_ps}}&
-\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/vase2_ps}}&
+\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/vase1_ps}}&
 EPS\\
 3 & 
 \raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/beethoven_sl}}&
 \raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/vase0_sl}}&
 \fcolorbox{green}{white}{\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/barrel_sl}}}&
-\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/vase2_sl}}&
+\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/vase1_sl}}&
 GSL\\
 4 &
 \raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/beethoven_mvs}}&
 \raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/vase0_mvs}}&
 \raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/barrel_mvs}}&
-\fcolorbox{green}{white}{\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/vase2_mvs}}}&
+\fcolorbox{green}{white}{\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/vase1_mvs}}}&
 PMVS\\
 \bottomrule
 \end{tabular}
@@ -206,29 +462,6 @@ Description 3 matches with object \textit{barrel}, which has a reliable reconstr
 
 \subsubsection{Description 4: Vase1}
 Description 4 matches with object \textit{vase1}, thus the algorithm selected by the interpreter achieves successful reconstruction result. The problem condition of object \textit{barrel} is also mapped to algorithm PMVS, that is why the reconstruction result of \textit{barrel} is also successful.
-
-\subsection{Real-world Datasets}
-We select four real-world objects, each represents the one of the four problem condtiions proposed in Chapter~\ref{ch:3DRecon_ProbSpace}, as shown in Figure~\ref{fig:test_real_world}. The descriptions of problem conditions of real-world objects are shown in Table~\ref{tab:real_data_prop_list}, as well as the appropriate algorithm selected by the interpreter. Given a user specified description, the proof of concept interpreter will select an algorithm, and any object that matches this description should be well reconstructed by this selected algorithm. Since a description could be mapped to multiple algorithms, an object that does not match the description could potentially have a successful reconstruction result as well. The reconstruction results of synthetic objects and those of the baseline method are shown in Figure~\ref{fig:real_results}. Since we do not have the ground truth here, we resort to visual analysis to see if the appropriate algorithm gives an acceptable reconstruction compared to that of the baseline method.
-\begin{figure}[!htbp]
-\centering
-\begin{tabular}{c|*{4}{p{2cm}}}
-\toprule
-class \# & 1 & 2 & 3 & 4\\
-\midrule
-  & textureless & textureless & textured & textured\\
-description & diffuse & mixed d/s & diffuse & mixed d/s\\
-  & bright & bright & dark/bright & dark/bright\\
-\hline
-object & 
-\raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/real_world_img/statue/statue}} &
-\raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/real_world_img/cup/cup}} &
-\raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/real_world_img/pot/pot}} &
-\raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/real_world_img/vase/vase}}\\
-\bottomrule
-\end{tabular}
-\caption{The rerepsentatives of the four classes of objects used for evaluation.}
-\label{fig:test_real_world}
-\end{figure}
 
 We use the aforementioned methods to retrieve the parameters of each property. The decomposition of material for each object is presented in Figure~\ref{fig:real_data_material}. The property settings of each object is listed in Table~\ref{tab:real_data_prop_list}.
 \begin{table}[!htbp]

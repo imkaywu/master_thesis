@@ -113,6 +113,7 @@
 %% booktabs: provides some special commands for typesetting tables as used
 %% in excellent journals.  Ignore the examples in the Lamport book!
 \usepackage{booktabs}
+\newcommand{\tabitem}{~~\llap{\textbullet}~~}
 %% multi-row and multi-column table 
 \usepackage{multirow, bigstrut}
 
@@ -144,6 +145,7 @@
 %% Quantitative Information" or "Envisioning Information".
 \usepackage{color}
 \definecolor{greytext}{gray}{0.5}
+\newcommand{\tc}[1]{\textcolor{red}{#1}}
 
 %% comment: provides a new {comment} environment: all text inside the
 %% environment is ignored.
