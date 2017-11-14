@@ -70,8 +70,8 @@ kaywu@ece.ubc.ca \\ % Your email address
 
 \begin{alertblock}{Challenges}
   \begin{itemize}
-    \item Algorithms: vision background, doesn't scale well;
-    \item Parameters: not interpretable;
+    \item Algorithms: vision knowledge required;
+    \item Parameters: not interpretable, meaningful, or conceptually estimatible;
     \item Approach: \textit{try-and-error}.
   \end{itemize}
 \end{alertblock}
@@ -343,6 +343,26 @@ Investigate the problem conditions under which the algorithms can reliably work.
 \end{frame}
 
 %------------------------------------------------
+\begin{frame}{Mapping: algorithms}
+
+\begin{exampleblock}{selected algorithms}
+\begin{itemize}
+\item Patch-based Multi-View Stereo (PMVS): propagate-refinement-filtering;
+\item Example-based Photometric Stereo (EPS): arbitrary BRDF is a linear combination of basis BRDFs;
+\item Gray-coded Structured Light (GSL): encode spatial informally temporally.
+\end{itemize}
+\end{exampleblock}
+
+\begin{exampleblock}{baseline methods}
+\begin{itemize}
+\item Volumetric Visual Hull: carve voxels projecting outside of silhouettes;
+\item Linear-least squares Photometric Stereo: $\mathbf{I}=\rho\mathbf{N}\cdot\mathbf{L}$
+\end{itemize}
+\end{exampleblock}
+
+\end{frame}
+
+%------------------------------------------------
 \begin{frame}{Mapping: dataset creation}
 
 \end{frame}
@@ -431,9 +451,9 @@ Investigate the problem conditions under which the algorithms can reliably work.
 
 \begin{exampleblock}{Evaluation question}
   1. Can the proof of concept interpreter return one of the best possible algorithms that achieves a successful reconstruction given the correct description? \\
-  2. Can a specified description give a decent reconstruction result (baseline result)? \\
-  3. Can a better description give a better reconstruction result than a worse description? \\
-  4. Can a wrong description give a poor reconstruction result? \\
+  % 2. Can a specified description give a decent reconstruction result (baseline result)? \\
+  2. Can a less accurate description give a less successful reconstruction result? \\
+  3. Can an inaccurate description give a poor reconstruction result? \\
 \end{exampleblock}
 
 \end{frame}
@@ -456,7 +476,7 @@ Investigate the problem conditions under which the algorithms can reliably work.
 \end{frame}
 
 %------------------------------------------------
-\begin{frame}{Interpretation: proof of concept interpreter}
+\begin{frame}{Interpretation: interpreter}
 
 An interpreter selects an appropriate algorithm based on description of problem condition and constraints.
 
@@ -470,18 +490,6 @@ An interpreter selects an appropriate algorithm based on description of problem 
 %------------------------------------------------
 \begin{frame}{Interpretation: dataset creation}
 
-\begin{exampleblock}{Capture}
-  \begin{table}
-    \begin{tabular}{l|l|l}
-    method & hardware & configuration \\
-    \midrule
-    MVS+VH & camera & 3 heights, $30^\circ$ baseline angle \\
-    PS & camera, lamp, 2 ref objs & \\
-    SL & camera, projector & $10^\circ$ baseline angle\\
-    \end{tabular}
-  \end{table}
-\end{exampleblock}
-
 \begin{exampleblock}{Calibration}
   \begin{table}
     \begin{tabular}{l|l}
@@ -494,10 +502,22 @@ An interpreter selects an appropriate algorithm based on description of problem 
   \end{table}
 \end{exampleblock}
 
+\begin{exampleblock}{Creation}
+  \begin{table}
+    \begin{tabular}{l|l|l}
+    method & hardware & configuration \\
+    \midrule
+    MVS+VH & camera & 3 heights, $30^\circ$ baseline angle \\
+    PS & camera, lamp, 2 ref objs & \\
+    SL & camera, projector & $10^\circ$ baseline angle\\
+    \end{tabular}
+  \end{table}
+\end{exampleblock}
+
 \end{frame}
 
 %------------------------------------------------
-\begin{frame}{Interpretation: synthetic objects}
+\begin{frame}{Interpretation: synthetic and real-world dataset}
 
 \begin{figure}[!htbp]
 \centering
@@ -509,14 +529,17 @@ prob cond\# & 1 & 2 & 3 & 4\\
 description & diffuse & mixed d/s & diffuse & mixed d/s\\
   & bright & bright & dark/bright & dark/bright\\
 \hline
-object & 
-\raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/synth_dataset/bust}} &
-\raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/synth_dataset/vase0}} &
-\raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/synth_dataset/barrel}} &
-\raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/synth_dataset/vase1}}\\
+\multirow{2}{*}{object} & 
+\includegraphics[width=0.15\textwidth]{interp/synth_data/bust} &
+\includegraphics[width=0.15\textwidth]{interp/synth_data/vase0} &
+\includegraphics[width=0.15\textwidth]{interp/synth_data/barrel} &
+\includegraphics[width=0.15\textwidth]{interp/synth_data/vase1}\\ \cline{2-5}
+& \includegraphics[width=0.15\textwidth]{interp/real_world_img/statue/statue} &
+\includegraphics[width=0.15\textwidth]{interp/real_world_img/cup/cup} &
+\includegraphics[width=0.15\textwidth]{interp/real_world_img/pot/pot} &
+\includegraphics[width=0.15\textwidth]{interp/real_world_img/vase/vase}\\
 \bottomrule
 \end{tabular}
-\caption{The rerepsentative synthetic objects of the four problem conditions for evaluation.}
 \end{figure}
 
 \end{frame}
@@ -534,53 +557,28 @@ Desc \# & Bust & Vase1 & Barrel & Vase0 & Interp Algo.\\
 \fcolorbox{green}{white}{\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/beethoven_sl}}}&
 \raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/vase0_sl}}&
 \raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/barrel_sl}}&
-\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/vase2_sl}}&
+\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/vase1_sl}}&
 GSL\\
 2 & 
 \raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/beethoven_ps}}&
 \fcolorbox{green}{white}{\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/vase0_ps}}}&
 \raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/barrel_ps}}&
-\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/vase2_ps}}&
+\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/vase1_ps}}&
 EPS\\
 3 & 
 \raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/beethoven_sl}}&
 \raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/vase0_sl}}&
 \fcolorbox{green}{white}{\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/barrel_sl}}}&
-\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/vase2_sl}}&
+\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/vase1_sl}}&
 GSL\\
 4 &
 \raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/beethoven_mvs}}&
 \raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/vase0_mvs}}&
 \raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/barrel_mvs}}&
-\fcolorbox{green}{white}{\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/vase2_mvs}}}&
+\fcolorbox{green}{white}{\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/vase1_mvs}}}&
 PMVS\\
 \bottomrule
 \end{tabular}
-\end{figure}
-
-\end{frame}
-
-%------------------------------------------------
-\begin{frame}{Interpretation: real-world objects}
-
-\begin{figure}[!htbp]
-\centering
-\begin{tabular}{l|*{4}{p{1.5cm}}}
-\toprule
-prob cond\# & 1 & 2 & 3 & 4\\
-\midrule
-  & textureless & textureless & textured & textured\\
-description & diffuse & mixed d/s & diffuse & mixed d/s\\
-  & bright & bright & bright & bright\\
-\hline
-object & 
-\raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/real_world_img/statue/statue}} &
-\raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/real_world_img/cup/cup}} &
-\raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/real_world_img/pot/pot}} &
-\raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/real_world_img/vase/vase}}\\
-\bottomrule
-\end{tabular}
-\caption{The rerepsentative real-world objects of the four problem conditions for evaluation.}
 \end{figure}
 
 \end{frame}
