@@ -7,6 +7,7 @@
 \graphicspath{ {../img/} }
 
 \usepackage{booktabs} % Allows the use of \toprule, \midrule and \bottomrule in tables
+\newcommand{\tabitem}{~~\llap{\textbullet}~~}
 \usepackage[scale=2]{ccicons}
 
 \usepackage{pgfplots}
@@ -23,6 +24,9 @@
 \tikzset{fontscale/.style = {font=\relsize{#1}}}
 
 \usepackage{multirow}
+
+\usepackage{color}
+\newcommand{\tc}[1]{\textcolor{red}{#1}}
 
 {%
 \fboxsep=0pt
@@ -545,38 +549,27 @@ description & diffuse & mixed d/s & diffuse & mixed d/s\\
 \end{frame}
 
 %------------------------------------------------
-\begin{frame}{Interpretation: evaluation of interpreter}
+\begin{frame}{Interpretation: accurate description, successful result}
 
-\begin{figure}[!htbp]
+\begin{figure}
 \centering
-\begin{tabular}{lccccr}
+\begin{tabular}{l|c|c|c|c}
 \toprule
-Desc \# & Bust & Vase1 & Barrel & Vase0 & Interp Algo.\\
+& \multicolumn{4}{c}{Synth-objects}\\ \cline{2-5}
+& Bust & Vase0 & Barrel & Vase1\\
 \midrule
-1 & 
-\fcolorbox{green}{white}{\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/beethoven_sl}}}&
-\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/vase0_sl}}&
-\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/barrel_sl}}&
-\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/vase1_sl}}&
-GSL\\
-2 & 
-\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/beethoven_ps}}&
-\fcolorbox{green}{white}{\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/vase0_ps}}}&
-\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/barrel_ps}}&
-\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/vase1_ps}}&
-EPS\\
-3 & 
-\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/beethoven_sl}}&
-\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/vase0_sl}}&
-\fcolorbox{green}{white}{\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/barrel_sl}}}&
-\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/vase1_sl}}&
-GSL\\
-4 &
-\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/beethoven_mvs}}&
-\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/vase0_mvs}}&
-\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/barrel_mvs}}&
-\fcolorbox{green}{white}{\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/vase1_mvs}}}&
-PMVS\\
+\parbox[t]{2mm}{\rotatebox[origin=c]{90}{Algo}}
+& GSL & EPS & GSL & PMVS \\
+\parbox[t]{2mm}{\rotatebox[origin=c]{90}{Results}}
+& \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/synth_interp/beethoven_sl}}
+& \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/synth_interp/vase0_ps}}
+& \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/synth_interp/barrel_sl}}
+& \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/synth_interp/vase1_mvs}}\\
+\parbox[t]{2mm}{\rotatebox[origin=c]{90}{Baseline}}
+& \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/synth_interp/beethoven_vh}}
+& \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/synth_interp/vase0_vh}}
+& \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/synth_interp/barrel_vh}}
+& \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/synth_interp/vase1_vh}}\\
 \bottomrule
 \end{tabular}
 \end{figure}
@@ -584,38 +577,27 @@ PMVS\\
 \end{frame}
 
 %------------------------------------------------
-\begin{frame}{Interpretation: evaluation of interpreter (cont'd)}
+\begin{frame}{Interpretation: accurate description, successful result (cont'd)}
 
-\begin{figure}[!htbp]
+\begin{figure}
 \centering
-\begin{tabular}{lccccr}
+\begin{tabular}{l|c|c|c|c}
 \toprule
-Desc \# & Statue & Cup & Pot & Vase & Interp Algo.\\
+& \multicolumn{4}{c}{Real-objects}\\ \cline{2-5}
+& Statue & Cup & Pot & Vase \\
 \midrule
-1 &
-\fcolorbox{green}{white}{\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/real_interp/statue/statue_sl}}}&
-\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/real_interp/cup/cup_sl}}&
-\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/real_interp/pot/pot_sl}}&
-\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/real_interp/vase/vase_sl}}&
-GSL\\
-2 &
-\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/real_interp/statue/statue_ps}}&
-\fcolorbox{green}{white}{\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/real_interp/cup/cup_ps}}}&
-\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/real_interp/pot/pot_ps}}&
-\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/real_interp/vase/vase_ps}}&
-EPS\\
-3 &
-\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/real_interp/statue/statue_sl}}&
-\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/real_interp/cup/cup_sl}}&
-\fcolorbox{green}{white}{\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/real_interp/pot/pot_sl}}}&
-\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/real_interp/vase/vase_sl}}&
-GSL\\
-4 &
-\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/real_interp/statue/statue_mvs}}&
-\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/real_interp/cup/cup_mvs}}&
-\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/real_interp/pot/pot_mvs}}&
-\fcolorbox{green}{white}{\raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/real_interp/vase/vase_mvs}}}&
-PMVS\\
+\parbox[t]{2mm}{\rotatebox[origin=c]{90}{Algo.}}
+& GSL & EPS & GSL & PMVS \\
+\parbox[t]{2mm}{\rotatebox[origin=c]{90}{Results}}
+& \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/real_interp/statue/statue_sl}}
+& \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/real_interp/cup/cup_ps}}
+& \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/real_interp/pot/pot_sl}}
+& \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/real_interp/vase/vase_mvs}}\\
+\parbox[t]{2mm}{\rotatebox[origin=c]{90}{Baseline}}
+& \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/real_interp/statue/statue_sc}}
+& \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/real_interp/cup/cup_sc}}
+& \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/real_interp/pot/pot_sc}}
+& \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/real_interp/vase/vase_sc}}\\
 \bottomrule
 \end{tabular}
 \end{figure}
@@ -623,7 +605,131 @@ PMVS\\
 \end{frame}
 
 %------------------------------------------------
-\begin{frame}{Interpretation: discussion}
+\begin{frame}{Interpretation: accurate description, successful result (cont'd)}
+
+\begin{exampleblock}{Observations}
+\begin{itemize}
+\item algorithms chosen by interpreter outperform the baseline method; \\
+\item reconstructed surfaces: smoother, no holes, no obtrutions.
+\end{itemize}
+\end{exampleblock}
+
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}{Interpretation: less accurate description, less successful result}
+
+\begin{figure}
+\centering
+\begin{tabular}{c|*{4}{l}|l}
+\toprule
+\multirow{2}{*}{Object} & \multicolumn{5}{c}{Descriptions and Results} \\ \cline{2-6}
+& $Desc_1$ & $Desc_2$ & $Desc_3$ & $Desc_4$ & Correct Desc \\
+\midrule
+Desc & \tc{02}080208 & 08\tc{08}0208 & 0802\tc{08}02 & 080202\tc{02} & 02080802 \\
+\multirow{3}{*}{Algo} & \tabitem EPS     & \tabitem PMVS   & \tabitem\tc{BL} & \tabitem\tc{PMVS} & \tabitem\tc{EPS}\\
+                      & \tabitem\tc{GSL} & \tabitem EPS    &           &           &\\
+                      &                  & \tabitem\tc{GSL}&           &           &\\ \cline{2-6}
+vase0 & \raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/vase0_sl}} &
+  \raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/vase0_sl}} &
+  \raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/vase0_vh}} &
+  \raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/vase0_mvs}} &
+  \raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/vase0_ps}} \\
+cup & \raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/real_interp/cup/cup_sl}} &
+  \raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/real_interp/cup/cup_sl}} &
+  \raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/real_interp/cup/cup_sc}} &
+  \raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/real_interp/cup/cup_mvs}} &
+  \raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/real_interp/cup/cup_ps}} \\
+\bottomrule
+\end{tabular}
+\end{figure}
+
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}{Interpretation: less accurate description, less successful result}
+
+\begin{exampleblock}{Observations}
+\begin{itemize}
+\item Algorithm chosen by the interpreter given a less accurate may or may not return a poor result; \\
+\item It depends if the return algorithms has at least an overlapping with those returned if given accurate description.
+\end{itemize}
+\end{exampleblock}
+
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}{Interpretation: inaccurate description, poor result}
+
+\begin{figure}
+\centering
+\begin{tabular}{c|*{4}{l}}
+\toprule
+Object & Bust & Vase0 & Barrel & Vase1 \\
+\midrule
+\parbox[t]{2mm}{\multirow{4}{*}{\rotatebox[origin=c]{90}{Incorrect Desc}}} 
+& 08020802 & 08020208 & 02020802 & 02020208 \\
+& \tabitem\tc{BL} & \tabitem\tc{PMVS} & \tabitem\tc{BL} & \tabitem\tc{EPS} \\
+&           & \tabitem EPS \\
+& \includegraphics[width=0.1\textwidth]{interp/synth_interp/beethoven_vh}
+& \includegraphics[width=0.1\textwidth]{interp/synth_interp/vase0_mvs}
+& \includegraphics[width=0.1\textwidth]{interp/synth_interp/barrel_vh}
+& \includegraphics[width=0.1\textwidth]{interp/synth_interp/vase1_ps} \\ \cline{2-5}
+\parbox[t]{2mm}{\multirow{5}{*}{\rotatebox[origin=c]{90}{Correct Desc}}}
+& 02080208 & 02080802 & 08080208 & 08080802 \\
+& \tabitem EPS    & \tabitem\tc{EPS} & \tabitem PMVS    & \tabitem\tc{PMVS} \\
+& \tabitem\tc{GSL}  &          & \tabitem EPS     & \tabitem EPS \\
+&           &            & \tabitem\tc{GSL} & \\
+& \includegraphics[width=0.1\textwidth]{interp/synth_interp/beethoven_sl}
+& \includegraphics[width=0.1\textwidth]{interp/synth_interp/vase0_ps}
+& \includegraphics[width=0.1\textwidth]{interp/synth_interp/barrel_sl}
+& \includegraphics[width=0.1\textwidth]{interp/synth_interp/vase1_mvs} \\
+\bottomrule
+\end{tabular}
+\end{figure}
+
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}{Interpretation: inaccurate description, poor result (cont'd)}
+
+\begin{figure}
+\centering
+\begin{tabular}{c|*{4}{l}}
+\toprule
+Object & Statue & Cup & Pot & Vase \\
+\midrule
+\parbox[t]{2mm}{\multirow{4}{*}{\rotatebox[origin=c]{90}{Incorrect Desc}}}
+& 08020802 & 08020208 & 02020802 & 02020208 \\
+& \tabitem\tc{BL} & \tabitem\tc{PMVS} & \tabitem\tc{BL} & \tabitem\tc{EPS} \\
+&           & \tabitem EPS \\
+& \includegraphics[width=0.1\textwidth]{interp/real_interp/statue/statue_sc}
+& \includegraphics[width=0.1\textwidth]{interp/real_interp/cup/cup_mvs}
+& \includegraphics[width=0.1\textwidth]{interp/real_interp/pot/pot_sc}
+& \includegraphics[width=0.1\textwidth]{interp/real_interp/vase/vase_ps} \\ \cline{2-5}
+\parbox[t]{2mm}{\multirow{5}{*}{\rotatebox[origin=c]{90}{Correct Desc}}}
+& 02080208 & 02080802 & 08080208 & 08080802 \\
+& \tabitem EPS    & \tabitem\tc{EPS} & \tabitem PMVS    & \tabitem\tc{PMVS} \\
+& \tabitem\tc{GSL}  &          & \tabitem EPS     & \tabitem EPS \\
+&           &            & \tabitem\tc{GSL} & \\
+& \includegraphics[width=0.1\textwidth]{interp/real_interp/statue/statue_sl}
+& \includegraphics[width=0.1\textwidth]{interp/real_interp/cup/cup_ps}
+& \includegraphics[width=0.1\textwidth]{interp/real_interp/pot/pot_sl}
+& \includegraphics[width=0.1\textwidth]{interp/real_interp/vase/vase_mvs} \\
+\bottomrule
+\end{tabular}
+\end{figure}
+
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}{Interpretation: inaccurate description, poor result (cont'd)}
+
+\begin{exampleblock}{Observations}
+\begin{itemize}
+\item given an inaccurate description, it becomes more likely to choose a unsuccessful algorithm or the baseline method.
+\end{itemize}
+\end{exampleblock}
 
 \end{frame}
 
