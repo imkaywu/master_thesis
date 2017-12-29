@@ -190,7 +190,7 @@ We select four real-world objects, each represents the one of the four problem c
 \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/real_world_img/cup/cup}} &
 \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/real_world_img/pot/pot}} &
 \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/real_world_img/vase/vase}}\\ \cline{3-6}
-\parbox[t]{2mm}{\multirow{3}{*}{\rotatebox[origin=c]{90}{Verbal}}}
+\parbox[t]{2mm}{\multirow{3}{*}{\rotatebox[origin=c]{90}{Semantic}}}
 & & \tabitem textureless & \tabitem textureless & \tabitem textured & \tabitem textured\\
 & & \tabitem diffuse & \tabitem mixed d/s & \tabitem diffuse & \tabitem mixed d/s\\
 & & \tabitem bright & \tabitem bright & \tabitem dark/bright & \tabitem dark/bright\\ \cline{3-6}
@@ -213,20 +213,56 @@ We select four real-world objects, each represents the one of the four problem c
 This section evaluates the proof of concept interpreter, which is three-fold: 1) given an accurate description, can the interpreter select an algorithm that achieves a successful reconstruction result; 2) given an less accurate description, would the interpreter perform poorer than given an accuracy; 3) given an inaccurate description, would the interpreter fail to achieve a successful reconstruction. We provide demonstrative results of the interpreter using the synthetic and real-world dataset, as shown in Figure~\ref{fig:synth_real_dataset}.
 
 \subsection{Evaluation 1: accurate description, successful result}
-In this section, we evaluate whether the interpreter can return a successful reconstruction result given a valid description of problem condition, see results in Figure~\ref{fig:eval_1}. The figure is divided into two sections, one for synthetic dataset and another for real-world dataset. The `Algo' row shows the algorithm selected by the interpreter, which also appear as the algorithm in red text in Figure~\ref{fig:synth_data},~\ref{fig:real_data}. The `Results' row shows the reconstruction results of the corresponding algorithm, and the `Baseline' row demonstrate the results of the baseline method. We utilize visual phenomena, such as surface roughness, holes, spikes as indicators of the reconstruction quality.
+In this section, we evaluate the performance of interpreter given a valid description, \ie whether the interpreter can return a successful reconstruction result given a valid description of problem condition. We provide the detailed process of reconstructing objects using the proposed interface with a example, and show the reconstruction results of the aforementioned datasets.
 
-The baseline method achieves decent reconstruction results on all objects. Though due to the resolution of the voxel grids, the surfaces are relatively rough. Further, the surface concavities fail to be carved out for concave objects (Bust). The performance of the interpreter on both synthetic and real-world datasets are consistent in that the algorithms selected by the interpreter consistently outperform the baseline technique. All results have much smoother reconstructed surfaces, especially those of EPS and GSL, which is an indicator that the accuracy of the results are much higher using the selected algorithm. Further, erroneous results, such as surface holes, obtrutions, spikes are absent from the reconstruction results, which indicates that the selected algorithms can achieve completeness, and angular error no worse than the baseline.
+Let's revisit the scenario proposed in Chapter~\ref{ch:Introduction} using the test objects `bust' and `statue' as an example. First, the user describes the problem condition based on visual and geometric properties. In the example, the description of object `bust' and `statue' is: texture (0.2), albedo (0.8), specularity (0.2), and roughness (0.8). The synthetic objects with the same problem condition are shown in Figure~\ref{fig:desc_interp_1}.
+\begin{figure*}[!htbp]
+\centering
+\begin{tabular}{cc}
+\includegraphics[width=0.4\textwidth]{img/interp/ui/ui_sphere_1.PNG} &
+\includegraphics[width=0.4\textwidth]{img/interp/ui/ui_teapot.PNG} \\
+(a). synthetic sphere & (b). synthetic object \\
+\end{tabular}
+\caption{(a) and (b) shows the synthetic object rendered using the problem condition of object `bust' and `statue'. [images need to be changed]}
+\label{fig:desc_interp_1}
+\end{figure*}
 
-Note that the selection of objects do no favor any algorithm. In fact, as we will show below, it is highly possible to get a poor result if another algorithm is chosen instead of the interpreted one. The significance of this study is that we demonstrated that it is achievable to translate a user-specified description, which has nothing to do with algorithm-level knowledge, to an algorithm selected from a suite of algorithms and achieve a successful reconstruction. There is no need to understand the underlying algorithms, or set the obscure algorithm specific parameters.
+Next, the interpreter, consisting of mapping and constraints, finds an appropriate algorithm that could result in a successful reconstruction given the user-specified description. This is achieved by using the mapping discovered in Chapter~\ref{ch:3DRecon_Mapping}, and additional constraints to select a reliable algorithm for reconstruction, as shown in Figure~\ref{fig:mapping_interp_1}. In this example, GSL is selected as the interpreted algorithm for reconstruction.
+\begin{figure*}[!htbp]
+\centering
+\includegraphics[width=\textwidth]{interp/interp_mapping.pdf}
+\caption{The interpreter selects an appropriate algorithm based on description. Based on the discovered mapping from Chapter~\ref{ch:3DRecon_Mapping}, EPS and GSL can achieve a successful reconstruction, which is labelled in green while PMVS would fail to give successful result, which is labelled in red.}
+\label{fig:mapping_interp_1}
+\end{figure*}
+
+Lastly, the interpreted algorithm accept images captured using appropriate capturing system as input, and return a reconstruction result. We can see that the reconstructed model of the interpreted algorithm have much smoother surfaces than that of the baseline method, which indicates greater accuracy, as shown in Figure~\ref{fig:result_interp_1}. Thus, we conclude that the interpreted algorithm reconstructs the object successfully.
+\begin{figure*}[!htbp]
+\centering
+\begin{tabular}{cccc}
+\includegraphics[width=0.2\textwidth]{interp/synth_interp/beethoven_sl} &
+\includegraphics[width=0.2\textwidth]{interp/synth_interp/beethoven_vh} &
+\includegraphics[width=0.2\textwidth]{interp/real_interp/statue/statue_sl} & 
+\includegraphics[width=0.2\textwidth]{interp/real_interp/statue/statue_sc} \\
+(a). Result & (b). BL Result & (c). Result & (d). BL Result\\
+\end{tabular}
+\caption{(a), (c) show the reconstruction results of the interpreted algorithm, and (b), (d) show the results of the baseline method.}
+\label{fig:result_interp_1}
+\end{figure*}
+
+For more results, please refer to Figure~\ref{fig:eval_1}. The figure is organized as follows: `Desc' row shows the description of the objects using the proposed model and representations, the `Algo' row shows the algorithm selected by the interpreter, which also appear as the algorithm in red text in Figure~\ref{fig:synth_data},~\ref{fig:real_data}. The `Results' row shows the reconstruction results of the corresponding algorithm, and the `Baseline' row demonstrate the results of the baseline method. As discussed previously, we utilize visual phenomena, such as surface roughness, holes, spikes as indicators of the reconstruction quality. The baseline method achieves decent reconstruction results on all objects. Though due to the resolution of the voxel grids, the surfaces are relatively rough. Further, the surface concavities fail to be carved out for concave objects (Bust). The performance of the interpreter on both synthetic and real-world datasets are consistent in that the algorithms selected by the interpreter consistently outperform the baseline technique. All results have much smoother reconstructed surfaces, especially those of EPS and GSL, which is an indicator that the accuracy of the results are much higher using the selected algorithm. Further, erroneous results, such as surface holes, obtrutions, spikes are absent from the reconstruction results, which indicates that the selected algorithms can achieve completeness, and angular error no worse than the baseline.
+
+Note that the selected objects do no favor any algorithm. The significance of this study is to demonstrate that it is achievable to translate a user-specified description, which has nothing to do with algorithm-level knowledge, to an algorithm selected from a suite of algorithms and achieve a successful reconstruction. There is no need to understand the underlying algorithms, or set the obscure algorithm specific parameters.
 \begin{figure*}[!htbp]
 \centering
 \begin{tabular}{l|c|c|c|c}
 \toprule
-& \multicolumn{4}{c}{Synth-objects}\\ \cline{2-5}
-& Bust & Vase0 & Barrel & Vase1\\
+& \multicolumn{4}{c}{Synthetic and real-world objects}\\ \cline{2-5}
+& Bust\& Statue & Vase0\& Cup & Barrel\& Pot & Vase1\& Vase\\
 \midrule
+\parbox[t]{2mm}{\rotatebox[origin=c]{90}{Desc}}
+& 02080208 & 02080802 & 08080202 & 08080802 \\ \cline{2-5}
 \parbox[t]{2mm}{\rotatebox[origin=c]{90}{Algo}}
-& GSL & EPS & GSL & PMVS \\
+& GSL & EPS & GSL & PMVS \\ \cline{2-5}
 \parbox[t]{2mm}{\rotatebox[origin=c]{90}{Results}}
 & \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/synth_interp/beethoven_sl}}
 & \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/synth_interp/vase0_ps}}
@@ -237,13 +273,11 @@ Note that the selection of objects do no favor any algorithm. In fact, as we wil
 & \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/synth_interp/vase0_vh}}
 & \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/synth_interp/barrel_vh}}
 & \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/synth_interp/vase1_vh}}\\
-\bottomrule
-\toprule
-& \multicolumn{4}{c}{Real-objects}\\ \cline{2-5}
-& Statue & Cup & Pot & Vase \\
+% \bottomrule
+% \toprule
+% & \multicolumn{4}{c}{Real-objects}\\ \cline{2-5}
+% & Statue & Cup & Pot & Vase \\
 \midrule
-\parbox[t]{2mm}{\rotatebox[origin=c]{90}{Algo.}}
-& GSL & EPS & GSL & PMVS \\
 \parbox[t]{2mm}{\rotatebox[origin=c]{90}{Results}}
 & \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/real_interp/statue/statue_sl}}
 & \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/real_interp/cup/cup_ps}}
@@ -280,11 +314,11 @@ The layout of the graph is as follows: columnwise, $\text{Desc}_i, i\in\{1, 2, 3
   \includegraphics[width=0.1\textwidth]{interp/synth_interp/beethoven_mvs} &
   \includegraphics[width=0.1\textwidth]{interp/synth_interp/beethoven_ps} &
   \includegraphics[width=0.1\textwidth]{interp/synth_interp/beethoven_sl} \\ \cline{2-6}
-\multirow{4}{*}{vase0} & \tc{02}080208 & 08\tc{08}0208 & 0802\tc{08}02 & 080202\tc{02} & 02080802 \\
-& \tabitem EPS 	   & \tabitem PMVS   & \tabitem\tc{BL} & \tabitem\tc{PMVS} & \tabitem\tc{EPS}\\
-& \tabitem\tc{GSL} & \tabitem EPS 	 & 				   & 				   &\\
-& 			   	   & \tabitem\tc{GSL}& 				   & 				   &\\
-& \includegraphics[width=0.1\textwidth]{interp/synth_interp/vase0_sl} &
+\multirow{4}{*}{vase0} & \tc{02}020208 & 08\tc{08}0208 & 0802\tc{08}02 & 080202\tc{02} & 02080802 \\
+& \tabitem\tc{EPS} 	   & \tabitem PMVS   & \tabitem\tc{BL} & \tabitem\tc{PMVS} & \tabitem\tc{EPS}\\
+& & \tabitem EPS 	 & 				   & 				   &\\
+& & \tabitem\tc{GSL}& 				   & 				   &\\
+& \includegraphics[width=0.1\textwidth]{interp/synth_interp/vase0_ps} &
   \includegraphics[width=0.1\textwidth]{interp/synth_interp/vase0_sl} &
   \includegraphics[width=0.1\textwidth]{interp/synth_interp/vase0_vh} &
   \includegraphics[width=0.1\textwidth]{interp/synth_interp/vase0_mvs} &
@@ -328,11 +362,11 @@ The layout of the graph is as follows: columnwise, $\text{Desc}_i, i\in\{1, 2, 3
   \includegraphics[width=0.1\textwidth]{interp/real_interp/statue/statue_mvs} &
   \includegraphics[width=0.1\textwidth]{interp/real_interp/statue/statue_ps} &
   \includegraphics[width=0.1\textwidth]{interp/real_interp/statue/statue_sl} \\ \cline{2-6}
-\multirow{4}{*}{cup} & \tc{02}080208 & 08\tc{08}0208 & 0802\tc{08}02 & 080202\tc{02} & 02080802 \\
-& \tabitem EPS 	   & \tabitem PMVS   & \tabitem\tc{BL} & \tabitem\tc{PMVS} & \tabitem\tc{EPS}\\
-& \tabitem\tc{GSL} & \tabitem EPS 	 & 				   & \\
-& 			   	   & \tabitem\tc{GSL}& 				   & 				   &\\
-& \includegraphics[width=0.1\textwidth]{interp/real_interp/cup/cup_sl} &
+\multirow{4}{*}{cup} & \tc{02}020208 & 08\tc{08}0208 & 0802\tc{08}02 & 080202\tc{02} & 02080802 \\
+& \tabitem\tc{EPS} 	   & \tabitem PMVS   & \tabitem\tc{BL} & \tabitem\tc{PMVS} & \tabitem\tc{EPS}\\
+& & \tabitem EPS 	 & 				   & \\
+& & \tabitem\tc{GSL}& 				   & 				   &\\
+& \includegraphics[width=0.1\textwidth]{interp/real_interp/cup/cup_ps} &
   \includegraphics[width=0.1\textwidth]{interp/real_interp/cup/cup_sl} &
   \includegraphics[width=0.1\textwidth]{interp/real_interp/cup/cup_sc} &
   \includegraphics[width=0.1\textwidth]{interp/real_interp/cup/cup_mvs} &
@@ -422,7 +456,7 @@ Object & Statue & Cup & Pot & Vase \\
 
 The figure is divided into two sections: one for inaccurate description and one for accurate description. The inaccurate description is property-wise opposite to the corresponding accurate description. The mapped algorithms are shown below the description, with the algorithm chosen by the interpreter coloured in red. The reconstruction result by the interpreted algorithm is shown as well.
 
-From the study of less accurate desription, we have already found out that it is still possible to achieve a successful result given an inaccurate description. However, it becomes more challenging, and more likely to select a less successful algorithm or the baseline method. There is a certain limit to the tolerance of inaccuracy of property estimation. Thus, the take-away message is that the interpreter, in some cases, can still performs reliably given an inaccurate description. However, it becomes more likely to fail to achieve a successful result given an completely inaccurate description of problem condition.
+From the study of less accurate desription, we have already found out that it is still possible to achieve a successful result given an inaccurate description. However, it becomes more challenging, and more likely to select a less successful algorithm or the baseline method. Conversely, a better description can lead to a better reconstruction result. There is a certain limit to the tolerance of inaccuracy of property estimation. Thus, the take-away message is that the interpreter, in some cases, can still performs reliably given an inaccurate description. However, it becomes more likely to fail to achieve a successful result given an completely inaccurate description of problem condition.
 
 % \subsubsection{Description 1: Bust}
 % Description 1 matches with object \textit{bust}, thus the algorithm selected by the interpreter achieves successful reconstruction result. The problem condition of object \textit{barrel} is also mapped to algorithm GSL, that is why the reconstruction result of \textit{barrel} is also successful.

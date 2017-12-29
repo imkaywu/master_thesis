@@ -161,14 +161,14 @@ This study is a $3\times 3$ factorial design with two properties (factors), each
 We study the main effects and interaction effects of properties on the performance of PMVS in terms of accuracy and completeness. The performance of the algorithm is visualized in Figure~\ref{fig:mvs_pairwise}.
 \begin{figure}[!htbp]
 \begin{tabular}{cc}
-\includegraphics[width=0.45\textwidth]{mapping/pairwise/mvs_tex_alb} &
-\includegraphics[width=0.45\textwidth]{mapping/pairwise/mvs_tex_spec}\\
+\includegraphics[width=0.45\textwidth]{mapping/eval_prop/mvs_tex_alb} &
+\includegraphics[width=0.45\textwidth]{mapping/eval_prop/mvs_tex_spec}\\
 (a). Texture and albedo & (b). Texture and specularity\\\\
-\includegraphics[width=0.45\textwidth]{mapping/pairwise/mvs_tex_rough} &
-\includegraphics[width=0.45\textwidth]{mapping/pairwise/mvs_alb_spec}\\
+\includegraphics[width=0.45\textwidth]{mapping/eval_prop/mvs_tex_rough} &
+\includegraphics[width=0.45\textwidth]{mapping/eval_prop/mvs_alb_spec}\\
 (c). Texture and roughness & (d). Albedo and specularity\\\\
-\includegraphics[width=0.45\textwidth]{mapping/pairwise/mvs_alb_rough} &
-\includegraphics[width=0.45\textwidth]{mapping/pairwise/mvs_spec_rough}\\
+\includegraphics[width=0.45\textwidth]{mapping/eval_prop/mvs_alb_rough} &
+\includegraphics[width=0.45\textwidth]{mapping/eval_prop/mvs_spec_rough}\\
 (e). Albedo and roughness & (f). Specularity and roughness\\
 \end{tabular}
 \caption{Performance of PMVS under four problem conditions. For instance, (a) shows the performance under the condition of changing \textit{texture} and \textit{albedo} levels, while the others are fixed. The main effect of a property is illustrated by the color variation along the corresponding axis. The monotonic color variation diagonally indicates no interaction between the two properties, otherwise, there is an interaction effect. Thus in (a), we observe a main effect of texture on completeness, no other main effects and interaction effects are present.}
@@ -234,14 +234,14 @@ For completeness, there is a significant main effect from texture, and no other 
 We study the main effects and interaction effects of properties on the performance of EPS in terms of mean and standard deviation (SD) of angular error. The performance of the algorithm is visualized in Figure~\ref{fig:ps_pairwise}.
 \begin{figure}[!htbp]
 \begin{tabular}{cc}
-\includegraphics[width=0.45\textwidth]{mapping/pairwise/ps_tex_alb}&
-\includegraphics[width=0.45\textwidth]{mapping/pairwise/ps_tex_spec}\\
+\includegraphics[width=0.45\textwidth]{mapping/eval_prop/ps_tex_alb}&
+\includegraphics[width=0.45\textwidth]{mapping/eval_prop/ps_tex_spec}\\
 (a). Texture and albedo & (b). Texture and specularity\\\\
-\includegraphics[width=0.45\textwidth]{mapping/pairwise/ps_tex_rough}&
-\includegraphics[width=0.45\textwidth]{mapping/pairwise/ps_alb_spec}\\
+\includegraphics[width=0.45\textwidth]{mapping/eval_prop/ps_tex_rough}&
+\includegraphics[width=0.45\textwidth]{mapping/eval_prop/ps_alb_spec}\\
 (c). Texture and roughness & (d). Albedo and specularity\\\\
-\includegraphics[width=0.45\textwidth]{mapping/pairwise/ps_alb_rough}&
-\includegraphics[width=0.45\textwidth]{mapping/pairwise/ps_spec_rough}\\
+\includegraphics[width=0.45\textwidth]{mapping/eval_prop/ps_alb_rough}&
+\includegraphics[width=0.45\textwidth]{mapping/eval_prop/ps_spec_rough}\\
 (e). Albedo and roughness & (f). Specularity and roughness\\
 \end{tabular}
 \caption{Performance of Example-based PS under six problem conditions. For instance, (a) shows the performance under the condition of changing \textit{texture} and \textit{albedo} levels, while the others are fixed. The main effect of a property is illustrated by the color variation along the corresponding axis. The monotonic color variation diagonally indicates no interaction between the two properties, otherwise, there is an interaction effect. Thus in (a), we observe a main effect of albedo on mean angular error, no other main effects and interaction effects are present.}
@@ -376,14 +376,14 @@ Albedo, specularity, and roughness all have a main effect on angular error. More
 We interpret the main effects and interactions of properties on the performance of GSL in terms of accuracy and completeness. The performance of the algorithm is visualized in Figure~\ref{fig:sl_pairwise}.
 \begin{figure}[!htbp]
 \begin{tabular}{cc}
-\includegraphics[width=0.45\textwidth]{mapping/pairwise/sl_tex_alb}&
-\includegraphics[width=0.45\textwidth]{mapping/pairwise/sl_tex_spec}\\
+\includegraphics[width=0.45\textwidth]{mapping/eval_prop/sl_tex_alb}&
+\includegraphics[width=0.45\textwidth]{mapping/eval_prop/sl_tex_spec}\\
 (a). Texture and albedo & (b). Texture and specularity \\\\
-\includegraphics[width=0.45\textwidth]{mapping/pairwise/sl_tex_rough}&
-\includegraphics[width=0.45\textwidth]{mapping/pairwise/sl_alb_spec}\\
+\includegraphics[width=0.45\textwidth]{mapping/eval_prop/sl_tex_rough}&
+\includegraphics[width=0.45\textwidth]{mapping/eval_prop/sl_alb_spec}\\
 (c). Texture and roughness & (d). Albedo and specularity \\\\
-\includegraphics[width=0.45\textwidth]{mapping/pairwise/sl_alb_rough}&
-\includegraphics[width=0.45\textwidth]{mapping/pairwise/sl_spec_rough}\\
+\includegraphics[width=0.45\textwidth]{mapping/eval_prop/sl_alb_rough}&
+\includegraphics[width=0.45\textwidth]{mapping/eval_prop/sl_spec_rough}\\
 (e). Albedo and roughness & (f). Specularity and roughness\\
 \end{tabular}
 \caption{Performance of Gray-coded SL under six problem conditions. For instance, (a) shows the performance under the condition of changing \textit{texture} and \textit{albedo} levels, while the others are fixed. The main effect of a property is illustrated by the color variation along the corresponding axis. The monotonic color variation diagonally indicates no interaction between the two properties, otherwise, there is an interaction effect. Thus in (a), we observe a main effect of albedo on completeness, no other main effects and interaction effects are present.}
@@ -481,74 +481,68 @@ In the previous section, we have examined the performance of algorithms with two
 \label{fig:lookup_table}
 \end{sidewaysfigure*}
 
-\begin{table}[!htbp]
+\begin{sidewaystable}[!htbp]
 \centering
-\begin{tabular}{l*{4}{c}}
+\begin{tabular}{ccc}
+% mvs
+\begin{tabular}{*{4}{c}}
 \toprule
-\textbf{Metric} & Texture & Albedo & Specular & Roughness\\
+Texture & Albedo & Specular & Roughness\\
 \midrule
-Accuracy & 0.5 & 0.5 & 0.2 & -\\
-\&Completeness & 0.5 & 0.8 & 0.2 & -\\
-         & 0.5 & 0.8 & 0.5 & -\\
-         & 0.8 & 0.2 & 0.2 & -\\
-         & 0.8 & 0.5 & 0.2 & -\\
-         & 0.8 & 0.8 & 0.2 & -\\
-         & 0.8 & 0.5 & 0.5 & -\\
-         & 0.8 & 0.8 & 0.5 & -\\
-         & 0.8 & 0.5 & 0.8 & -\\
-         & 0.8 & 0.8 & 0.8 & -\\
+0.5 & 0.5 & 0.2 & -\\
+0.5 & 0.8 & 0.2 & -\\
+0.5 & 0.8 & 0.5 & -\\
+0.8 & 0.2 & 0.2 & -\\
+0.8 & 0.5 & 0.2 & -\\
+0.8 & 0.8 & 0.2 & -\\
+0.8 & 0.5 & 0.5 & -\\
+0.8 & 0.8 & 0.5 & -\\
+0.8 & 0.5 & 0.8 & -\\
+0.8 & 0.8 & 0.8 & -\\
 \bottomrule
 \end{tabular}
-\caption{The problem conditions under which PMVS works successfully in terms of the two metrics \textit{accuracy} and \textit{completeness}.}
-\label{tab:mvs_training_result}
-\end{table}
 
-\begin{table}[!htbp]
-\centering
-\begin{tabular}{l*{4}{c}}
-\hline
-\textbf{Metric} & Texture & Albedo & Specular & Roughness\\
-\hline
-Angle difference& - & 0.2 & 0.2 & 0.8\\
-                & - & 0.2 & 0.5 & 0.8\\
-                & - & 0.2 & 0.8 & 0.8\\
-                % & - & 0.5 & 0.2 & 0.2\\
-                % & - & 0.5 & 0.2 & 0.5\\
-                & - & 0.5 & 0.2 & 0.8\\
-                % & - & 0.5 & 0.5 & 0.2\\
-                & - & 0.5 & 0.5 & 0.8\\
-                & - & 0.5 & 0.8 & 0.8\\
-                & - & 0.8 & 0.2 & 0.2\\ % can be removed
-                & - & 0.8 & 0.2 & 0.8\\
-                & - & 0.8 & 0.5 & 0.2\\
-                & - & 0.8 & 0.5 & 0.8\\
-                & - & 0.8 & 0.8 & 0.2\\ % can be removed
-                & - & 0.8 & 0.8 & 0.8\\
-\hline
+% ps
+\begin{tabular}{*{4}{c}}
+\toprule
+Texture & Albedo & Specular & Roughness\\
+\midrule
+- & 0.2 & 0.2 & 0.8\\
+- & 0.2 & 0.5 & 0.8\\
+- & 0.2 & 0.8 & 0.8\\
+- & 0.5 & 0.2 & 0.2\\
+- & 0.5 & 0.2 & 0.5\\
+- & 0.5 & 0.2 & 0.8\\
+- & 0.5 & 0.5 & 0.2\\
+- & 0.5 & 0.5 & 0.8\\
+- & 0.5 & 0.8 & 0.8\\
+- & 0.8 & 0.2 & 0.2\\ % can be removed
+- & 0.8 & 0.2 & 0.8\\
+- & 0.8 & 0.5 & 0.2\\
+- & 0.8 & 0.5 & 0.8\\
+- & 0.8 & 0.8 & 0.2\\ % can be removed
+- & 0.8 & 0.8 & 0.8\\
+\bottomrule
 \end{tabular}
-\caption{The problem conditions under which example-based PS works successfully in terms of the metric \textit{angular error}.}
-\label{tab:ps_training_result}
-\end{table}
 
-\begin{table}[!htbp]
-\centering
-\begin{tabular}{l*{4}{c}}
-\hline
-\textbf{Metric} & Texture & Albedo & Specular & Roughness\\
-\hline
-Accuracy    & - & - & - & -\\
-\hline
-Completeness& - & 0.8 & 0.2 & 0.2\\
-            & - & 0.8 & 0.5 & 0.2\\
-            & - & 0.8 & 0.8 & 0.2\\
-            & - & 0.8 & 0.2 & 0.8\\
-            & - & 0.8 & 0.5 & 0.8\\
-            & - & 0.8 & 0.8 & 0.8\\
-\hline
+% sl
+\begin{tabular}{*{4}{c}}
+\toprule
+Texture & Albedo & Specular & Roughness\\
+\midrule
+- & 0.8 & 0.2 & 0.2\\
+- & 0.8 & 0.5 & 0.2\\
+- & 0.8 & 0.8 & 0.2\\
+- & 0.8 & 0.2 & 0.8\\
+- & 0.8 & 0.5 & 0.8\\
+- & 0.8 & 0.8 & 0.8\\
+\bottomrule
 \end{tabular}
-\caption{The problem conditions under which Gray-code SL works successfully in terms of the two metrics \textit{accuracy} and \textit{completeness}.}
-\label{tab:sl_training_result}
-\end{table}
 
-\section{Summary}
+\end{tabular}
+\caption{The problem conditions under which PMVS, EPS, and GSL works successfully in terms of the two metrics \textit{accuracy} and \textit{completeness}.}
+\label{tab:training_result}
+\end{sidewaystable}
+
+\section{Discussion and Conclusions}
 It is a non-trivial task to find a mapping from problem conditions to algorithms based on the description. By no means is the aforementioned approach the only way, or a perfect way, since it potentially has the problem of suffering from property scaling issue. Nonetheless, the factorial studies remains a valuable approach to obtain insights of the \textit{effective properties} of a specific algorithm. The development of the mapping is an on-going process. For instance, we can include more quantitative metrics such as colour accuracy, `ghost reconstruction', and so on. In order to make the mapping applicable to objects with more complex shapes, we need to consider more sophisticated geometric properties besides roughness, such as concavity, depth-discontinuity, occlusion, etc. Furthermore, the incorporation of more algorithms is another way to ensure that the problem space is well covered.

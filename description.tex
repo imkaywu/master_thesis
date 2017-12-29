@@ -3,27 +3,30 @@
 
 \chapter{A Description of 3D Reconstruction}
 \label{ch:3DRecon_Desc}
-In Chapter~\ref{ch:3DRecon_ProbSpace}, we introduced a problem space for 3D reconstruction. However, a problem space alone is not sufficient to achieve the goal of creating an interface to 3D reconstruction. Given a problem condition, only a general and vague description is possible for now. For instance, a `textured, glossy cup'. However, this description is hard to interpret: how is a textured or textureless, matte or glossy surface represented, and how textured or glossy the surface is. Thus, this previous description lacks two key compoents to make it interpretable. First, since it is practically impossible to achieve an exhaustive description, the description should only encompass a fixed set of properties, each with a pre-defined rule for interpretation. The scope of description is determined by the scope of the problem space. For instance, sub-surface scattering property is not included in the description since it is omitted in the problem space. Secondly, the representation of each property. Each property might have multiple facets that are essential to problem solving. For instance, when we talk about texture, some important features include randomness of texture, scale of texel (texture element), or magnitude and orientation of texture, and so on. Without determining a proper representation of the property, there is no way we can proceed to perceptually estimate the quantity of the corresponding property.
+In Chapter~\ref{ch:3DRecon_ProbSpace}, we introduced a problem space for 3D reconstruction. However, it is not sufficient to have a problem space alone in order to create an interface to 3D reconstruction. A problem space provides a new perspective to understand algorithms without delving into algorithmic details. However, it provides little in terms of describing problem conditions that we are interested in solving. There are two key components that are needed in order to provide a consistent description: a model which addresses \textit{what} to describe, \ie which property is included or excluded in the model, and the corresponding representations addressing \textit{how} to describe the components of model, \ie what characteristic feature of a property should be of interest. The first issue has already been somewhat addressed in Chapter~\ref{ch:3DRecon_ProbSpace} with a well-defined problem space. Specifically, we can use the same or similar components of problem space as the components of the model. However, the second issue has yet to be addressed. We have not proposed which aspect of a property is crucial to problem solving, and how it is measured. It is pointless to discuss the estimation of property parameter, or measure the quantity of a property without determining the corresponding representation beforehand. Thus, it is practically impossible to provide a rigorous description without a model and corresponding representations. Here is a concrete example to further stress the importance of model and representations: how to describe a porcelain vase? First and foremost, we need to decide which properties to describe. Let's assume we focus on surface `texture'. Then the next issue is how this property, `texture' in this example, is represented, \ie which apsect of `texture' is used to measure the quantity of this specific property. We can choose the scale of texel (texture element), or randomness of texel as representation of texture. However, it does not make sense to quantitize a property before determining the corresponding representation. Thus, this chapter addresses these two issues: first, we recognize that it is practically impossible to achieve an exhaustive description, the description should only encompass a fixed set of properties, each with a pre-defined rule for interpretation. The scope of description is determined by the scope of the problem space. For instance, sub-surface scattering property is not included in the description since it is omitted in the problem space. Secondly, we need to determine the representation of each property. Each property might have multiple facets that are essential to problem solving. For instance, when we talk about texture, some important features include randomness of texture, scale of texel (texture element), or magnitude and orientation of texture, and so on. Without determining a proper representation of the property, there is no way we can proceed to perceptually estimate the quantity of the corresponding property.
+% Thus, this chapter is concerned with defining an interpretable description to select an algorithm, which consists of a model and corresponding representations. 
 
-Thus, this chapter is concerned with defining an interpretable description to select an algorithm, which consists of a model and corresponding representations. Computer vision problems require, among other factors, a model of the problem space and appropriate representations~\cite{little1985phdthesis}. The model characterizes the relevant properties of the elements in the domain and analyze their relations. The representations describe an object's properties selected by the model to facilitate a solution of the problem. The description essentially tries to answer two questions: \textit{what to describe}, \ie what properties should be included or excluded in the model, and \textit{how to describe a property}, \ie what characteristic feature of property should be of interest. By using this formal description, expressing the conditions within which an algorithm works reliably becomes more specific.
+This way of thinking is not specific to our problem. Typical computer vision problems require, among other factors, a model of the problem space and appropriate representations~\cite{little1985phdthesis}. The model characterizes the relevant properties of the elements in the domain and analyze their relations. The representations describe an object's properties selected by the model to facilitate a solution of the problem. For instance, surface orientation is one component of the surface geometry model, and the corresponding representation can be surface normal or curvature. Another example is colour, which is a component of a material model, and where RGB space is the corresponding representation of the colour. By using this formal description consisting of a model and corresponding representatios, expressing the conditions within which an algorithm works reliably becomes more well-defined. Thus, this chapter is devoted to proposing a model and representations for 3D reconstruction problem, which are the key components of the interpretable description.
 
 In this chapter, we attempt to provide a description of the 3D reconstruction problem which allows for a well defined specification of the conditions surrounding the problem. This description abstracts away from the functional specification of \textit{how} to estimate a reconstruction. We first propose a formal definition of the 3D reconstruction problem in Appendix~\ref{sec:3DRecon_Def}. Next, section~\ref{sec:3DRecon_Model} proposes a model to 3D reconstruction by selecting various key \textit{aspects} of the problem space that are crucial for describing the appearance of the object. Section~\ref{sec:3DRecon_Rep} outlines concrete representations of the proposed model. Section~\ref{sec:3DRecon_Exp} provides examples of expressing common 3D reconstruction problems using the proposed model and representations. These following four layers represent the description of our accessible 3D reconstruction framework: Definition, Representation, Model, and Expression.
 
-
-\section{Model}
 \label{sec:3DRecon_Model}
-Models and representations are fundamental for vision problem solving. Models select characteristic properties of an object, and representation describes the model selected object properties to facilitate a solution of a class of problem. A model facilitates the representation of aspects in reality that are useful in a particular problem domain~\cite{bolles19863dpo}. For instance, surface orientation is one component of the surface geometry model, and the corresponding representation can be surface normal or curvature. Another example is colour, which is a component of a material model, and where RGB space is the corresponding representation of the colour.
+Models and representations are fundamental for vision problem solving. Models select characteristic properties of an object, and representations describe the model selected object properties to facilitate a solution of a class of problem. A model facilitates the representation of aspects in reality that are useful in a particular problem domain~\cite{bolles19863dpo}. There are two criteria in choosing the model: 1) the model components need to be useful for problem solving; 2) the components need to be visually/conceptually identifiable so that it is easy for users to learn to describe problem conditions using the proposed model. As is dicussed in Chapter~\ref{ch:RelatedWork}, visual and geometric information, such as texture, shading variation, and silhouette are critical to 3D vision algorithms. In Chapter~\ref{ch:3DRecon_ProbSpace}, we summarized key visual and geometric properties of an object that are of great importance for human to identify and distinguish objects. We can clearly see an overlap between these two. For instance, both textural and brightness information are utilized by algorithms and humans. Thus, we select a subset of properties that can be used by algorithms as reconstruction cues, and also easily identifiable by humans as the main components of our model.
 
-We select the subset of properties used for object taxonomy in Chapter~\ref{ch:3DRecon_Taxo} as the main components of our model. The model consisting of these key properties is shown in Table~\ref{tab:3DRecon_model}.
+The selection of algorithm depends not only on material and shape of objects, but also on the capturing system. The condition of lighting determines if certain cetegories of algorithms can be used. For instance, active methods needs controlled lighting condition, which tyically use a light source or projector whereas passive methods works under ambient lighting. The number of vantage points determines whether a single vantage point algorithm or multiple vantage points algorithm is utilized. Lastly, the static or dynamic nature of the scene determines whether an algorithm that can dynamically update the scene is needed. The key components of the model are shown in Table~\ref{tab:3DRecon_model}.
 \begin{table}[!htbp]
   \centering
   \begin{tabular}{l|l}
   \toprule
-  \multirow{5}{*}{Model} & Texture\\
-  & Lightness\\
-  & Reflectance\\
-  & Roughness\\
-  & Concavity\\
+  \multirow{5}{*}{Model} 
+  & Lighting \\
+  & Vantage points \\
+  & Nature of object or scene \\
+  & Texture \\
+  & Lightness \\
+  & Reflectance \\
+  & Roughness \\
+  & Concavity \\
   \bottomrule
   \end{tabular}
   \caption{Model of the 3D reconstruction problem. Properties are selected from the taxonomy in Chapter~\ref{ch:3DRecon_ProbSpace}.}
@@ -45,7 +48,7 @@ We select the subset of properties used for object taxonomy in Chapter~\ref{ch:3
 
 \section{Representation}
 \label{sec:3DRecon_Rep}
-Based on the proposed definition and model of the 3D reconstruction problem, we need to further define our representations so that the 3D reconstruction problem can be expressed using our proposed model. We need to turn our attention to how to represent the properties used in the proposed model.
+Based on the proposed definition and model of the 3D reconstruction problem, we need to further define the representations so that the 3D reconstruction problem can be expressed using the proposed model.
 
 % We look at the \textit{cues} that are utilized by 3D reconstruction techniques and their corresponding contributing properties. In Chapter~\ref{ch:3DRecon_Taxo}, we explored a new taxonomy of 3D reconstruction based visual/geometric cues. Now we need to investigate the visual and geometric properties of the object that can affect those cues. This section is organized by the visual/geomtric cues, and the visual/geomtric properties are investigated in each section.
 
@@ -73,6 +76,30 @@ Based on the proposed definition and model of the 3D reconstruction problem, we 
 
 % \subsection{Cues and properties}
 % As defined in Chapter~\ref{sec:3DRecon_Def}, cue is the characteristics of the segment while property is that of the scell. For each cue observed in a segment, we discuss the underlying properties that have an impact on it.
+\subsection{Setup of capturing system}
+The model of the capturing system includes the lighting condition of the capturing system, the number of vantage points, and the nature of the object or scene. The corrsponding representations of the model are shown in Table~\ref{tab:capture_system_representation}.
+\begin{table}[!htbp]
+    \centering
+    \begin{tabular}{lll}
+        \toprule
+        \textbf{Model} & \textbf{Representations} & \textbf{Value} \\
+        \midrule
+        \multirow{4}{*}{Lighting} & Passive & Ambient light\\
+                                  & \multirow{3}{*}{Active} & Light source\\
+                                  &  & Projector\\
+                                  & &  \tc{Light source\& projector} \\ \cline{1-3}
+        \multirow{4}{*}{Vantage point} & Single vantage point & 1 \\
+                                   & \multirow{3}{*}{Multiple vantage points} & Small ($<10$) \\
+                                   &                                          & \tc{Medium ($10 - 50$)} \\
+                                   &                                          & Large ($>50$) \\ \cline{1-3}
+        \multirow{2}{*}{Nature of scene} & & \tc{Static} \\
+                                         & & Dynamic \\
+        \bottomrule
+    \end{tabular}
+    \caption{The repersentations of the capturing system. The configuration of the current capturing system is label in red.}
+    \label{tab:capture_system_representation}
+\end{table}
+In this thesis, we use a fixed capturing system, thus the configurations of the capturing system is constant throughout the thesis, thus is omitted in the following discussions for the sake of brevity. The configuration of the capturing system is shown in Table~\ref{tab:capture_system_representation}.
 
 \subsection{Texture}
 Texture is one of the most important cues for many computer vision algorithms. It is generally divided into two categories, namely \textit{tactile} and \textit{visual} textures. Tactile textures refer to the immediate tangible feel of a surface, whereas visual textures refer to the visual impression that textures produce to the human observer, which are related to local spatial variations of simple stimuli like colour, orientation and intensity in an image. Here we focus only on visual textures, as they are more widely used in the stereo vision research. The term `texture' hereafter refers exclusively to `visual texture' unless mentioned otherwise.
@@ -91,15 +118,15 @@ There are various properties that make texture distinguishable: scale/size/granu
 % Here we only consider visual textures, which is the result of shape and reflection. Therefore, a surface with varying reflectance property can produces a textured surface, a flat surface with fixed reflectance property under different illuminations can also achieve textured effect. Even very weak texture can be a strong cue to object reconstruction as manifested by the Middlebury `Dino' dataset.
 
 \subsection{Lightness}
-When light strikes a surface, it may be reflected, transmitted, absorbed, or scattered; usually, a combination of these effects occurs. The intensity/colour information received by a sensor is thus determined, among other factors, by the amount of light available after these interactions. Here, we consider intensity as caused solely by reflection, since this is one of the most common phenomena experienced and is the easiest to analyze. Generally, we assume that all effects are local, thus global effects such as inter-reflection and transmission, among others, are omitted. This is called a \textbf{local interaction model}. 
+When light strikes a surface, it may be reflected, transmitted, absorbed, or scattered; usually, a combination of these effects occurs. The intensity or colour information received by a sensor is thus determined, among other factors, by the amount of light available after these interactions. Here, we consider intensity as caused solely by reflection, since this is one of the most common phenomena experienced and is the easiest to analyze. Generally, we assume that all effects are local, thus global effects such as inter-reflection and transmission, among others, are omitted. This is called a \textit{local interaction model}. 
 % Lightness ranges from `black' to `white' in the grey scale axis, and colour is a superset of intensity, which takes into account the spectral composition of light. Both lightness and colour depend on illumination, surface normal, surface reflectance, and viewing direction.
 
-In order to understand the contributing factors of pixel intensity/colour, we need an in-depth understanding of reflection, \ie how light is reflected off of a surface patch, and the relation between material and intensity values. The radiometric formation of an image consists of three separate processes, \textit{light-matter interaction}, \textit{light-lens interaction}, and \textit{light-sensor interaction}.
+In order to understand the contributing factors of pixel intensity or colour, we need an in-depth understanding of reflection, \ie how light is reflected off of a surface patch, and the relation between material and intensity values. The radiometric formation of an image consists of three separate processes, \textit{light-matter interaction}, \textit{light-sensor interaction}, and \textit{irradiance-intensity conversion}.
 
 \subsubsection{Light-matter interaction}
-The relation between the incoming illumination and reflected light is modelled using the \textit{bidirectional reflectance distribution function} (BRDF). The BRDF is defined as:
+The relation between the incoming illumination and reflected light is modelled using the \textit{bidirectional reflectance distribution function} (BRDF), refer to the Appendix~\ref{sec:radio_term} for definitions of radiometric terms. The BRDF is defined as:
 
-\noindent\textbf{Definition (BRDF)} the ratio of the scene radiance $\mathbf{L_r(\theta_r, \phi_r)}$ to the irradiance $\mathbf{E_i(\theta_i, \phi_i)}$, \ie $f(\theta_i, \phi_i, \theta_r, \phi_r)=\frac{E^{surface}(\theta_i, \phi_i)}{L^{surface}(\theta_r, \phi_r)}$.
+\noindent\textbf{Definition (BRDF)} the ratio of the scene radiance $\mathbf{L_r(\theta_r, \phi_r)}$ to the irradiance $\mathbf{E_i(\theta_i, \phi_i)}$, \ie $f(\theta_i, \phi_i, \theta_r, \phi_r)=\frac{L^{surface}(\theta_r, \phi_r)}{E^{surface}(\theta_i, \phi_i)}$.
 \begin{figure}[!htbp]
 \centering
 \begin{tikzpicture}[node distance=2cm, auto]
@@ -113,11 +140,11 @@ The relation between the incoming illumination and reflected light is modelled u
 \label{fig:light_matter_interact}
 \end{figure}
 
-For Lambertian model, BRDF can be simplified as \textit{Diffuse albedo} or surface albedo, which is the proportion of incident light that is reflected by the surface. 
+As we can see from the definition of BRDF, scene radiance is a function of BRDF given a fixed incident radiance. BRDF is a bidirectional function, which depends on both incoming and outgoing directions. It can be simplified under specific reflectance models. For instance, BRDF can be simplified as \textit{Diffuse albedo} or surface albedo when using Lambertian reflectance, which is the proportion of incident light that is reflected by the surface.
 % It should be noted that albedo is not an intrinsic property of a surface. Instead, for any surface, the albedo depends on the spectral and angular distributions of the incident light.
 
-\subsubsection{Light lens interaction}
-A common assumption made in vision community is that radiance is constant as it propagates along a ray. Therefore, the scene radiance is the same as the radiance passing through the lens, which is the same as the radiance received by the sensor. Since image irradiance is the radiance accumulated on a unit surface, it follows that image irradiance is proportional to the scene radiance. Thus, the relation between \textit{scene radiance} and \textit{image irradiance} is linear.
+\subsubsection{Light sensor interaction}
+A common assumption made in vision community is that radiance is constant as it propagates along a ray. Therefore, the scene radiance is the same as the radiance passing through the lens, which is the same as the radiance received by the sensor. Since image irradiance is the radiance accumulated on a unit surface area, it follows that image irradiance is linear related to the scene radiance. Thus, the relation between \textit{scene radiance} and \textit{image irradiance} is linear.
 \begin{figure}[!ht]
 \centering
 \begin{tikzpicture}[node distance=2cm, auto]
@@ -127,22 +154,22 @@ A common assumption made in vision community is that radiance is constant as it 
 \draw [arrow] (scene_rad) -- (lens);
 \draw [arrow] (lens) -- (irradiance);
 \end{tikzpicture}
-\caption{The light-lens interaction. Image irradiance is linearly related to scene radiance.}
+\caption{The light-sensor interaction. Image irradiance is linearly related to scene radiance.}
 \label{fig:light_lens_interact}
 \end{figure}
 
-\subsubsection{Light sensor interaction}
-The camera response function relating image irradiance at the image plane to measured pixel intensity values is a non-linear mapping. A linear relation can be retrieved by radiometric calibration.
+\subsubsection{Irradiance-intensity conversion}
+The camera response function relating image irradiance at the image plane to measured pixel intensity values is a non-linear mapping. It is common to assume that intensity is linear related to image irradiance in many vision algorithms. A linear relation can be retrieved by radiometric calibration.
 \begin{figure}[!ht]
 \centering
 \begin{tikzpicture}[node distance=2cm, auto]
 \node (irradiance) [data] {Image Irradiance};
-\node (sensor) [model, right of=irradiance, xshift=2cm] {Sensor};
-\node (intensity) [data, right of=sensor, xshift=2cm] {Intensity};
-\draw [arrow] (irradiance) -- (sensor);
-\draw [arrow] (sensor) -- (intensity);
+\node (response) [model, right of=irradiance, xshift=2cm] {NL-response};
+\node (intensity) [data, right of=response, xshift=2cm] {Intensity};
+\draw [arrow] (irradiance) -- (response);
+\draw [arrow] (response) -- (intensity);
 \end{tikzpicture}
-\caption{The light-sensor interaction. Pixel intensity is linearly related to image irradiance assuming linear radiometric mapping.}
+\caption{The camera response function is typically non-linear. Thus pixel intensity if non-linear with respect to irradiance. However, this can be corrected by radiometric calibration. More often, it is assumed that pixel intensity is linearly related to image irradiance in many vision algorithms.}
 \label{fig:light_sensor_interact}
 \end{figure}
 
@@ -158,7 +185,6 @@ In conclusion, as long as the \textit{light-sensor interaction} is considered as
 
 \subsection{Specularity}
 Specular surfaces reflect light in nearly a single direction when microscopic surface irregularities are small compared to light wavelength, and no subsurface scattering is present~\cite{nayar1989surface}. Unlike diffuse reflections, where we experience the lightness and colour of an object, specular reflections carry information about the structure, intensity, and spectral content of the illumination field. In other words, specular reflection is simply an image of the environment, or the illumination field, distorted by the geometry of the reflecting surface. For instance, the specular sphere in Figure~\ref{fig:spec_ref} shows a distorted image of the environment instead of the underlying surface colour. A purely specular surface is a mirror, which is rare in nature. Most natural materials exhibit a mixture of specular and diffuse reflections. A commonly used model treats mixed reflectance as a weighted combination of diffuse and specular component. Thus the ratio of incident light that is specularly reflected is considered as the representation of sepcularity, with 0 being completely diffuse, and 1 being completely specular (mirror like).
-%  We use a numeric \textit{specular} value to denote the proportion of a material's specularity.
 \begin{figure}[!htbp]
 \centering
 \begin{tabular}{cc}
@@ -223,39 +249,16 @@ Possible surface models are divided into 2 categories: surfaces with exact known
 % \subsection{Concavity}
 % Concavity can be measured by \textit{surface curvature}, which is defined as the inverse of the radius of a tangentially intersecting circle/sphere. We include concavity in our model for the sake of completeness. However, we decide to omit this property in the following discussion since it will introduce global light transport including cast shadow and inter-reflection, and so on, which violates our assumption of \textbf{local interaction model}. Global light transport can severely worsen the accuracy of active methods. Besides, methods that utilize silhouette information may also fail to reconstruct concavities since concavity is invisible in the silhouette images.
 
-\subsection{Perception of properties}
-\label{sec:prop_percept}
-Different materials can be visually distinguished because they structure light in a particular, characteristic way. The way light is structured depends heavily on the shape of object, reflectance and transmittance properties of material, and illumination field. This process is called the `forward optics' (image formation) process. The material perception problem is, in some sense, the `inverse optics' problem: determining what combination of surface geometry, surface material, and illumination field generated a given image. Thus, in order to recover the reflectance properties of materials, the visual system must somehow disentangle the contributions of the illumination field and geometry. This is arguably the central problem of material perception, though the answer is currently far from clear. But our intuition and many empirical studies support the view that humans are exceptional at material perception.
-
-Everyday experience suggests that, human's visual system are extremly good at estimating material properties. We can effortlessly distinguish numerous different categories of material: textiles, stones, liquids, foodstuffs, and so on, and can recognize many specific materials within each class such as silk, wool and cotton. Besides, being able to visually distinguish between materials and infer their properties by sight, is invaluable for many tasks. For instance, when determining edibility, we can make subtle visual judgements of material properties to determine whether fruit is ripe, whether soup has bee left to go cold or whether bread is going stale~\cite{fleming2014visual}. There are numerous experimental evidence to support this intuition. For example, \citeauthor{sharan2009material} have shown that subjects can identify a wide range of materials from photographs even with brief presentations. \citeauthor{fleming2013perceptual} showed subjects photographs of materials from different categories and asked them to rate various subjective qualities, such as hardnesss, glossiness and prettiness. Even though subjects were not explicitly informed that the samples belonged to different classes, the subjective ratings of the individual samples were systematically clustered into categories, suggesting that subjects could theoretically classify materials through visual judgements of their properties.
-
-Empirical studies have focused on the visual estimation of specific properties of materials, such as glossiness, translucency or surface roughness. For instance, on the topic of glossiness, \citeauthor{nishida1998use} showed that subjects can judge the specular reflectance of computer simulated glossy surfaces~\cite{nishida1998use}, and \citeauthor{fleming2003real} showed that this ability generalizes across differences in lighting, as long as the illumination has statistical structure that is typical of the natural environment~\cite{fleming2003real}. \citeauthor{fleming2014visual} argued that the visual system does not actually estimate physical parameters of materials and objects, for instance, parameters of a reflectance model. Instead the brain is remarkably adept at building `statistical generative models' that capture the natural degrees of variation in appearance between samples~\cite{fleming2014visual}. Though there is currently no universally accepted theory on visual perception of material, both our intuition and empirical results do suggest that human are exceptionally good at `estimating' material properties.
-
-Despite its subjective ease, material perception still poses the visual system with some unique and significant challenges, because a given material can take on many different appearances depending on the lighting, viewpoint and shape. Thus, we provide a \textit{generative} approach to visual perception: a simulation software is used to generate images of a synthetic object with varied property settings to aid the estimation of properties. The user can choose an illumination field and object shape that is closest to the real-world enviriontment and object. Then a ``try-and-see'' approach was taken to obtain the parameters. More specifically, the user would change the value of each property and see if the rendered result resembles the real object. A similar approach can be found in~\cite{Berkiten:2016:ARB} where \citeauthor{Berkiten:2016:ARB} used a synthetic dataset to find the contributing factors of various Photometric Stereo algorithms.
-
-The lightness of the object is controlled by the albedo value. Albedo is defiend as the ratio of reflected light with respect to incident light. The albedo is determined by the value channel of HSV colour space. To determine the specularity and roughness of the object, we experiment with varying parameters to get the most realistic image. We demonstrate the process using the following example data `vase', as shown in Figure~\ref{fig:ui}.
-\begin{figure}[!htbp]
-\centering
-\begin{tabular}{ccc}
-  \includegraphics[width=0.3\textwidth]{interp/ui/ui_sphere.png}&
-  \includegraphics[width=0.3\textwidth]{interp/ui/ui_vase.png}&
-  \includegraphics[width=0.3\textwidth]{img/interp/real_world_img/vase/vase.jpg}\\
-  (a). synthetic sphere & (b). synthetic vase & (c). real-world vase\\
-\end{tabular}
-\caption{The UI for determining the property settings, including albedo, specular, and roughness of the surface. In this case shown above, the problem condition is: texture (0.8), albedo (0.8), specular (0.2), roughness(0.2). (a) demonstrates the effect of the property settings on a sphere, (b) on a teapot, and (c) shows the real-world object.}
-\label{fig:ui}
-\end{figure}
-
-
-\section{Expression}
-\label{sec:3DRecon_Exp}
-In this section, we introduce the expression of 3D reconstruction problem using the proposed model and representations, as shown in Table~\ref{tab:3DRecon_model_repre}. As discussed in Section~\ref{sec:prop_percept}, it is intuitive for humans to perceptually estimate material properties. However, as previously discussed, the conditions under which a specific algorithm works in largely unclear, it is practically impossible to fully take advantage of an asortment of vision algorithms without sophisticated vision knowledge.
+In conclusion, the proposed model and representation of 3D reconstruction can be summarized in Table~\ref{tab:3DRecon_model_repre}.
 \begin{table}[!htbp]
   \centering
   \begin{tabular}{l|l}
   \toprule
   \textbf{Model} & \textbf{Representation}\\
   \midrule
+  Number of viewpoints & \textit{Small} \\
+  Number of light sources & \textit{Small} \\
+  Baseline angle & \textit{Medium} \\
   Texture & \textit{Texture randomness}\\
   Lightness & \textit{Diffuse albedo}\\
   Specularity & \textit{Specular reflectance}\\
@@ -266,6 +269,31 @@ In this section, we introduce the expression of 3D reconstruction problem using 
   \caption{A Model and corresponding representations of the 3D reconstruction problem.}
   \label{tab:3DRecon_model_repre}
 \end{table}
+
+\section{Expression}
+\label{sec:3DRecon_Exp}
+In this section, we discuss the expression of 3D reconstruction problem using the proposed model and representations, as shown in Table~\ref{tab:3DRecon_model_repre}. There are two related issues that need to be addressed: 1) how intuitive is the proposed model for humans to use to describe problem conditions; 2) how can a user estimates the parameters of properties. We first address the issue of property perception in Section~\ref{sec:prop_percept}. We can show that it is intuitive for humans to perceptually identify materials and estimate material properties. Next, we will use the proposed description to express the four problem conditions proposed in Chapter~\ref{ch:3DRecon_ProbSpace}.
+
+\subsection{Perception of properties}
+\label{sec:prop_percept}
+Different materials can be visually distinguished because they structure light in a particular, characteristic way. The way light is structured depends heavily on the shape of object, reflectance and transmittance properties of material, and illumination field. This process is called the `forward optics' (image formation) process. The material perception problem is, in some sense, the `inverse optics' problem: determining what combination of surface geometry, surface material, and illumination field generated a given image~\cite{anderson2011visual}. Thus, in order to recover the reflectance properties of materials, the visual system must somehow disentangle the contributions of the illumination field and geometry. This is arguably the central problem of material perception, though the answer is currently far from clear~\cite{anderson2011visual}. But our intuition and many empirical studies support the view that humans are exceptional at material perception.
+
+Everyday experience suggests that, human's visual system are extremly good at estimating material properties. We can effortlessly distinguish numerous different categories of material: textiles, stones, liquids, foodstuffs, and so on, and can recognize many specific materials within each class such as silk, wool and cotton~\cite{fleming2014visual}. Besides, being able to visually distinguish between materials and infer their properties by sight, is invaluable for many tasks. For instance, when determining edibility, we can make subtle visual judgements of material properties to determine whether fruit is ripe, whether soup has bee left to go cold or whether bread is going stale~\cite{fleming2014visual}. There are numerous experimental evidences to support this intuition. For example, \citeauthor{sharan2009material} have shown that subjects can identify a wide range of materials from photographs even with brief presentations~\cite{sharan2009material}. \citeauthor{fleming2013perceptual} showed subjects photographs of materials from different categories and asked them to rate various subjective qualities, such as hardnesss, glossiness and prettiness~\cite{fleming2013perceptual}. Even though subjects were not explicitly informed that the samples belonged to different classes, the subjective ratings of the individual samples were systematically clustered into categories, suggesting that subjects could theoretically classify materials through visual judgements of their properties.
+
+There have been some empirical studies focused on visual estimation of specific properties of materials, such as glossiness, translucency or surface roughness. For instance, on the topic of glossiness, \citeauthor{nishida1998use} showed that subjects can judge the specular reflectance of computer simulated glossy surfaces~\cite{nishida1998use}, and \citeauthor{fleming2003real} showed that this ability generalizes across differences in lighting, as long as the illumination has statistical structure that is typical of the natural environment~\cite{fleming2003real}. \citeauthor{fleming2014visual} argued that the visual system does not actually estimate physical parameters of materials and objects, for instance, parameters of a reflectance model. Instead the brain is remarkably adept at building `statistical generative models' that capture the natural degrees of variation in appearance between samples~\cite{fleming2014visual}. Though there is currently no universally accepted theory on visual perception of material, both our intuition and empirical results do suggest that human are exceptionally good at `estimating' material properties.
+
+Despite its subjective ease, material perception still poses the visual system with some unique and significant challenges, because a given material can take on many different appearances depending on the lighting, viewpoint and shape. Thus, we provide a \textit{generative} approach to visual perception: a simulation software is used to generate images of a synthetic object with varied property settings to aid the estimation of properties. The user can choose an illumination field and object shape that is closest to the real-world enviriontment and object. Then this ``try-and-error'' approach is used to estimate parameters of properties. More specifically, the user would change the value of each property and see if the rendered result resembles the real object. A similar approach can be found in~\cite{Berkiten:2016:ARB} where \citeauthor{Berkiten:2016:ARB} used a synthetic dataset to find the contributing factors of various Photometric Stereo algorithms. We demonstrate this ``try-and-error'' approach using the following example shown in Figure~\ref{fig:prop_estimate}:  the lightness of the object is controlled by the albedo value, which is determined by the value channel of HSV colour space. To determine the specularity and roughness of the object, we experiment with varying parameters to get the most realistic image.
+\begin{figure}[!htbp]
+\centering
+\begin{tabular}{ccc}
+  \includegraphics[width=0.3\textwidth]{interp/ui/ui_sphere.png}&
+  \includegraphics[width=0.3\textwidth]{interp/ui/ui_vase.png}&
+  \includegraphics[width=0.3\textwidth]{img/interp/real_world_img/vase/vase.jpg}\\
+  (a). synthetic sphere & (b). synthetic vase & (c). real-world vase\\
+\end{tabular}
+\caption{The UI for determining the property settings, including albedo, specular, and roughness of the surface. In this case shown above, the problem condition is: texture (0.8), albedo (0.8), specular (0.2), roughness(0.2). (a) demonstrates the effect of the property settings on a sphere, (b) on a teapot, and (c) shows the real-world object.}
+\label{fig:prop_estimate}
+\end{figure}
 
 Now that we have a proposed model and representations of 3D reconstruction problem, we can express the four proposed problem conditions using this description. Given that all perceived estimates would likely be low resolution from users, we use three discrete scales to parameterize these properties: \textit{low} (0.2), \textit{medium} (0.5), and \textit{high} (0.8). The expression of the reconstruction problem is shown in table~\ref{tab:express}.
 \begin{table}[!htbp]
@@ -283,3 +311,10 @@ Now that we have a proposed model and representations of 3D reconstruction probl
   \caption{Expression of the reconstruction problem for the four problem conditions proposed in Section~\ref{ch:3DRecon_ProbSpace}.}
   \label{tab:express}
 \end{table}
+
+\section{Discussion and Conclusions}
+This chapter builds upon the problem space proposed in Chapter~\ref{ch:3DRecon_ProbSpace}, and aims to provide a description to allow users to define problem condition of an object definitively. The description consists of two parts: a model and corresponding representations. The model answers the question of \textit{what} characteristic features of an object to describe, and the rerepsentations address the issue of \textit{how} to describe the selected set of features of an object.
+
+The model selects key properties of a problem, and with the additional assumptions, we select a subset properties, as shown in Table~\ref{tab:3DRecon_model_repre}. We further analyze how easy it is to perceptually estimate properties, and express the four problem conditions using the proposed description. The proposed description is the first layer of our three-layer description-based interface. It works as as the input of interpreter, and from which, an algorithm that works reliably will be chosen to reconstruct a successful digital shape.
+
+Since we only explore a subset of problem space, the proposed model and representations may be insufficient to describe some classes of object, especially objects with translucent, transparant, or refractive surfaces. However, the extension of the descripion is limited by the availability of existing techniques As long as reliably solution has been developed, we can extend current description to incorporate model complex reflective and geometric properties.
