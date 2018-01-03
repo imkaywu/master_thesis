@@ -92,7 +92,10 @@ $$
 \mbox{maximize} \quad \sum_{j=0}^{N-1}\sum_{i=0}^{M-1} consist(prop(sc_i), cue(seg_{(i, j)}))
 $$
 
-\section{Definition of Radiometric Terms}
+\section{Physics-based Vision}
+\label{sec:pbv}
+
+\subsection{Radiometric terms}
 \label{sec:radio_term}
 Below is a list of radiometry terms, see Figure~\ref{fig:radiometry_terms} for an illustration:
 \begin{itemize}
@@ -108,6 +111,71 @@ Below is a list of radiometry terms, see Figure~\ref{fig:radiometry_terms} for a
 \includegraphics[width=0.5\textwidth]{model/radiometry_terms.png}
 \caption{Illustration of light-matter interaction.}
 \label{fig:radiometry_terms}
+\end{figure}
+
+\noindent\textbf{Definition 15 (BRDF)} the ratio of the scene radiance $\mathbf{L_r(\theta_r, \phi_r)}$ to the irradiance $\mathbf{E_i(\theta_i, \phi_i)}$, \ie $f(\theta_i, \phi_i, \theta_r, \phi_r)=\frac{L^{surface}(\theta_r, \phi_r)}{E^{surface}(\theta_i, \phi_i)}$.
+
+\subsection{Reflectance model: microfacet model}
+\label{sec:microfacet_model}
+The microfacet model postulates that if a surface reflection can occur between a given light vector $\mathbf{l}$ and view vector $\mathbf{v}$, then there must exist some portion of the surface, or microfacet, with a normal aligned halfway between the $\mathbf{l}$ and $\mathbf{v}$. This ``half vector'', sometimes referred to as the microsurface normal, is thus defined as $\mathbf{h}=\frac{\mathbf{l}+\mathbf{v}}{|\mathbf{l}+\mathbf{v}|}$. A general form of the microfacet model for isotropic material is
+
+$$
+f(\mathbf{l}, \mathbf{v}) = \text{diffuse}+\frac{D(\theta_h)F(\theta_d)G(\theta_l, \theta_v)}{4\cos\theta_l\cos\theta_v}
+$$
+
+where $\theta_l$ and $\theta_v$ are the angles of incidence of $\mathbf{l}$ and $\mathbf{v}$ vectors with respect to the normal $\theta_h$ is the angle between the normal and the half vector, and $\theta_d$ is the ``difference'' angle between $\mathbf{l}$ and the half vector.
+
+The diffuse term is a function of unknown form. Lambert diffuse is often assumed and is represented by a constant value. For the specular term, $D$ is the microfacet distribution function and is responsible for the shape of the specular peak, $F$ is the Fresnel reflection coefficient, and $G$ is the geometric attenuation or shadowing factor.
+
+\subsection{Image formation: radiometric perspective}
+This section discusses the radiometric perspective of image formation. Specifically, we discuss the contributing factors that determine the pixel intensity of an image.
+
+\subsubsection{Light-matter interaction}
+The relation between the incoming illumination and reflected light is modelled using the \textit{bidirectional reflectance distribution function} (BRDF), refer to the Appendix~\ref{sec:radio_term} for definitions of radiometric terms.
+\begin{figure}[!htbp]
+\centering
+\begin{tikzpicture}[node distance=2cm, auto]
+\node (light_rad) [data] {Incident Radiance};
+\node (material) [model, right of=light_rad, xshift=2cm] {Material};
+\node (scene_rad) [data, right of=material, xshift=2cm] {Scene Radiance};
+\draw [arrow] (light_rad) -- (material);
+\draw [arrow] (material) -- (scene_rad);
+\end{tikzpicture}
+\caption{The light-matter interaction. Scene radiance is linear related to incident radiance.}
+\label{fig:light_matter_interact}
+\end{figure}
+
+As we can see from the definition of BRDF, scene radiance is a function of BRDF given a fixed incident radiance. BRDF is a bidirectional function, which depends on both incoming and outgoing directions. It can be simplified under specific reflectance models. For instance, BRDF can be simplified as \textit{Diffuse albedo} or surface albedo when using Lambertian reflectance, which is the proportion of incident light that is reflected by the surface.
+% It should be noted that albedo is not an intrinsic property of a surface. Instead, for any surface, the albedo depends on the spectral and angular distributions of the incident light.
+
+\subsubsection{Light sensor interaction}
+A common assumption made in vision community is that radiance is constant as it propagates along a ray. Therefore, the scene radiance is the same as the radiance passing through the lens, which is the same as the radiance received by the sensor. Since image irradiance is the radiance accumulated on a unit surface area, it follows that image irradiance is linear related to the scene radiance. Thus, the relation between \textit{scene radiance} and \textit{image irradiance} is linear.
+\begin{figure}[!ht]
+\centering
+\begin{tikzpicture}[node distance=2cm, auto]
+\node (scene_rad) [data] {Scene Radiance};
+\node (lens) [model, right of=scene_rad, xshift=2cm] {Lens};
+\node (irradiance) [data, right of=lens, xshift=2cm] {Image Irradiance};
+\draw [arrow] (scene_rad) -- (lens);
+\draw [arrow] (lens) -- (irradiance);
+\end{tikzpicture}
+\caption{The light-sensor interaction. Image irradiance is linearly related to scene radiance.}
+\label{fig:light_lens_interact}
+\end{figure}
+
+\subsubsection{Irradiance-intensity conversion}
+The camera response function relating image irradiance at the image plane to measured pixel intensity values is a non-linear mapping. It is common to assume that intensity is linear related to image irradiance in many vision algorithms. A linear relation can be retrieved by radiometric calibration.
+\begin{figure}[!htbp]
+\centering
+\begin{tikzpicture}[node distance=2cm, auto]
+\node (irradiance) [data] {Image Irradiance};
+\node (response) [model, right of=irradiance, xshift=2cm] {NL-response};
+\node (intensity) [data, right of=response, xshift=2cm] {Intensity};
+\draw [arrow] (irradiance) -- (response);
+\draw [arrow] (response) -- (intensity);
+\end{tikzpicture}
+\caption{The camera response function is typically non-linear. Thus pixel intensity if non-linear with respect to irradiance. However, this can be corrected by radiometric calibration. More often, it is assumed that pixel intensity is linearly related to image irradiance in many vision algorithms.}
+\label{fig:light_sensor_interact}
 \end{figure}
 
 \section{Material of real-world objects}

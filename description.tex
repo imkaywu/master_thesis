@@ -10,6 +10,7 @@ This way of thinking is not specific to our problem. Typical computer vision pro
 
 In this chapter, we attempt to provide a description of the 3D reconstruction problem which allows for a well defined specification of the conditions surrounding the problem. This description abstracts away from the functional specification of \textit{how} to estimate a reconstruction. We first propose a formal definition of the 3D reconstruction problem in Appendix~\ref{sec:3DRecon_Def}. Next, section~\ref{sec:3DRecon_Model} proposes a model to 3D reconstruction by selecting various key \textit{aspects} of the problem space that are crucial for describing the appearance of the object. Section~\ref{sec:3DRecon_Rep} outlines concrete representations of the proposed model. Section~\ref{sec:3DRecon_Exp} provides examples of expressing common 3D reconstruction problems using the proposed model and representations. These following four layers represent the description of our accessible 3D reconstruction framework: Definition, Representation, Model, and Expression.
 
+\section{Model}
 \label{sec:3DRecon_Model}
 Models and representations are fundamental for vision problem solving. Models select characteristic properties of an object, and representations describe the model selected object properties to facilitate a solution of a class of problem. A model facilitates the representation of aspects in reality that are useful in a particular problem domain~\cite{bolles19863dpo}. There are two criteria in choosing the model: 1) the model components need to be useful for problem solving; 2) the components need to be visually/conceptually identifiable so that it is easy for users to learn to describe problem conditions using the proposed model. As is dicussed in Chapter~\ref{ch:RelatedWork}, visual and geometric information, such as texture, shading variation, and silhouette are critical to 3D vision algorithms. In Chapter~\ref{ch:3DRecon_ProbSpace}, we summarized key visual and geometric properties of an object that are of great importance for human to identify and distinguish objects. We can clearly see an overlap between these two. For instance, both textural and brightness information are utilized by algorithms and humans. Thus, we select a subset of properties that can be used by algorithms as reconstruction cues, and also easily identifiable by humans as the main components of our model.
 
@@ -118,62 +119,14 @@ There are various properties that make texture distinguishable: scale/size/granu
 % Here we only consider visual textures, which is the result of shape and reflection. Therefore, a surface with varying reflectance property can produces a textured surface, a flat surface with fixed reflectance property under different illuminations can also achieve textured effect. Even very weak texture can be a strong cue to object reconstruction as manifested by the Middlebury `Dino' dataset.
 
 \subsection{Lightness}
-When light strikes a surface, it may be reflected, transmitted, absorbed, or scattered; usually, a combination of these effects occurs. The intensity or colour information received by a sensor is thus determined, among other factors, by the amount of light available after these interactions. Here, we consider intensity as caused solely by reflection, since this is one of the most common phenomena experienced and is the easiest to analyze. Generally, we assume that all effects are local, thus global effects such as inter-reflection and transmission, among others, are omitted. This is called a \textit{local interaction model}. 
+When light strikes a surface, it may be reflected, transmitted, absorbed, or scattered; usually, a combination of these effects occurs. The intensity or colour information received by a sensor is thus determined, among other factors, by the amount of light available after these interactions. Here, we consider intensity as caused solely by reflection, since this is one of the most common phenomena experienced and is the easiest to analyze. Generally, we assume that all effects are local, thus global effects such as inter-reflection and transmission, among others, are omitted. This is called a \textit{local interaction model}.
 % Lightness ranges from `black' to `white' in the grey scale axis, and colour is a superset of intensity, which takes into account the spectral composition of light. Both lightness and colour depend on illumination, surface normal, surface reflectance, and viewing direction.
 
-In order to understand the contributing factors of pixel intensity or colour, we need an in-depth understanding of reflection, \ie how light is reflected off of a surface patch, and the relation between material and intensity values. The radiometric formation of an image consists of three separate processes, \textit{light-matter interaction}, \textit{light-sensor interaction}, and \textit{irradiance-intensity conversion}.
+In order to understand the contributing factors of pixel intensity or colour, we need an in-depth understanding of reflection, \ie how light is reflected off of a surface patch, and the relation between material and intensity values. The radiometric formation of an image consists of three separate processes, \textit{light-matter interaction}, \textit{light-sensor interaction}, and \textit{irradiance-intensity conversion}, as discussed in Appendix~\ref{sec:pbv}. The conclusion is that image intensity is linear related to diffuse reflectance.
 
-\subsubsection{Light-matter interaction}
-The relation between the incoming illumination and reflected light is modelled using the \textit{bidirectional reflectance distribution function} (BRDF), refer to the Appendix~\ref{sec:radio_term} for definitions of radiometric terms. The BRDF is defined as:
+Diffuse reflectance represents light that is refracted into the surface, scattered, partially absorbed, and re-emitted. The Lambertian diffuse model assumes that the refracted light has scattered enough that it has lost all directionality and thus the diffuse reflectance (albedo) is constant. However, very few materials exhibit a Lambertian response. Notably, this is strongly correlated to surface roughness - smooth surfaces, \ie those with a higher specular peak, tend to have a shadowed edge, and rough surfaces tend to have a peak instead of a shadow. This grazing shadow for smooth surfaces can be explained by the Fresnel equations: at grazing angles, more energy is reflected from the surfaces and less is refracted into the surface to be diffusely re-emitted. However, diffusse models don't generally consider the effect of surface roughness on Fresnel refraction and either assume a smooth surface or ignore the Fresnel effect. In this thesis, the albedo is considered constant for a specific material.
 
-\noindent\textbf{Definition (BRDF)} the ratio of the scene radiance $\mathbf{L_r(\theta_r, \phi_r)}$ to the irradiance $\mathbf{E_i(\theta_i, \phi_i)}$, \ie $f(\theta_i, \phi_i, \theta_r, \phi_r)=\frac{L^{surface}(\theta_r, \phi_r)}{E^{surface}(\theta_i, \phi_i)}$.
-\begin{figure}[!htbp]
-\centering
-\begin{tikzpicture}[node distance=2cm, auto]
-\node (light_rad) [data] {Incident Radiance};
-\node (material) [model, right of=light_rad, xshift=2cm] {Material};
-\node (scene_rad) [data, right of=material, xshift=2cm] {Scene Radiance};
-\draw [arrow] (light_rad) -- (material);
-\draw [arrow] (material) -- (scene_rad);
-\end{tikzpicture}
-\caption{The light-matter interaction. Scene radiance is linear related to incident radiance.}
-\label{fig:light_matter_interact}
-\end{figure}
-
-As we can see from the definition of BRDF, scene radiance is a function of BRDF given a fixed incident radiance. BRDF is a bidirectional function, which depends on both incoming and outgoing directions. It can be simplified under specific reflectance models. For instance, BRDF can be simplified as \textit{Diffuse albedo} or surface albedo when using Lambertian reflectance, which is the proportion of incident light that is reflected by the surface.
-% It should be noted that albedo is not an intrinsic property of a surface. Instead, for any surface, the albedo depends on the spectral and angular distributions of the incident light.
-
-\subsubsection{Light sensor interaction}
-A common assumption made in vision community is that radiance is constant as it propagates along a ray. Therefore, the scene radiance is the same as the radiance passing through the lens, which is the same as the radiance received by the sensor. Since image irradiance is the radiance accumulated on a unit surface area, it follows that image irradiance is linear related to the scene radiance. Thus, the relation between \textit{scene radiance} and \textit{image irradiance} is linear.
-\begin{figure}[!ht]
-\centering
-\begin{tikzpicture}[node distance=2cm, auto]
-\node (scene_rad) [data] {Scene Radiance};
-\node (lens) [model, right of=scene_rad, xshift=2cm] {Lens};
-\node (irradiance) [data, right of=lens, xshift=2cm] {Image Irradiance};
-\draw [arrow] (scene_rad) -- (lens);
-\draw [arrow] (lens) -- (irradiance);
-\end{tikzpicture}
-\caption{The light-sensor interaction. Image irradiance is linearly related to scene radiance.}
-\label{fig:light_lens_interact}
-\end{figure}
-
-\subsubsection{Irradiance-intensity conversion}
-The camera response function relating image irradiance at the image plane to measured pixel intensity values is a non-linear mapping. It is common to assume that intensity is linear related to image irradiance in many vision algorithms. A linear relation can be retrieved by radiometric calibration.
-\begin{figure}[!ht]
-\centering
-\begin{tikzpicture}[node distance=2cm, auto]
-\node (irradiance) [data] {Image Irradiance};
-\node (response) [model, right of=irradiance, xshift=2cm] {NL-response};
-\node (intensity) [data, right of=response, xshift=2cm] {Intensity};
-\draw [arrow] (irradiance) -- (response);
-\draw [arrow] (response) -- (intensity);
-\end{tikzpicture}
-\caption{The camera response function is typically non-linear. Thus pixel intensity if non-linear with respect to irradiance. However, this can be corrected by radiometric calibration. More often, it is assumed that pixel intensity is linearly related to image irradiance in many vision algorithms.}
-\label{fig:light_sensor_interact}
-\end{figure}
-
-In conclusion, as long as the \textit{light-sensor interaction} is considered as a linear mapping (as most vision algorithms do) or calibrated in a pre-processing step, the pixel intensity value is linearly related to surface reflectance, which is characterized by BRDF. There are 4 DoF in spatially-invariant BRDF, and for the simplified case - Lambertian reflectance, the BRDF is degenerated to \textit{diffuse albedo}, which is the representation we adopt for lightness.
+In conclusion, as long as the \textit{light-sensor interaction} is considered as a linear mapping (as most vision algorithms do) or calibrated in a pre-processing step, the pixel intensity value is linearly related to diffuse reflectance (also named albedo), which is the representation we adopt for lightness.
 
 % The reflectance of light also depends on the incident direction. Specifically, light that lands on a surface at a grazing angle will be much more likely to reflect, see Figure~\ref{fig:alb_ang}. We take into account the Fresnel effect in the synthetic stage, thus we consider the albedo with small incident angle.
 % \begin{figure}[h]
@@ -184,7 +137,10 @@ In conclusion, as long as the \textit{light-sensor interaction} is considered as
 % \end{figure}
 
 \subsection{Specularity}
-Specular surfaces reflect light in nearly a single direction when microscopic surface irregularities are small compared to light wavelength, and no subsurface scattering is present~\cite{nayar1989surface}. Unlike diffuse reflections, where we experience the lightness and colour of an object, specular reflections carry information about the structure, intensity, and spectral content of the illumination field. In other words, specular reflection is simply an image of the environment, or the illumination field, distorted by the geometry of the reflecting surface. For instance, the specular sphere in Figure~\ref{fig:spec_ref} shows a distorted image of the environment instead of the underlying surface colour. A purely specular surface is a mirror, which is rare in nature. Most natural materials exhibit a mixture of specular and diffuse reflections. A commonly used model treats mixed reflectance as a weighted combination of diffuse and specular component. Thus the ratio of incident light that is specularly reflected is considered as the representation of sepcularity, with 0 being completely diffuse, and 1 being completely specular (mirror like).
+Specular surfaces reflect light in nearly a single direction when microscopic surface irregularities are small compared to light wavelength, and no subsurface scattering is present~\cite{nayar1989surface}. Unlike diffuse reflections, where we experience the lightness and colour of an object, specular reflections carry information about the structure, intensity, and spectral content of the illumination field. In other words, specular reflection is simply an image of the environment, or the illumination field, distorted by the geometry of the reflecting surface. For instance, the specular sphere in Figure~\ref{fig:spec_ref} shows a distorted image of the environment instead of the underlying surface colour. A purely specular surface is a mirror, which is rare in nature. Most natural materials exhibit a mixture of specular and diffuse reflections. We use the microfacet model as the reflectance model in this thesis, which is discussed in Appendix~\ref{sec:microfacet_model}. Thus the amount of specular component is determined by the Fresnel reflectance, with 0 being completely diffuse, and 1 being completely specular (mirror like).
+% A commonly used model treats mixed reflectance as a weighted combination of diffuse and specular component. Thus the ratio of incident light that is specularly reflected is considered as the representation of sepcularity
+
+The Fresnel reflectance is the fraction of incoming light that is reflected (as opposed to refracted) from an optically flat surface of a given substance. It varies based on the light direction and the surface (in this case microfacet) normal. Fresnel reflectance tells us how much of the light hitting the relevant microfacets (the ones facing in the half-angle direction) is reflected. Fresnel reflectance (on the y-axis in this graph) depends on refraction index (in other words, what the object’s made of) and the incoming light angle (which is plotted here on the x-axis). As the angle increases, the Fresnel reflectance barely changes for the first 45 degrees (the green area on the graph); afterwards it starts changing, first slowly (the yellow area, up to about 75 degrees) and then for very glancing angles (the red zone) it rapidly goes to $100\%$ at all wavelengths.
 \begin{figure}[!htbp]
 \centering
 \begin{tabular}{cc}
@@ -260,9 +216,9 @@ In conclusion, the proposed model and representation of 3D reconstruction can be
   Number of light sources & \textit{Small} \\
   Baseline angle & \textit{Medium} \\
   Texture & \textit{Texture randomness}\\
-  Lightness & \textit{Diffuse albedo}\\
-  Specularity & \textit{Specular reflectance}\\
-  Roughness & \textit{SD of facet slopes}\\
+  Lightness & \textit{Diffuse reflectance}\\
+  Specularity & \textit{Fresnel reflectance}\\
+  Roughness & \textit{Distribution of facet slope}\\
   % Concavity & \textit{Surface curvature}\\
   \bottomrule
   \end{tabular}
