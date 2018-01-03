@@ -296,19 +296,22 @@ Assumptions:
 %------------------------------------------------
 \begin{frame}{Description: model and representations}
 
-\begin{table}[!htbp]
+\begin{table}
   \centering
-  \begin{tabular}{l|ll}
+  \begin{tabular}{l|l}
   \toprule
   \textbf{Model} & \textbf{Representation}\\
   \midrule
+  Nature of scene & \textit{Static} \\
+  Lighting & \textit{Mixed: ambient, projector, light sources} \\
+  Vantage point & \textit{Medium: 10 - 50} \\
   Texture & \textit{Texture randomness}\\
-  Lightness & \textit{Diffuse albedo}\\
-  Specularity & \textit{Specular reflectance}\\
-  Roughness & \textit{SD of facet slopes}\\
+  Lightness & \textit{Diffuse reflectance}\\
+  Specularity & \textit{Fresnel reflectance}\\
+  Roughness & \textit{Distribution of facet slope}\\
+  % Concavity & \textit{Surface curvature}\\
   \bottomrule
   \end{tabular}
-  \caption{Representations of the 3D reconstruction problem.}
 \end{table}
 
 \end{frame}

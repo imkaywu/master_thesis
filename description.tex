@@ -85,16 +85,16 @@ The model of the capturing system includes the lighting condition of the capturi
         \toprule
         \textbf{Model} & \textbf{Representations} & \textbf{Value} \\
         \midrule
+        \multirow{2}{*}{Nature of scene} & & \tc{Static} \\
+                                         & & Dynamic \\ \cline{1-3}
         \multirow{4}{*}{Lighting} & Passive & Ambient light\\
-                                  & \multirow{3}{*}{Active} & Light source\\
+                                  & \multirow{2}{*}{Active} & Light source\\
                                   &  & Projector\\
-                                  & &  \tc{Light source\& projector} \\ \cline{1-3}
+                                  & Mixed & \tc{Ambient\& light source\& projector} \\ \cline{1-3}
         \multirow{4}{*}{Vantage point} & Single vantage point & 1 \\
                                    & \multirow{3}{*}{Multiple vantage points} & Small ($<10$) \\
                                    &                                          & \tc{Medium ($10 - 50$)} \\
-                                   &                                          & Large ($>50$) \\ \cline{1-3}
-        \multirow{2}{*}{Nature of scene} & & \tc{Static} \\
-                                         & & Dynamic \\
+                                   &                                          & Large ($>50$) \\
         \bottomrule
     \end{tabular}
     \caption{The repersentations of the capturing system. The configuration of the current capturing system is label in red.}
@@ -212,9 +212,9 @@ In conclusion, the proposed model and representation of 3D reconstruction can be
   \toprule
   \textbf{Model} & \textbf{Representation}\\
   \midrule
-  Number of viewpoints & \textit{Small} \\
-  Number of light sources & \textit{Small} \\
-  Baseline angle & \textit{Medium} \\
+  Nature of scene & \textit{Static} \\
+  Lighting & \textit{Mixed: ambient, projector, light sources} \\
+  Vantage point & \textit{Medium: 10 - 50} \\
   Texture & \textit{Texture randomness}\\
   Lightness & \textit{Diffuse reflectance}\\
   Specularity & \textit{Fresnel reflectance}\\
