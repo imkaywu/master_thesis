@@ -115,17 +115,36 @@ Below is a list of radiometry terms, see Figure~\ref{fig:radiometry_terms} for a
 
 \noindent\textbf{Definition 15 (BRDF)} the ratio of the scene radiance $\mathbf{L_r(\theta_r, \phi_r)}$ to the irradiance $\mathbf{E_i(\theta_i, \phi_i)}$, \ie $f(\theta_i, \phi_i, \theta_r, \phi_r)=\frac{L^{surface}(\theta_r, \phi_r)}{E^{surface}(\theta_i, \phi_i)}$.
 
+The BRDF is used in the \textit{reflectance equation}:
+\begin{align*}
+L^{surface}(\theta_r, \phi_r)&=f(\theta_i, \phi_i, \theta_r, \phi_r)E^{surface}(\theta_i, \phi_i)\\
+&= \int_\Omega f(\theta_i, \phi_i, \theta_r, \phi_r) L_i(\theta_i, \phi_i) \cos\theta_i d\omega_i
+\end{align*}
+
+The phenomena described by the BRDF includes (at least for dielectrics) two distinct physical phenomena - surface reflection and subsurface scattering. Since each of these phenomena has different behaviour, BRDFs typically include a separate term for each one. The BRDF term describing surface reflection is usually called the \textit{specular term} and the term describing subsurface scattering is called the \textit{diffuse term}.
+
 \subsection{Reflectance model: microfacet model}
 \label{sec:microfacet_model}
-The microfacet model postulates that if a surface reflection can occur between a given light vector $\mathbf{l}$ and view vector $\mathbf{v}$, then there must exist some portion of the surface, or microfacet, with a normal aligned halfway between the $\mathbf{l}$ and $\mathbf{v}$. This ``half vector'', sometimes referred to as the microsurface normal, is thus defined as $\mathbf{h}=\frac{\mathbf{l}+\mathbf{v}}{|\mathbf{l}+\mathbf{v}|}$. A general form of the microfacet model for isotropic material is
+The basis for most physically-based specular BRDF term is \textit{microfacet theory}. This theory was developed to describe surface reflection from general (non-optically flat) surfaces. The basic assumption underlying microfacet theory is that the surface is composed of many \textit{microfacet}, too small to be seen individually. Each microfacet is assumed to be optically flat, and splits light into exactly two directions - reflection and refraction.
+
+The microfacet model postulates that if a surface reflection can occur between a given light vector $\mathbf{l}$ and view vector $\mathbf{v}$, then there must exist some portion of the surface, or microfacet, with a normal aligned halfway between the $\mathbf{l}$ and $\mathbf{v}$. This ``half vector'', sometimes referred to as the microsurface normal, is thus defined as $\mathbf{h}=\frac{\mathbf{l}+\mathbf{v}}{|\mathbf{l}+\mathbf{v}|}$. Not all microfacets for which $\mathbf{n}=\mathbf{h}$ will contribute to the reflection: some are blocked by other microfacets from the direction of $\mathbf{l}$ (shadowing), from the direction of $\mathbf{v}$ (masking), or from both. Microfacet theory assumes that all shadowed light is lost from the specular term; in reality, due to multiple surface reflections some of it will eventually be visible, but this is not accounted for in microfacet theory. This is not typically a major source of error in most cases (rough metal surfaces are a possible exception).
+
+With these assumptions (optically flat microfacets, no interreflection), the microfacet specular BRDF term has the following form:
+$$
+f(\mathbf{l}, \mathbf{v}) = \frac{D(\theta_h)F(\theta_d)G(\theta_l, \theta_v)}{4\cos\theta_l\cos\theta_v}
+$$
+
+where $\theta_l$ and $\theta_v$ are the angles of incidence of $\mathbf{l}$ and $\mathbf{v}$ vectors with respect to the normal $\theta_h$ is the angle between the normal and the half vector, and $\theta_d$ is the ``difference'' angle between $\mathbf{l}$ and the half vector. For the specular term, $D$ is the microfacet distribution function and is responsible for the shape of the specular peak, $F$ is the Fresnel reflection coefficient, and $G$ is the geometric attenuation or shadowing factor.
+
+Although there are several model for subsurface local reflection in the literatur, the most widely-used on by far is the \textit{Lambertian} BRDF term. The Lambertian BRDF is actually a constant value; the well known cosine of $(\mathbf{n}\cdot\mathbf{l})$ factor is part of the reflection equation, not the BRDF. The eaxct value of the Lambertian BRDF is
 
 $$
-f(\mathbf{l}, \mathbf{v}) = \text{diffuse}+\frac{D(\theta_h)F(\theta_d)G(\theta_l, \theta_v)}{4\cos\theta_l\cos\theta_v}
+f_{Lambert}(\mathbf{l}, \mathbf{v}) = \frac{\mathbf{c}_{diff}}{\pi}
 $$
+Here $\mathbf{c}_{diff}$ is the fraction of light which is diffusely reflected. It is an RGB value with R, G, and B restricted to the 0 - 1 range, and corresponds closely to what most people think of as a ``surface colour''. This parameter is typically referred to as the \textit{diffuse colour}.
 
-where $\theta_l$ and $\theta_v$ are the angles of incidence of $\mathbf{l}$ and $\mathbf{v}$ vectors with respect to the normal $\theta_h$ is the angle between the normal and the half vector, and $\theta_d$ is the ``difference'' angle between $\mathbf{l}$ and the half vector.
-
-The diffuse term is a function of unknown form. Lambert diffuse is often assumed and is represented by a constant value. For the specular term, $D$ is the microfacet distribution function and is responsible for the shape of the specular peak, $F$ is the Fresnel reflection coefficient, and $G$ is the geometric attenuation or shadowing factor.
+Most physically plausible models not specifically described in microfacet form can still be interpreted as microfacet models in that they have a distribution function, a Fresnel factor, and some additional factor which could be considered a geometric shadowing factor. The only real difference
+between microfacet models and other models is whether they include the explicit $\frac{1}{4\cos\theta_l\cos\theta_v}$ factor that comes from the microfacet derivation. For models that don’t include this factor, an implied shadowing factor can be determined by multiplying the model by $4\cos\theta_l\cos\theta_v$ after factoring out the $D$ and $F$ factors.
 
 \subsection{Image formation: radiometric perspective}
 This section discusses the radiometric perspective of image formation. Specifically, we discuss the contributing factors that determine the pixel intensity of an image.

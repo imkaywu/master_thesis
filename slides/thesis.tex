@@ -319,21 +319,44 @@ Assumptions:
 %------------------------------------------------
 \begin{frame}{Description: expression}
 
-We use three discrete scales to parameterize these properties: \textit{low} (0.2), \textit{medium} (0.5), and \textit{high} (0.8).
 \begin{table}[!htbp]
   \centering
   \begin{tabular}{l*{4}{p{1cm}}l}
   \toprule
-  \textbf{Prob cond} & Texture & Albedo & Specular & Rough & \textbf{Label}\\
+  \textbf{Object} & Texture & Albedo & Specular & Rough & \textbf{Label}\\
   \midrule
-  1 & low/med & high & low/med & high & Tl-B-D-R\\
-  2 & low/med & high & high & low/med & Tl-B-M-S\\
-  3 & high & high & low/med & high & T-B-D-R\\
-  4 & high & high & high & low/med & T-B-M-S\\
+  Vase & high & high & high & low & T-B-M-S\\
   \bottomrule
   \end{tabular}
-  \caption{Expression of the four problem conditions.}
+  \caption{Description of the object `vase'.}
 \end{table}
+
+\begin{figure}[!htbp]
+\centering
+\begin{tabular}{ccc}
+  \includegraphics[width=0.3\textwidth]{interp/ui/ui_sphere.png}&
+  \includegraphics[width=0.3\textwidth]{interp/ui/ui_vase.png}&
+  \includegraphics[width=0.3\textwidth]{interp/real_world_img/vase/vase.jpg}\\
+  (a). synthetic sphere & (b). synthetic vase & (c). real-world vase\\
+\end{tabular}
+\caption{(a) demonstrates the effect of the property settings on a sphere, (b) on a teapot, and (c) shows the real-world object.}
+\end{figure}
+
+% We use three discrete scales to parameterize these properties: \textit{low} (0.2), \textit{medium} (0.5), and \textit{high} (0.8).
+% \begin{table}[!htbp]
+%   \centering
+%   \begin{tabular}{l*{4}{p{1cm}}l}
+%   \toprule
+%   \textbf{Prob cond} & Texture & Albedo & Specular & Rough & \textbf{Label}\\
+%   \midrule
+%   1 & low/med & high & low/med & high & Tl-B-D-R\\
+%   2 & low/med & high & high & low/med & Tl-B-M-S\\
+%   3 & high & high & low/med & high & T-B-D-R\\
+%   4 & high & high & high & low/med & T-B-M-S\\
+%   \bottomrule
+%   \end{tabular}
+%   \caption{Expression of the four problem conditions.}
+% \end{table}
 
 \end{frame}
 
