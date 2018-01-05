@@ -218,12 +218,13 @@ In this section, we evaluate the performance of interpreter given a valid descri
 Let's revisit the scenario proposed in Chapter~\ref{ch:Introduction} using the test objects `bust' and `statue' as an example. First, the user describes the problem condition based on visual and geometric properties. In the example, the description of object `bust' and `statue' is: texture (0.2), albedo (0.8), specularity (0.2), and roughness (0.8). The synthetic objects with the same problem condition are shown in Figure~\ref{fig:desc_interp_1}.
 \begin{figure*}[!htbp]
 \centering
-\begin{tabular}{cc}
-\includegraphics[width=0.4\textwidth]{img/interp/ui/ui_sphere_1.PNG} &
-\includegraphics[width=0.4\textwidth]{img/interp/ui/ui_teapot.PNG} \\
-(a). synthetic sphere & (b). synthetic object \\
+\begin{tabular}{ccc}
+\includegraphics[width=0.3\textwidth]{img/interp/ui/interp_desc_0.JPG} &
+\includegraphics[width=0.3\textwidth]{img/interp/ui/interp_desc_1.png} &
+\includegraphics[width=0.3\textwidth]{img/interp/ui/interp_desc_2.png} \\
+(a). property settings & (b). synthetic sphere & (c). synthetic object \\
 \end{tabular}
-\caption{(a) and (b) shows the synthetic object rendered using the problem condition of object `bust' and `statue'. [images need to be changed]}
+\caption{(b) and (c) shows the synthetic object rendered using the problem condition of object `bust' and `statue'.}
 \label{fig:desc_interp_1}
 \end{figure*}
 
@@ -298,6 +299,7 @@ Note that the selected objects do no favor any algorithm. The significance of th
 We have demonstrated in last section that the interpreter can achieve successful results given accurate description. However, how would the interpreter perform given an inaccurate description? There are two guesses: 1) the interpreter would return poor result given an inaccurate description; 2) the interpreter can still achieve successful results under some specific circumstances. In this section, we are interested to find out how sensitive the interpreter is given inaccurate descriptions, and the cases where it would fail or succeed. We provide four inaccurate desriptions by iterating through four properties, and each time one and only one property is set correctly. For instance, $\text{prop}_i$ is correctly estimated for $\text{desc}_i$ while the rest of the properties are set incorrectly, $i\in \{1, 2, 3, 4\}$. Since a description could be mapped to multiple algorithms, a description that does not match the object could potentially have a successful reconstruction result as well.
 
 The layout of the graph is as follows: columnwise, $\text{Desc}_i, i\in\{1, 2, 3, 4\}$ presents results where an inaccurate description is provided while the last column presents the results where the correct description is provided. Rowwise, for each object, the result is divided into three segments: The description of problem condition is presented in the first segment, which is coloured-coded to indicate the correctly set property. The order of properties in the description is: texture, albedo, specularity, and roughness. Since there is one and only one correctly estimated property in each inaccurate description, it is coloured in red while the incorrectly estimated properties are coloured in black. The algorithms returned by the mapping are presented below the description in the second segment, with the algorithm chosen by the interpreter coloured in red. The reconstruction result using the interpreted algorithm is shown in the last segment of each section.
+% one incorrect description
 \begin{figure*}[!htbp]
 \centering
 \begin{tabular}{c|*{4}{l}|l}
@@ -305,40 +307,41 @@ The layout of the graph is as follows: columnwise, $\text{Desc}_i, i\in\{1, 2, 3
 \multirow{2}{*}{Object} & \multicolumn{5}{c}{Descriptions and Results} \\ \cline{2-6}
 & $Desc_1$ & $Desc_2$ & $Desc_3$ & $Desc_4$ & Correct Desc \\
 \midrule
-\multirow{4}{*}{Bust} & \tc{02}020802 & 08\tc{08}0802 & 0802\tc{02}02 & 080208\tc{08} & 02080208 \\
-& \tabitem\tc{BL} & \tabitem PMVS 	 & \tabitem\tc{PMVS} & \tabitem\tc{EPS} & \tabitem EPS 	  \\
-& 		 		  & \tabitem EPS  	 & 	    	 		 & 	 			  	& \tabitem\tc{GSL}\\
-& 		 		  & \tabitem\tc{GSL} & 	    	 		 & 	 			  	& 				  \\
-& \includegraphics[width=0.1\textwidth]{interp/synth_interp/beethoven_vh} &
-  \includegraphics[width=0.1\textwidth]{interp/synth_interp/beethoven_sl} &
-  \includegraphics[width=0.1\textwidth]{interp/synth_interp/beethoven_mvs} &
+\multirow{4}{*}{Bust} & \tc{08}080208 & 02\tc{02}0208 & 0208\tc{08}08 & 020802\tc{02} & 02080208 \\
+& \tabitem PMVS    & \tabitem\tc{EPS} & \tabitem EPS 	  & \tabitem EPS 	 & \tabitem EPS \\
+& \tabitem EPS     & 				  & \tabitem\tc{GSL} & \tabitem\tc{GSL} & \tabitem\tc{GSL} \\
+& \tabitem\tc{GSL} & 				  & 	    	 		 & 	 			  	& \\
+& \includegraphics[width=0.1\textwidth]{interp/synth_interp/beethoven_sl} &
   \includegraphics[width=0.1\textwidth]{interp/synth_interp/beethoven_ps} &
+  \includegraphics[width=0.1\textwidth]{interp/synth_interp/beethoven_sl} &
+  \includegraphics[width=0.1\textwidth]{interp/synth_interp/beethoven_sl} &
   \includegraphics[width=0.1\textwidth]{interp/synth_interp/beethoven_sl} \\ \cline{2-6}
-\multirow{4}{*}{vase0} & \tc{02}020208 & 08\tc{08}0208 & 0802\tc{08}02 & 080202\tc{02} & 02080802 \\
-& \tabitem\tc{EPS} 	   & \tabitem PMVS   & \tabitem\tc{BL} & \tabitem\tc{PMVS} & \tabitem\tc{EPS}\\
-& & \tabitem EPS 	 & 				   & 				   &\\
-& & \tabitem\tc{GSL}& 				   & 				   &\\
-& \includegraphics[width=0.1\textwidth]{interp/synth_interp/vase0_ps} &
-  \includegraphics[width=0.1\textwidth]{interp/synth_interp/vase0_sl} &
+\multirow{4}{*}{vase0} & \tc{08}080802 & 02\tc{02}0802 & 0208\tc{02}02 & 020808\tc{08} & 02080802 \\
+& \tabitem\tc{PMVS} & \tabitem\tc{BL} & \tabitem EPS 	& \tabitem EPS     & \tabitem\tc{EPS}\\
+& \tabitem EPS 	    &    	  	 	 & \tabitem\tc{GSL} & \tabitem\tc{GSL} & \\
+& 				    & 		 		 & 				   	& 				   & \\
+& \includegraphics[width=0.1\textwidth]{interp/synth_interp/vase0_mvs} &
   \includegraphics[width=0.1\textwidth]{interp/synth_interp/vase0_vh} &
-  \includegraphics[width=0.1\textwidth]{interp/synth_interp/vase0_mvs} &
+  \includegraphics[width=0.1\textwidth]{interp/synth_interp/vase0_sl} &
+  \includegraphics[width=0.1\textwidth]{interp/synth_interp/vase0_sl} &
   \includegraphics[width=0.1\textwidth]{interp/synth_interp/vase0_ps} \\ \cline{2-6}
-\multirow{4}{*}{barrel} & \tc{08}020802 & 02\tc{08}0802 & 0202\tc{02}02 & 020208\tc{08} & 08080208 \\
-& \tabitem\tc{PMVS} & \tabitem EPS     & \tabitem\tc{BL} & \tabitem\tc{EPS} & \tabitem PMVS   \\
-& 					& \tabitem\tc{GSL} & 				 & 					& \tabitem EPS    \\
-& 					& 				   & 				 &					& \tabitem\tc{GSL}\\
-& \includegraphics[width=0.1\textwidth]{interp/synth_interp/barrel_mvs} &
+\multirow{4}{*}{barrel} & \tc{02}080208 & 08\tc{02}0208 & 0808\tc{08}08 & 080802\tc{02} & 08080208 \\
+& \tabitem EPS 	   & \tabitem\tc{PMVS} & \tabitem PMVS    & \tabitem PMVS 	 & \tabitem PMVS \\
+& \tabitem\tc{GSL} & \tabitem EPS 	   & \tabitem EPS 	  & \tabitem EPS 	 & \tabitem EPS\\
+& 				   & 				   & \tabitem\tc{GSL} &	\tabitem\tc{GSL} & \tabitem\tc{GSL} \\
+& \includegraphics[width=0.1\textwidth]{interp/synth_interp/barrel_sl} &
+  \includegraphics[width=0.1\textwidth]{interp/synth_interp/barrel_mvs} &
   \includegraphics[width=0.1\textwidth]{interp/synth_interp/barrel_sl} &
-  \includegraphics[width=0.1\textwidth]{interp/synth_interp/barrel_vh} &
-  \includegraphics[width=0.1\textwidth]{interp/synth_interp/barrel_ps} &
+  \includegraphics[width=0.1\textwidth]{interp/synth_interp/barrel_sl} &
   \includegraphics[width=0.1\textwidth]{interp/synth_interp/barrel_sl} \\ \cline{2-6}
-\multirow{4}{*}{vase1} & \tc{08}020208 & 02\tc{08}0208 & 0202\tc{08}08 & 020202\tc{02} & 08080802 \\
-& \tabitem\tc{PMVS} & \tabitem EPS     & \tabitem\tc{BL} & \tabitem\tc{BL} & \tabitem\tc{PMVS}\\
-& \tabitem EPS 		& \tabitem\tc{GSL} &				 &				   & \tabitem EPS     \\
-& \includegraphics[width=0.1\textwidth]{interp/synth_interp/vase1_mvs} &
+\multirow{4}{*}{vase1} & \tc{02}080802 & 08\tc{02}0802 & 0808\tc{02}02 & 080808\tc{08} & 08080802 \\
+& \tabitem\tc{EPS} & \tabitem\tc{BL} & \tabitem PMVS 	& \tabitem PMVS & \tabitem\tc{PMVS}\\
+& 				   & 				 & \tabitem EPS 	& \tabitem EPS & \tabitem EPS     \\
+&				   &				 & \tabitem\tc{GSL} & \tabitem\tc{GSL} & \\
+& \includegraphics[width=0.1\textwidth]{interp/synth_interp/vase1_ps} &
+  \includegraphics[width=0.1\textwidth]{interp/synth_interp/vase1_vh} &
   \includegraphics[width=0.1\textwidth]{interp/synth_interp/vase1_sl} &
-  \includegraphics[width=0.1\textwidth]{interp/synth_interp/vase1_vh} &
-  \includegraphics[width=0.1\textwidth]{interp/synth_interp/vase1_vh} &
+  \includegraphics[width=0.1\textwidth]{interp/synth_interp/vase1_sl} &
   \includegraphics[width=0.1\textwidth]{interp/synth_interp/vase1_mvs}\\
 \bottomrule
 \end{tabular}
@@ -346,6 +349,56 @@ The layout of the graph is as follows: columnwise, $\text{Desc}_i, i\in\{1, 2, 3
 \label{fig:eval_21}
 \end{figure*}
 
+% one correct description
+% \begin{figure*}[!htbp]
+% \centering
+% \begin{tabular}{c|*{4}{l}|l}
+% \toprule
+% \multirow{2}{*}{Object} & \multicolumn{5}{c}{Descriptions and Results} \\ \cline{2-6}
+% & $Desc_1$ & $Desc_2$ & $Desc_3$ & $Desc_4$ & Correct Desc \\
+% \midrule
+% \multirow{4}{*}{Bust} & \tc{02}020802 & 08\tc{08}0802 & 0802\tc{02}02 & 080208\tc{08} & 02080208 \\
+% & \tabitem\tc{BL} & \tabitem PMVS 	 & \tabitem\tc{PMVS} & \tabitem\tc{EPS} & \tabitem EPS 	  \\
+% & 		 		  & \tabitem EPS  	 & 	    	 		 & 	 			  	& \tabitem\tc{GSL}\\
+% & 		 		  & \tabitem\tc{GSL} & 	    	 		 & 	 			  	& 				  \\
+% & \includegraphics[width=0.1\textwidth]{interp/synth_interp/beethoven_vh} &
+%   \includegraphics[width=0.1\textwidth]{interp/synth_interp/beethoven_sl} &
+%   \includegraphics[width=0.1\textwidth]{interp/synth_interp/beethoven_mvs} &
+%   \includegraphics[width=0.1\textwidth]{interp/synth_interp/beethoven_ps} &
+%   \includegraphics[width=0.1\textwidth]{interp/synth_interp/beethoven_sl} \\ \cline{2-6}
+% \multirow{4}{*}{vase0} & \tc{02}020208 & 08\tc{08}0208 & 0802\tc{08}02 & 080202\tc{02} & 02080802 \\
+% & \tabitem\tc{EPS} 	   & \tabitem PMVS   & \tabitem\tc{BL} & \tabitem\tc{PMVS} & \tabitem\tc{EPS}\\
+% & & \tabitem EPS 	 & 				   & 				   &\\
+% & & \tabitem\tc{GSL}& 				   & 				   &\\
+% & \includegraphics[width=0.1\textwidth]{interp/synth_interp/vase0_ps} &
+%   \includegraphics[width=0.1\textwidth]{interp/synth_interp/vase0_sl} &
+%   \includegraphics[width=0.1\textwidth]{interp/synth_interp/vase0_vh} &
+%   \includegraphics[width=0.1\textwidth]{interp/synth_interp/vase0_mvs} &
+%   \includegraphics[width=0.1\textwidth]{interp/synth_interp/vase0_ps} \\ \cline{2-6}
+% \multirow{4}{*}{barrel} & \tc{08}020802 & 02\tc{08}0802 & 0202\tc{02}02 & 020208\tc{08} & 08080208 \\
+% & \tabitem\tc{PMVS} & \tabitem EPS     & \tabitem\tc{BL} & \tabitem\tc{EPS} & \tabitem PMVS   \\
+% & 					& \tabitem\tc{GSL} & 				 & 					& \tabitem EPS    \\
+% & 					& 				   & 				 &					& \tabitem\tc{GSL}\\
+% & \includegraphics[width=0.1\textwidth]{interp/synth_interp/barrel_mvs} &
+%   \includegraphics[width=0.1\textwidth]{interp/synth_interp/barrel_sl} &
+%   \includegraphics[width=0.1\textwidth]{interp/synth_interp/barrel_vh} &
+%   \includegraphics[width=0.1\textwidth]{interp/synth_interp/barrel_ps} &
+%   \includegraphics[width=0.1\textwidth]{interp/synth_interp/barrel_sl} \\ \cline{2-6}
+% \multirow{4}{*}{vase1} & \tc{08}020208 & 02\tc{08}0208 & 0202\tc{08}08 & 020202\tc{02} & 08080802 \\
+% & \tabitem\tc{PMVS} & \tabitem EPS     & \tabitem\tc{BL} & \tabitem\tc{BL} & \tabitem\tc{PMVS}\\
+% & \tabitem EPS 		& \tabitem\tc{GSL} &				 &				   & \tabitem EPS     \\
+% & \includegraphics[width=0.1\textwidth]{interp/synth_interp/vase1_mvs} &
+%   \includegraphics[width=0.1\textwidth]{interp/synth_interp/vase1_sl} &
+%   \includegraphics[width=0.1\textwidth]{interp/synth_interp/vase1_vh} &
+%   \includegraphics[width=0.1\textwidth]{interp/synth_interp/vase1_vh} &
+%   \includegraphics[width=0.1\textwidth]{interp/synth_interp/vase1_mvs}\\
+% \bottomrule
+% \end{tabular}
+% \caption{Evaluation 2: less accurate description may lead to poor result. $\text{Desc}_i$ represents inaccurate descriptions. For each object, the first row represent the description, with the correctly estimated property coloured in red while the incorrect ones in black. The algorithms determined by mapping are below the description with the algorithm selected by interpreter coloured in red (BL: baseline). The last row shows the corresponding reconstruction results.}
+% \label{fig:eval_21}
+% \end{figure*}
+
+% one incorrect description
 \begin{figure*}[!htbp]
 \centering
 \begin{tabular}{c|*{4}{l}|l}
@@ -353,46 +406,97 @@ The layout of the graph is as follows: columnwise, $\text{Desc}_i, i\in\{1, 2, 3
 \multirow{2}{*}{Object} & \multicolumn{5}{c}{Descriptions and Results} \\ \cline{2-6}
 & $Desc_1$ & $Desc_2$ & $Desc_3$ & $Desc_4$ & Correct Desc \\
 \midrule
-\multirow{4}{*}{statue} & \tc{02}020802 & 08\tc{08}0802 & 0802\tc{02}02 & 080208\tc{08} & 02080208 \\
-& \tabitem\tc{BL} & \tabitem PMVS 	 & \tabitem\tc{PMVS} & \tabitem\tc{EPS} & \tabitem EPS 	  \\
-& 		 		  & \tabitem EPS  	 & 	    	 		 & 	 			  	& \tabitem\tc{GSL}\\
-& 		 		  & \tabitem\tc{GSL} & 	    	 		 & 	 			  	&\\
-& \includegraphics[width=0.1\textwidth]{interp/real_interp/statue/statue_sc} &
-  \includegraphics[width=0.1\textwidth]{interp/real_interp/statue/statue_sl} &
-  \includegraphics[width=0.1\textwidth]{interp/real_interp/statue/statue_mvs} &
+\multirow{4}{*}{statue} & \tc{08}080208 & 02\tc{02}0208 & 0208\tc{08}08 & 020802\tc{02} & 02080208 \\
+& \tabitem PMVS    & \tabitem\tc{EPS} & \tabitem EPS 	  & \tabitem EPS 	 & \tabitem EPS \\
+& \tabitem EPS     & 				  & \tabitem\tc{GSL} & \tabitem\tc{GSL} & \tabitem\tc{GSL} \\
+& \tabitem\tc{GSL} & 				  & 	    	 		 & 	 			  	& \\
+& \includegraphics[width=0.1\textwidth]{interp/real_interp/statue/statue_sl} &
   \includegraphics[width=0.1\textwidth]{interp/real_interp/statue/statue_ps} &
+  \includegraphics[width=0.1\textwidth]{interp/real_interp/statue/statue_sl} &
+  \includegraphics[width=0.1\textwidth]{interp/real_interp/statue/statue_sl} &
   \includegraphics[width=0.1\textwidth]{interp/real_interp/statue/statue_sl} \\ \cline{2-6}
-\multirow{4}{*}{cup} & \tc{02}020208 & 08\tc{08}0208 & 0802\tc{08}02 & 080202\tc{02} & 02080802 \\
-& \tabitem\tc{EPS} 	   & \tabitem PMVS   & \tabitem\tc{BL} & \tabitem\tc{PMVS} & \tabitem\tc{EPS}\\
-& & \tabitem EPS 	 & 				   & \\
-& & \tabitem\tc{GSL}& 				   & 				   &\\
-& \includegraphics[width=0.1\textwidth]{interp/real_interp/cup/cup_ps} &
-  \includegraphics[width=0.1\textwidth]{interp/real_interp/cup/cup_sl} &
+\multirow{4}{*}{cup} & \tc{08}080802 & 02\tc{02}0802 & 0208\tc{02}02 & 020808\tc{08} & 02080802 \\
+& \tabitem\tc{PMVS} & \tabitem\tc{BL} & \tabitem EPS 	& \tabitem EPS     & \tabitem\tc{EPS}\\
+& \tabitem EPS 	    &    	  	 	 & \tabitem\tc{GSL} & \tabitem\tc{GSL} & \\
+& 				    & 		 		 & 				   	& 				   & \\
+& \includegraphics[width=0.1\textwidth]{interp/real_interp/cup/cup_mvs} &
   \includegraphics[width=0.1\textwidth]{interp/real_interp/cup/cup_sc} &
-  \includegraphics[width=0.1\textwidth]{interp/real_interp/cup/cup_mvs} &
+  \includegraphics[width=0.1\textwidth]{interp/real_interp/cup/cup_sl} &
+  \includegraphics[width=0.1\textwidth]{interp/real_interp/cup/cup_sl} &
   \includegraphics[width=0.1\textwidth]{interp/real_interp/cup/cup_ps} \\ \cline{2-6}
-\multirow{4}{*}{pot} & \tc{08}020802 & 02\tc{08}0802 & 0202\tc{02}02 & 020208\tc{08} & 08080208 \\
-& \tabitem\tc{PMVS} & \tabitem EPS     & \tabitem\tc{BL} & \tabitem\tc{EPS} & \tabitem PMVS   \\
-& 					& \tabitem\tc{GSL} & 				 & 					& \tabitem EPS    \\
-& 					& 				   & 				 &					& \tabitem\tc{GSL}\\
-& \includegraphics[width=0.1\textwidth]{interp/real_interp/pot/pot_mvs} &
+\multirow{4}{*}{pot} & \tc{02}080208 & 08\tc{02}0208 & 0808\tc{08}08 & 080802\tc{02} & 08080208 \\
+& \tabitem EPS 	   & \tabitem\tc{PMVS} & \tabitem PMVS    & \tabitem PMVS 	 & \tabitem PMVS \\
+& \tabitem\tc{GSL} & \tabitem EPS 	   & \tabitem EPS 	  & \tabitem EPS 	 & \tabitem EPS\\
+& 				   & 				   & \tabitem\tc{GSL} &	\tabitem\tc{GSL} & \tabitem\tc{GSL} \\
+& \includegraphics[width=0.1\textwidth]{interp/real_interp/pot/pot_sl} &
+  \includegraphics[width=0.1\textwidth]{interp/real_interp/pot/pot_mvs} &
   \includegraphics[width=0.1\textwidth]{interp/real_interp/pot/pot_sl} &
-  \includegraphics[width=0.1\textwidth]{interp/real_interp/pot/pot_sc} &
-  \includegraphics[width=0.1\textwidth]{interp/real_interp/pot/pot_ps} &
+  \includegraphics[width=0.1\textwidth]{interp/real_interp/pot/pot_sl} &
   \includegraphics[width=0.1\textwidth]{interp/real_interp/pot/pot_sl} \\ \cline{2-6}
-\multirow{4}{*}{vase} & \tc{08}020208 & 02\tc{08}0208 & 0202\tc{08}08 & 020202\tc{02} & 08080802 \\
-& \tabitem\tc{PMVS} & \tabitem EPS     & \tabitem\tc{BL} & \tabitem\tc{BL} & \tabitem\tc{PMVS}\\
-& \tabitem EPS 		& \tabitem\tc{GSL} &				 &				   & \tabitem EPS     \\
-& \includegraphics[width=0.1\textwidth]{interp/real_interp/vase/vase_mvs} &
+\multirow{4}{*}{vase} & \tc{02}080802 & 08\tc{02}0802 & 0808\tc{02}02 & 080808\tc{08} & 08080802 \\
+& \tabitem\tc{EPS} & \tabitem\tc{BL} & \tabitem PMVS 	& \tabitem PMVS & \tabitem\tc{PMVS}\\
+& 				   & 				 & \tabitem EPS 	& \tabitem EPS & \tabitem EPS     \\
+&				   &				 & \tabitem\tc{GSL} & \tabitem\tc{GSL} & \\
+& \includegraphics[width=0.1\textwidth]{interp/real_interp/vase/vase_ps} &
+  \includegraphics[width=0.1\textwidth]{interp/real_interp/vase/vase_sc} &
   \includegraphics[width=0.1\textwidth]{interp/real_interp/vase/vase_sl} &
-  \includegraphics[width=0.1\textwidth]{interp/real_interp/vase/vase_sc} &
-  \includegraphics[width=0.1\textwidth]{interp/real_interp/vase/vase_sc} &
+  \includegraphics[width=0.1\textwidth]{interp/real_interp/vase/vase_sl} &
   \includegraphics[width=0.1\textwidth]{interp/real_interp/vase/vase_mvs}\\
 \bottomrule
 \end{tabular}
 \caption{Evaluation 2: less accurate description may lead to poor reconstruction results. $\text{Desc}_i$ represents inaccurate descriptions. For each object, the first row represent the description, with the correctly estimated property coloured in red while the incorrect ones in black. The algorithms determined by mapping are below the description with the algorithm selected by interpreter coloured in red (BL: baseline). The last row shows the corresponding reconstruction results.}
 \label{fig:eval_22}
 \end{figure*}
+
+% one correct description
+% \begin{figure*}[!htbp]
+% \centering
+% \begin{tabular}{c|*{4}{l}|l}
+% \toprule
+% \multirow{2}{*}{Object} & \multicolumn{5}{c}{Descriptions and Results} \\ \cline{2-6}
+% & $Desc_1$ & $Desc_2$ & $Desc_3$ & $Desc_4$ & Correct Desc \\
+% \midrule
+% \multirow{4}{*}{statue} & \tc{02}020802 & 08\tc{08}0802 & 0802\tc{02}02 & 080208\tc{08} & 02080208 \\
+% & \tabitem\tc{BL} & \tabitem PMVS 	 & \tabitem\tc{PMVS} & \tabitem\tc{EPS} & \tabitem EPS 	  \\
+% & 		 		  & \tabitem EPS  	 & 	    	 		 & 	 			  	& \tabitem\tc{GSL}\\
+% & 		 		  & \tabitem\tc{GSL} & 	    	 		 & 	 			  	&\\
+% & \includegraphics[width=0.1\textwidth]{interp/real_interp/statue/statue_sc} &
+%   \includegraphics[width=0.1\textwidth]{interp/real_interp/statue/statue_sl} &
+%   \includegraphics[width=0.1\textwidth]{interp/real_interp/statue/statue_mvs} &
+%   \includegraphics[width=0.1\textwidth]{interp/real_interp/statue/statue_ps} &
+%   \includegraphics[width=0.1\textwidth]{interp/real_interp/statue/statue_sl} \\ \cline{2-6}
+% \multirow{4}{*}{cup} & \tc{02}020208 & 08\tc{08}0208 & 0802\tc{08}02 & 080202\tc{02} & 02080802 \\
+% & \tabitem\tc{EPS} 	   & \tabitem PMVS   & \tabitem\tc{BL} & \tabitem\tc{PMVS} & \tabitem\tc{EPS}\\
+% & & \tabitem EPS 	 & 				   & \\
+% & & \tabitem\tc{GSL}& 				   & 				   &\\
+% & \includegraphics[width=0.1\textwidth]{interp/real_interp/cup/cup_ps} &
+%   \includegraphics[width=0.1\textwidth]{interp/real_interp/cup/cup_sl} &
+%   \includegraphics[width=0.1\textwidth]{interp/real_interp/cup/cup_sc} &
+%   \includegraphics[width=0.1\textwidth]{interp/real_interp/cup/cup_mvs} &
+%   \includegraphics[width=0.1\textwidth]{interp/real_interp/cup/cup_ps} \\ \cline{2-6}
+% \multirow{4}{*}{pot} & \tc{08}020802 & 02\tc{08}0802 & 0202\tc{02}02 & 020208\tc{08} & 08080208 \\
+% & \tabitem\tc{PMVS} & \tabitem EPS     & \tabitem\tc{BL} & \tabitem\tc{EPS} & \tabitem PMVS   \\
+% & 					& \tabitem\tc{GSL} & 				 & 					& \tabitem EPS    \\
+% & 					& 				   & 				 &					& \tabitem\tc{GSL}\\
+% & \includegraphics[width=0.1\textwidth]{interp/real_interp/pot/pot_mvs} &
+%   \includegraphics[width=0.1\textwidth]{interp/real_interp/pot/pot_sl} &
+%   \includegraphics[width=0.1\textwidth]{interp/real_interp/pot/pot_sc} &
+%   \includegraphics[width=0.1\textwidth]{interp/real_interp/pot/pot_ps} &
+%   \includegraphics[width=0.1\textwidth]{interp/real_interp/pot/pot_sl} \\ \cline{2-6}
+% \multirow{4}{*}{vase} & \tc{08}020208 & 02\tc{08}0208 & 0202\tc{08}08 & 020202\tc{02} & 08080802 \\
+% & \tabitem\tc{PMVS} & \tabitem EPS     & \tabitem\tc{BL} & \tabitem\tc{BL} & \tabitem\tc{PMVS}\\
+% & \tabitem EPS 		& \tabitem\tc{GSL} &				 &				   & \tabitem EPS     \\
+% & \includegraphics[width=0.1\textwidth]{interp/real_interp/vase/vase_mvs} &
+%   \includegraphics[width=0.1\textwidth]{interp/real_interp/vase/vase_sl} &
+%   \includegraphics[width=0.1\textwidth]{interp/real_interp/vase/vase_sc} &
+%   \includegraphics[width=0.1\textwidth]{interp/real_interp/vase/vase_sc} &
+%   \includegraphics[width=0.1\textwidth]{interp/real_interp/vase/vase_mvs}\\
+% \bottomrule
+% \end{tabular}
+% \caption{Evaluation 2: less accurate description may lead to poor reconstruction results. $\text{Desc}_i$ represents inaccurate descriptions. For each object, the first row represent the description, with the correctly estimated property coloured in red while the incorrect ones in black. The algorithms determined by mapping are below the description with the algorithm selected by interpreter coloured in red (BL: baseline). The last row shows the corresponding reconstruction results.}
+% \label{fig:eval_22}
+% \end{figure*}
+
 % paraphrase this: We can see that inaccurate description can lead to poor reconstruction, and it leads to successful results only when the selected algorithm is in the mapping of the correct description.
 
 Let's denote the algorithm(s) returned by the mapping given description $\text{Desc}_i$ as $\{\text{Algo}_i\}$. For instance, the algorithms for object \textit{bust} given description $\text{Desc}_2$ is $\text{Algo}_2=\{PMVS, EPS, GSL\}$. Let's also denote the algorithm(s) returned by the correct description as $\{\text{Algo}\}$. Thus in the case of object \textit{bust}, $\{\text{Algo}\}=\{EPS, GSL\}$. We observe that an inaccurate description can possibly lead to a successful reconstruction if and only if 
