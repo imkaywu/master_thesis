@@ -76,7 +76,7 @@ kaywu@ece.ubc.ca \\ % Your email address
   \begin{itemize}
     \item Algorithms: vision knowledge required;
     \item Parameters: not interpretable, meaningful, or conceptually estimatible;
-    \item Approach: \textit{try-and-error}.
+    \item Approach: \textit{trial-and-error}.
   \end{itemize}
 \end{alertblock}
 
@@ -428,6 +428,13 @@ Reduce problem space dimensionality by discovering properties that have an effec
 \includegraphics[width=0.5\textwidth]{mapping/eval_prop/mvs_tex_spec}
 \end{figure}
 
+\begin{exampleblock}{observations}
+\begin{itemize}
+\item texture and specularity has an effect on both accuracy and completeness;
+\item the effect of specularity is less noticable on highly/lowly textured surfaces.
+\end{itemize}
+\end{exampleblock}
+
 \end{frame}
 
 %------------------------------------------------
@@ -450,6 +457,7 @@ Texture & Albedo & Specular & Roughness\\
 0.5 & 0.8 & 0.5 & -\\
 \bottomrule
 \end{tabular}
+\caption{Problem conditions that PMVS works reliably under.}
 \end{table}
 
 \end{frame}
@@ -586,7 +594,7 @@ An interpreter selects an appropriate algorithm based on description of problem 
 
 \begin{figure}[!htbp]
 \centering
-\includegraphics[width=0.8\textwidth]{interp/interpreter.pdf}
+\includegraphics[width=0.7\textwidth]{interp/interpreter.pdf}
 \end{figure}
 
 \end{frame}
@@ -738,9 +746,33 @@ We use object `vase' as an example:
 
 \begin{exampleblock}{Comparison to baseline result}
 \begin{itemize}
-\item completenss: has unconstructed holes
+\item completenss: has incomplete holes
 \end{itemize}
 \end{exampleblock}
+
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}{Interpretation 2: demonstrative result (cont'd)}
+
+We use object `bust' as an example:
+\begin{figure}
+\centering
+\includegraphics[width=0.8\textwidth]{images/interp2_1.pdf}
+\end{figure}
+
+\begin{exampleblock}{Comparison to baseline result}
+\begin{itemize}
+\item accuracy: higher quality
+\item completenss: no unconstructed holes
+\end{itemize}
+\end{exampleblock}
+
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}{Interpretation 2: demonstrative result (cont'd)}
+
 
 \end{frame}
 
@@ -754,21 +786,51 @@ We use object `vase' as an example:
 \multirow{2}{*}{Object} & \multicolumn{5}{c}{Descriptions and Results} \\ \cline{2-6}
 & $Desc_1$ & $Desc_2$ & $Desc_3$ & $Desc_4$ & Correct Desc \\
 \midrule
-Desc & \tc{02}020208 & 08\tc{08}0208 & 0802\tc{08}02 & 080202\tc{02} & 02080802 \\
-\multirow{3}{*}{Algo} & 
-\tabitem\tc{EPS} & \tabitem PMVS   & \tabitem\tc{BL} & \tabitem\tc{PMVS} & \tabitem\tc{EPS}\\
-&                & \tabitem EPS    &           &           &\\
-&                & \tabitem\tc{GSL}&           &           &\\ \cline{2-6}
-vase0 & \raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/vase0_ps}} &
-  \raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/vase0_sl}} &
+Desc & \tc{08}080802 & 02\tc{02}0802 & 0208\tc{02}02 & 020808\tc{08} & 02080802 \\
+\multirow{3}{*}{Algo} 
+& \tabitem\tc{PMVS} & \tabitem\tc{BL} & \tabitem EPS  & \tabitem EPS     & \tabitem\tc{EPS}\\
+& \tabitem EPS      &            & \tabitem\tc{GSL} & \tabitem\tc{GSL} & \\ \cline{2-6}
+vase0 & \raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/vase0_mvs}} &
   \raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/vase0_vh}} &
-  \raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/vase0_mvs}} &
-  \raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/vase0_ps}} \\
-cup & \raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/real_interp/cup/cup_ps}} &
-  \raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/real_interp/cup/cup_sl}} &
+  \raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/vase0_sl}} &
+  \raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/vase0_sl}} &
+  \raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/vase0_ps}}\\
+cup & \raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/real_interp/cup/cup_mvs}} &
   \raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/real_interp/cup/cup_sc}} &
-  \raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/real_interp/cup/cup_mvs}} &
+  \raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/real_interp/cup/cup_sl}} &
+  \raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/real_interp/cup/cup_sl}} &
   \raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/real_interp/cup/cup_ps}} \\
+\bottomrule
+\end{tabular}
+\end{figure}
+
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}{Interpretation 2: more results (cont'd)}
+
+\begin{figure}
+\centering
+\begin{tabular}{c|*{4}{l}|l}
+\toprule
+\multirow{2}{*}{Object} & \multicolumn{5}{c}{Descriptions and Results} \\ \cline{2-6}
+& $Desc_1$ & $Desc_2$ & $Desc_3$ & $Desc_4$ & Correct Desc \\
+\midrule
+Desc & \tc{08}080208 & 02\tc{02}0208 & 0208\tc{08}08 & 020802\tc{02} & 02080208 \\
+\multirow{3}{*}{Algo} 
+& \tabitem PMVS    & \tabitem\tc{EPS} & \tabitem EPS    & \tabitem EPS   & \tabitem EPS \\
+& \tabitem EPS     &          & \tabitem\tc{GSL} & \tabitem\tc{GSL} & \tabitem\tc{GSL} \\
+& \tabitem\tc{GSL} &          &              &            & \\ \cline{2-6}
+bust & \raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/beethoven_sl}} &
+  \raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/beethoven_ps}} &
+  \raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/beethoven_sl}} &
+  \raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/beethoven_sl}} &
+  \raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/beethoven_sl}}\\
+statue & \raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/real_interp/statue/statue_sl}} &
+  \raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/real_interp/statue/statue_ps}} &
+  \raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/real_interp/statue/statue_sl}} &
+  \raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/real_interp/statue/statue_sl}} &
+  \raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/real_interp/statue/statue_sl}} \\
 \bottomrule
 \end{tabular}
 \end{figure}
@@ -839,7 +901,7 @@ Object & Bust & Vase0 & Barrel & Vase1 \\
 \end{frame}
 
 %------------------------------------------------
-\begin{frame}{Interpretation 3: more results}
+\begin{frame}{Interpretation 3: more results (cont'd)}
 
 \begin{figure}
 \centering
@@ -894,7 +956,7 @@ Object & Statue & Cup & Pot & Vase \\
 \end{frame}
 
 %------------------------------------------------
-\begin{frame}[standout]{Take-away message}
+\begin{frame}[standout]
 
 Computer vision should focus on more than \\just algorithms, but easier accessibility.
 
