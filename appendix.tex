@@ -167,8 +167,8 @@ The relation between the incoming illumination and reflected light is modelled u
 As we can see from the definition of BRDF, scene radiance is a function of BRDF given a fixed incident radiance. BRDF is a bidirectional function, which depends on both incoming and outgoing directions. It can be simplified under specific reflectance models. For instance, BRDF can be simplified as \textit{Diffuse albedo} or surface albedo when using Lambertian reflectance, which is the proportion of incident light that is reflected by the surface.
 % It should be noted that albedo is not an intrinsic property of a surface. Instead, for any surface, the albedo depends on the spectral and angular distributions of the incident light.
 
-\subsubsection{Light sensor interaction}
-A common assumption made in vision community is that radiance is constant as it propagates along a ray. Therefore, the scene radiance is the same as the radiance passing through the lens, which is the same as the radiance received by the sensor. Since image irradiance is the radiance accumulated on a unit surface area, it follows that image irradiance is linear related to the scene radiance. Thus, the relation between \textit{scene radiance} and \textit{image irradiance} is linear.
+\subsubsection{Light-lens interaction}
+A common assumption made in vision community is that radiance is constant as it propagates along a ray. Therefore, the scene radiance is the same as the radiance passing through the lens, which is the same as the radiance received by the sensor. Since image irradiance is the radiance accumulated on a unit surface area, it follows that image irradiance is linear related to the scene radiance. Thus, it can be shown that \textit{image irradiance} is proportional to \textit{scene radiance}~\cite{forsyth2011computer}.
 \begin{figure}[!ht]
 \centering
 \begin{tikzpicture}[node distance=2cm, auto]
@@ -182,7 +182,7 @@ A common assumption made in vision community is that radiance is constant as it 
 \label{fig:light_lens_interact}
 \end{figure}
 
-\subsubsection{Irradiance-intensity conversion}
+\subsubsection{Light-sensor interaction}
 The camera response function relating image irradiance at the image plane to measured pixel intensity values is a non-linear mapping. It is common to assume that intensity is linear related to image irradiance in many vision algorithms. A linear relation can be retrieved by radiometric calibration.
 \begin{figure}[!htbp]
 \centering
