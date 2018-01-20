@@ -5,11 +5,11 @@
 \label{ch:3DRecon_Interp}
 Now that we have proposed a well-defined problem space of 3D reconstruction problem, as well as a mapping from problem space to algorithms, the interpretation from the problem-centric description to reliable algorithms must be shown. There are many possible ways to interpret the description, our proof of concept interpreter is based on the direct evaluation of performance of each 3D reconstruction algorithm under different problem conditions presented in Chapter~\ref{ch:3DRecon_Mapping}. This mapping from problem space to algorithms and additional constraints allow an successful algorithm to be definitively selected.
 
-In this chapter, we first propose a proof of concept interpreter, which makes the three-layer description-based interface complete. By no means is the proposed interpreter the best possible interpreter, but it suffice to demonstrate the usage of the interface. The interpreter is responsible for receiving a description from the user, and select an algorithm from a suite of algorithms. We are interested in evaluating the performance of the interpreter under the four problem conditions, which are summarized in Chapter~\ref{ch:3DRecon_ProbSpace}. More specifically, we are interested in finding out whether the interpreter is able to translate a user-specified description into an algorithm so that a successful reconstruction result can be achieved. Further, we are also interested in the performance of interpreter with less accurate, or inaccurate descriptions as inputs. It gives us insights into the sensitivity of the interpreter, and demonstrate cases where it is crucial to provide accurate descriptions.
+In this chapter, we first propose a proof of concept interpreter, which makes the three-layer description-based interface complete. By no means is the proposed interpreter the best possible interpreter, but it suffice to demonstrate the usage of the interface. The interpreter is responsible for receiving a description from the user, and selects an algorithm from a suite of algorithms. We are interested in evaluating the performance of the interpreter under the four problem conditions, which are summarized in Chapter~\ref{ch:3DRecon_ProbSpace}. More specifically, we are interested in finding out whether the interpreter is able to translate a user-specified description into an algorithm so that a successful reconstruction result can be achieved. Further, we are also interested in the performance of interpreter with less accurate, or inaccurate descriptions as inputs. It gives us insights into the sensitivity of the interpreter, and demonstrate cases where it is crucial to provide accurate descriptions.
 
 Three algorithms and two baseline methods that are introduced in Chapter~\ref{ch:3DRecon_Mapping} have been implemented and integrated into the interpreter, providing basic but well rounded reconstruction capabilities. Although more algorithms can potentially be added, these methods are sufficient to validate the interface's ability to translate a description into a reconstruction solution. The integration of new algorithms that are more appropriate under particular situations requires only that they be evaluated by the same process discussed in Chapter~\ref{ch:3DRecon_Mapping}, as shown in Figure~\ref{fig:embed_algo}. This allows researchers to contribute novel algorithms to the interpretation of the interface easily.
 
-We created both synthetic and real-world datasets to evaluate the performance of the interpreter. The testbench is made publicly available to encourage the testing of additional reconstruction algorithms. Further, the testbench can be extended to include new visual/geometric properties, thus providing a wider coverage of the problem space.
+We created both synthetic and real-world datasets to evaluate the performance of the interpreter. The testbench is made publicly available to encourage the testing of additional reconstruction algorithms. Further, the testbench can be extended to include new visual and geometric properties, thus providing a wider coverage of the problem space.
 
 % However, such an evaluation faces several challenges. First, the mapping does not pose very strict constraints on object's geometry, and an exhaustive evaluation would require a vast number of objects to reach a solid conclusion, which is not a practical approach. Second, we need a selection of algorithms that cover a wide range of problem space so that we can determine more convincingly if an unsuccessful result is due to lack of coverage or the limits of the interface.
 
@@ -54,12 +54,12 @@ The reason that qualitative comparison is sufficient is that we are less interes
 \begin{figure*}[!htbp]
 \centering
 \begin{tabular}{ccc}
-\includegraphics[width=0.2\textwidth]{img/interp/real_interp/pot/pot_sc} &
+\includegraphics[width=0.2\textwidth]{img/interp/synth_interp/budda_vh} &
 \includegraphics[width=0.2\textwidth]{img/interp/synth_interp/vase0_sl} &
-\includegraphics[width=0.2\textwidth]{img/interp/real_interp/vase/vase_ps} \\
-Rough surface & Surface hole & Surface spike\\
+\includegraphics[width=0.2\textwidth]{img/interp/real_interp/vase/vase_spike} \\
+(a). Rough surface & (b). Surface hole & (c). Surface spike\\
 \end{tabular}
-\caption{Visual phenomena that indicate poor quality of reconstruction results.}
+\caption{Visual phenomena that indicate poor quality of reconstruction results. (a) has rough surface which indicates poor accuracy, (b) has incomplete holes which indicates poor completeness, and (c) has spikes which indicates poor normal estimation.}
 \label{fig:vis_quality}
 \end{figure*}
 
@@ -72,7 +72,7 @@ Rough surface & Surface hole & Surface spike\\
 
 \section{Interpreter}
 \label{sec:interp}
-Our interface consists of three separate layers. The upper layer is the description of the problem condition. The middle layer is the interpreter which receives a description from the user and return an acceptable result. The bottom layer is the actual implementation of the algorithms. The interpreter is responsible for choosing an appropriate 3D reconstruction algorithm based on the description of the problem domain and additional requirements. Thus, it requires an understanding of algorithm performance across difference ranges of problem space to create a suitable interpreter.
+Our interface consists of three separate layers. The upper layer is the description of the problem condition. The middle layer is the interpreter which receives a description from the user and returns an acceptable result. The bottom layer is the actual implementation of the algorithms. The interpreter is responsible for choosing an appropriate 3D reconstruction algorithm based on the description of the problem domain and additional requirements. Thus, it requires an understanding of algorithm performance across difference ranges of problem space to create a suitable interpreter.
 
 However, if the interpreter relies solely on the mapping, it is possible that a user-specified description has more than one corresponding algorithm available. We propose to use two additional constraints so that only one appropriate algorithm is selected.
 
@@ -138,7 +138,7 @@ For SL, a opensource camera-projector calibration software developed by~\citeaut
 \subsection{Image capturing}
 The creation of the synthetic dataset is mostly the same as that discussed in Chapter~\ref{ch:3DRecon_Mapping}, thus is omitted in this section. The images of real-world dataset are captured using a Nikon D70S camera with a $18-70mm$ lens. The image resolution is $3004\times 2000$ pix.
 
-For MVS, we capture the dataset by positioning the camera in three different heights. The objects are about $30-50cm$ away from the camera, and stays fixed on a turntable. We have followed the following two steps to acquire data: 1) put the camera at a different height, adjust the orientation so that the object in at the center of the frame; 2) take pictures while rotating the table. The table rotates approximately $30^\circ$ every time. We rotate it 12 times and in total, we can obtain 36 images per object.
+For MVS, we capture the dataset by positioning the camera in three different heights. The objects are about $30-50cm$ away from the camera, and stays fixed on a turntable. We have followed the following two steps to acquire data: 1) put the camera at a different height, adjust the orientation so that the object is at the center of the frame; 2) take pictures while rotating the table. The table rotates approximately $30^\circ$ every time. We rotate it 12 times and in total, we can obtain 36 images per object.
 
 For PS, a $70-200mm$ lens, a handheld lamp, and two reference objects (diffuse and glossy) are used. The objects are positioned about $3m$ from the camera to approximate orthographic projection. To avoid inter-reflection, all data are captured in a dark room with everying covered by black cloth except the target object. We use a hand-held lamp as the light source and choose close to frontal viewpoints to avoid severe self-shadowing effect. We take 20 images per object and select 15 plus images depending on the severity of the self-shadow effect.
 
@@ -210,7 +210,7 @@ We select four real-world objects, each represents the one of the four problem c
 
 \section{Evaluation of Interpreter}
 \label{sec:eval_interp}
-This section evaluates the proof of concept interpreter, which is three-fold: 1) given an accurate description, can the interpreter select an algorithm that achieves a successful reconstruction result; 2) given an less accurate description, would the interpreter perform poorer than given an accuracy; 3) given an inaccurate description, would the interpreter fail to achieve a successful reconstruction. We provide demonstrative results of the interpreter using the synthetic and real-world dataset, as shown in Figure~\ref{fig:synth_real_dataset}.
+This section evaluates the proof of concept interpreter, which is three-fold: 1) given an accurate description, can the interpreter select an algorithm that achieves a successful reconstruction result; 2) given an less accurate description, would the interpreter perform poorer than given an accurate description; 3) given an inaccurate description, would the interpreter fail to achieve a successful reconstruction. We provide demonstrative results of the interpreter using the synthetic and real-world dataset, as shown in Figure~\ref{fig:synth_real_dataset}.
 
 \subsection{Evaluation 1: accurate description, successful result}
 In this section, we evaluate the performance of interpreter given a valid description, \ie whether the interpreter can return a successful reconstruction result given a valid description of problem condition. We provide the detailed process of reconstructing objects using the proposed interface with a example, and show the reconstruction results of the aforementioned datasets.
@@ -236,7 +236,7 @@ Next, the interpreter, consisting of mapping and constraints, selects an appropr
 \label{fig:mapping_interp_1}
 \end{figure*}
 
-Lastly, the interpreted algorithm accept images captured using appropriate capturing system as input, and return a reconstruction result. We can see that the reconstructed model of the interpreted algorithm have much smoother surfaces than that of the baseline method, which indicates greater accuracy, as shown in Figure~\ref{fig:result_interp_1}. Thus, we conclude that the interpreted algorithm reconstructs the object successfully.
+Lastly, the interpreted algorithm accepts images captured using the appropriate capturing system as input, and returns a reconstruction result. We can see that the reconstructed model of the interpreted algorithm has a much smoother surface than that of the baseline method, which indicates greater accuracy, as shown in Figure~\ref{fig:result_interp_1}. Thus, we conclude that the interpreted algorithm reconstructs the object successfully.
 \begin{figure*}[!htbp]
 \centering
 \begin{tabular}{cccc}
@@ -321,7 +321,7 @@ However, this might not always be the case. Let's use object `bust' as an exampl
 \includegraphics[width=0.15\textwidth]{interp/synth_interp/beethoven_sl}\\
 (a). \tc{08}080208 & (b). 02\tc{02}0208 & (c). 0208\tc{08}08 & (d). 020802\tc{02} & (e). 02080208\\
 \end{tabular}
-\caption{(a)-(d) show the reconstruction results given inaccurate description while (e) shows the result given accurate description. The text labelled in red represents incorrectly estimated property.}
+\caption{(a)-(d) show the reconstruction results given a less accurate description while (e) shows the result given an accurate description. The text labelled in red represents the property estimated incorrectly.}
 \label{fig:exmp_2_interp_2}
 \end{figure*}
 
@@ -534,17 +534,17 @@ For more results, please refer to Figure~\ref{fig:eval_21},~\ref{fig:eval_22}. T
 % paraphrase this: We can see that inaccurate description can lead to poor reconstruction, and it leads to successful results only when the selected algorithm is in the mapping of the correct description.
 
 \subsection{Evaluation 3: inaccurate description, poor result}
-We have demonstrated that given a less accurate description, the results may or may not be poor. In cases where the algorithm interpreted from a less accurate description is in the set of algorithms mapped from accurate description, it is still possible to achieve a successful reconstruction. In this section, we are interested to see if this conclusion can also be applied to completely inaccurate description, \ie is it still possible to return a successful result. In this section, we evaluate whether the interpreter would return a poor reconstruction result given an inaccurate description of problem condition. We evaluate the performance of the interpreter using both synthetic and real-world objects.
+We have demonstrated that given a less accurate description, the results may or may not be poor. In cases where the algorithm interpreted from a less accurate description overlaps with the set of algorithms mapped from an accurate description, it is still possible to achieve a successful reconstruction. In this section, we are interested to see if this conclusion can also be applied to completely inaccurate description, \ie is it still possible to return a successful result. In this section, we evaluate whether the interpreter would return a poor reconstruction result given an inaccurate description of problem condition. We evaluate the performance of the interpreter using both synthetic and real-world objects.
 
-Let's revisit the scenario proposed in Chapter~\ref{ch:Introduction} using test object `vase0': the user (Daisy) is interested to test how sensitive the interpreter is by providing completely incorrect description, \ie 0.8 (texture), 0.2 (albedo), 0.2 (specularity), and 0.8 (roughness) in this case. The interpreter selects PMVS as the reconstruction algorithm, and then proceeds to achieve a noisy and incomplete reconstruction result, see Figure~\ref{fig:exmp_1_interp_3}.
+Let's revisit the scenario proposed in Chapter~\ref{ch:Introduction} using test object `vase0': the user (Daisy) is interested to test how sensitive the interpreter is by providing completely incorrect description, \ie 0.8 (texture), 0.2 (albedo), 0.2 (specularity), and 0.8 (roughness) in this case. The interpreter selects PMVS as the reconstruction algorithm, and then proceeds to achieve a noisy and incomplete reconstruction result, which is worse than that of the interpreted algorithm, see Figure~\ref{fig:exmp_1_interp_3}.
 \begin{figure*}[!htbp]
 \centering
 \begin{tabular}{cc}
 \includegraphics[width=0.2\textwidth]{interp/synth_interp/vase0_mvs} &
 \includegraphics[width=0.2\textwidth]{interp/synth_interp/vase0_ps} \\
-(a). 08020208 & (b). 02080802 \\
+(a). \tc{08020208} & (b). 02080802 \\
 \end{tabular}
-\caption{(a) shows the reconstruction result given incorrect description whereas (b) shows the result given correct description.}
+\caption{(a) shows the reconstruction result given an incorrect description whereas (b) shows the result given a correct description.}
 \label{fig:exmp_1_interp_3}
 \end{figure*}
 
@@ -702,10 +702,10 @@ GSL\\
 PMVS\\
 \bottomrule
 \end{tabular}
-\caption{The evaluation of interpreter using synthetic objects. The first column presents the description provided to the interpreter. Description $i$ matches with the problem condition of synthetic object in column $i$, which is labeled in green rectangle. The last column is the algorithm selected by the interpreter. Since the interpreter would return a successful reconstruction given a description that matches the problem condition, the quality of reconstruction of the labeled objects indicates success/failure of the interpreter.}
+\caption{The evaluation of interpreter using synthetic objects. The first column presents the description provided to the interpreter. Description $i$ matches with the problem condition of synthetic object in column $(i+1)$, which is labeled in green rectangle. The last column is the algorithm selected by the interpreter. Since the interpreter would return a successful reconstruction given a description that matches the problem condition, the quality of reconstruction of the labeled objects indicates success/failure of the interpreter.}
 \label{fig:real_synth_results}
 \end{figure*}
 
-The figure layout is as follows: each description $\text{Desc}_i$ only matches the problem condition of object $i$, which is the object in the $i$th column. Based on previous findings, objects in diagonal should return successful reconstruction whereas the other results may or may not be successful, which is exactly the case.
+The figure layout is as follows: each description $\text{Desc}_i$ only matches the problem condition of object $i$, which is the object in the $(i+1)$th column. Based on previous findings, objects in diagonal should return successful reconstruction whereas the other results may or may not be successful, which is exactly the case.
 
 Building upon our description and mapping, we are able to develop a proof of concept interpreter which interprets the description of the problem, selects the most appropriate algorithm based on the mapping and returns a reliable reconstruction result. The development of more sophisticated descriptions for more complex geometry and material, incorporating new algorithms, and improving the construction of mapping are some potential directions to improve the presented interface.
