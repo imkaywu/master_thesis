@@ -65,6 +65,18 @@ kaywu@ece.ubc.ca \\ % Your email address
 %------------------------------------------------
 \section{Introduction}
 %------------------------------------------------
+\begin{frame}{Motivation: application}
+\begin{itemize}
+\item digital mapping
+\item visual effects
+\item virtual content creation
+\item 3D artist
+\item inverse CAD
+\item 3D printing's counterpart: 3D scanner
+\end{itemize}
+\end{frame}
+
+%------------------------------------------------
 \begin{frame}{Motivation: traditional 3D reconstruction}
 
 \begin{figure}
@@ -373,25 +385,6 @@ We use three-scale values to parameterize properties: \textit{low} (0.2), \texti
 \end{frame}
 
 %------------------------------------------------
-\begin{frame}{Mapping: dataset}
-
-\begin{exampleblock}{creation of dataset}
-\begin{itemize}
-\item We need a dataset contains object with varied visual and geometric properties;
-\item Generate the dataset using physic-based renderer.
-\end{itemize}
-\end{exampleblock}
-
-% \begin{exampleblock}{example of synthetic object}
-% \begin{figure}
-% \centering
-% \includegraphics[width=0.8\textwidth]{mapping/setup/tex}
-% \end{figure}
-% \end{exampleblock}
-
-\end{frame}
-
-%------------------------------------------------
 \begin{frame}{Mapping: reduce dimensionality}
 
 Reduce problem space dimensionality by discovering properties that have an effect on algorithm performance.
@@ -435,102 +428,7 @@ Texture & Albedo & Specular & Roughness\\
 \end{frame}
 
 %------------------------------------------------
-% \begin{frame}{Mapping: notable findings 1}
-
-% \begin{figure}[!htbp]
-% \begin{tabular}{cc}
-% \includegraphics[width=0.22\textwidth]{mapping/pairwise/mvs_tex_spec}&
-% \includegraphics[width=0.22\textwidth]{mapping/mvs_spec/mvs_spec}\\
-% (a). Algo. performance & (b) Image formation\\
-% \includegraphics[width=0.22\textwidth]{mapping/mvs_spec/mvs_spec_01}&
-% \includegraphics[width=0.22\textwidth]{mapping/mvs_spec/mvs_spec_00}\\
-% (c) $V_1$ & (d) $V_2$\\
-% \end{tabular}
-% \caption{(a) shows the algorithm performance w.r.t. texture and specularity. (b) shows the reflection of light off a specular surface. $V_1$ received the diffuse component while $V_2$ receives the specular component. (c), (d) shows the images observed from these two views. The specular area (red circle) observed in $V_2$ is visible in $V_1$.}
-% \end{figure}
-
-% \end{frame}
-
-%------------------------------------------------
-% \begin{frame}{Mapping: notable findings 2}
-
-% \begin{figure}[!htbp]
-% \centering
-% \begin{tabular}{c|ccc}
-%   Image & Normal map & Height map & Angular error\\
-%   \hline\\
-%   \includegraphics[width=0.12\textwidth]{mapping/ps_spec_rough/0802_0001}&
-%   \includegraphics[width=0.12\textwidth]{mapping/ps_spec_rough/0802_normal}&
-%   \includegraphics[width=0.15\textwidth]{images/0802_dmap}&
-%   \includegraphics[width=0.05\textwidth]{mapping/ps_spec_rough/0802_ang_error}\\
-%   & (a). rough: 0.2\\
-%   \includegraphics[width=0.12\textwidth]{mapping/ps_spec_rough/0805_0001}&
-%   \includegraphics[width=0.12\textwidth]{mapping/ps_spec_rough/0805_normal}&
-%   \includegraphics[width=0.15\textwidth]{images/0805_dmap}&
-%   \includegraphics[width=0.05\textwidth]{mapping/ps_spec_rough/0805_ang_error}\\
-%   & (b). rough: 0.5\\
-%   \includegraphics[width=0.12\textwidth]{mapping/ps_spec_rough/0808_0001}&
-%   \includegraphics[width=0.12\textwidth]{mapping/ps_spec_rough/0808_normal}&
-%   \includegraphics[width=0.15\textwidth]{images/0808_dmap}&
-%   \includegraphics[width=0.05\textwidth]{mapping/ps_spec_rough/0808_ang_error}\\
-%   & (c). rough: 0.8\\
-% \end{tabular}
-% \caption{The effect of roughness on PS. Albedo is set as 0.8, and specular is set as 0.8. (b) demonstrates that a medium level roughness would lead to worse normal estimation since it blurs the specular lobe.}
-% \end{figure}
-
-% \end{frame}
-
-%------------------------------------------------
-% \begin{frame}{Mapping: notable findings 3}
-
-% \begin{figure}[!htbp]
-% \centering
-% \begin{tabular}{ccc}
-% \includegraphics[width=0.25\textwidth]{trash/mapping/sl_spec_rough/sl_00050202}&
-% \includegraphics[width=0.25\textwidth]{trash/mapping/sl_spec_rough/sl_00050502}&
-% \includegraphics[width=0.25\textwidth]{trash/mapping/sl_spec_rough/sl_00050802}\\
-% (a) specular: 0.2 & (b) specular: 0.5 & (c) specular: 0.8\\
-% \includegraphics[width=0.25\textwidth]{trash/mapping/sl_spec_rough/sl_00050802}&
-% \includegraphics[width=0.25\textwidth]{trash/mapping/sl_spec_rough/sl_00050805}&
-% \includegraphics[width=0.25\textwidth]{trash/mapping/sl_spec_rough/sl_00050808}\\
-% (d) roughness: 0.2 & (e) roughness: 0.5 & (f) roughness: 0.8\\
-% \end{tabular}
-% \caption{(a)-(c): the roughness is set as 0.2, and specular has a negative effect on completeness; (d)-(e): the specular is set as 0.8, roughness has a positive effect on completeness.}
-% \end{figure}
-
-% \end{frame}
-
-%------------------------------------------------
-\begin{frame}{Mapping: interesting observations}
-
-% We provide key observations that can be theoretically justified by theory to demonstrate the insights that could be obtained from the mapping.
-
-\begin{exampleblock}{1. PMVS can work on specular surfaces provided the surface highly textured}
-\begin{figure}
-\begin{tabular}{ccc}
-\includegraphics[width=0.22\textwidth]{mapping/mvs_spec/mvs_spec}&
-\includegraphics[width=0.22\textwidth]{mapping/mvs_spec/mvs_spec_01}&
-\includegraphics[width=0.22\textwidth]{mapping/mvs_spec/mvs_spec_00}\\
-% (a). Image formation & (b) $V_1$ & (c) $V_2$\\
-\end{tabular}
-\end{figure}
-\end{exampleblock}
-
-\begin{exampleblock}{2. EPS and GSL fails on highly specular surfaces, and a blurred specular area leads to worse results.}
-\begin{figure}
-\begin{tabular}{ccc}
-\includegraphics[width=0.15\textwidth]{mapping/ps_spec_rough/0802_normal}&
-\includegraphics[width=0.15\textwidth]{mapping/ps_spec_rough/0805_normal}&
-\includegraphics[width=0.15\textwidth]{mapping/ps_spec_rough/0808_normal}\\
-(a). rough: 0.2 & (b). rough: 0.5 & (c). rough: 0.8
-\end{tabular}
-\end{figure}
-\end{exampleblock}
-
-\end{frame}
-
-%------------------------------------------------
-\section{Evaluation of interface}
+\section{Application of interface}
 %------------------------------------------------
 \begin{frame}{Interpretation: evaluation methodology}
 
@@ -639,6 +537,13 @@ Cond & 1 & 2 & 3 & 4\\
 \end{frame}
 
 %------------------------------------------------
+\begin{frame}{Interpretation: overview}
+
+
+
+\end{frame}
+
+%------------------------------------------------
 \begin{frame}{Interpretation 1: demonstrative result}
 
 accurate description $\Rightarrow$ successful result?
@@ -656,53 +561,6 @@ accurate description $\Rightarrow$ successful result?
 \end{exampleblock}
 
 \end{frame}
-
-%------------------------------------------------
-\begin{frame}{Interpretation 1: more results}
-
-\begin{figure}
-\centering
-\begin{tabular}{lcccc}
-\parbox[t]{2mm}{\rotatebox[origin=c]{90}{Algo}}
-& GSL & EPS & GSL & PMVS \\
-\midrule
-\parbox[t]{2mm}{\rotatebox[origin=c]{90}{Result}}
-& \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/synth_interp/beethoven_sl}}
-& \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/synth_interp/vase0_ps}}
-& \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/synth_interp/barrel_sl}}
-& \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/synth_interp/vase1_mvs}}\\
-\parbox[t]{2mm}{\rotatebox[origin=c]{90}{BL result}}
-& \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/synth_interp/beethoven_vh}}
-& \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/synth_interp/vase0_vh}}
-& \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/synth_interp/barrel_vh}}
-& \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/synth_interp/vase1_vh}}\\
-\midrule
-\parbox[t]{2mm}{\rotatebox[origin=c]{90}{Result}}
-& \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/real_interp/statue/statue_sl}}
-& \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/real_interp/cup/cup_ps}}
-& \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/real_interp/pot/pot_sl}}
-& \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/real_interp/vase/vase_mvs}}\\
-\parbox[t]{2mm}{\rotatebox[origin=c]{90}{BL result}}
-& \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/real_interp/statue/statue_sc}}
-& \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/real_interp/cup/cup_sc}}
-& \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/real_interp/pot/pot_sc}}
-& \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/real_interp/vase/vase_sc}}\\
-\end{tabular}
-\end{figure}
-
-\end{frame}
-
-% %------------------------------------------------
-% \begin{frame}{Interpretation: accurate description, successful result (cont'd)}
-
-% \begin{exampleblock}{Observations}
-% \begin{itemize}
-% \item algorithms chosen by interpreter outperform the baseline method; \\
-% \item reconstructed surfaces: smoother, no holes, no obtrutions.
-% \end{itemize}
-% \end{exampleblock}
-
-% \end{frame}
 
 %------------------------------------------------
 \begin{frame}{Interpretation 1}
@@ -764,6 +622,231 @@ less accurate description $\Rightarrow$ less successful result?
 \end{frame}
 
 %------------------------------------------------
+\begin{frame}{Interpretation 2}
+
+\begin{exampleblock}{Summary}
+\begin{itemize}
+\item Algorithm chosen by the interpreter given a less accurate description may or may not achieve a poor result; \\
+\item It depends if the return algorithms has at least an overlapping with those returned if given accurate description.
+\end{itemize}
+\end{exampleblock}
+
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}{Interpretation 3: demonstrative result}
+
+inaccurate description $\Rightarrow$ poor result?
+
+\begin{figure}
+\centering
+\includegraphics[width=0.8\textwidth]{images/interp3.pdf}
+\end{figure}
+
+\begin{exampleblock}{Summary}
+\begin{itemize}
+\item accuracy/completeness: surface rougher, poorer
+\end{itemize}
+\end{exampleblock}
+
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}{Interpretation 3}
+
+\begin{exampleblock}{Summary}
+\begin{itemize}
+\item Algorithm chosen by the interpreter given inaccurate description have a higher probability of achieving a poorer result; \\
+\end{itemize}
+\end{exampleblock}
+
+\end{frame}
+
+%------------------------------------------------
+\section{Conclusions}
+%------------------------------------------------
+\begin{frame}{Conclusions}
+
+\begin{itemize}
+\item The proposed description is able to give correct reconstruction for non-concave objects;
+\item The solution produced by the interface gets better as the description becomes more accurate, and vice versa;
+\item Using the simple descriptive language and proof-of-concept interpreter, we demonstrate the possibility of using descriptive properties to hide algorithmic details;
+\item To deal with more complicated objects, we need more complicated properties, or ways to describe the objects, but the challenge is the easy mathematical representation might not be available.
+\end{itemize}
+
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}{Recommendations and Future directions}
+
+\begin{itemize}
+\item Develop automated approach to derive description from images;
+\item Develop more sophisticated geometric model to incorporate objects with complex geometry;
+\end{itemize}
+
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}[standout]
+
+Computer vision should focus on more than \\just algorithms, but easier accessibility.
+
+\end{frame}
+
+%------------------------------------------------
+% Additional slides
+%------------------------------------------------
+
+%------------------------------------------------
+\begin{frame}{Mapping: dataset}
+
+\begin{exampleblock}{creation of dataset}
+\begin{itemize}
+\item We need a dataset contains object with varied visual and geometric properties;
+\item Generate the dataset using physic-based renderer.
+\end{itemize}
+\end{exampleblock}
+
+% \begin{exampleblock}{example of synthetic object}
+% \begin{figure}
+% \centering
+% \includegraphics[width=0.8\textwidth]{mapping/setup/tex}
+% \end{figure}
+% \end{exampleblock}
+
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}{Mapping: interesting observations}
+
+% We provide key observations that can be theoretically justified by theory to demonstrate the insights that could be obtained from the mapping.
+
+\begin{exampleblock}{1. PMVS can work on specular surfaces provided the surface highly textured}
+\begin{figure}
+\begin{tabular}{ccc}
+\includegraphics[width=0.22\textwidth]{mapping/mvs_spec/mvs_spec}&
+\includegraphics[width=0.22\textwidth]{mapping/mvs_spec/mvs_spec_01}&
+\includegraphics[width=0.22\textwidth]{mapping/mvs_spec/mvs_spec_00}\\
+% (a). Image formation & (b) $V_1$ & (c) $V_2$\\
+\end{tabular}
+\end{figure}
+\end{exampleblock}
+
+\begin{exampleblock}{2. EPS and GSL fails on highly specular surfaces, and a blurred specular area leads to worse results.}
+\begin{figure}
+\begin{tabular}{ccc}
+\includegraphics[width=0.15\textwidth]{mapping/ps_spec_rough/0802_normal}&
+\includegraphics[width=0.15\textwidth]{mapping/ps_spec_rough/0805_normal}&
+\includegraphics[width=0.15\textwidth]{mapping/ps_spec_rough/0808_normal}\\
+(a). rough: 0.2 & (b). rough: 0.5 & (c). rough: 0.8
+\end{tabular}
+\end{figure}
+\end{exampleblock}
+
+\end{frame}
+
+%------------------------------------------------
+% \begin{frame}{Mapping: notable findings 1}
+
+% \begin{figure}[!htbp]
+% \begin{tabular}{cc}
+% \includegraphics[width=0.22\textwidth]{mapping/pairwise/mvs_tex_spec}&
+% \includegraphics[width=0.22\textwidth]{mapping/mvs_spec/mvs_spec}\\
+% (a). Algo. performance & (b) Image formation\\
+% \includegraphics[width=0.22\textwidth]{mapping/mvs_spec/mvs_spec_01}&
+% \includegraphics[width=0.22\textwidth]{mapping/mvs_spec/mvs_spec_00}\\
+% (c) $V_1$ & (d) $V_2$\\
+% \end{tabular}
+% \caption{(a) shows the algorithm performance w.r.t. texture and specularity. (b) shows the reflection of light off a specular surface. $V_1$ received the diffuse component while $V_2$ receives the specular component. (c), (d) shows the images observed from these two views. The specular area (red circle) observed in $V_2$ is visible in $V_1$.}
+% \end{figure}
+
+% \end{frame}
+
+%------------------------------------------------
+% \begin{frame}{Mapping: notable findings 2}
+
+% \begin{figure}[!htbp]
+% \centering
+% \begin{tabular}{c|ccc}
+%   Image & Normal map & Height map & Angular error\\
+%   \hline\\
+%   \includegraphics[width=0.12\textwidth]{mapping/ps_spec_rough/0802_0001}&
+%   \includegraphics[width=0.12\textwidth]{mapping/ps_spec_rough/0802_normal}&
+%   \includegraphics[width=0.15\textwidth]{images/0802_dmap}&
+%   \includegraphics[width=0.05\textwidth]{mapping/ps_spec_rough/0802_ang_error}\\
+%   & (a). rough: 0.2\\
+%   \includegraphics[width=0.12\textwidth]{mapping/ps_spec_rough/0805_0001}&
+%   \includegraphics[width=0.12\textwidth]{mapping/ps_spec_rough/0805_normal}&
+%   \includegraphics[width=0.15\textwidth]{images/0805_dmap}&
+%   \includegraphics[width=0.05\textwidth]{mapping/ps_spec_rough/0805_ang_error}\\
+%   & (b). rough: 0.5\\
+%   \includegraphics[width=0.12\textwidth]{mapping/ps_spec_rough/0808_0001}&
+%   \includegraphics[width=0.12\textwidth]{mapping/ps_spec_rough/0808_normal}&
+%   \includegraphics[width=0.15\textwidth]{images/0808_dmap}&
+%   \includegraphics[width=0.05\textwidth]{mapping/ps_spec_rough/0808_ang_error}\\
+%   & (c). rough: 0.8\\
+% \end{tabular}
+% \caption{The effect of roughness on PS. Albedo is set as 0.8, and specular is set as 0.8. (b) demonstrates that a medium level roughness would lead to worse normal estimation since it blurs the specular lobe.}
+% \end{figure}
+
+% \end{frame}
+
+%------------------------------------------------
+% \begin{frame}{Mapping: notable findings 3}
+
+% \begin{figure}[!htbp]
+% \centering
+% \begin{tabular}{ccc}
+% \includegraphics[width=0.25\textwidth]{trash/mapping/sl_spec_rough/sl_00050202}&
+% \includegraphics[width=0.25\textwidth]{trash/mapping/sl_spec_rough/sl_00050502}&
+% \includegraphics[width=0.25\textwidth]{trash/mapping/sl_spec_rough/sl_00050802}\\
+% (a) specular: 0.2 & (b) specular: 0.5 & (c) specular: 0.8\\
+% \includegraphics[width=0.25\textwidth]{trash/mapping/sl_spec_rough/sl_00050802}&
+% \includegraphics[width=0.25\textwidth]{trash/mapping/sl_spec_rough/sl_00050805}&
+% \includegraphics[width=0.25\textwidth]{trash/mapping/sl_spec_rough/sl_00050808}\\
+% (d) roughness: 0.2 & (e) roughness: 0.5 & (f) roughness: 0.8\\
+% \end{tabular}
+% \caption{(a)-(c): the roughness is set as 0.2, and specular has a negative effect on completeness; (d)-(e): the specular is set as 0.8, roughness has a positive effect on completeness.}
+% \end{figure}
+
+% \end{frame}
+
+%------------------------------------------------
+\begin{frame}{Interpretation 1: more results}
+
+\begin{figure}
+\centering
+\begin{tabular}{lcccc}
+\parbox[t]{2mm}{\rotatebox[origin=c]{90}{Algo}}
+& GSL & EPS & GSL & PMVS \\
+\midrule
+\parbox[t]{2mm}{\rotatebox[origin=c]{90}{Result}}
+& \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/synth_interp/beethoven_sl}}
+& \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/synth_interp/vase0_ps}}
+& \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/synth_interp/barrel_sl}}
+& \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/synth_interp/vase1_mvs}}\\
+\parbox[t]{2mm}{\rotatebox[origin=c]{90}{BL result}}
+& \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/synth_interp/beethoven_vh}}
+& \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/synth_interp/vase0_vh}}
+& \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/synth_interp/barrel_vh}}
+& \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/synth_interp/vase1_vh}}\\
+\midrule
+\parbox[t]{2mm}{\rotatebox[origin=c]{90}{Result}}
+& \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/real_interp/statue/statue_sl}}
+& \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/real_interp/cup/cup_ps}}
+& \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/real_interp/pot/pot_sl}}
+& \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/real_interp/vase/vase_mvs}}\\
+\parbox[t]{2mm}{\rotatebox[origin=c]{90}{BL result}}
+& \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/real_interp/statue/statue_sc}}
+& \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/real_interp/cup/cup_sc}}
+& \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/real_interp/pot/pot_sc}}
+& \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/real_interp/vase/vase_sc}}\\
+\end{tabular}
+\end{figure}
+
+\end{frame}
+
+%------------------------------------------------
 \begin{frame}{Interpretation 2: more results}
 
 \begin{figure}
@@ -799,64 +882,6 @@ statue & \raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/real
   \raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/real_interp/statue/statue_sl}} \\
 \end{tabular}
 \end{figure}
-
-\end{frame}
-
-%------------------------------------------------
-% \begin{frame}{Interpretation 2: more results (cont'd)}
-
-% \begin{figure}
-% \centering
-% \begin{tabular}{c*{5}{l}}
-% Object & $Desc_1$ & $Desc_2$ & $Desc_3$ & $Desc_4$ & Correct Desc \\
-% \midrule
-% Desc & \tc{08}080208 & 02\tc{02}0208 & 0208\tc{08}08 & 020802\tc{02} & 02080208 \\ \cline{1-6}
-% \multirow{3}{*}{Algo} 
-% & \tabitem PMVS    & \tabitem\tc{EPS} & \tabitem EPS    & \tabitem EPS   & \tabitem EPS \\
-% & \tabitem EPS     &          & \tabitem\tc{GSL} & \tabitem\tc{GSL} & \tabitem\tc{GSL} \\
-% & \tabitem\tc{GSL} &          &              &            & \\ \cline{1-6}
-% bust & \raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/beethoven_sl}} &
-%   \raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/beethoven_ps}} &
-%   \raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/beethoven_sl}} &
-%   \raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/beethoven_sl}} &
-%   \raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/beethoven_sl}}\\
-% statue & \raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/real_interp/statue/statue_sl}} &
-%   \raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/real_interp/statue/statue_ps}} &
-%   \raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/real_interp/statue/statue_sl}} &
-%   \raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/real_interp/statue/statue_sl}} &
-%   \raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/real_interp/statue/statue_sl}} \\
-% \end{tabular}
-% \end{figure}
-
-% \end{frame}
-
-%------------------------------------------------
-\begin{frame}{Interpretation 2}
-
-\begin{exampleblock}{Summary}
-\begin{itemize}
-\item Algorithm chosen by the interpreter given a less accurate description may or may not achieve a poor result; \\
-\item It depends if the return algorithms has at least an overlapping with those returned if given accurate description.
-\end{itemize}
-\end{exampleblock}
-
-\end{frame}
-
-%------------------------------------------------
-\begin{frame}{Interpretation 3: demonstrative result}
-
-inaccurate description $\Rightarrow$ poor result?
-
-\begin{figure}
-\centering
-\includegraphics[width=0.8\textwidth]{images/interp3.pdf}
-\end{figure}
-
-\begin{exampleblock}{Summary}
-\begin{itemize}
-\item accuracy/completeness: surface rougher, poorer
-\end{itemize}
-\end{exampleblock}
 
 \end{frame}
 
@@ -917,36 +942,6 @@ Object & Statue & Cup & Pot & Vase \\
 & \includegraphics[width=0.1\textwidth]{interp/real_interp/vase/vase_mvs} \\
 \end{tabular}
 \end{figure}
-
-\end{frame}
-
-%------------------------------------------------
-\begin{frame}{Interpretation 3}
-
-\begin{exampleblock}{Summary}
-\begin{itemize}
-\item Algorithm chosen by the interpreter given inaccurate description have a higher probability of achieving a poorer result; \\
-\end{itemize}
-\end{exampleblock}
-
-\end{frame}
-
-%------------------------------------------------
-\section{Conclusions}
-%------------------------------------------------
-\begin{frame}{Conclusions}
-
-\begin{itemize}
-\item The proposed description is able to give correct reconstruction for non-concave objects;
-\item Using the simple descriptive language and proof-of-concept interpreter, we demonstrate the possibility of using descriptive properties to hide algorithmic details;
-\item To deal with more complicated objects, we need more complicated properties, or ways to describe the objects, but the challenge is the easy mathematical representation might not be available.
-\end{itemize}
-\end{frame}
-
-%------------------------------------------------
-\begin{frame}[standout]
-
-Computer vision should focus on more than \\just algorithms, but easier accessibility.
 
 \end{frame}
 
