@@ -36,7 +36,7 @@
 %----------------------------------------------------------------------------------------
 % TITLE PAGE
 %----------------------------------------------------------------------------------------
-\title[Interface of 3D Reconstruction]{Development and Application of a Description-based Interface for 3D Object Reconstruction} % The short title appears at the bottom of every slide, the full title is only on the title page
+\title[Interface of 3D Reconstruction]{Development and Application of a Description-based Interface for 3D Reconstruction} % The short title appears at the bottom of every slide, the full title is only on the title page
 
 \author{Kai Wu}
 \institute[UBC]
@@ -94,7 +94,7 @@ kaywu@ece.ubc.ca \\ % Your email address
   \begin{itemize}
     \item \textbf{Algorithms}: description of appearance, no vision background needed, embeding new algorithms is easy;
     \item \textbf{Parameters}: property parameters are perceptually interpretable\& meaningful;
-    \item \textbf{Approach}: choose an algorithm based on mapping.
+    \item \textbf{Approach}: no \textit{trial-and-error}.
   \end{itemize}
 \end{exampleblock}
 
@@ -113,7 +113,7 @@ kaywu@ece.ubc.ca \\ % Your email address
 %------------------------------------------------
 \begin{frame}{Contribution}
 
-Development of an interface for 3D reconstruction problem, which hides algorithmic details and allows users to describe conditions surrounding the problem. This description can be interpreteded so that an appropriate algorithm is chosen to achieve a successful reconstruction result.
+Development of an interface for 3D reconstruction problem, which hides algorithm details and allows users to describe conditions surrounding the problem. This description can be interpreteded so that an appropriate algorithm is chosen to achieve a successful reconstruction result.
 
 \end{frame}
 
@@ -267,7 +267,7 @@ Development of an interface for 3D reconstruction problem, which hides algorithm
 
 \begin{itemize}
 \item \textit{algorithm-centered} approach categorizes algorithms based on algorithm details, as discussed in \textbf{Related Work};
-\item \textit{object-centered} taxonomy categorizes algorithms based on the problem conditions that the algorithm can reliably works under.
+\item \textit{object-centered} approach categorizes algorithms based on the problem conditions that the algorithm can reliably works under.
 \end{itemize}
 
 \begin{figure}
@@ -304,9 +304,9 @@ Assumptions:
   Lighting & \textit{Mixed: ambient, projector, light sources} \\
   Vantage point & \textit{Medium: 10 - 50} \\
   Texture & \textit{Texture randomness} & \raisebox{-.5\height}{\includegraphics[width=0.3\textwidth]{mapping/setup/tex0}}\\
-  Lightness & \textit{Diffuse reflectance} & \raisebox{-.5\height}{\includegraphics[width=0.3\textwidth]{mapping/setup/alb0}}\\
+  Brightness & \textit{Diffuse reflectance} & \raisebox{-.5\height}{\includegraphics[width=0.3\textwidth]{mapping/setup/alb0}}\\
   Specularity & \textit{Fresnel reflectance} & \raisebox{-.5\height}{\includegraphics[width=0.3\textwidth]{mapping/setup/spec0}}\\
-  Roughness & \textit{Distribution of facet slope} & \raisebox{-.5\height}{\includegraphics[width=0.3\textwidth]{mapping/setup/rough0}}\\
+  Roughness & \textit{Distribution of facet normal} & \raisebox{-.5\height}{\includegraphics[width=0.3\textwidth]{mapping/setup/rough0}}\\
   % Concavity & \textit{Surface curvature}\\
   \end{tabular}
 \end{table}
@@ -316,44 +316,19 @@ Assumptions:
 %------------------------------------------------
 \begin{frame}{Description: expression}
 
-We use three discrete scales to parameterize these properties: \textit{low} (0.2), \textit{medium} (0.5), and \textit{high} (0.8).
-\begin{table}[!htbp]
-  \centering
-  \begin{tabular}{l*{4}{p{1cm}}l}
-  \toprule
-  \textbf{Object} & Texture & Albedo & Specular & Rough & \textbf{Label}\\
-  \midrule
-  Vase & high & high & high & low & T-B-M-S\\
-  \bottomrule
-  \end{tabular}
-  \caption{Description of the object `vase'.}
-\end{table}
+We use three-scale values to parameterize properties: \textit{low} (0.2), \textit{medium} (0.5), and \textit{high} (0.8).
 
 \begin{figure}[!htbp]
 \centering
-\begin{tabular}{ccc}
+\begin{tabular}{cccc}
+  \includegraphics[width=0.25\textwidth]{images/desc_vase.pdf}&
   \includegraphics[width=0.2\textwidth]{interp/ui/ui_sphere.png}&
   \includegraphics[width=0.2\textwidth]{interp/ui/ui_vase.png}&
   \includegraphics[width=0.2\textwidth]{interp/real_world_img/vase/vase.jpg}\\
-  (a). synthetic sphere & (b). synthetic vase & (c). real-world vase\\
+  Property settings & Synthetic sphere & Synthetic vase & Real-world vase\\
 \end{tabular}
 % \caption{(a) demonstrates the effect of the property settings on a sphere, (b) on a teapot, and (c) shows the real-world object.}
 \end{figure}
-
-% \begin{table}[!htbp]
-%   \centering
-%   \begin{tabular}{l*{4}{p{1cm}}l}
-%   \toprule
-%   \textbf{Prob cond} & Texture & Albedo & Specular & Rough & \textbf{Label}\\
-%   \midrule
-%   1 & low/med & high & low/med & high & Tl-B-D-R\\
-%   2 & low/med & high & high & low/med & Tl-B-M-S\\
-%   3 & high & high & low/med & high & T-B-D-R\\
-%   4 & high & high & high & low/med & T-B-M-S\\
-%   \bottomrule
-%   \end{tabular}
-%   \caption{Expression of the four problem conditions.}
-% \end{table}
 
 \end{frame}
 
@@ -526,7 +501,7 @@ Texture & Albedo & Specular & Roughness\\
 % \end{frame}
 
 %------------------------------------------------
-\begin{frame}{Mapping: theory and observations}
+\begin{frame}{Mapping: interesting observations}
 
 % We provide key observations that can be theoretically justified by theory to demonstrate the insights that could be obtained from the mapping.
 
@@ -666,7 +641,7 @@ Cond & 1 & 2 & 3 & 4\\
 %------------------------------------------------
 \begin{frame}{Interpretation 1: demonstrative result}
 
-accurate description $\Rightarrow$ successful result
+accurate description $\Rightarrow$ successful result?
 
 \begin{figure}
 \centering
@@ -676,7 +651,7 @@ accurate description $\Rightarrow$ successful result
 \begin{exampleblock}{Comparison to baseline result}
 \begin{itemize}
 \item accuracy: higher quality
-\item completenss: no unconstructed holes
+\item completenss: no incomplete holes
 \end{itemize}
 \end{exampleblock}
 
@@ -962,9 +937,9 @@ Object & Statue & Cup & Pot & Vase \\
 \begin{frame}{Conclusions}
 
 \begin{itemize}
-\item the proposed description is able to give correct reconstruction for non-concave objects
+\item The proposed description is able to give correct reconstruction for non-concave objects;
+\item Using the simple descriptive language and proof-of-concept interpreter, we demonstrate the possibility of using descriptive properties to hide algorithmic details;
 \item To deal with more complicated objects, we need more complicated properties, or ways to describe the objects, but the challenge is the easy mathematical representation might not be available.
-\item Using the simple descriptive language and proof-of-concept interpreter, we demonstrate the possibility of using descriptive properties to hide algorithmic details.
 \end{itemize}
 \end{frame}
 

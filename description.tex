@@ -244,13 +244,14 @@ There have been some empirical studies focused on visual estimation of specific 
 Despite its subjective ease, material perception still poses the visual system with some unique and significant challenges, because a given material can take on many different appearances depending on the lighting, viewpoint and shape. Thus, we provide a \textit{generative} approach to visual perception: a simulation software is used to generate images of a synthetic object with varied property settings to aid the estimation of properties. The user can choose an illumination field and object shape that is closest to the real-world enviriontment and object. Then this ``trial-and-error'' approach is used to estimate parameters of properties. More specifically, the user would change the value of each property and see if the rendered result resembles the real object. A similar approach can be found in~\cite{Berkiten:2016:ARB} where \citeauthor{Berkiten:2016:ARB} used a synthetic dataset to find the contributing factors of various Photometric Stereo algorithms. We demonstrate this approach using the following example shown in Figure~\ref{fig:prop_estimate}:  the brightness of the object is controlled by the albedo value, which is determined by the value channel of HSV colour space. To determine the specularity and roughness of the object, we experiment with varying parameters to get the most realistic image.
 \begin{figure}[!htbp]
 \centering
-\begin{tabular}{ccc}
-  \includegraphics[width=0.3\textwidth]{interp/ui/ui_sphere.png}&
-  \includegraphics[width=0.3\textwidth]{interp/ui/ui_vase.png}&
-  \includegraphics[width=0.3\textwidth]{img/interp/real_world_img/vase/vase.jpg}\\
-  (a). synthetic sphere & (b). synthetic vase & (c). real-world vase\\
+\begin{tabular}{cccc}
+  \includegraphics[width=0.25\textwidth]{model/desc_vase.pdf}&
+  \includegraphics[width=0.2\textwidth]{interp/ui/ui_sphere.png}&
+  \includegraphics[width=0.2\textwidth]{interp/ui/ui_vase.png}&
+  \includegraphics[width=0.2\textwidth]{img/interp/real_world_img/vase/vase.jpg}\\
+  (a). Property settings & (b). Synthetic sphere & (c). Synthetic vase & (d). Real-world vase\\
 \end{tabular}
-\caption{The UI for determining the property settings, including albedo, specular, and roughness of the surface. In this case shown above, the problem condition is: texture (0.8), albedo (0.8), specular (0.2), roughness(0.2). (a) demonstrates the effect of the property settings on a sphere, (b) on a teapot, and (c) shows the real-world object.}
+\caption{The UI for determining the property settings, including albedo, specular, and roughness of the surface. As shown in (a), the problem condition in this case is: texture (0.8), albedo (0.8), specular (0.2), roughness(0.2). (b) demonstrates the effect of the property settings on a sphere, (c) on a teapot, and (d) shows the real-world object.}
 \label{fig:prop_estimate}
 \end{figure}
 
