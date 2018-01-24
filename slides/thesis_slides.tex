@@ -75,18 +75,12 @@ kaywu@ece.ubc.ca \\ % Your email address
 \includegraphics[width=0.3\textwidth]{images/3d_scanner.jpg} \\
 Visual effects & Inverse CAD & 3D scanner \\
 \includegraphics[width=0.3\textwidth]{images/customization.png} & 
-\\
+ &
+\includegraphics[width=0.3\textwidth]{images/virtual_content.png} \\
 Customization & DIY Repair\& Reconstruction & Virtual content creation \\
 \end{tabular}
 \end{figure}
-% \begin{itemize}
-% \item digital mapping
-% \item visual effects
-% \item virtual content creation
-% \item 3D artist
-% \item inverse CAD
-% \item 3D printing's counterpart: 3D scanner
-% \end{itemize}
+
 \end{frame}
 
 %------------------------------------------------
@@ -100,7 +94,7 @@ Customization & DIY Repair\& Reconstruction & Virtual content creation \\
 \begin{alertblock}{Challenges}
   \begin{itemize}
     \item \textbf{Algorithms}: vision knowledge required;
-    \item \textbf{Parameters}: not interpretable, meaningful, or conceptually estimatible;
+    \item \textbf{Parameters}: not interpretable, meaningful, or conceptually estimatible, vary from algorithm to algorithm.
     \item \textbf{Approach}: \textit{trial-and-error}.
   \end{itemize}
 \end{alertblock}
@@ -116,7 +110,7 @@ Customization & DIY Repair\& Reconstruction & Virtual content creation \\
 & Traditional 3D Recon & Interface for 3D Recon\\
 \midrule
 Algorithm & vision knowledge & hidden \\
-Parameter & algorithm-specific params & params of visual\& geometric properties \\
+Parameter & algorithm-specific params & a fixed set of params of visual\& geometric properties \\
 Approach & multiple trial-and-error & no trial-and-error \\
 \end{tabular}
 \end{table}
@@ -173,7 +167,7 @@ Development of an interface for 3D reconstruction problem, which hides algorithm
 \end{exampleblock}
 
 \begin{alertblock}{Challenges}
-1. Not that we don't have enough tools, but the barrier to take advantage of these tools is high. \\
+1. Not that we don't have enough tools, but \textit{when} and \textit{where} to use them. \\
 \end{alertblock}
 
 \end{frame}
@@ -183,7 +177,7 @@ Development of an interface for 3D reconstruction problem, which hides algorithm
 
 \begin{exampleblock}{Shape from Stereo}
   \begin{itemize}
-    \item Example: Multi-View Stereo, Structured Light
+    \item Example: Multi-View Stereo, Structured Light, laser scanner
     \item Problem: Texture, reflectance
   \end{itemize}
 \end{exampleblock}
@@ -191,7 +185,7 @@ Development of an interface for 3D reconstruction problem, which hides algorithm
 \begin{exampleblock}{Shape from Intensity}
   \begin{itemize}
     \item Example: Shape from Shading, Photometric Stereo
-    \item Problem: Lightness, shape
+    \item Problem: Brightness, geometry
   \end{itemize}
 \end{exampleblock}
 
@@ -258,6 +252,10 @@ Development of an interface for 3D reconstruction problem, which hides algorithm
 \section{Development of Interface}
 %------------------------------------------------
 \begin{frame}{Overview of interface}
+
+\begin{exampleblock}{3-layer interface for 3D reconstruction}
+\end{exampleblock}
+
 \begin{figure}
 \centering
 \begin{tikzpicture}[node distance=0.8cm, auto]
@@ -267,18 +265,17 @@ Development of an interface for 3D reconstruction problem, which hides algorithm
 \node (algo) [data, below of=interp, font=\small] {L1: Algorithm};
 
 \end{tikzpicture}
-\caption{3-layer interface to 3D reconstruction.}
 \end{figure}
 
 \begin{exampleblock}{Description}
-  1. define problem space; \\
-  2. describe problem condition.
+  Describe visual and geometric appearance of object
 \end{exampleblock}
-\begin{exampleblock}{Interpreter: translate description to an appropriate algorithm.}
-  Mapping: discover the relation between problem space and algorithm.
+\begin{exampleblock}{Interpreter}
+  1. Translate description into an appropriate algorithm; \\
+  2. Mapping: relation between problem space and algorithms.
 \end{exampleblock}
 \begin{exampleblock}{Algorithm}
-  Embed algorithms into the interface
+  Underlying algorithms across varied categories.
 \end{exampleblock}
 
 \end{frame}
@@ -288,18 +285,21 @@ Development of an interface for 3D reconstruction problem, which hides algorithm
 %------------------------------------------------
 \begin{frame}{Problem space}
 
-The selection of the properties is based on:
+\begin{exampleblock}{}
+% The selection of the properties is based on:
 \begin{itemize}
-\item availability of this properties in real life
-\item why emission is not selected?
+\item Select properties commonly seen in real world;
+\item Choose properties that can be addressed by current algorithms.
 \end{itemize}
+\end{exampleblock}
+
 % \begin{itemize}
 % \item \textit{algorithm-centered} approach categorizes algorithms based on algorithm details, as discussed in \textbf{Related Work};
 % \item \textit{object-centered} approach categorizes algorithms based on the problem conditions that the algorithm can reliably works under.
 % \end{itemize}
 
 \begin{figure}
-\includegraphics[width=0.7\textwidth]{prob_space/obj_class}
+\includegraphics[width=0.8\textwidth]{prob_space/obj_class}
 \end{figure}
 
 \end{frame}
@@ -313,7 +313,7 @@ The selection of the properties is based on:
 \begin{tabular}{ll}
 \multirow{2}{*}{existence of algorithm} & translucency, transparency \\
 & low surface reflectance (dark surfaces) \\ \cline{1-2}
-\multirow{2}{*}{global interaction model} & transmission, refraction, inter-reflection \\
+\multirow{2}{*}{local interaction model} & transmission, refraction, inter-reflection \\
 & severe concavity \\
 \end{tabular}
 \end{table}
@@ -349,34 +349,23 @@ The selection of the properties is based on:
 \end{frame}
 
 %------------------------------------------------
-\begin{frame}{Description: expression}
-
-We use three-scale values to parameterize properties: \textit{low} (0.2), \textit{medium} (0.5), and \textit{high} (0.8).
-
-\begin{figure}[!htbp]
-\centering
-\begin{tabular}{cccc}
-  \includegraphics[width=0.25\textwidth]{images/desc_vase.pdf}&
-  \includegraphics[width=0.2\textwidth]{interp/ui/ui_sphere.png}&
-  \includegraphics[width=0.2\textwidth]{interp/ui/ui_vase.png}&
-  \includegraphics[width=0.2\textwidth]{interp/real_world_img/vase/vase.jpg}\\
-  Property settings & Synthetic sphere & Synthetic vase & Real-world vase\\
-\end{tabular}
-% \caption{(a) demonstrates the effect of the property settings on a sphere, (b) on a teapot, and (c) shows the real-world object.}
-\end{figure}
-
-\end{frame}
-
-%------------------------------------------------
 \subsection{Mapping of 3D Reconstruction}
 %------------------------------------------------
 \begin{frame}{Mapping}
 
 % Investigate the problem conditions under which the algorithms can reliably work.
-
+\begin{exampleblock}{Purpose}
+\end{exampleblock}
 \begin{figure}
 \centering
-\includegraphics[width=0.9\textwidth]{images/mapping_3d_vision.pdf}
+\includegraphics[width=0.9\textwidth]{images/mapping_1.pdf}
+\end{figure}
+
+\begin{exampleblock}{Construction}
+\end{exampleblock}
+\begin{figure}
+\centering
+\includegraphics[width=0.9\textwidth]{images/mapping_2.pdf}
 \end{figure}
 
 % \begin{itemize}
@@ -384,69 +373,6 @@ We use three-scale values to parameterize properties: \textit{low} (0.2), \texti
 % \item Evaluate algorithmic performance within EPD
 % \item Derive mapping from problem conditions to algorithms.
 % \end{itemize}
-
-\end{frame}
-
-%------------------------------------------------
-\begin{frame}{Mapping: algorithms}
-
-\begin{exampleblock}{selected algorithms}
-\begin{itemize}
-\item Patch-based Multi-View Stereo (PMVS): propagate-refinement-filtering;
-\item Example-based Photometric Stereo (EPS): arbitrary BRDF is a linear combination of basis BRDFs;
-\item Gray-coded Structured Light (GSL): encode spatial informally temporally.
-\end{itemize}
-\end{exampleblock}
-
-\begin{exampleblock}{baseline methods}
-\begin{itemize}
-\item Volumetric Visual Hull: carve voxels projecting outside of silhouettes;
-\item Linear-least squares Photometric Stereo: $\mathbf{I}=\rho\mathbf{N}\cdot\mathbf{L}$
-\end{itemize}
-\end{exampleblock}
-
-\end{frame}
-
-%------------------------------------------------
-\begin{frame}{Mapping: reduce dimensionality}
-
-Reduce problem space dimensionality by discovering properties that have an effect on algorithm performance.
-\begin{figure}
-\centering
-\includegraphics[width=0.5\textwidth]{mapping/eval_prop/mvs_tex_spec}
-\end{figure}
-
-\begin{exampleblock}{observations}
-\begin{itemize}
-\item texture and specularity has an effect on both accuracy and completeness;
-\item the effect of specularity is less noticable on highly/lowly textured surfaces.
-\end{itemize}
-\end{exampleblock}
-
-\end{frame}
-
-%------------------------------------------------
-\begin{frame}{Mapping: discover mapping}
-
-Discover the mapping from problem condition to algorithms
-\begin{figure}
-\centering
-\includegraphics[width=0.5\textwidth]{mapping/lookup_table/mvs_texture_05}
-\end{figure}
-
-\begin{table}
-\centering
-\begin{tabular}{*{4}{c}}
-\toprule
-Texture & Albedo & Specular & Roughness\\
-\midrule
-0.5 & 0.5 & 0.2 & -\\
-0.5 & 0.8 & 0.2 & -\\
-0.5 & 0.8 & 0.5 & -\\
-\bottomrule
-\end{tabular}
-\caption{Problem conditions that PMVS works reliably under.}
-\end{table}
 
 \end{frame}
 
@@ -560,81 +486,17 @@ Cond & 1 & 2 & 3 & 4\\
 \end{frame}
 
 %------------------------------------------------
-\begin{frame}{Interpretation 1: demonstrative result}
-
-accurate description $\Rightarrow$ successful result?
+\begin{frame}{Interpretation: results}
 
 \begin{figure}
 \centering
-\includegraphics[width=0.8\textwidth]{images/interp1.pdf}
+\includegraphics[width=\textwidth]{images/interp.pdf}
 \end{figure}
-
-\begin{exampleblock}{Comparison to baseline result}
-\begin{itemize}
-\item accuracy: higher quality
-\item completenss: no incomplete holes
-\end{itemize}
-\end{exampleblock}
 
 \end{frame}
 
 %------------------------------------------------
-\begin{frame}{Interpretation 2: demonstrative result}
-
-less accurate description $\Rightarrow$ less successful result?
-
-\begin{figure}
-\centering
-\includegraphics[width=0.8\textwidth]{images/interp2.pdf}
-\end{figure}
-
-\begin{exampleblock}{Comparison to baseline result}
-\begin{itemize}
-\item completenss: has incomplete holes
-\end{itemize}
-\end{exampleblock}
-
-\end{frame}
-
-%------------------------------------------------
-\begin{frame}{Interpretation 2: demonstrative result (cont'd)}
-
-less accurate description $\Rightarrow$ less successful result?
-
-\begin{figure}
-\centering
-\includegraphics[width=0.8\textwidth]{images/interp2_1.pdf}
-\end{figure}
-
-\begin{exampleblock}{Comparison to baseline result}
-\begin{itemize}
-\item accuracy: higher quality
-\item completenss: no incomplete holes
-\end{itemize}
-\end{exampleblock}
-
-\end{frame}
-
-%------------------------------------------------
-\begin{frame}{Interpretation 3: demonstrative result}
-
-inaccurate description $\Rightarrow$ poor result?
-
-\begin{figure}
-\centering
-\includegraphics[width=0.8\textwidth]{images/interp3.pdf}
-\end{figure}
-
-\begin{exampleblock}{Summary}
-\begin{itemize}
-\item accuracy/completeness: surface rougher, poorer
-\end{itemize}
-\end{exampleblock}
-
-\end{frame}
-
-%------------------------------------------------
-\begin{frame}{Interpretation: overview}
+\begin{frame}{Interpretation: results (cont'd)}
 
 \begin{figure}
 \centering
@@ -644,7 +506,7 @@ inaccurate description $\Rightarrow$ poor result?
 \end{frame}
 
 %------------------------------------------------
-\begin{frame}{Interpretation: summary}
+\begin{frame}{Interpretation: results}
 
 \begin{exampleblock}{}
 \begin{itemize}
@@ -659,14 +521,14 @@ inaccurate description $\Rightarrow$ poor result?
 \end{frame}
 
 %------------------------------------------------
-\begin{frame}{Interpreter: results}
+\begin{frame}{Interpreter: results (cont'd)}
 
 \begin{figure}
 \centering
 \includegraphics[width=0.9\textwidth]{images/3d_recon_interface_2.pdf}
 \end{figure}
 
-\begin{exampleblock}{Strengths}
+\begin{exampleblock}{}
   \begin{itemize}
     \item \textbf{Algorithms}: description of appearance, no vision background needed, embeding new algorithms is easy;
     \item \textbf{Parameters}: property parameters are perceptually interpretable\& meaningful;
@@ -681,22 +543,31 @@ inaccurate description $\Rightarrow$ poor result?
 %------------------------------------------------
 \begin{frame}{Conclusions}
 
+\begin{exampleblock}{}
+
 \begin{itemize}
-\item The proposed description is able to give correct reconstruction for non-concave objects;
-\item The solution produced by the interface gets better as the description becomes more accurate, and vice versa;
-\item Using the simple descriptive language and proof-of-concept interpreter, we demonstrate the possibility of using descriptive properties to hide algorithmic details;
-\item To deal with more complicated objects, we need more complicated properties, or ways to describe the objects, but the challenge is the easy mathematical representation might not be available.
+\item The proposed interface is able to produce a correct reconstruction result given an accurate description of an object;
+\item The solution produced by the interface improves as the description becomes more accurate;
+\item Using the description and proof of concept interpreter, we demonstrate the possibility of using descriptive properties to hide algorithm details and providing a fixed set of parameters that can be perceptually estimated;
 \end{itemize}
+
+\end{exampleblock}
 
 \end{frame}
 
 %------------------------------------------------
-\begin{frame}{Recommendations and Future directions}
+\begin{frame}{Future directions}
+
+\begin{exampleblock}{}
 
 \begin{itemize}
 \item Develop automated approach to derive description from images;
-\item Develop more sophisticated geometric model to incorporate objects with complex geometry;
+\item Develop more advanced techniques to discover the mapping from problem conditions to algorithms;
+\item Develop more sophisticated geometric model to incorporate objects with complex geometry.
+% \item To deal with more complicated objects, we need more complicated properties, or ways to describe the objects, but the challenge is the easy mathematical representation might not be available.
 \end{itemize}
+
+\end{exampleblock}
 
 \end{frame}
 
@@ -710,6 +581,45 @@ Computer vision should focus on more than \\just algorithms, but easier accessib
 %------------------------------------------------
 % Additional slides
 %------------------------------------------------
+
+%------------------------------------------------
+\begin{frame}{Description: expression}
+
+We use three-scale values to parameterize properties: \textit{low} (0.2), \textit{medium} (0.5), and \textit{high} (0.8).
+
+\begin{figure}[!htbp]
+\centering
+\begin{tabular}{cccc}
+  \includegraphics[width=0.25\textwidth]{images/desc_vase.pdf}&
+  \includegraphics[width=0.2\textwidth]{interp/ui/ui_sphere.png}&
+  \includegraphics[width=0.2\textwidth]{interp/ui/ui_vase.png}&
+  \includegraphics[width=0.2\textwidth]{interp/real_world_img/vase/vase.jpg}\\
+  Property settings & Synthetic sphere & Synthetic vase & Real-world vase\\
+\end{tabular}
+% \caption{(a) demonstrates the effect of the property settings on a sphere, (b) on a teapot, and (c) shows the real-world object.}
+\end{figure}
+
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}{Mapping: algorithms}
+
+\begin{exampleblock}{selected algorithms}
+\begin{itemize}
+\item Patch-based Multi-View Stereo (PMVS): propagate-refinement-filtering;
+\item Example-based Photometric Stereo (EPS): arbitrary BRDF is a linear combination of basis BRDFs;
+\item Gray-coded Structured Light (GSL): encode spatial informally temporally.
+\end{itemize}
+\end{exampleblock}
+
+\begin{exampleblock}{baseline methods}
+\begin{itemize}
+\item Volumetric Visual Hull: carve voxels projecting outside of silhouettes;
+\item Linear-least squares Photometric Stereo: $\mathbf{I}=\rho\mathbf{N}\cdot\mathbf{L}$
+\end{itemize}
+\end{exampleblock}
+
+\end{frame}
 
 %------------------------------------------------
 \begin{frame}{Mapping: dataset}
@@ -727,6 +637,49 @@ Computer vision should focus on more than \\just algorithms, but easier accessib
 % \includegraphics[width=0.8\textwidth]{mapping/setup/tex}
 % \end{figure}
 % \end{exampleblock}
+
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}{Mapping: reduce dimensionality}
+
+Reduce problem space dimensionality by discovering properties that have an effect on algorithm performance.
+\begin{figure}
+\centering
+\includegraphics[width=0.5\textwidth]{mapping/eval_prop/mvs_tex_spec}
+\end{figure}
+
+\begin{exampleblock}{observations}
+\begin{itemize}
+\item texture and specularity has an effect on both accuracy and completeness;
+\item the effect of specularity is less noticable on highly/lowly textured surfaces.
+\end{itemize}
+\end{exampleblock}
+
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}{Mapping: discover mapping}
+
+Discover the mapping from problem condition to algorithms
+\begin{figure}
+\centering
+\includegraphics[width=0.5\textwidth]{mapping/lookup_table/mvs_texture_05}
+\end{figure}
+
+\begin{table}
+\centering
+\begin{tabular}{*{4}{c}}
+\toprule
+Texture & Albedo & Specular & Roughness\\
+\midrule
+0.5 & 0.5 & 0.2 & -\\
+0.5 & 0.8 & 0.2 & -\\
+0.5 & 0.8 & 0.5 & -\\
+\bottomrule
+\end{tabular}
+\caption{Problem conditions that PMVS works reliably under.}
+\end{table}
 
 \end{frame}
 
@@ -826,6 +779,25 @@ Computer vision should focus on more than \\just algorithms, but easier accessib
 % \end{frame}
 
 %------------------------------------------------
+\begin{frame}{Interpretation 1: demonstrative result}
+
+accurate description $\Rightarrow$ successful result?
+
+\begin{figure}
+\centering
+\includegraphics[width=0.8\textwidth]{images/interp1.pdf}
+\end{figure}
+
+\begin{exampleblock}{Comparison to baseline result}
+\begin{itemize}
+\item accuracy: higher quality
+\item completenss: no incomplete holes
+\end{itemize}
+\end{exampleblock}
+
+\end{frame}
+
+%------------------------------------------------
 \begin{frame}{Interpretation 1: more results}
 
 \begin{figure}
@@ -857,6 +829,43 @@ Computer vision should focus on more than \\just algorithms, but easier accessib
 & \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/real_interp/vase/vase_sc}}\\
 \end{tabular}
 \end{figure}
+
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}{Interpretation 2: demonstrative result}
+
+less accurate description $\Rightarrow$ less successful result?
+
+\begin{figure}
+\centering
+\includegraphics[width=0.8\textwidth]{images/interp2.pdf}
+\end{figure}
+
+\begin{exampleblock}{Comparison to baseline result}
+\begin{itemize}
+\item completenss: has incomplete holes
+\end{itemize}
+\end{exampleblock}
+
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}{Interpretation 2: demonstrative result (cont'd)}
+
+less accurate description $\Rightarrow$ less successful result?
+
+\begin{figure}
+\centering
+\includegraphics[width=0.8\textwidth]{images/interp2_1.pdf}
+\end{figure}
+
+\begin{exampleblock}{Comparison to baseline result}
+\begin{itemize}
+\item accuracy: higher quality
+\item completenss: no incomplete holes
+\end{itemize}
+\end{exampleblock}
 
 \end{frame}
 
@@ -906,6 +915,24 @@ statue & \raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/real
   \raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/real_interp/statue/statue_sl}} \\
 \end{tabular}
 \end{figure}
+
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}{Interpretation 3: demonstrative result}
+
+inaccurate description $\Rightarrow$ poor result?
+
+\begin{figure}
+\centering
+\includegraphics[width=0.8\textwidth]{images/interp3.pdf}
+\end{figure}
+
+\begin{exampleblock}{Summary}
+\begin{itemize}
+\item accuracy/completeness: surface rougher, poorer
+\end{itemize}
+\end{exampleblock}
 
 \end{frame}
 
