@@ -66,14 +66,27 @@ kaywu@ece.ubc.ca \\ % Your email address
 \section{Introduction}
 %------------------------------------------------
 \begin{frame}{Motivation: application}
-\begin{itemize}
-\item digital mapping
-\item visual effects
-\item virtual content creation
-\item 3D artist
-\item inverse CAD
-\item 3D printing's counterpart: 3D scanner
-\end{itemize}
+
+\begin{figure}
+\centering
+\begin{tabular}{*{3}{p{3.2cm}}}
+\includegraphics[width=0.3\textwidth]{images/visual_effects.png} &
+\includegraphics[width=0.3\textwidth]{images/inverse_cad.png} &
+\includegraphics[width=0.3\textwidth]{images/3d_scanner.jpg} \\
+Visual effects & Inverse CAD & 3D scanner \\
+\includegraphics[width=0.3\textwidth]{images/customization.png} & 
+\\
+Customization & DIY Repair\& Reconstruction & Virtual content creation \\
+\end{tabular}
+\end{figure}
+% \begin{itemize}
+% \item digital mapping
+% \item visual effects
+% \item virtual content creation
+% \item 3D artist
+% \item inverse CAD
+% \item 3D printing's counterpart: 3D scanner
+% \end{itemize}
 \end{frame}
 
 %------------------------------------------------
@@ -81,7 +94,7 @@ kaywu@ece.ubc.ca \\ % Your email address
 
 \begin{figure}
 \centering
-\includegraphics[width=0.6\textwidth]{images/3d_recon_tradition.pdf}
+\includegraphics[width=0.9\textwidth]{images/3d_recon_traditional_2.pdf}
 \end{figure}
 
 \begin{alertblock}{Challenges}
@@ -95,30 +108,18 @@ kaywu@ece.ubc.ca \\ % Your email address
 \end{frame}
 
 %------------------------------------------------
-\begin{frame}{Motivation: interface of 3D reconstruction}
+\begin{frame}{Goal}
 
-\begin{figure}
+\begin{table}
 \centering
-\includegraphics[width=0.7\textwidth]{images/3d_recon_interface.pdf}
-\end{figure}
-
-\begin{exampleblock}{Strengths}
-  \begin{itemize}
-    \item \textbf{Algorithms}: description of appearance, no vision background needed, embeding new algorithms is easy;
-    \item \textbf{Parameters}: property parameters are perceptually interpretable\& meaningful;
-    \item \textbf{Approach}: no \textit{trial-and-error}.
-  \end{itemize}
-\end{exampleblock}
-
-\end{frame}
-
-%------------------------------------------------
-\begin{frame}{Overview}
-
-\begin{figure}
-\centering
-\includegraphics[width=\textwidth]{images/overview.pdf}
-\end{figure}
+\begin{tabular}{l|*{2}{p{4cm}}}
+& Traditional 3D Recon & Interface for 3D Recon\\
+\midrule
+Algorithm & vision knowledge & hidden \\
+Parameter & algorithm-specific params & params of visual\& geometric properties \\
+Approach & multiple trial-and-error & no trial-and-error \\
+\end{tabular}
+\end{table}
 
 \end{frame}
 
@@ -139,6 +140,16 @@ Development of an interface for 3D reconstruction problem, which hides algorithm
 % \end{itemize}
 
 % \end{frame}
+
+%------------------------------------------------
+\begin{frame}{Overview of thesis/presentation}
+
+\begin{figure}
+\centering
+\includegraphics[width=\textwidth]{images/overview.pdf}
+\end{figure}
+
+\end{frame}
 
 %------------------------------------------------
 \section{Related Work}
@@ -246,7 +257,7 @@ Development of an interface for 3D reconstruction problem, which hides algorithm
 %------------------------------------------------
 \section{Development of Interface}
 %------------------------------------------------
-\begin{frame}{Overview}
+\begin{frame}{Overview of interface}
 \begin{figure}
 \centering
 \begin{tikzpicture}[node distance=0.8cm, auto]
@@ -277,10 +288,15 @@ Development of an interface for 3D reconstruction problem, which hides algorithm
 %------------------------------------------------
 \begin{frame}{Problem space}
 
+The selection of the properties is based on:
 \begin{itemize}
-\item \textit{algorithm-centered} approach categorizes algorithms based on algorithm details, as discussed in \textbf{Related Work};
-\item \textit{object-centered} approach categorizes algorithms based on the problem conditions that the algorithm can reliably works under.
+\item availability of this properties in real life
+\item why emission is not selected?
 \end{itemize}
+% \begin{itemize}
+% \item \textit{algorithm-centered} approach categorizes algorithms based on algorithm details, as discussed in \textbf{Related Work};
+% \item \textit{object-centered} approach categorizes algorithms based on the problem conditions that the algorithm can reliably works under.
+% \end{itemize}
 
 \begin{figure}
 \includegraphics[width=0.7\textwidth]{prob_space/obj_class}
@@ -291,11 +307,18 @@ Development of an interface for 3D reconstruction problem, which hides algorithm
 %------------------------------------------------
 \begin{frame}{Problem space: four problem conditions}
 
-Assumptions:
-\begin{itemize}
-\item Active methods require high surface albedo (bright), in order to demonstrate the effectiveness of these methods, we focus on bright surfaces only.
-\item Diffuse is caused solely by surface roughness since sub-surface scattering is ignored.
-\end{itemize}
+\begin{exampleblock}{Assumptions}
+\begin{table}
+\centering
+\begin{tabular}{ll}
+\multirow{2}{*}{existence of algorithm} & translucency, transparency \\
+& low surface reflectance (dark surfaces) \\ \cline{1-2}
+\multirow{2}{*}{global interaction model} & transmission, refraction, inter-reflection \\
+& severe concavity \\
+\end{tabular}
+\end{table}
+
+\end{exampleblock}
 
 \begin{figure}[h]
 \includegraphics[width=0.7\textwidth]{prob_space/prob_cond}
@@ -428,7 +451,7 @@ Texture & Albedo & Specular & Roughness\\
 \end{frame}
 
 %------------------------------------------------
-\section{Application of interface}
+\section{Application of Interface}
 %------------------------------------------------
 \begin{frame}{Interpretation: evaluation methodology}
 
@@ -537,13 +560,6 @@ Cond & 1 & 2 & 3 & 4\\
 \end{frame}
 
 %------------------------------------------------
-\begin{frame}{Interpretation: overview}
-
-
-
-\end{frame}
-
-%------------------------------------------------
 \begin{frame}{Interpretation 1: demonstrative result}
 
 accurate description $\Rightarrow$ successful result?
@@ -557,18 +573,6 @@ accurate description $\Rightarrow$ successful result?
 \begin{itemize}
 \item accuracy: higher quality
 \item completenss: no incomplete holes
-\end{itemize}
-\end{exampleblock}
-
-\end{frame}
-
-%------------------------------------------------
-\begin{frame}{Interpretation 1}
-
-\begin{exampleblock}{Summary}
-\begin{itemize}
-\item We have demonstrated that it is feasible to achieve a successful reconstruction result given a description of problem condition, without knowledge of which algorithm to use;
-\item This could be extended to a wider range of problem conditions given a more complicated object description.
 \end{itemize}
 \end{exampleblock}
 
@@ -612,28 +616,6 @@ less accurate description $\Rightarrow$ less successful result?
 \end{frame}
 
 %------------------------------------------------
-\begin{frame}{Interpretation 2: demonstrative result (cont'd)}
-
-\begin{figure}
-\centering
-\includegraphics[width=\textwidth]{images/interp2_2.pdf}
-\end{figure}
-
-\end{frame}
-
-%------------------------------------------------
-\begin{frame}{Interpretation 2}
-
-\begin{exampleblock}{Summary}
-\begin{itemize}
-\item Algorithm chosen by the interpreter given a less accurate description may or may not achieve a poor result; \\
-\item It depends if the return algorithms has at least an overlapping with those returned if given accurate description.
-\end{itemize}
-\end{exampleblock}
-
-\end{frame}
-
-%------------------------------------------------
 \begin{frame}{Interpretation 3: demonstrative result}
 
 inaccurate description $\Rightarrow$ poor result?
@@ -652,12 +634,44 @@ inaccurate description $\Rightarrow$ poor result?
 \end{frame}
 
 %------------------------------------------------
-\begin{frame}{Interpretation 3}
+\begin{frame}{Interpretation: overview}
 
-\begin{exampleblock}{Summary}
+\begin{figure}
+\centering
+\includegraphics[width=0.8\textwidth]{images/result_summary.pdf}
+\end{figure}
+
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}{Interpretation: summary}
+
+\begin{exampleblock}{}
 \begin{itemize}
-\item Algorithm chosen by the interpreter given inaccurate description have a higher probability of achieving a poorer result; \\
+\item We have demonstrated that it is achievable to design an description-based interface so that a successful reconstruction result is obtained given a description of problem condition, without knowledge of which algorithm to use;
+\item The reconstruction result improves as the accuracy of the description increases.
+% \item Algorithm chosen by the interpreter given a less accurate description may or may not achieve a poor result;
+% \item It depends if the return algorithms has at least an overlapping with those returned if given accurate description;
+% \item Algorithm chosen by the interpreter given inaccurate description have a higher probability of achieving a poorer result.
 \end{itemize}
+\end{exampleblock}
+
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}{Interpreter: results}
+
+\begin{figure}
+\centering
+\includegraphics[width=0.9\textwidth]{images/3d_recon_interface_2.pdf}
+\end{figure}
+
+\begin{exampleblock}{Strengths}
+  \begin{itemize}
+    \item \textbf{Algorithms}: description of appearance, no vision background needed, embeding new algorithms is easy;
+    \item \textbf{Parameters}: property parameters are perceptually interpretable\& meaningful;
+    \item \textbf{Approach}: no \textit{trial-and-error}.
+  \end{itemize}
 \end{exampleblock}
 
 \end{frame}
@@ -842,6 +856,16 @@ Computer vision should focus on more than \\just algorithms, but easier accessib
 & \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/real_interp/pot/pot_sc}}
 & \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/real_interp/vase/vase_sc}}\\
 \end{tabular}
+\end{figure}
+
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}{Interpretation 2: demonstrative result (cont'd)}
+
+\begin{figure}
+\centering
+\includegraphics[width=\textwidth]{images/interp2_2.pdf}
 \end{figure}
 
 \end{frame}
