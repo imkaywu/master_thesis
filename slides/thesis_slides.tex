@@ -101,6 +101,9 @@ Customization & DIY Repair\& Reconstruction & Virtual content creation \\
 
 \end{frame}
 
+
+%------------------------------------------------
+\section{Problem Statement} % Research question
 %------------------------------------------------
 \begin{frame}{Goal}
 
@@ -351,21 +354,15 @@ Development of an interface for 3D reconstruction problem, which hides algorithm
 %------------------------------------------------
 \subsection{Mapping of 3D Reconstruction}
 %------------------------------------------------
-\begin{frame}{Mapping: overview}
+% \begin{frame}{Mapping: overview}
 
-% Investigate the problem conditions under which the algorithms can reliably work.
-\begin{figure}
-\centering
-\includegraphics[width=0.9\textwidth]{images/mapping_0.pdf}
-\end{figure}
+% % Investigate the problem conditions under which the algorithms can reliably work.
+% \begin{figure}
+% \centering
+% \includegraphics[width=0.9\textwidth]{images/mapping_0.pdf}
+% \end{figure}
 
-% \begin{itemize}
-% \item Establish the \textit{effective problem domain} (EPD): cope with large variation in material and shape.
-% \item Evaluate algorithmic performance within EPD
-% \item Derive mapping from problem conditions to algorithms.
-% \end{itemize}
-
-\end{frame}
+% \end{frame}
 
 %------------------------------------------------
 \begin{frame}{Mapping: dimension reduction}
@@ -392,7 +389,7 @@ Reduce problem space dimensionality by discovering properties that have an effec
 \includegraphics[width=0.8\textwidth]{images/mapping_2.pdf}
 \end{figure}
 
-Discover the mapping from problem condition to algorithms
+Discover the mapping from problem condition to algorithms.
 \begin{figure}
 \centering
 \includegraphics[width=0.5\textwidth]{mapping/lookup_table/mvs_texture_05}
@@ -403,7 +400,7 @@ Discover the mapping from problem condition to algorithms
 %------------------------------------------------
 \section{Application of Interface}
 %------------------------------------------------
-\begin{frame}{Interpretation: evaluation methodology}
+\begin{frame}{Interpretation: evaluation questions}
 
 \begin{exampleblock}{Evaluation questions}
   1. accurate description $\Rightarrow$ successful result; \\
@@ -428,26 +425,16 @@ accuracy & completenss & angle diff \\
 \end{frame}
 
 %------------------------------------------------
-% \begin{frame}{Interpretation: evaluation methodology (cont'd)}
+\begin{frame}{Interpretation: dataset creation}
 
-% \begin{exampleblock}{Roadmap}
-%   \begin{itemize}
-%     \item proof of concept interpreter;
-%     \item dataset creation;
-%     \item results of interpreter.
-%   \end{itemize}
-% \end{exampleblock}
-
-% \end{frame}
-
-%------------------------------------------------
-\begin{frame}{Interpretation: proof of concept interpreter}
-
-Interpreter: selects an algorithm based on a description.
-
-\begin{figure}[!htbp]
+\begin{figure}
 \centering
-\includegraphics[width=0.7\textwidth]{interp/interpreter.pdf}
+\begin{tabular}{ccc}
+\includegraphics[width=0.3\textwidth]{images/diy_repair_recon.jpg} &
+\includegraphics[width=0.3\textwidth]{images/diy_repair_recon.jpg} &
+\includegraphics[width=0.3\textwidth]{images/diy_repair_recon.jpg}\\
+MVS\& VH & PS & SL \\
+\end{tabular}
 \end{figure}
 
 \end{frame}
@@ -488,10 +475,10 @@ Objects meet the requirements of the four problem conditions.
 
 \begin{figure}[!htbp]
 \centering
-\begin{tabular}{p{0.6cm}*{4}{p{1.5cm}}}
+\begin{tabular}{p{0.4cm}*{4}{c}} % p{1.5cm}
 Cond & 1 & 2 & 3 & 4\\
 \midrule
-\multirow{2}{*}{\rotatebox[origin=c]{90}{object}} & 
+\multirow{2}{*}{\rotatebox[origin=c]{90}{Object}} & 
 \includegraphics[width=0.15\textwidth]{interp/synth_data/bust} &
 \includegraphics[width=0.15\textwidth]{interp/synth_data/vase0} &
 \includegraphics[width=0.15\textwidth]{interp/synth_data/barrel} &
@@ -499,38 +486,129 @@ Cond & 1 & 2 & 3 & 4\\
 & \includegraphics[width=0.15\textwidth]{interp/real_world_img/statue/statue} &
 \includegraphics[width=0.15\textwidth]{interp/real_world_img/cup/cup} &
 \includegraphics[width=0.15\textwidth]{interp/real_world_img/pot/pot} &
-\includegraphics[width=0.15\textwidth]{interp/real_world_img/vase/vase}\\ \cline{1-5}
-\multirow{3}{*}{\rotatebox[origin=c]{90}{appearance}}
-  & textureless & textureless & textured & textured\\
-  & diffuse & mixed d/s & diffuse & mixed d/s\\
-  & bright & bright & dark/bright & dark/bright\\
+\includegraphics[width=0.15\textwidth]{interp/real_world_img/vase/vase}
+% \\ \cline{1-5}
+% \multirow{3}{*}{\rotatebox[origin=c]{90}{appearance}}
+%   & textureless & textureless & textured & textured\\
+%   & diffuse & mixed d/s & diffuse & mixed d/s\\
+%   & bright & bright & bright/dark & bright/dark\\
 \end{tabular}
 \end{figure}
 
 \end{frame}
 
 %------------------------------------------------
-\begin{frame}{Interpretation: results}
+\begin{frame}{Interpretation: accurate description, successful result}
 
 \begin{figure}
 \centering
-\includegraphics[width=\textwidth]{images/interp.pdf}
+\begin{tabular}{*{8}{p{1cm}}}
+
+\includegraphics[width=0.12\textwidth]{interp/synth_interp/beethoven_sl} & 
+\includegraphics[width=0.12\textwidth]{interp/synth_interp/vase0_ps} &
+\includegraphics[width=0.12\textwidth]{interp/synth_interp/barrel_sl} &
+\includegraphics[width=0.12\textwidth]{interp/synth_interp/vase1_mvs} & 
+\includegraphics[width=0.12\textwidth]{interp/real_interp/statue/statue_sl} &
+\includegraphics[width=0.12\textwidth]{interp/real_interp/cup/cup_ps} &
+\includegraphics[width=0.12\textwidth]{interp/real_interp/pot/pot_sl} &
+\includegraphics[width=0.12\textwidth]{interp/real_interp/vase/vase_mvs} \\
+\includegraphics[width=0.12\textwidth]{interp/synth_interp/beethoven_vh} &
+\includegraphics[width=0.12\textwidth]{interp/synth_interp/vase0_vh} &
+\includegraphics[width=0.12\textwidth]{interp/synth_interp/barrel_vh} &
+\includegraphics[width=0.12\textwidth]{interp/synth_interp/vase1_vh} &
+\includegraphics[width=0.12\textwidth]{interp/real_interp/statue/statue_sc} &
+\includegraphics[width=0.12\textwidth]{interp/real_interp/cup/cup_sc} &
+\includegraphics[width=0.12\textwidth]{interp/real_interp/pot/pot_sc} &
+\includegraphics[width=0.12\textwidth]{interp/real_interp/vase/vase_sc} \\
+
+\end{tabular}
+\end{figure}
+
+\begin{exampleblock}{}
+\begin{itemize}
+\item accuracy: higher quality
+\item completenss: no incomplete holes
+\end{itemize}
+\end{exampleblock}
+
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}{Interpretation: less accurate description, less successful result}
+
+\begin{figure}
+\centering
+\begin{tabular}{*{5}{c}}
+\tc{T}ASR & T\tc{A}SR & TA\tc{S}R & TAS\tc{R} & Corr Desc \\
+\midrule
+\includegraphics[width=0.12\textwidth]{interp/synth_interp/vase0_mvs} &
+\includegraphics[width=0.12\textwidth]{interp/synth_interp/vase0_vh} &
+\includegraphics[width=0.12\textwidth]{interp/synth_interp/vase0_sl} &
+\includegraphics[width=0.12\textwidth]{interp/synth_interp/vase0_sl} &
+\includegraphics[width=0.12\textwidth]{interp/synth_interp/vase0_ps}\\
+
+\includegraphics[width=0.12\textwidth]{interp/real_interp/cup/cup_mvs} &
+\includegraphics[width=0.12\textwidth]{interp/real_interp/cup/cup_sc} &
+\includegraphics[width=0.12\textwidth]{interp/real_interp/cup/cup_sl} &
+\includegraphics[width=0.12\textwidth]{interp/real_interp/cup/cup_sl} &
+\includegraphics[width=0.12\textwidth]{interp/real_interp/cup/cup_ps} \\
+
+\includegraphics[width=0.12\textwidth]{interp/synth_interp/beethoven_sl} &
+\includegraphics[width=0.12\textwidth]{interp/synth_interp/beethoven_ps} &
+\includegraphics[width=0.12\textwidth]{interp/synth_interp/beethoven_sl} &
+\includegraphics[width=0.12\textwidth]{interp/synth_interp/beethoven_sl} &
+\includegraphics[width=0.12\textwidth]{interp/synth_interp/beethoven_sl}\\
+
+\includegraphics[width=0.12\textwidth]{interp/real_interp/statue/statue_sl} &
+\includegraphics[width=0.12\textwidth]{interp/real_interp/statue/statue_ps} &
+\includegraphics[width=0.12\textwidth]{interp/real_interp/statue/statue_sl} &
+\includegraphics[width=0.12\textwidth]{interp/real_interp/statue/statue_sl} &
+\includegraphics[width=0.12\textwidth]{interp/real_interp/statue/statue_sl} \\
+
+\end{tabular}
 \end{figure}
 
 \end{frame}
 
 %------------------------------------------------
-\begin{frame}{Interpretation: results (cont'd)}
+\begin{frame}{Interpretation: inaccurate description, poor result}
 
 \begin{figure}
 \centering
-\includegraphics[width=0.8\textwidth]{images/result_summary.pdf}
+\begin{tabular}{*{8}{p{1cm}}}
+
+\includegraphics[width=0.1\textwidth]{interp/synth_interp/beethoven_vh} &
+\includegraphics[width=0.1\textwidth]{interp/synth_interp/vase0_mvs} &
+\includegraphics[width=0.1\textwidth]{interp/synth_interp/barrel_vh} &
+\includegraphics[width=0.1\textwidth]{interp/synth_interp/vase1_ps} &
+\includegraphics[width=0.1\textwidth]{interp/real_interp/statue/statue_sc} &
+\includegraphics[width=0.1\textwidth]{interp/real_interp/cup/cup_mvs} &
+\includegraphics[width=0.1\textwidth]{interp/real_interp/pot/pot_sc} &
+\includegraphics[width=0.1\textwidth]{interp/real_interp/vase/vase_ps} \\
+
+\includegraphics[width=0.1\textwidth]{interp/synth_interp/beethoven_sl} &
+\includegraphics[width=0.1\textwidth]{interp/synth_interp/vase0_ps} &
+\includegraphics[width=0.1\textwidth]{interp/synth_interp/barrel_sl} &
+\includegraphics[width=0.1\textwidth]{interp/synth_interp/vase1_mvs} &
+\includegraphics[width=0.1\textwidth]{interp/real_interp/statue/statue_sl} &
+\includegraphics[width=0.1\textwidth]{interp/real_interp/cup/cup_ps} &
+\includegraphics[width=0.1\textwidth]{interp/real_interp/pot/pot_sl} &
+\includegraphics[width=0.1\textwidth]{interp/real_interp/vase/vase_mvs} \\
+
+\end{tabular}
 \end{figure}
+
+\begin{exampleblock}{}
+\begin{itemize}
+\item Baseline method is selected by the interface;
+\item poorer accuracy or completeness: surface rougher, incomplete.
+\end{itemize}
+\end{exampleblock}
 
 \end{frame}
 
 %------------------------------------------------
-\begin{frame}{Interpretation: results}
+\begin{frame}{Interpretation: discussion}
 
 \begin{exampleblock}{}
 \begin{itemize}
@@ -545,7 +623,7 @@ Cond & 1 & 2 & 3 & 4\\
 \end{frame}
 
 %------------------------------------------------
-\begin{frame}{Interpreter: results (cont'd)}
+\begin{frame}{Interpreter: summary}
 
 \begin{figure}
 \centering
@@ -588,6 +666,7 @@ Cond & 1 & 2 & 3 & 4\\
 \item Develop automated approach to derive description from images;
 \item Develop more advanced techniques to discover the mapping from problem conditions to algorithms;
 \item Develop more sophisticated geometric model to incorporate objects with complex geometry.
+\item Investigate the more precise relation between description and performance, \emph{i.e.,} if better description can lead to better performance monotonically.
 % \item To deal with more complicated objects, we need more complicated properties, or ways to describe the objects, but the challenge is the easy mathematical representation might not be available.
 \end{itemize}
 
@@ -640,68 +719,6 @@ We use three-scale values to parameterize properties: \textit{low} (0.2), \texti
 \item Linear-least squares Photometric Stereo: $\mathbf{I}=\rho\mathbf{N}\cdot\mathbf{L}$
 \end{itemize}
 \end{exampleblock}
-
-\end{frame}
-
-%------------------------------------------------
-\begin{frame}{Mapping: dataset}
-
-\begin{exampleblock}{creation of dataset}
-\begin{itemize}
-\item We need a dataset contains object with varied visual and geometric properties;
-\item Generate the dataset using physic-based renderer.
-\end{itemize}
-\end{exampleblock}
-
-% \begin{exampleblock}{example of synthetic object}
-% \begin{figure}
-% \centering
-% \includegraphics[width=0.8\textwidth]{mapping/setup/tex}
-% \end{figure}
-% \end{exampleblock}
-
-\end{frame}
-
-%------------------------------------------------
-\begin{frame}{Mapping: reduce dimensionality}
-
-Reduce problem space dimensionality by discovering properties that have an effect on algorithm performance.
-\begin{figure}
-\centering
-\includegraphics[width=0.5\textwidth]{mapping/eval_prop/mvs_tex_spec}
-\end{figure}
-
-\begin{exampleblock}{observations}
-\begin{itemize}
-\item texture and specularity has an effect on both accuracy and completeness;
-\item the effect of specularity is less noticable on highly/lowly textured surfaces.
-\end{itemize}
-\end{exampleblock}
-
-\end{frame}
-
-%------------------------------------------------
-\begin{frame}{Mapping: discover mapping}
-
-Discover the mapping from problem condition to algorithms
-\begin{figure}
-\centering
-\includegraphics[width=0.5\textwidth]{mapping/lookup_table/mvs_texture_05}
-\end{figure}
-
-\begin{table}
-\centering
-\begin{tabular}{*{4}{c}}
-\toprule
-Texture & Albedo & Specular & Roughness\\
-\midrule
-0.5 & 0.5 & 0.2 & -\\
-0.5 & 0.8 & 0.2 & -\\
-0.5 & 0.8 & 0.5 & -\\
-\bottomrule
-\end{tabular}
-\caption{Problem conditions that PMVS works reliably under.}
-\end{table}
 
 \end{frame}
 
@@ -801,219 +818,13 @@ Texture & Albedo & Specular & Roughness\\
 % \end{frame}
 
 %------------------------------------------------
-\begin{frame}{Interpretation 1: demonstrative result}
+\begin{frame}{Interpretation: proof of concept interpreter}
 
-accurate description $\Rightarrow$ successful result?
+Interpreter: selects an algorithm based on a description.
 
-\begin{figure}
+\begin{figure}[!htbp]
 \centering
-\includegraphics[width=0.8\textwidth]{images/interp1.pdf}
-\end{figure}
-
-\begin{exampleblock}{Comparison to baseline result}
-\begin{itemize}
-\item accuracy: higher quality
-\item completenss: no incomplete holes
-\end{itemize}
-\end{exampleblock}
-
-\end{frame}
-
-%------------------------------------------------
-\begin{frame}{Interpretation 1: more results}
-
-\begin{figure}
-\centering
-\begin{tabular}{lcccc}
-\parbox[t]{2mm}{\rotatebox[origin=c]{90}{Algo}}
-& GSL & EPS & GSL & PMVS \\
-\midrule
-\parbox[t]{2mm}{\rotatebox[origin=c]{90}{Result}}
-& \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/synth_interp/beethoven_sl}}
-& \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/synth_interp/vase0_ps}}
-& \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/synth_interp/barrel_sl}}
-& \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/synth_interp/vase1_mvs}}\\
-\parbox[t]{2mm}{\rotatebox[origin=c]{90}{BL result}}
-& \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/synth_interp/beethoven_vh}}
-& \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/synth_interp/vase0_vh}}
-& \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/synth_interp/barrel_vh}}
-& \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/synth_interp/vase1_vh}}\\
-\midrule
-\parbox[t]{2mm}{\rotatebox[origin=c]{90}{Result}}
-& \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/real_interp/statue/statue_sl}}
-& \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/real_interp/cup/cup_ps}}
-& \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/real_interp/pot/pot_sl}}
-& \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/real_interp/vase/vase_mvs}}\\
-\parbox[t]{2mm}{\rotatebox[origin=c]{90}{BL result}}
-& \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/real_interp/statue/statue_sc}}
-& \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/real_interp/cup/cup_sc}}
-& \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/real_interp/pot/pot_sc}}
-& \raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/real_interp/vase/vase_sc}}\\
-\end{tabular}
-\end{figure}
-
-\end{frame}
-
-%------------------------------------------------
-\begin{frame}{Interpretation 2: demonstrative result}
-
-less accurate description $\Rightarrow$ less successful result?
-
-\begin{figure}
-\centering
-\includegraphics[width=0.8\textwidth]{images/interp2.pdf}
-\end{figure}
-
-\begin{exampleblock}{Comparison to baseline result}
-\begin{itemize}
-\item completenss: has incomplete holes
-\end{itemize}
-\end{exampleblock}
-
-\end{frame}
-
-%------------------------------------------------
-\begin{frame}{Interpretation 2: demonstrative result (cont'd)}
-
-less accurate description $\Rightarrow$ less successful result?
-
-\begin{figure}
-\centering
-\includegraphics[width=0.8\textwidth]{images/interp2_1.pdf}
-\end{figure}
-
-\begin{exampleblock}{Comparison to baseline result}
-\begin{itemize}
-\item accuracy: higher quality
-\item completenss: no incomplete holes
-\end{itemize}
-\end{exampleblock}
-
-\end{frame}
-
-%------------------------------------------------
-\begin{frame}{Interpretation 2: demonstrative result (cont'd)}
-
-\begin{figure}
-\centering
-\includegraphics[width=\textwidth]{images/interp2_2.pdf}
-\end{figure}
-
-\end{frame}
-
-%------------------------------------------------
-\begin{frame}{Interpretation 2: more results}
-
-\begin{figure}
-\centering
-\begin{tabular}{c|*{5}{l}}
-Object & $Desc_1$ & $Desc_2$ & $Desc_3$ & $Desc_4$ & Correct Desc \\
-\midrule
-Desc & \tc{08}080802 & 02\tc{02}0802 & 0208\tc{02}02 & 020808\tc{08} & 02080802 \\
-Algo & PMVS & BL & GSL & GSL & \tc{EPS}\\
-vase0 & \raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/vase0_mvs}} &
-  \raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/vase0_vh}} &
-  \raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/vase0_sl}} &
-  \raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/vase0_sl}} &
-  \raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/vase0_ps}}\\
-cup & \raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/real_interp/cup/cup_mvs}} &
-  \raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/real_interp/cup/cup_sc}} &
-  \raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/real_interp/cup/cup_sl}} &
-  \raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/real_interp/cup/cup_sl}} &
-  \raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/real_interp/cup/cup_ps}} \\
-\midrule
-Desc & \tc{08}080208 & 02\tc{02}0208 & 0208\tc{08}08 & 020802\tc{02} & 02080208 \\
-\multirow{2}{*}{Algo} & GSL & EPS & GSL & GSL & EPS \\
-& & & & & \tc{GSL} \\
-bust & \raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/beethoven_sl}} &
-  \raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/beethoven_ps}} &
-  \raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/beethoven_sl}} &
-  \raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/beethoven_sl}} &
-  \raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/synth_interp/beethoven_sl}}\\
-statue & \raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/real_interp/statue/statue_sl}} &
-  \raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/real_interp/statue/statue_ps}} &
-  \raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/real_interp/statue/statue_sl}} &
-  \raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/real_interp/statue/statue_sl}} &
-  \raisebox{-.5\height}{\includegraphics[width=0.1\textwidth]{interp/real_interp/statue/statue_sl}} \\
-\end{tabular}
-\end{figure}
-
-\end{frame}
-
-%------------------------------------------------
-\begin{frame}{Interpretation 3: demonstrative result}
-
-inaccurate description $\Rightarrow$ poor result?
-
-\begin{figure}
-\centering
-\includegraphics[width=0.8\textwidth]{images/interp3.pdf}
-\end{figure}
-
-\begin{exampleblock}{Summary}
-\begin{itemize}
-\item accuracy/completeness: surface rougher, poorer
-\end{itemize}
-\end{exampleblock}
-
-\end{frame}
-
-%------------------------------------------------
-\begin{frame}{Interpretation 3: more results}
-
-\begin{figure}
-\centering
-\begin{tabular}{c*{4}{l}}
-Object & Bust & Vase0 & Barrel & Vase1 \\
-\midrule
-\parbox[t]{2mm}{\multirow{4}{*}{\rotatebox[origin=c]{90}{Incorrect Desc}}} 
-& 08020802 & 08020208 & 02020802 & 02020208 \\
-& \tabitem\tc{BL} & \tabitem\tc{PMVS} & \tabitem\tc{BL} & \tabitem\tc{EPS} \\
-&           & \tabitem EPS \\
-& \includegraphics[width=0.1\textwidth]{interp/synth_interp/beethoven_vh}
-& \includegraphics[width=0.1\textwidth]{interp/synth_interp/vase0_mvs}
-& \includegraphics[width=0.1\textwidth]{interp/synth_interp/barrel_vh}
-& \includegraphics[width=0.1\textwidth]{interp/synth_interp/vase1_ps} \\ \cline{1-5}
-\parbox[t]{2mm}{\multirow{5}{*}{\rotatebox[origin=c]{90}{Correct Desc}}}
-& 02080208 & 02080802 & 08080208 & 08080802 \\
-& \tabitem EPS    & \tabitem\tc{EPS} & \tabitem PMVS    & \tabitem\tc{PMVS} \\
-& \tabitem\tc{GSL}  &          & \tabitem EPS     & \tabitem EPS \\
-&           &            & \tabitem\tc{GSL} & \\
-& \includegraphics[width=0.1\textwidth]{interp/synth_interp/beethoven_sl}
-& \includegraphics[width=0.1\textwidth]{interp/synth_interp/vase0_ps}
-& \includegraphics[width=0.1\textwidth]{interp/synth_interp/barrel_sl}
-& \includegraphics[width=0.1\textwidth]{interp/synth_interp/vase1_mvs} \\
-\end{tabular}
-\end{figure}
-
-\end{frame}
-
-%------------------------------------------------
-\begin{frame}{Interpretation 3: more results (cont'd)}
-
-\begin{figure}
-\centering
-\begin{tabular}{c*{4}{l}}
-Object & Statue & Cup & Pot & Vase \\
-\midrule
-\parbox[t]{2mm}{\multirow{4}{*}{\rotatebox[origin=c]{90}{Incorrect Desc}}}
-& 08020802 & 08020208 & 02020802 & 02020208 \\
-& \tabitem\tc{BL} & \tabitem\tc{PMVS} & \tabitem\tc{BL} & \tabitem\tc{EPS} \\
-&           & \tabitem EPS \\
-& \includegraphics[width=0.1\textwidth]{interp/real_interp/statue/statue_sc}
-& \includegraphics[width=0.1\textwidth]{interp/real_interp/cup/cup_mvs}
-& \includegraphics[width=0.1\textwidth]{interp/real_interp/pot/pot_sc}
-& \includegraphics[width=0.1\textwidth]{interp/real_interp/vase/vase_ps} \\ \cline{1-5}
-\parbox[t]{2mm}{\multirow{5}{*}{\rotatebox[origin=c]{90}{Correct Desc}}}
-& 02080208 & 02080802 & 08080208 & 08080802 \\
-& \tabitem EPS    & \tabitem\tc{EPS} & \tabitem PMVS    & \tabitem\tc{PMVS} \\
-& \tabitem\tc{GSL}  &          & \tabitem EPS     & \tabitem EPS \\
-&           &            & \tabitem\tc{GSL} & \\
-& \includegraphics[width=0.1\textwidth]{interp/real_interp/statue/statue_sl}
-& \includegraphics[width=0.1\textwidth]{interp/real_interp/cup/cup_ps}
-& \includegraphics[width=0.1\textwidth]{interp/real_interp/pot/pot_sl}
-& \includegraphics[width=0.1\textwidth]{interp/real_interp/vase/vase_mvs} \\
-\end{tabular}
+\includegraphics[width=0.7\textwidth]{interp/interpreter.pdf}
 \end{figure}
 
 \end{frame}
