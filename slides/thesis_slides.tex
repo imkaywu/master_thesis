@@ -351,21 +351,12 @@ Development of an interface for 3D reconstruction problem, which hides algorithm
 %------------------------------------------------
 \subsection{Mapping of 3D Reconstruction}
 %------------------------------------------------
-\begin{frame}{Mapping}
+\begin{frame}{Mapping: overview}
 
 % Investigate the problem conditions under which the algorithms can reliably work.
-\begin{exampleblock}{Purpose}
-\end{exampleblock}
 \begin{figure}
 \centering
-\includegraphics[width=0.9\textwidth]{images/mapping_1.pdf}
-\end{figure}
-
-\begin{exampleblock}{Construction}
-\end{exampleblock}
-\begin{figure}
-\centering
-\includegraphics[width=0.9\textwidth]{images/mapping_2.pdf}
+\includegraphics[width=0.9\textwidth]{images/mapping_0.pdf}
 \end{figure}
 
 % \begin{itemize}
@@ -373,6 +364,39 @@ Development of an interface for 3D reconstruction problem, which hides algorithm
 % \item Evaluate algorithmic performance within EPD
 % \item Derive mapping from problem conditions to algorithms.
 % \end{itemize}
+
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}{Mapping: dimension reduction}
+
+\begin{figure}
+\centering
+\includegraphics[width=0.8\textwidth]{images/mapping_1.pdf}
+\end{figure}
+
+Reduce problem space dimensionality by discovering properties that have an effect on algorithm performance.
+
+\begin{figure}
+\centering
+\includegraphics[width=0.5\textwidth]{mapping/eval_prop/mvs_tex_spec}
+\end{figure}
+
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}{Mapping: mapping construction}
+
+\begin{figure}
+\centering
+\includegraphics[width=0.8\textwidth]{images/mapping_2.pdf}
+\end{figure}
+
+Discover the mapping from problem condition to algorithms
+\begin{figure}
+\centering
+\includegraphics[width=0.5\textwidth]{mapping/lookup_table/mvs_texture_05}
+\end{figure}
 
 \end{frame}
 
