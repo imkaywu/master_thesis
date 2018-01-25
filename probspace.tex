@@ -39,8 +39,8 @@ We first give an overview of problem space, which consists of visual and geometr
 %\multirow{3}{*}{Texture} & Textured & \textbf{T} \\
 %						 & Repeated textured & \textbf{Tr} \\
 %						 & Textureless & \textbf{Tl} \\ \cline{2-3}
-%\multirow{2}{*}{Lightness} & Bright & \textbf{B} \\
-%						   & Dark 	& \textbf{D} \\ \cline{2-3}
+%\multirow{2}{*}{Brightness} & Bright & \textbf{B} \\
+%						    & Dark 	& \textbf{D} \\ \cline{2-3}
 %\multirow{5}{*}{Reflection} & Specular model & \textbf{S} \\
 %							& Diffuse model  & \textbf{D} \\
 %							& Mixed model	 & \textbf{M} \\
@@ -52,7 +52,7 @@ We first give an overview of problem space, which consists of visual and geometr
 %						   & Concave & \textbf{Cv} \\
 %\bottomrule
 %\end{tabular}
-%\caption{Labels of properties}
+%\caption{Labels of properties.}
 %\label{tab:prop_label}
 %\end{table}
 
@@ -61,7 +61,7 @@ We first give an overview of problem space, which consists of visual and geometr
 Though 3D reconstruction of opaque surfaces with Lambertian reflectance has been a well studies problem, specular, translucent, transparent, and refractive scenes still pose challenging problems for acquisition systems~\cite{ihrke2010transparent}. \citeauthor{ihrke2010transparent} conducted a comprehensive review on acquisition approaches for transparent and specular surfaces, and concluded that though different classes of techniques have been developed to deal with these problems and good reconstruction results can be achieved with current state-of-the-art techniques~\cite{ihrke2010transparent}. However, the proposed approaches are still highly specialized and targeted at a very specific object class~\cite{ihrke2010transparent}. Thus, the limits of existing techniques demands that only a subset of problem space can be solved robustly. Further, it is more feasible as a proof of concept demonstration to target a sub-space. Therefore, we make the following assumptions to the keep problem space more tractable:
 
 \subsubsection{Simplified light-matter interaction model}
-We assume \textbf{local interaction model}, \ie global light transport such as transmission, refraction, cast shadow, inter-reflection, metalic are not considered. The rationale behind our choice is that most techniques that have been developed over the past few decades mainly tackle object with an opaque, diffuse or mixed surface~\cite{ihrke2010transparent}. Since the majority of reconstruciton techniques rely on observing light reflected off a surface, surfaces exhibit significant effect of global light tranport present a huge challenge to the reconstruction problem. For specular, refractive, and translucent or transparent objects, only very specialized algorithms are applicable for reconstruction~\cite{ihrke2010transparent}. This is a widely used and accepted model in varied areas of computer vision, including shape from stereo, shading, and so on. As more algorithms become available to tackle these types of objects, they can be embedded to the interface using the same approach that will be discussed in Chapter~\ref{ch:3DRecon_Mapping}, as shown in Figure~\ref{fig:embed_algo}.
+We assume \textbf{local interaction model}, \ie global light transport such as transmission, refraction, cast shadow, inter-reflection are not considered. The rationale behind our choice is that most techniques that have been developed over the past few decades mainly tackle object with an opaque, diffuse or mixed surface~\cite{ihrke2010transparent}. Since the majority of reconstruciton techniques rely on observing light reflected off a surface, surfaces exhibit significant effect of global light tranport present a huge challenge to the reconstruction problem. For specular, refractive, and translucent or transparent objects, only very specialized algorithms are applicable for reconstruction~\cite{ihrke2010transparent}. This is a widely used and accepted model in varied areas of computer vision, including shape from stereo, shading, and so on. As more algorithms become available to tackle these types of objects, they can be embedded to the interface using the same approach that will be discussed in Chapter~\ref{ch:3DRecon_Mapping}, as shown in Figure~\ref{fig:embed_algo}.
 \begin{figure*}[!htbp]
 \centering
 \includegraphics[width=0.8\textwidth]{img/prob_space/embed_algo.pdf}
@@ -75,7 +75,7 @@ Most real-world surfaces are not optically flat, or smooth at a microscopic scal
 \subsubsection{Simplified geometric model}
 It's a challenging task to model geometry using mathematical descriptions. For geometric primitives such as cube, sphere, or cone, etc, it's possible to describe the shape using concise descriptions. However, the task becomes more challenging when it comes to shapes with varied characteristics. Furthermore it becomes more ambiguous when natural language is employed. Thus we only consider the microscopic roughness of the surface, which has a direct relation with the reflection. Other prominent geometric properties such as \textit{concavity}, which affects self-shadow, inter-reflection, \textit{depth-discontinuity}, which affects the depth estimation, are not considered.
 
-\subsubsection{High surface reflectance}
+\subsubsection{Surface reflectance}
 Existing 3D vision techniques requires distinct cues for reconstruction, be it texture, intensity variation, focus change, and so on. This information will become much noisier and less effective on darker surfaces. Surfaces with low albedo will make many algorithms ineffective, including most active techniques. In this thesis, dark surfaces could be challenging for all the underlying algorithms implemented within the interface. This works fine when it comes to design and use such an interface since there is no need for all underlying algorithms to work reliably. However, from a demonstrative standpoint, this would render the interface failing to call any of the selected algorithms except the baseline methods, which fails to demonstrate the performance of interpreter. Thus, we decided to use objects with bright surfaces so that the interpreter can invoke one of the underlying algorithms given accurate description.
 
 \subsubsection{Setup of capturing system}
@@ -83,11 +83,15 @@ The configuration of capturing system determines the selection of algorithm in a
 
 % \subsection{Four problem conditions}
 % \label{sec:prob_cond}
-Built upon the previously defined problem space, and additional assumptions, we define four classes of problem conditions that will be investigated in depth, as shown in Figure~\ref{fig:prob_cond}. We will demonstrate that it is achievable to design a descritpion-based interface that hides algorithm details and return solutions without knowing the underlying algorithms using objects that satisfy these conditions.
+Built upon the previously defined problem space, and additional assumptions, we select four of the six properties, the range of which that we are interested in is represented in green, as shown in Figure~\ref{fig:prob_cond} (a). Further, we define four classes of problem conditions that will be investigated in depth, as shown in Figure~\ref{fig:prob_cond} (b). We will demonstrate that it is achievable to design a descritpion-based interface that hides algorithm details and return solutions without knowing the underlying algorithms using objects that satisfy these conditions.
 \begin{figure*}[!htbp]
 \centering
-\includegraphics[width=\textwidth]{prob_space/prob_cond}
-\caption{Four problem conditions selected based on the definition of problem space and additional assumptions. The description-based interface will be evaluated using objects satisfying these conditions.}
+\begin{tabular}{cc}
+\includegraphics[width=0.6\textwidth]{prob_space/prob_cond_1} &
+\includegraphics[width=0.3\textwidth]{prob_space/four_class} \\
+(a). selected properties & (b). four problem conditions
+\end{tabular}
+\caption{(a). Most real-world objects do no exhibit extreme properties, such as $0\%$ or $100\%$ brightness, thus we consider the end points as extremities, and represented in grey. The area represented by green is the range of property that we are interested in; (b). Four problem conditions selected based on the definition of problem space and additional assumptions. The description-based interface will be evaluated using objects satisfying these conditions.}
 \label{fig:prob_cond}
 \end{figure*}
 
