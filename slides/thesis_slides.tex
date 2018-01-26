@@ -287,15 +287,19 @@ Geoemtry\\
 \begin{frame}{Problem space: four problem conditions}
 
 \begin{exampleblock}{Assumptions}
-\begin{table}
-\centering
-\begin{tabular}{ll}
-\multirow{2}{*}{existence of algorithm} & translucency, transparency \\
-& low surface reflectance \\ \cline{1-2}
-\multirow{2}{*}{local interaction model} & transmission, refraction, inter-reflection \\
-& severe concavity \\
-\end{tabular}
-\end{table}
+
+\begin{itemize}
+\item \textbf{existence of algorithms}
+  \begin{itemize}
+  \item translucent, transparent objects need specialized methods;
+  \item low surface reflectance, low reflected light.
+  \end{itemize}
+\item \textbf{local interaction model}
+  \begin{itemize}
+  \item transmission, refraction, inter-reflection;
+  \item severe concavity.
+  \end{itemize}
+\end{itemize}
 
 \end{exampleblock}
 
@@ -406,43 +410,24 @@ accuracy & completenss & angle diff \\
 \begin{figure}
 \centering
 \begin{tabular}{ccc}
+\includegraphics[width=0.3\textwidth]{images/mvs_calib.PNG} &
 \includegraphics[width=0.3\textwidth]{images/diy_repair_recon.jpg} &
-\includegraphics[width=0.3\textwidth]{images/diy_repair_recon.jpg} &
-\includegraphics[width=0.3\textwidth]{images/diy_repair_recon.jpg}\\
+\includegraphics[width=0.3\textwidth]{images/sl_calib.png}\\
 MVS\& VH & PS & SL \\
 \end{tabular}
 \end{figure}
 
+\begin{table}
+  \begin{tabular}{p{1cm}p{2cm}p{2.5cm}p{4cm}}
+  Alg & Hardware & Config & Calibration \\
+  \midrule
+  MVS, VH & 36 cameras  & 3 heights, $30^\circ$ baseline angle & focal length from EXIF, extrinsics using SfM \\
+  PS & camera, lamp, ref objs & random light position & no radiometric/geometric calibration performed \\
+  SL & camera, projector & $10^\circ$ baseline angle & camera-projector calibration using local homography\\
+  \end{tabular}
+\end{table}
+
 \end{frame}
-
-%------------------------------------------------
-% \begin{frame}{Interpretation: dataset creation}
-
-% \begin{exampleblock}{Setup}
-%   \begin{table}
-%     \begin{tabular}{l|l|l}
-%     method & hardware & configuration \\
-%     \midrule
-%     MVS+VH & camera & 3 heights, $30^\circ$ baseline angle \\
-%     PS & camera, lamp, 2 ref objs & \\
-%     SL & camera, projector & $10^\circ$ baseline angle\\
-%     \end{tabular}
-%   \end{table}
-% \end{exampleblock}
-
-% \begin{exampleblock}{Calibration}
-%   \begin{table}
-%     \begin{tabular}{l|l}
-%     method & calibration \\
-%     \midrule
-%     MVS+VH & focal length from EXIF, extrinsics using SfM \\
-%     PS & no radiometric calibration performed \\
-%     SL & camera-projector calibration using local homography \\
-%     \end{tabular}
-%   \end{table}
-% \end{exampleblock}
-
-% \end{frame}
 
 %------------------------------------------------
 \begin{frame}{Interpretation: dataset}
