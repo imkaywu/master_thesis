@@ -25,6 +25,8 @@
 
 \usepackage{multirow}
 
+% \setlength{\tabcolsep}{3pt} % table column spacing for the whole doc
+
 \usepackage{color}
 \newcommand{\tc}[1]{\textcolor{red}{#1}}
 
@@ -178,26 +180,26 @@ Development of an interface for 3D reconstruction problem, which hides algorithm
 %------------------------------------------------
 \begin{frame}{Related Work: algorithms}
 
-\begin{exampleblock}{Shape from Stereo}
-  \begin{itemize}
-    \item Example: Multi-View Stereo, Structured Light, laser scanner
-    \item Problem: Texture, reflectance
-  \end{itemize}
-\end{exampleblock}
+% \begin{exampleblock}{Shape from Stereo}
+%   \begin{itemize}
+%     \item Example: Multi-View Stereo, Structured Light, laser scanner
+%     \item Problem: Texture, reflectance
+%   \end{itemize}
+% \end{exampleblock}
 
-\begin{exampleblock}{Shape from Intensity}
-  \begin{itemize}
-    \item Example: Shape from Shading, Photometric Stereo
-    \item Problem: Brightness, geometry
-  \end{itemize}
-\end{exampleblock}
+% \begin{exampleblock}{Shape from Intensity}
+%   \begin{itemize}
+%     \item Example: Shape from Shading, Photometric Stereo
+%     \item Problem: Brightness, geometry
+%   \end{itemize}
+% \end{exampleblock}
 
-\begin{exampleblock}{Shape from Silhouette}
-  \begin{itemize}
-    \item Example: Visual Hull, Space Carving
-    \item Problem: Shape, reflectance
-  \end{itemize}
-\end{exampleblock}
+% \begin{exampleblock}{Shape from Silhouette}
+%   \begin{itemize}
+%     \item Example: Visual Hull, Space Carving
+%     \item Problem: Shape, reflectance
+%   \end{itemize}
+% \end{exampleblock}
 
 % \begin{figure}
 % \begin{tabular}{lll}
@@ -220,29 +222,24 @@ Development of an interface for 3D reconstruction problem, which hides algorithm
 % \end{tabular}
 % \end{figure}
 
-% \begin{figure}
-% \begin{tabular}{ccc}
-% \toprule
-% Class & Method & Problem \\
-% \midrule
-% \multirow{2}{*}{Shape from Stereo} & 
-% \raisebox{-.5\height}{\includegraphics[height=1cm]{images/mvs.png}} &
-% Texture, Specular \\
-% &  \raisebox{-.5\height}{\includegraphics[height=1cm]{images/sl.jpg}} &
-% Albedo, Specular \\
-% \multirow{2}{*}{Shape from Intensity} & 
-% \raisebox{-.5\height}{\includegraphics[height=1cm]{images/sfs.png}} &
-% Albedo, Specular, Geomtry \\
-% & \raisebox{-.5\height}{\includegraphics[height=1cm]{images/ps.png}} &
-% Albedo, Geoemtry \\
-% \multirow{2}{*}{Shape from Silhouette} &
-% \raisebox{-.5\height}{\includegraphics[height=1cm]{images/vh.jpg}} &
-% Geoemtry\\
-% & \raisebox{-.5\height}{\includegraphics[height=1cm]{images/vh_1.png}} &
-% Geoemtry\\
-% \bottomrule
-% \end{tabular}
-% \end{figure}
+\begin{figure}
+\begin{tabular}{p{1.6cm}ccp{1.5cm}}
+Class & \multicolumn{2}{c}{Method} & Problem \\
+\midrule
+Shape from Stereo & 
+\raisebox{-0.75\height}{\includegraphics[width=0.2\textwidth]{images/mvs.png}} &
+\raisebox{-0.75\height}{\includegraphics[width=0.2\textwidth]{images/sl.jpg}} &
+Texture, Albedo, Specular \\
+Shape from Intensity & 
+\raisebox{-.75\height}{\includegraphics[width=0.15\textwidth]{images/sfs.png}} &
+\raisebox{-.75\height}{\includegraphics[width=0.2\textwidth]{images/ps.png}} &
+Albedo, Specular, Geomtry \\
+Shape from Silhouette &
+\raisebox{-.75\height}{\includegraphics[width=0.2\textwidth]{images/vh.jpg}} &
+\raisebox{-.75\height}{\includegraphics[width=0.2\textwidth]{images/vh_1.png}} &
+Geoemtry\\
+\end{tabular}
+\end{figure}
 
 \begin{alertblock}{Challenges}
 1. Few algorithm works for objects with diverse range of properties;\\
@@ -500,6 +497,7 @@ Cond & 1 & 2 & 3 & 4\\
 %------------------------------------------------
 \begin{frame}{Interpretation: accurate description, successful result}
 
+\addtolength{\tabcolsep}{-3pt}
 \begin{figure}
 \centering
 \begin{tabular}{*{8}{p{1cm}}}
@@ -523,6 +521,7 @@ Cond & 1 & 2 & 3 & 4\\
 
 \end{tabular}
 \end{figure}
+\addtolength{\tabcolsep}{3pt}
 
 \begin{exampleblock}{}
 \begin{itemize}
@@ -536,67 +535,120 @@ Cond & 1 & 2 & 3 & 4\\
 %------------------------------------------------
 \begin{frame}{Interpretation: less accurate description, less successful result}
 
+\addtolength{\tabcolsep}{-6pt}
 \begin{figure}
 \centering
-\begin{tabular}{*{5}{c}}
-\tc{T}ASR & T\tc{A}SR & TA\tc{S}R & TAS\tc{R} & Corr Desc \\
+\begin{tabular}{*{5}{c}|*{5}{c}}
+\tc{T}ASR & T\tc{A}SR & TA\tc{S}R & TAS\tc{R} & TASR & \tc{T}ASR & T\tc{A}SR & TA\tc{S}R & TAS\tc{R} & TASR \\
 \midrule
-\includegraphics[width=0.12\textwidth]{interp/synth_interp/vase0_mvs} &
-\includegraphics[width=0.12\textwidth]{interp/synth_interp/vase0_vh} &
-\includegraphics[width=0.12\textwidth]{interp/synth_interp/vase0_sl} &
-\includegraphics[width=0.12\textwidth]{interp/synth_interp/vase0_sl} &
-\includegraphics[width=0.12\textwidth]{interp/synth_interp/vase0_ps}\\
+\includegraphics[width=0.1\textwidth]{interp/synth_interp/vase0_mvs} &
+\includegraphics[width=0.1\textwidth]{interp/synth_interp/vase0_vh} &
+\includegraphics[width=0.1\textwidth]{interp/synth_interp/vase0_sl} &
+\includegraphics[width=0.1\textwidth]{interp/synth_interp/vase0_sl} &
+\includegraphics[width=0.1\textwidth]{interp/synth_interp/vase0_ps} &
+\includegraphics[width=0.1\textwidth]{interp/real_interp/cup/cup_mvs} &
+\includegraphics[width=0.1\textwidth]{interp/real_interp/cup/cup_sc} &
+\includegraphics[width=0.1\textwidth]{interp/real_interp/cup/cup_sl} &
+\includegraphics[width=0.1\textwidth]{interp/real_interp/cup/cup_sl} &
+\includegraphics[width=0.1\textwidth]{interp/real_interp/cup/cup_ps} \\
 
-\includegraphics[width=0.12\textwidth]{interp/real_interp/cup/cup_mvs} &
-\includegraphics[width=0.12\textwidth]{interp/real_interp/cup/cup_sc} &
-\includegraphics[width=0.12\textwidth]{interp/real_interp/cup/cup_sl} &
-\includegraphics[width=0.12\textwidth]{interp/real_interp/cup/cup_sl} &
-\includegraphics[width=0.12\textwidth]{interp/real_interp/cup/cup_ps} \\
-
-\includegraphics[width=0.12\textwidth]{interp/synth_interp/beethoven_sl} &
-\includegraphics[width=0.12\textwidth]{interp/synth_interp/beethoven_ps} &
-\includegraphics[width=0.12\textwidth]{interp/synth_interp/beethoven_sl} &
-\includegraphics[width=0.12\textwidth]{interp/synth_interp/beethoven_sl} &
-\includegraphics[width=0.12\textwidth]{interp/synth_interp/beethoven_sl}\\
-
-\includegraphics[width=0.12\textwidth]{interp/real_interp/statue/statue_sl} &
-\includegraphics[width=0.12\textwidth]{interp/real_interp/statue/statue_ps} &
-\includegraphics[width=0.12\textwidth]{interp/real_interp/statue/statue_sl} &
-\includegraphics[width=0.12\textwidth]{interp/real_interp/statue/statue_sl} &
-\includegraphics[width=0.12\textwidth]{interp/real_interp/statue/statue_sl} \\
+\includegraphics[width=0.1\textwidth]{interp/synth_interp/vase1_ps} &
+\includegraphics[width=0.1\textwidth]{interp/synth_interp/vase1_vh} &
+\includegraphics[width=0.1\textwidth]{interp/synth_interp/vase1_sl} &
+\includegraphics[width=0.1\textwidth]{interp/synth_interp/vase1_sl} &
+\includegraphics[width=0.1\textwidth]{interp/synth_interp/vase1_mvs} &
+\includegraphics[width=0.1\textwidth]{interp/real_interp/vase/vase_ps} &
+\includegraphics[width=0.1\textwidth]{interp/real_interp/vase/vase_sc} &
+\includegraphics[width=0.1\textwidth]{interp/real_interp/vase/vase_sl} &
+\includegraphics[width=0.1\textwidth]{interp/real_interp/vase/vase_sl} &
+\includegraphics[width=0.1\textwidth]{interp/real_interp/vase/vase_mvs}\\
 
 \end{tabular}
 \end{figure}
+\addtolength{\tabcolsep}{6pt}
+
+\begin{exampleblock}{}
+\begin{itemize}
+\item poorer accuracy or completeness: surface rougher, incomplete.
+\end{itemize}
+\end{exampleblock}
+
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}{Interpretation: less accurate description, less successful result (cont'd)}
+
+\addtolength{\tabcolsep}{-6pt}
+\begin{figure}
+\centering
+\begin{tabular}{*{5}{c}|*{5}{c}}
+\tc{T}ASR & T\tc{A}SR & TA\tc{S}R & TAS\tc{R} & TASR & \tc{T}ASR & T\tc{A}SR & TA\tc{S}R & TAS\tc{R} & TASR\\
+\midrule
+
+\includegraphics[width=0.1\textwidth]{interp/synth_interp/beethoven_sl} &
+\includegraphics[width=0.1\textwidth]{interp/synth_interp/beethoven_ps} &
+\includegraphics[width=0.1\textwidth]{interp/synth_interp/beethoven_sl} &
+\includegraphics[width=0.1\textwidth]{interp/synth_interp/beethoven_sl} &
+\includegraphics[width=0.1\textwidth]{interp/synth_interp/beethoven_sl} &
+\includegraphics[width=0.1\textwidth]{interp/real_interp/statue/statue_sl} &
+\includegraphics[width=0.1\textwidth]{interp/real_interp/statue/statue_ps} &
+\includegraphics[width=0.1\textwidth]{interp/real_interp/statue/statue_sl} &
+\includegraphics[width=0.1\textwidth]{interp/real_interp/statue/statue_sl} &
+\includegraphics[width=0.1\textwidth]{interp/real_interp/statue/statue_sl} \\
+
+\includegraphics[width=0.1\textwidth]{interp/synth_interp/barrel_sl} &
+\includegraphics[width=0.1\textwidth]{interp/synth_interp/barrel_mvs} &
+\includegraphics[width=0.1\textwidth]{interp/synth_interp/barrel_sl} &
+\includegraphics[width=0.1\textwidth]{interp/synth_interp/barrel_sl} &
+\includegraphics[width=0.1\textwidth]{interp/synth_interp/barrel_sl} &
+\includegraphics[width=0.1\textwidth]{interp/real_interp/pot/pot_sl} &
+\includegraphics[width=0.1\textwidth]{interp/real_interp/pot/pot_mvs} &
+\includegraphics[width=0.1\textwidth]{interp/real_interp/pot/pot_sl} &
+\includegraphics[width=0.1\textwidth]{interp/real_interp/pot/pot_sl} &
+\includegraphics[width=0.1\textwidth]{interp/real_interp/pot/pot_sl} \\
+
+\end{tabular}
+\end{figure}
+\addtolength{\tabcolsep}{6pt}
+
+\begin{exampleblock}{}
+\begin{itemize}
+\item comparable accuracy or completeness
+\item less accurate description trigger the same algorithm as the accurate one.
+\end{itemize}
+\end{exampleblock}
 
 \end{frame}
 
 %------------------------------------------------
 \begin{frame}{Interpretation: inaccurate description, poor result}
 
+\addtolength{\tabcolsep}{-3pt}
 \begin{figure}
 \centering
 \begin{tabular}{*{8}{p{1cm}}}
 
-\includegraphics[width=0.1\textwidth]{interp/synth_interp/beethoven_vh} &
-\includegraphics[width=0.1\textwidth]{interp/synth_interp/vase0_mvs} &
-\includegraphics[width=0.1\textwidth]{interp/synth_interp/barrel_vh} &
-\includegraphics[width=0.1\textwidth]{interp/synth_interp/vase1_ps} &
-\includegraphics[width=0.1\textwidth]{interp/real_interp/statue/statue_sc} &
-\includegraphics[width=0.1\textwidth]{interp/real_interp/cup/cup_mvs} &
-\includegraphics[width=0.1\textwidth]{interp/real_interp/pot/pot_sc} &
-\includegraphics[width=0.1\textwidth]{interp/real_interp/vase/vase_ps} \\
+\includegraphics[width=0.12\textwidth]{interp/synth_interp/beethoven_vh} &
+\includegraphics[width=0.12\textwidth]{interp/synth_interp/vase0_mvs} &
+\includegraphics[width=0.12\textwidth]{interp/synth_interp/barrel_vh} &
+\includegraphics[width=0.12\textwidth]{interp/synth_interp/vase1_ps} &
+\includegraphics[width=0.12\textwidth]{interp/real_interp/statue/statue_sc} &
+\includegraphics[width=0.12\textwidth]{interp/real_interp/cup/cup_mvs} &
+\includegraphics[width=0.12\textwidth]{interp/real_interp/pot/pot_sc} &
+\includegraphics[width=0.12\textwidth]{interp/real_interp/vase/vase_ps} \\
 
-\includegraphics[width=0.1\textwidth]{interp/synth_interp/beethoven_sl} &
-\includegraphics[width=0.1\textwidth]{interp/synth_interp/vase0_ps} &
-\includegraphics[width=0.1\textwidth]{interp/synth_interp/barrel_sl} &
-\includegraphics[width=0.1\textwidth]{interp/synth_interp/vase1_mvs} &
-\includegraphics[width=0.1\textwidth]{interp/real_interp/statue/statue_sl} &
-\includegraphics[width=0.1\textwidth]{interp/real_interp/cup/cup_ps} &
-\includegraphics[width=0.1\textwidth]{interp/real_interp/pot/pot_sl} &
-\includegraphics[width=0.1\textwidth]{interp/real_interp/vase/vase_mvs} \\
+\includegraphics[width=0.12\textwidth]{interp/synth_interp/beethoven_sl} &
+\includegraphics[width=0.12\textwidth]{interp/synth_interp/vase0_ps} &
+\includegraphics[width=0.12\textwidth]{interp/synth_interp/barrel_sl} &
+\includegraphics[width=0.12\textwidth]{interp/synth_interp/vase1_mvs} &
+\includegraphics[width=0.12\textwidth]{interp/real_interp/statue/statue_sl} &
+\includegraphics[width=0.12\textwidth]{interp/real_interp/cup/cup_ps} &
+\includegraphics[width=0.12\textwidth]{interp/real_interp/pot/pot_sl} &
+\includegraphics[width=0.12\textwidth]{interp/real_interp/vase/vase_mvs} \\
 
 \end{tabular}
 \end{figure}
+\addtolength{\tabcolsep}{3pt}
 
 \begin{exampleblock}{}
 \begin{itemize}
@@ -825,6 +877,16 @@ Interpreter: selects an algorithm based on a description.
 \begin{figure}[!htbp]
 \centering
 \includegraphics[width=0.7\textwidth]{interp/interpreter.pdf}
+\end{figure}
+
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}{Interpretation 2: demonstrative result (cont'd)}
+
+\begin{figure}
+\centering
+\includegraphics[width=\textwidth]{images/interp2_2.pdf}
 \end{figure}
 
 \end{frame}
