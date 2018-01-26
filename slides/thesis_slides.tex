@@ -201,27 +201,6 @@ Development of an interface for 3D reconstruction problem, which hides algorithm
 %   \end{itemize}
 % \end{exampleblock}
 
-% \begin{figure}
-% \begin{tabular}{lll}
-% \toprule
-% Class & Method & Problem \\
-% \midrule
-% \multirow{2}{*}{Shape from Stereo} & 
-% Multi-View Stereo &
-% \multirow{2}{*}{Texture, reflectance} \\
-% & Structured Light \\
-% \multirow{2}{*}{Shape from Intensity} & 
-% Shape from Shading & 
-% \multirow{2}{*}{Lightness, shape} \\
-% & Photometric Stereo \\
-% \multirow{2}{*}{Shape from Silhouette} &
-% Visual Hull & 
-% \multirow{2}{*}{Shape, reflectance}\\
-% & Space Carving \\
-% \bottomrule
-% \end{tabular}
-% \end{figure}
-
 \begin{figure}
 \begin{tabular}{p{1.6cm}ccp{1.5cm}}
 Class & \multicolumn{2}{c}{Method} & Problem \\
@@ -525,8 +504,8 @@ Cond & 1 & 2 & 3 & 4\\
 
 \begin{exampleblock}{}
 \begin{itemize}
-\item accuracy: higher quality
-\item completenss: no incomplete holes
+\item accuracy: smoother surface, higher quality
+\item completenss: no surface holes
 \end{itemize}
 \end{exampleblock}
 
@@ -569,7 +548,7 @@ Cond & 1 & 2 & 3 & 4\\
 
 \begin{exampleblock}{}
 \begin{itemize}
-\item poorer accuracy or completeness: surface rougher, incomplete.
+\item accuracy or completeness: poorer, rougher, incomplete surface.
 \end{itemize}
 \end{exampleblock}
 
@@ -613,8 +592,8 @@ Cond & 1 & 2 & 3 & 4\\
 
 \begin{exampleblock}{}
 \begin{itemize}
-\item comparable accuracy or completeness
-\item less accurate description trigger the same algorithm as the accurate one.
+\item accuracy or completeness: comparable 
+\item less accurate descriptions trigger the same algorithm as the accurate one.
 \end{itemize}
 \end{exampleblock}
 
@@ -653,7 +632,7 @@ Cond & 1 & 2 & 3 & 4\\
 \begin{exampleblock}{}
 \begin{itemize}
 \item Baseline method is selected by the interface;
-\item poorer accuracy or completeness: surface rougher, incomplete.
+\item accuracy or completeness: poor, rougher, incomplete surface.
 \end{itemize}
 \end{exampleblock}
 
