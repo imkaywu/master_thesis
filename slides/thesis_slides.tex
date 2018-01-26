@@ -6,6 +6,7 @@
 \usepackage{graphicx}
 \graphicspath{ {../img/} }
 
+\usepackage{multirow}
 \usepackage{booktabs} % Allows the use of \toprule, \midrule and \bottomrule in tables
 \newcommand{\tabitem}{~~\llap{\textbullet}~~}
 \usepackage[scale=2]{ccicons}
@@ -22,10 +23,6 @@
 
 \usepackage{relsize}
 \tikzset{fontscale/.style = {font=\relsize{#1}}}
-
-\usepackage{multirow}
-
-% \setlength{\tabcolsep}{3pt} % table column spacing for the whole doc
 
 \usepackage{color}
 \newcommand{\tc}[1]{\textcolor{red}{#1}}
@@ -111,7 +108,7 @@ Customization & DIY Repair\& Reconstruction & Virtual content creation \\
 
 \begin{table}
 \centering
-\begin{tabular}{l|*{2}{p{4cm}}}
+\begin{tabular}{lp{3.5cm}p{4cm}}
 & Traditional 3D Recon & Interface for 3D Recon\\
 \midrule
 Algorithm & vision knowledge & hidden \\
@@ -624,15 +621,15 @@ Cond & 1 & 2 & 3 & 4\\
 \end{frame}
 
 %------------------------------------------------
-\begin{frame}{Interpretation: discussion}
+\begin{frame}{Interpretation: discussions}
 
 \begin{exampleblock}{}
 \begin{itemize}
 \item We have demonstrated that it is achievable to design an description-based interface so that a successful reconstruction result is obtained given a description of problem condition, without knowledge of which algorithm to use;
-\item The reconstruction result improves as the accuracy of the description increases.
-% \item Algorithm chosen by the interpreter given a less accurate description may or may not achieve a poor result;
+\item Algorithm chosen by the interpreter given a less accurate description may or may not achieve a poor result;
+\item Algorithm chosen by the interpreter given inaccurate description is more likely to achieve a poorer result.
 % \item It depends if the return algorithms has at least an overlapping with those returned if given accurate description;
-% \item Algorithm chosen by the interpreter given inaccurate description have a higher probability of achieving a poorer result.
+% \item The reconstruction result becomes worse as the description becomes less accurate.
 \end{itemize}
 \end{exampleblock}
 
@@ -700,6 +697,7 @@ Computer vision should focus on more than \\just algorithms, but easier accessib
 %------------------------------------------------
 % Additional material
 %------------------------------------------------
+\appendix
 \begin{frame}{Description: expression}
 
 We use three-scale values to parameterize properties: \textit{low} (0.2), \textit{medium} (0.5), and \textit{high} (0.8).

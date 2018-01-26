@@ -1,0 +1,16 @@
+\frametitle{Motivation: application}
+
+\begin{figure}
+\centering
+\begin{tabular}{*{3}{p{3.2cm}}}
+\includegraphics[width=0.3\textwidth]{images/visual_effects.png} &
+\includegraphics[width=0.3\textwidth]{images/inverse_cad.png} &
+\includegraphics[width=0.3\textwidth]{images/3d_scanner.jpg} \\
+Visual effects & Inverse CAD & 3D scanner \\
+\includegraphics[width=0.3\textwidth]{images/customization.png} &
+\includegraphics[width=0.3\textwidth]{images/diy_repair_recon.jpg} &
+\includegraphics[width=0.3\textwidth]{images/virtual_content.png} \\
+Customization & DIY Repair\& Reconstruction & Virtual content creation \\
+\end{tabular}
+\end{figure}
+
