@@ -346,6 +346,8 @@ Discover the mapping from problem condition to algorithms.
 \end{frame}
 
 %------------------------------------------------
+\subsection{Interpretation of 3D Reconstruction}
+%------------------------------------------------
 \begin{frame}{Interpreter: proof of concept}
 
 Interpreter: selects an algorithm based on a description.
@@ -440,6 +442,103 @@ Objects meet the requirements of the four problem conditions.
 %------------------------------------------------
 \begin{frame}{Interpreter: accurate description, successful result}
 
+\addtolength{\tabcolsep}{-3pt}
+\begin{figure}
+\centering
+\begin{tabular}{cccc}
+
+\includegraphics[width=0.15\textwidth]{interp/real_interp/statue/statue_mvs} &
+\includegraphics[width=0.15\textwidth]{interp/real_interp/statue/statue_ps} &
+\fcolorbox{green}{white}{\includegraphics[width=0.15\textwidth]{interp/real_interp/statue/statue_sl}} &
+\includegraphics[width=0.15\textwidth]{interp/real_interp/statue/statue_sc} \\
+
+\includegraphics[width=0.15\textwidth]{interp/real_interp/cup/cup_mvs} &
+\fcolorbox{green}{white}{\includegraphics[width=0.15\textwidth]{interp/real_interp/cup/cup_ps}} &
+\includegraphics[width=0.15\textwidth]{interp/real_interp/cup/cup_sl} &
+\includegraphics[width=0.15\textwidth]{interp/real_interp/cup/cup_sc} \\
+
+\includegraphics[width=0.15\textwidth]{interp/real_interp/pot/pot_mvs} &
+\includegraphics[width=0.15\textwidth]{interp/real_interp/pot/pot_ps} &
+\fcolorbox{green}{white}{\includegraphics[width=0.15\textwidth]{interp/real_interp/pot/pot_sl}} &
+\includegraphics[width=0.15\textwidth]{interp/real_interp/pot/pot_sc} \\
+
+\fcolorbox{green}{white}{\includegraphics[width=0.15\textwidth]{interp/real_interp/vase/vase_mvs}} &
+\includegraphics[width=0.15\textwidth]{interp/real_interp/vase/vase_ps} &
+\includegraphics[width=0.15\textwidth]{interp/real_interp/vase/vase_sl} &
+\includegraphics[width=0.15\textwidth]{interp/real_interp/vase/vase_sc} \\
+
+\end{tabular}
+\end{figure}
+\addtolength{\tabcolsep}{3pt}
+
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}{Interpreter: less accurate description, less successful result}
+
+\addtolength{\tabcolsep}{-3pt}
+\begin{figure}
+\centering
+\begin{tabular}{cccc}
+
+\includegraphics[width=0.15\textwidth]{interp/real_interp/statue/statue_mvs} &
+\includegraphics[width=0.15\textwidth]{interp/real_interp/statue/statue_ps} &
+\fcolorbox{green}{white}{\includegraphics[width=0.15\textwidth]{interp/real_interp/statue/statue_sl}} &
+\includegraphics[width=0.15\textwidth]{interp/real_interp/statue/statue_sc} \\
+
+\fcolorbox{red}{white}{\includegraphics[width=0.15\textwidth]{interp/real_interp/cup/cup_mvs}} &
+\fcolorbox{green}{white}{\includegraphics[width=0.15\textwidth]{interp/real_interp/cup/cup_ps}} &
+\includegraphics[width=0.15\textwidth]{interp/real_interp/cup/cup_sl} &
+\includegraphics[width=0.15\textwidth]{interp/real_interp/cup/cup_sc} \\
+
+\includegraphics[width=0.15\textwidth]{interp/real_interp/pot/pot_mvs} &
+\includegraphics[width=0.15\textwidth]{interp/real_interp/pot/pot_ps} &
+\fcolorbox{green}{white}{\includegraphics[width=0.15\textwidth]{interp/real_interp/pot/pot_sl}} &
+\includegraphics[width=0.15\textwidth]{interp/real_interp/pot/pot_sc} \\
+
+\fcolorbox{green}{white}{\includegraphics[width=0.15\textwidth]{interp/real_interp/vase/vase_mvs}} &
+\fcolorbox{red}{white}{\includegraphics[width=0.15\textwidth]{interp/real_interp/vase/vase_ps}} &
+\includegraphics[width=0.15\textwidth]{interp/real_interp/vase/vase_sl} &
+\includegraphics[width=0.15\textwidth]{interp/real_interp/vase/vase_sc} \\
+
+\end{tabular}
+\end{figure}
+\addtolength{\tabcolsep}{3pt}
+
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}{Interpreter: inaccurate description, poor result}
+
+\addtolength{\tabcolsep}{-3pt}
+\begin{figure}
+\centering
+\begin{tabular}{cccc}
+
+\includegraphics[width=0.15\textwidth]{interp/real_interp/statue/statue_mvs} &
+\includegraphics[width=0.15\textwidth]{interp/real_interp/statue/statue_ps} &
+\fcolorbox{green}{white}{\includegraphics[width=0.15\textwidth]{interp/real_interp/statue/statue_sl}} &
+\fcolorbox{red}{white}{\includegraphics[width=0.15\textwidth]{interp/real_interp/statue/statue_sc}} \\
+
+\fcolorbox{red}{white}{\includegraphics[width=0.15\textwidth]{interp/real_interp/cup/cup_mvs}} &
+\fcolorbox{green}{white}{\includegraphics[width=0.15\textwidth]{interp/real_interp/cup/cup_ps}} &
+\includegraphics[width=0.15\textwidth]{interp/real_interp/cup/cup_sl} &
+\includegraphics[width=0.15\textwidth]{interp/real_interp/cup/cup_sc} \\
+
+\includegraphics[width=0.15\textwidth]{interp/real_interp/pot/pot_mvs} &
+\includegraphics[width=0.15\textwidth]{interp/real_interp/pot/pot_ps} &
+\fcolorbox{green}{white}{\includegraphics[width=0.15\textwidth]{interp/real_interp/pot/pot_sl}} &
+\fcolorbox{red}{white}{\includegraphics[width=0.15\textwidth]{interp/real_interp/pot/pot_sc}} \\
+
+\fcolorbox{green}{white}{\includegraphics[width=0.15\textwidth]{interp/real_interp/vase/vase_mvs}} &
+\fcolorbox{red}{white}{\includegraphics[width=0.15\textwidth]{interp/real_interp/vase/vase_ps}} &
+\includegraphics[width=0.15\textwidth]{interp/real_interp/vase/vase_sl} &
+\includegraphics[width=0.15\textwidth]{interp/real_interp/vase/vase_sc} \\
+
+\end{tabular}
+\end{figure}
+\addtolength{\tabcolsep}{3pt}
+
 \end{frame}
 
 %------------------------------------------------
@@ -449,7 +548,8 @@ Objects meet the requirements of the four problem conditions.
 \begin{itemize}
 \item We have demonstrated that it is achievable to design an description-based interface so that a successful reconstruction result is obtained given a description of problem condition, without knowledge of which algorithm to use;
 \item Algorithm chosen by the interpreter given a less accurate description may or may not achieve a poor result;
-\item Algorithm chosen by the interpreter given inaccurate description is more likely to achieve a poorer result.
+\item Algorithm chosen by the interpreter given inaccurate description is more likely to achieve a poorer result;
+\item As the description becomes far away from the accurate one, the interpreter will select a less successful algorithm and achieve poorer result.
 % \item It depends if the return algorithms has at least an overlapping with those returned if given accurate description;
 % \item The reconstruction result becomes worse as the description becomes less accurate.
 \end{itemize}
