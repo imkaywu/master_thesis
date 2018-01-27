@@ -64,30 +64,11 @@ kaywu@ece.ubc.ca \\ % Your email address
 %------------------------------------------------
 \section{Introduction}
 %------------------------------------------------
-\begin{frame}{Motivation: application}
+\begin{frame}{Motivation: scenario}
 
 \begin{figure}
 \centering
-\begin{tabular}{*{3}{p{3.2cm}}}
-\includegraphics[width=0.3\textwidth]{images/visual_effects.png} &
-\includegraphics[width=0.3\textwidth]{images/inverse_cad.png} &
-\includegraphics[width=0.3\textwidth]{images/3d_scanner.jpg} \\
-Visual effects & Inverse CAD & 3D scanner \\
-\includegraphics[width=0.3\textwidth]{images/customization.png} & 
-\includegraphics[width=0.3\textwidth]{images/diy_repair_recon.jpg} &
-\includegraphics[width=0.3\textwidth]{images/virtual_content.png} \\
-Customization & DIY Repair\& Reconstruction & Virtual content creation \\
-\end{tabular}
-\end{figure}
-
-\end{frame}
-
-%------------------------------------------------
-\begin{frame}{Motivation: traditional 3D reconstruction}
-
-\begin{figure}
-\centering
-\includegraphics[width=0.9\textwidth]{images/3d_recon_traditional_2.pdf}
+\includegraphics[width=0.8\textwidth]{images/motivation.pdf}
 \end{figure}
 
 \begin{alertblock}{Challenges}
@@ -100,11 +81,13 @@ Customization & DIY Repair\& Reconstruction & Virtual content creation \\
 
 \end{frame}
 
+%------------------------------------------------
+\begin{frame}{Motivation: scenario}
 
-%------------------------------------------------
-\section{Problem Statement} % Research question
-%------------------------------------------------
-\begin{frame}{Goal}
+\begin{figure}
+\centering
+\includegraphics[width=0.8\textwidth]{images/motivation1.pdf}
+\end{figure}
 
 \begin{table}
 \centering
@@ -120,14 +103,17 @@ Approach & multiple trial-and-error & no trial-and-error \\
 \end{frame}
 
 %------------------------------------------------
-\begin{frame}{Contribution}
+\section{Problem Statement} % Research question
+%------------------------------------------------
 
-Development of an interface for 3D reconstruction problem, which hides algorithm details and allows users to describe conditions surrounding the problem. This description can be interpreteded so that an appropriate algorithm is chosen to achieve a successful reconstruction result.
+\begin{frame}{Research question}
 
 \end{frame}
 
 %------------------------------------------------
-% \begin{frame}{Contribution (cont'd)}
+\begin{frame}{Contribution}
+
+Development of an interface for 3D reconstruction problem, which hides algorithm details and allows users to describe conditions surrounding the problem. This description can be interpreteded so that an appropriate algorithm is chosen to achieve a successful reconstruction result.
 
 % This contribution is significant because:
 % \begin{itemize}
@@ -135,7 +121,7 @@ Development of an interface for 3D reconstruction problem, which hides algorithm
 % \item An description of object problem condition is provided to hide the algorithmic details, thus understanding of the algorithm, or conditions of applying algorithms are not a prerequisite.
 % \end{itemize}
 
-% \end{frame}
+\end{frame}
 
 %------------------------------------------------
 \begin{frame}{Overview of thesis/presentation}
@@ -257,31 +243,13 @@ Geoemtry\\
 \end{frame}
 
 %------------------------------------------------
-\subsection{Problem Space of 3D Reconstruction}
+\subsection{Description of 3D Reconstruction}
 %------------------------------------------------
-\begin{frame}{Problem space}
-
-\begin{exampleblock}{}
-% The selection of the properties is based on:
-\begin{itemize}
-\item Select properties commonly seen in real world;
-\item Choose properties that can be addressed by current algorithms.
-\end{itemize}
-\end{exampleblock}
-
-% \begin{itemize}
-% \item \textit{algorithm-centered} approach categorizes algorithms based on algorithm details, as discussed in \textbf{Related Work};
-% \item \textit{object-centered} approach categorizes algorithms based on the problem conditions that the algorithm can reliably works under.
-% \end{itemize}
+\begin{frame}{Description: problem space}
 
 \begin{figure}
-\includegraphics[width=0.8\textwidth]{prob_space/obj_class}
+\includegraphics[width=0.6\textwidth]{prob_space/obj_class}
 \end{figure}
-
-\end{frame}
-
-%------------------------------------------------
-\begin{frame}{Problem space: four problem conditions}
 
 \begin{exampleblock}{Assumptions}
 
@@ -300,14 +268,17 @@ Geoemtry\\
 
 \end{exampleblock}
 
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}{Description: four problem conditions}
+
 \begin{figure}[h]
 \includegraphics[width=0.8\textwidth]{prob_space/prob_cond}
 \end{figure}
 
 \end{frame}
 
-%------------------------------------------------
-\subsection{Description of 3D Reconstruction}
 %------------------------------------------------
 \begin{frame}{Description: model and representations}
 
@@ -375,6 +346,18 @@ Discover the mapping from problem condition to algorithms.
 \end{frame}
 
 %------------------------------------------------
+\begin{frame}{Interpreter: proof of concept}
+
+Interpreter: selects an algorithm based on a description.
+
+\begin{figure}[!htbp]
+\centering
+\includegraphics[width=0.7\textwidth]{interp/interpreter.pdf}
+\end{figure}
+
+\end{frame}
+
+%------------------------------------------------
 \section{Application of Interface}
 %------------------------------------------------
 \begin{frame}{Interpretation: evaluation questions}
@@ -408,7 +391,7 @@ accuracy & completenss & angle diff \\
 \centering
 \begin{tabular}{ccc}
 \includegraphics[width=0.3\textwidth]{images/mvs_calib.PNG} &
-\includegraphics[width=0.3\textwidth]{images/diy_repair_recon.jpg} &
+\includegraphics[width=0.3\textwidth]{images/sl_calib.png} &
 \includegraphics[width=0.3\textwidth]{images/sl_calib.png}\\
 MVS\& VH & PS & SL \\
 \end{tabular}
@@ -433,15 +416,14 @@ Objects meet the requirements of the four problem conditions.
 
 \begin{figure}[!htbp]
 \centering
-\begin{tabular}{p{0.4cm}*{4}{c}} % p{1.5cm}
-Cond & 1 & 2 & 3 & 4\\
-\midrule
-\multirow{2}{*}{\rotatebox[origin=c]{90}{Object}} & 
+\begin{tabular}{*{4}{c}} % p{1.5cm}
+1 & 2 & 3 & 4\\
+\midrule 
 \includegraphics[width=0.15\textwidth]{interp/synth_data/bust} &
 \includegraphics[width=0.15\textwidth]{interp/synth_data/vase0} &
 \includegraphics[width=0.15\textwidth]{interp/synth_data/barrel} &
 \includegraphics[width=0.15\textwidth]{interp/synth_data/vase1}\\
-& \includegraphics[width=0.15\textwidth]{interp/real_world_img/statue/statue} &
+\includegraphics[width=0.15\textwidth]{interp/real_world_img/statue/statue} &
 \includegraphics[width=0.15\textwidth]{interp/real_world_img/cup/cup} &
 \includegraphics[width=0.15\textwidth]{interp/real_world_img/pot/pot} &
 \includegraphics[width=0.15\textwidth]{interp/real_world_img/vase/vase}
@@ -456,167 +438,7 @@ Cond & 1 & 2 & 3 & 4\\
 \end{frame}
 
 %------------------------------------------------
-\begin{frame}{Interpretation: accurate description, successful result}
-
-\addtolength{\tabcolsep}{-3pt}
-\begin{figure}
-\centering
-\begin{tabular}{*{8}{p{1cm}}}
-
-\includegraphics[width=0.12\textwidth]{interp/synth_interp/beethoven_sl} & 
-\includegraphics[width=0.12\textwidth]{interp/synth_interp/vase0_ps} &
-\includegraphics[width=0.12\textwidth]{interp/synth_interp/barrel_sl} &
-\includegraphics[width=0.12\textwidth]{interp/synth_interp/vase1_mvs} & 
-\includegraphics[width=0.12\textwidth]{interp/real_interp/statue/statue_sl} &
-\includegraphics[width=0.12\textwidth]{interp/real_interp/cup/cup_ps} &
-\includegraphics[width=0.12\textwidth]{interp/real_interp/pot/pot_sl} &
-\includegraphics[width=0.12\textwidth]{interp/real_interp/vase/vase_mvs} \\
-\includegraphics[width=0.12\textwidth]{interp/synth_interp/beethoven_vh} &
-\includegraphics[width=0.12\textwidth]{interp/synth_interp/vase0_vh} &
-\includegraphics[width=0.12\textwidth]{interp/synth_interp/barrel_vh} &
-\includegraphics[width=0.12\textwidth]{interp/synth_interp/vase1_vh} &
-\includegraphics[width=0.12\textwidth]{interp/real_interp/statue/statue_sc} &
-\includegraphics[width=0.12\textwidth]{interp/real_interp/cup/cup_sc} &
-\includegraphics[width=0.12\textwidth]{interp/real_interp/pot/pot_sc} &
-\includegraphics[width=0.12\textwidth]{interp/real_interp/vase/vase_sc} \\
-
-\end{tabular}
-\end{figure}
-\addtolength{\tabcolsep}{3pt}
-
-\begin{exampleblock}{}
-\begin{itemize}
-\item accuracy: smoother surface, higher quality
-\item completenss: no surface holes
-\end{itemize}
-\end{exampleblock}
-
-\end{frame}
-
-%------------------------------------------------
-\begin{frame}{Interpretation: less accurate description, less successful result}
-
-\addtolength{\tabcolsep}{-6pt}
-\begin{figure}
-\centering
-\begin{tabular}{*{5}{c}|*{5}{c}}
-\tc{T}ASR & T\tc{A}SR & TA\tc{S}R & TAS\tc{R} & TASR & \tc{T}ASR & T\tc{A}SR & TA\tc{S}R & TAS\tc{R} & TASR \\
-\midrule
-\includegraphics[width=0.1\textwidth]{interp/synth_interp/vase0_mvs} &
-\includegraphics[width=0.1\textwidth]{interp/synth_interp/vase0_vh} &
-\includegraphics[width=0.1\textwidth]{interp/synth_interp/vase0_sl} &
-\includegraphics[width=0.1\textwidth]{interp/synth_interp/vase0_sl} &
-\includegraphics[width=0.1\textwidth]{interp/synth_interp/vase0_ps} &
-\includegraphics[width=0.1\textwidth]{interp/real_interp/cup/cup_mvs} &
-\includegraphics[width=0.1\textwidth]{interp/real_interp/cup/cup_sc} &
-\includegraphics[width=0.1\textwidth]{interp/real_interp/cup/cup_sl} &
-\includegraphics[width=0.1\textwidth]{interp/real_interp/cup/cup_sl} &
-\includegraphics[width=0.1\textwidth]{interp/real_interp/cup/cup_ps} \\
-
-\includegraphics[width=0.1\textwidth]{interp/synth_interp/vase1_ps} &
-\includegraphics[width=0.1\textwidth]{interp/synth_interp/vase1_vh} &
-\includegraphics[width=0.1\textwidth]{interp/synth_interp/vase1_sl} &
-\includegraphics[width=0.1\textwidth]{interp/synth_interp/vase1_sl} &
-\includegraphics[width=0.1\textwidth]{interp/synth_interp/vase1_mvs} &
-\includegraphics[width=0.1\textwidth]{interp/real_interp/vase/vase_ps} &
-\includegraphics[width=0.1\textwidth]{interp/real_interp/vase/vase_sc} &
-\includegraphics[width=0.1\textwidth]{interp/real_interp/vase/vase_sl} &
-\includegraphics[width=0.1\textwidth]{interp/real_interp/vase/vase_sl} &
-\includegraphics[width=0.1\textwidth]{interp/real_interp/vase/vase_mvs}\\
-
-\end{tabular}
-\end{figure}
-\addtolength{\tabcolsep}{6pt}
-
-\begin{exampleblock}{}
-\begin{itemize}
-\item accuracy or completeness: poorer, rougher, incomplete surface.
-\end{itemize}
-\end{exampleblock}
-
-\end{frame}
-
-%------------------------------------------------
-\begin{frame}{Interpretation: less accurate description, less successful result (cont'd)}
-
-\addtolength{\tabcolsep}{-6pt}
-\begin{figure}
-\centering
-\begin{tabular}{*{5}{c}|*{5}{c}}
-\tc{T}ASR & T\tc{A}SR & TA\tc{S}R & TAS\tc{R} & TASR & \tc{T}ASR & T\tc{A}SR & TA\tc{S}R & TAS\tc{R} & TASR\\
-\midrule
-
-\includegraphics[width=0.1\textwidth]{interp/synth_interp/beethoven_sl} &
-\includegraphics[width=0.1\textwidth]{interp/synth_interp/beethoven_ps} &
-\includegraphics[width=0.1\textwidth]{interp/synth_interp/beethoven_sl} &
-\includegraphics[width=0.1\textwidth]{interp/synth_interp/beethoven_sl} &
-\includegraphics[width=0.1\textwidth]{interp/synth_interp/beethoven_sl} &
-\includegraphics[width=0.1\textwidth]{interp/real_interp/statue/statue_sl} &
-\includegraphics[width=0.1\textwidth]{interp/real_interp/statue/statue_ps} &
-\includegraphics[width=0.1\textwidth]{interp/real_interp/statue/statue_sl} &
-\includegraphics[width=0.1\textwidth]{interp/real_interp/statue/statue_sl} &
-\includegraphics[width=0.1\textwidth]{interp/real_interp/statue/statue_sl} \\
-
-\includegraphics[width=0.1\textwidth]{interp/synth_interp/barrel_sl} &
-\includegraphics[width=0.1\textwidth]{interp/synth_interp/barrel_mvs} &
-\includegraphics[width=0.1\textwidth]{interp/synth_interp/barrel_sl} &
-\includegraphics[width=0.1\textwidth]{interp/synth_interp/barrel_sl} &
-\includegraphics[width=0.1\textwidth]{interp/synth_interp/barrel_sl} &
-\includegraphics[width=0.1\textwidth]{interp/real_interp/pot/pot_sl} &
-\includegraphics[width=0.1\textwidth]{interp/real_interp/pot/pot_mvs} &
-\includegraphics[width=0.1\textwidth]{interp/real_interp/pot/pot_sl} &
-\includegraphics[width=0.1\textwidth]{interp/real_interp/pot/pot_sl} &
-\includegraphics[width=0.1\textwidth]{interp/real_interp/pot/pot_sl} \\
-
-\end{tabular}
-\end{figure}
-\addtolength{\tabcolsep}{6pt}
-
-\begin{exampleblock}{}
-\begin{itemize}
-\item accuracy or completeness: comparable 
-\item less accurate descriptions trigger the same algorithm as the accurate one.
-\end{itemize}
-\end{exampleblock}
-
-\end{frame}
-
-%------------------------------------------------
-\begin{frame}{Interpretation: inaccurate description, poor result}
-
-\addtolength{\tabcolsep}{-3pt}
-\begin{figure}
-\centering
-\begin{tabular}{*{8}{p{1cm}}}
-
-\includegraphics[width=0.12\textwidth]{interp/synth_interp/beethoven_vh} &
-\includegraphics[width=0.12\textwidth]{interp/synth_interp/vase0_mvs} &
-\includegraphics[width=0.12\textwidth]{interp/synth_interp/barrel_vh} &
-\includegraphics[width=0.12\textwidth]{interp/synth_interp/vase1_ps} &
-\includegraphics[width=0.12\textwidth]{interp/real_interp/statue/statue_sc} &
-\includegraphics[width=0.12\textwidth]{interp/real_interp/cup/cup_mvs} &
-\includegraphics[width=0.12\textwidth]{interp/real_interp/pot/pot_sc} &
-\includegraphics[width=0.12\textwidth]{interp/real_interp/vase/vase_ps} \\
-
-\includegraphics[width=0.12\textwidth]{interp/synth_interp/beethoven_sl} &
-\includegraphics[width=0.12\textwidth]{interp/synth_interp/vase0_ps} &
-\includegraphics[width=0.12\textwidth]{interp/synth_interp/barrel_sl} &
-\includegraphics[width=0.12\textwidth]{interp/synth_interp/vase1_mvs} &
-\includegraphics[width=0.12\textwidth]{interp/real_interp/statue/statue_sl} &
-\includegraphics[width=0.12\textwidth]{interp/real_interp/cup/cup_ps} &
-\includegraphics[width=0.12\textwidth]{interp/real_interp/pot/pot_sl} &
-\includegraphics[width=0.12\textwidth]{interp/real_interp/vase/vase_mvs} \\
-
-\end{tabular}
-\end{figure}
-\addtolength{\tabcolsep}{3pt}
-
-\begin{exampleblock}{}
-\begin{itemize}
-\item Baseline method is selected by the interface;
-\item accuracy or completeness: poor, rougher, incomplete surface.
-\end{itemize}
-\end{exampleblock}
+\begin{frame}{Interpreter: accurate description, successful result}
 
 \end{frame}
 
@@ -832,14 +654,128 @@ We use three-scale values to parameterize properties: \textit{low} (0.2), \texti
 % \end{frame}
 
 %------------------------------------------------
-\begin{frame}{Interpretation: proof of concept interpreter}
+\begin{frame}{Interpretation: accurate description, successful result}
 
-Interpreter: selects an algorithm based on a description.
-
-\begin{figure}[!htbp]
+\addtolength{\tabcolsep}{-3pt}
+\begin{figure}
 \centering
-\includegraphics[width=0.7\textwidth]{interp/interpreter.pdf}
+\begin{tabular}{*{8}{p{1cm}}}
+
+\includegraphics[width=0.12\textwidth]{interp/synth_interp/beethoven_sl} & 
+\includegraphics[width=0.12\textwidth]{interp/synth_interp/vase0_ps} &
+\includegraphics[width=0.12\textwidth]{interp/synth_interp/barrel_sl} &
+\includegraphics[width=0.12\textwidth]{interp/synth_interp/vase1_mvs} & 
+\includegraphics[width=0.12\textwidth]{interp/real_interp/statue/statue_sl} &
+\includegraphics[width=0.12\textwidth]{interp/real_interp/cup/cup_ps} &
+\includegraphics[width=0.12\textwidth]{interp/real_interp/pot/pot_sl} &
+\includegraphics[width=0.12\textwidth]{interp/real_interp/vase/vase_mvs} \\
+\includegraphics[width=0.12\textwidth]{interp/synth_interp/beethoven_vh} &
+\includegraphics[width=0.12\textwidth]{interp/synth_interp/vase0_vh} &
+\includegraphics[width=0.12\textwidth]{interp/synth_interp/barrel_vh} &
+\includegraphics[width=0.12\textwidth]{interp/synth_interp/vase1_vh} &
+\includegraphics[width=0.12\textwidth]{interp/real_interp/statue/statue_sc} &
+\includegraphics[width=0.12\textwidth]{interp/real_interp/cup/cup_sc} &
+\includegraphics[width=0.12\textwidth]{interp/real_interp/pot/pot_sc} &
+\includegraphics[width=0.12\textwidth]{interp/real_interp/vase/vase_sc} \\
+
+\end{tabular}
 \end{figure}
+\addtolength{\tabcolsep}{3pt}
+
+\begin{exampleblock}{}
+\begin{itemize}
+\item accuracy: smoother surface, higher quality
+\item completenss: no surface holes
+\end{itemize}
+\end{exampleblock}
+
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}{Interpretation: less accurate description, less successful result}
+
+\addtolength{\tabcolsep}{-6pt}
+\begin{figure}
+\centering
+\begin{tabular}{*{5}{c}|*{5}{c}}
+\tc{T}ASR & T\tc{A}SR & TA\tc{S}R & TAS\tc{R} & TASR & \tc{T}ASR & T\tc{A}SR & TA\tc{S}R & TAS\tc{R} & TASR \\
+\midrule
+\includegraphics[width=0.1\textwidth]{interp/synth_interp/vase0_mvs} &
+\includegraphics[width=0.1\textwidth]{interp/synth_interp/vase0_vh} &
+\includegraphics[width=0.1\textwidth]{interp/synth_interp/vase0_sl} &
+\includegraphics[width=0.1\textwidth]{interp/synth_interp/vase0_sl} &
+\includegraphics[width=0.1\textwidth]{interp/synth_interp/vase0_ps} &
+\includegraphics[width=0.1\textwidth]{interp/real_interp/cup/cup_mvs} &
+\includegraphics[width=0.1\textwidth]{interp/real_interp/cup/cup_sc} &
+\includegraphics[width=0.1\textwidth]{interp/real_interp/cup/cup_sl} &
+\includegraphics[width=0.1\textwidth]{interp/real_interp/cup/cup_sl} &
+\includegraphics[width=0.1\textwidth]{interp/real_interp/cup/cup_ps} \\
+
+\includegraphics[width=0.1\textwidth]{interp/synth_interp/vase1_ps} &
+\includegraphics[width=0.1\textwidth]{interp/synth_interp/vase1_vh} &
+\includegraphics[width=0.1\textwidth]{interp/synth_interp/vase1_sl} &
+\includegraphics[width=0.1\textwidth]{interp/synth_interp/vase1_sl} &
+\includegraphics[width=0.1\textwidth]{interp/synth_interp/vase1_mvs} &
+\includegraphics[width=0.1\textwidth]{interp/real_interp/vase/vase_ps} &
+\includegraphics[width=0.1\textwidth]{interp/real_interp/vase/vase_sc} &
+\includegraphics[width=0.1\textwidth]{interp/real_interp/vase/vase_sl} &
+\includegraphics[width=0.1\textwidth]{interp/real_interp/vase/vase_sl} &
+\includegraphics[width=0.1\textwidth]{interp/real_interp/vase/vase_mvs}\\
+
+\end{tabular}
+\end{figure}
+\addtolength{\tabcolsep}{6pt}
+
+\begin{exampleblock}{}
+\begin{itemize}
+\item accuracy or completeness: poorer, rougher, incomplete surface.
+\end{itemize}
+\end{exampleblock}
+
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}{Interpretation: less accurate description, less successful result (cont'd)}
+
+\addtolength{\tabcolsep}{-6pt}
+\begin{figure}
+\centering
+\begin{tabular}{*{5}{c}|*{5}{c}}
+\tc{T}ASR & T\tc{A}SR & TA\tc{S}R & TAS\tc{R} & TASR & \tc{T}ASR & T\tc{A}SR & TA\tc{S}R & TAS\tc{R} & TASR\\
+\midrule
+
+\includegraphics[width=0.1\textwidth]{interp/synth_interp/beethoven_sl} &
+\includegraphics[width=0.1\textwidth]{interp/synth_interp/beethoven_ps} &
+\includegraphics[width=0.1\textwidth]{interp/synth_interp/beethoven_sl} &
+\includegraphics[width=0.1\textwidth]{interp/synth_interp/beethoven_sl} &
+\includegraphics[width=0.1\textwidth]{interp/synth_interp/beethoven_sl} &
+\includegraphics[width=0.1\textwidth]{interp/real_interp/statue/statue_sl} &
+\includegraphics[width=0.1\textwidth]{interp/real_interp/statue/statue_ps} &
+\includegraphics[width=0.1\textwidth]{interp/real_interp/statue/statue_sl} &
+\includegraphics[width=0.1\textwidth]{interp/real_interp/statue/statue_sl} &
+\includegraphics[width=0.1\textwidth]{interp/real_interp/statue/statue_sl} \\
+
+\includegraphics[width=0.1\textwidth]{interp/synth_interp/barrel_sl} &
+\includegraphics[width=0.1\textwidth]{interp/synth_interp/barrel_mvs} &
+\includegraphics[width=0.1\textwidth]{interp/synth_interp/barrel_sl} &
+\includegraphics[width=0.1\textwidth]{interp/synth_interp/barrel_sl} &
+\includegraphics[width=0.1\textwidth]{interp/synth_interp/barrel_sl} &
+\includegraphics[width=0.1\textwidth]{interp/real_interp/pot/pot_sl} &
+\includegraphics[width=0.1\textwidth]{interp/real_interp/pot/pot_mvs} &
+\includegraphics[width=0.1\textwidth]{interp/real_interp/pot/pot_sl} &
+\includegraphics[width=0.1\textwidth]{interp/real_interp/pot/pot_sl} &
+\includegraphics[width=0.1\textwidth]{interp/real_interp/pot/pot_sl} \\
+
+\end{tabular}
+\end{figure}
+\addtolength{\tabcolsep}{6pt}
+
+\begin{exampleblock}{}
+\begin{itemize}
+\item accuracy or completeness: comparable 
+\item less accurate descriptions trigger the same algorithm as the accurate one.
+\end{itemize}
+\end{exampleblock}
 
 \end{frame}
 
@@ -850,6 +786,45 @@ Interpreter: selects an algorithm based on a description.
 \centering
 \includegraphics[width=\textwidth]{images/interp2_2.pdf}
 \end{figure}
+
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}{Interpretation: inaccurate description, poor result}
+
+\addtolength{\tabcolsep}{-3pt}
+\begin{figure}
+\centering
+\begin{tabular}{*{8}{p{1cm}}}
+
+\includegraphics[width=0.12\textwidth]{interp/synth_interp/beethoven_vh} &
+\includegraphics[width=0.12\textwidth]{interp/synth_interp/vase0_mvs} &
+\includegraphics[width=0.12\textwidth]{interp/synth_interp/barrel_vh} &
+\includegraphics[width=0.12\textwidth]{interp/synth_interp/vase1_ps} &
+\includegraphics[width=0.12\textwidth]{interp/real_interp/statue/statue_sc} &
+\includegraphics[width=0.12\textwidth]{interp/real_interp/cup/cup_mvs} &
+\includegraphics[width=0.12\textwidth]{interp/real_interp/pot/pot_sc} &
+\includegraphics[width=0.12\textwidth]{interp/real_interp/vase/vase_ps} \\
+
+\includegraphics[width=0.12\textwidth]{interp/synth_interp/beethoven_sl} &
+\includegraphics[width=0.12\textwidth]{interp/synth_interp/vase0_ps} &
+\includegraphics[width=0.12\textwidth]{interp/synth_interp/barrel_sl} &
+\includegraphics[width=0.12\textwidth]{interp/synth_interp/vase1_mvs} &
+\includegraphics[width=0.12\textwidth]{interp/real_interp/statue/statue_sl} &
+\includegraphics[width=0.12\textwidth]{interp/real_interp/cup/cup_ps} &
+\includegraphics[width=0.12\textwidth]{interp/real_interp/pot/pot_sl} &
+\includegraphics[width=0.12\textwidth]{interp/real_interp/vase/vase_mvs} \\
+
+\end{tabular}
+\end{figure}
+\addtolength{\tabcolsep}{3pt}
+
+\begin{exampleblock}{}
+\begin{itemize}
+\item Baseline method is selected by the interface;
+\item accuracy or completeness: poor, rougher, incomplete surface.
+\end{itemize}
+\end{exampleblock}
 
 \end{frame}
 
