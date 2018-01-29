@@ -27,11 +27,6 @@
 \usepackage{color}
 \newcommand{\tc}[1]{\textcolor{red}{#1}}
 
-{%
-\fboxsep=0pt
-\fboxrule=2pt
-}%
-
 %----------------------------------------------------------------------------------------
 % TITLE PAGE
 %----------------------------------------------------------------------------------------
@@ -107,6 +102,8 @@ Approach & multiple trial-and-error & no trial-and-error \\
 %------------------------------------------------
 
 \begin{frame}{Research question}
+
+How to develop a description-based interface for 3D reconstruction so that a successful reconstruction result is obtained given an accurate description of problem condition?
 
 \end{frame}
 
@@ -247,8 +244,16 @@ Geoemtry\\
 %------------------------------------------------
 \begin{frame}{Description: problem space}
 
+\begin{exampleblock}{Problem space}
+\end{exampleblock}
 \begin{figure}
-\includegraphics[width=0.6\textwidth]{prob_space/obj_class}
+\includegraphics[width=0.55\textwidth]{prob_space/obj_class}
+\end{figure}
+
+\begin{exampleblock}{Four problem conditions}
+\end{exampleblock}
+\begin{figure}
+\includegraphics[width=0.55\textwidth]{prob_space/prob_cond}
 \end{figure}
 
 \begin{exampleblock}{Assumptions}
@@ -267,15 +272,6 @@ Geoemtry\\
 \end{itemize}
 
 \end{exampleblock}
-
-\end{frame}
-
-%------------------------------------------------
-\begin{frame}{Description: four problem conditions}
-
-\begin{figure}[h]
-\includegraphics[width=0.8\textwidth]{prob_space/prob_cond}
-\end{figure}
 
 \end{frame}
 
@@ -354,7 +350,7 @@ Interpreter: selects an algorithm based on a description.
 
 \begin{figure}[!htbp]
 \centering
-\includegraphics[width=0.7\textwidth]{interp/interpreter.pdf}
+\includegraphics[width=\textwidth]{images/interpreter.pdf}
 \end{figure}
 
 \end{frame}
@@ -365,9 +361,11 @@ Interpreter: selects an algorithm based on a description.
 \begin{frame}{Interpretation: evaluation questions}
 
 \begin{exampleblock}{Evaluation questions}
-  1. accurate description $\Rightarrow$ successful result; \\
-  2. less accurate description $\Rightarrow$ less successful result;\\
-  3. inaccurate description $\Rightarrow$ poor result; \\
+\begin{enumerate}
+  \item accurate description $\Rightarrow$ successful result;
+  \item less accurate description $\Rightarrow$ less successful result;
+  \item inaccurate description $\Rightarrow$ poor result.
+\end{enumerate}
 \end{exampleblock}
 
 \begin{exampleblock}{Criteria}
@@ -412,56 +410,33 @@ MVS\& VH & PS & SL \\
 \end{frame}
 
 %------------------------------------------------
-\begin{frame}{Interpretation: dataset}
-
-Objects meet the requirements of the four problem conditions.
-
-\begin{figure}[!htbp]
-\centering
-\begin{tabular}{*{4}{c}} % p{1.5cm}
-1 & 2 & 3 & 4\\
-\midrule 
-\includegraphics[width=0.15\textwidth]{interp/synth_data/bust} &
-\includegraphics[width=0.15\textwidth]{interp/synth_data/vase0} &
-\includegraphics[width=0.15\textwidth]{interp/synth_data/barrel} &
-\includegraphics[width=0.15\textwidth]{interp/synth_data/vase1}\\
-\includegraphics[width=0.15\textwidth]{interp/real_world_img/statue/statue} &
-\includegraphics[width=0.15\textwidth]{interp/real_world_img/cup/cup} &
-\includegraphics[width=0.15\textwidth]{interp/real_world_img/pot/pot} &
-\includegraphics[width=0.15\textwidth]{interp/real_world_img/vase/vase}
-% \\ \cline{1-5}
-% \multirow{3}{*}{\rotatebox[origin=c]{90}{appearance}}
-%   & textureless & textureless & textured & textured\\
-%   & diffuse & mixed d/s & diffuse & mixed d/s\\
-%   & bright & bright & bright/dark & bright/dark\\
-\end{tabular}
-\end{figure}
-
-\end{frame}
-
-%------------------------------------------------
 \begin{frame}{Interpreter: accurate description, successful result}
 
+\setlength{\fboxrule}{2pt}
 \addtolength{\tabcolsep}{-3pt}
 \begin{figure}
 \centering
-\begin{tabular}{cccc}
+\begin{tabular}{ccccc}
 
+\includegraphics[width=0.2\textwidth]{images/interp11.pdf} &
 \includegraphics[width=0.15\textwidth]{interp/real_interp/statue/statue_mvs} &
 \includegraphics[width=0.15\textwidth]{interp/real_interp/statue/statue_ps} &
 \fcolorbox{green}{white}{\includegraphics[width=0.15\textwidth]{interp/real_interp/statue/statue_sl}} &
 \includegraphics[width=0.15\textwidth]{interp/real_interp/statue/statue_sc} \\
 
-\includegraphics[width=0.15\textwidth]{interp/real_interp/cup/cup_mvs} &
-\fcolorbox{green}{white}{\includegraphics[width=0.15\textwidth]{interp/real_interp/cup/cup_ps}} &
-\includegraphics[width=0.15\textwidth]{interp/real_interp/cup/cup_sl} &
-\includegraphics[width=0.15\textwidth]{interp/real_interp/cup/cup_sc} \\
+% \includegraphics[width=0.2\textwidth]{images/interp21.pdf} &
+% \includegraphics[width=0.15\textwidth]{interp/real_interp/cup/cup_mvs} &
+% \fcolorbox{green}{white}{\includegraphics[width=0.15\textwidth]{interp/real_interp/cup/cup_ps}} &
+% \includegraphics[width=0.15\textwidth]{interp/real_interp/cup/cup_sl} &
+% \includegraphics[width=0.15\textwidth]{interp/real_interp/cup/cup_sc} \\
 
-\includegraphics[width=0.15\textwidth]{interp/real_interp/pot/pot_mvs} &
-\includegraphics[width=0.15\textwidth]{interp/real_interp/pot/pot_ps} &
-\fcolorbox{green}{white}{\includegraphics[width=0.15\textwidth]{interp/real_interp/pot/pot_sl}} &
-\includegraphics[width=0.15\textwidth]{interp/real_interp/pot/pot_sc} \\
+% \includegraphics[width=0.2\textwidth]{images/interp31.pdf} &
+% \includegraphics[width=0.15\textwidth]{interp/real_interp/pot/pot_mvs} &
+% \includegraphics[width=0.15\textwidth]{interp/real_interp/pot/pot_ps} &
+% \fcolorbox{green}{white}{\includegraphics[width=0.15\textwidth]{interp/real_interp/pot/pot_sl}} &
+% \includegraphics[width=0.15\textwidth]{interp/real_interp/pot/pot_sc} \\
 
+\includegraphics[width=0.2\textwidth]{images/interp41.pdf} &
 \fcolorbox{green}{white}{\includegraphics[width=0.15\textwidth]{interp/real_interp/vase/vase_mvs}} &
 \includegraphics[width=0.15\textwidth]{interp/real_interp/vase/vase_ps} &
 \includegraphics[width=0.15\textwidth]{interp/real_interp/vase/vase_sl} &
@@ -476,26 +451,31 @@ Objects meet the requirements of the four problem conditions.
 %------------------------------------------------
 \begin{frame}{Interpreter: less accurate description, less successful result}
 
+\setlength{\fboxrule}{2pt}
 \addtolength{\tabcolsep}{-3pt}
 \begin{figure}
 \centering
-\begin{tabular}{cccc}
+\begin{tabular}{ccccc}
 
+\includegraphics[width=0.2\textwidth]{images/interp12.pdf} &
 \includegraphics[width=0.15\textwidth]{interp/real_interp/statue/statue_mvs} &
 \includegraphics[width=0.15\textwidth]{interp/real_interp/statue/statue_ps} &
 \fcolorbox{green}{white}{\includegraphics[width=0.15\textwidth]{interp/real_interp/statue/statue_sl}} &
 \includegraphics[width=0.15\textwidth]{interp/real_interp/statue/statue_sc} \\
 
-\fcolorbox{red}{white}{\includegraphics[width=0.15\textwidth]{interp/real_interp/cup/cup_mvs}} &
-\fcolorbox{green}{white}{\includegraphics[width=0.15\textwidth]{interp/real_interp/cup/cup_ps}} &
-\includegraphics[width=0.15\textwidth]{interp/real_interp/cup/cup_sl} &
-\includegraphics[width=0.15\textwidth]{interp/real_interp/cup/cup_sc} \\
+% \includegraphics[width=0.2\textwidth]{images/interp22.pdf} &
+% \fcolorbox{red}{white}{\includegraphics[width=0.15\textwidth]{interp/real_interp/cup/cup_mvs}} &
+% \fcolorbox{green}{white}{\includegraphics[width=0.15\textwidth]{interp/real_interp/cup/cup_ps}} &
+% \includegraphics[width=0.15\textwidth]{interp/real_interp/cup/cup_sl} &
+% \includegraphics[width=0.15\textwidth]{interp/real_interp/cup/cup_sc} \\
 
-\includegraphics[width=0.15\textwidth]{interp/real_interp/pot/pot_mvs} &
-\includegraphics[width=0.15\textwidth]{interp/real_interp/pot/pot_ps} &
-\fcolorbox{green}{white}{\includegraphics[width=0.15\textwidth]{interp/real_interp/pot/pot_sl}} &
-\includegraphics[width=0.15\textwidth]{interp/real_interp/pot/pot_sc} \\
+% \includegraphics[width=0.2\textwidth]{images/interp32.pdf} &
+% \includegraphics[width=0.15\textwidth]{interp/real_interp/pot/pot_mvs} &
+% \includegraphics[width=0.15\textwidth]{interp/real_interp/pot/pot_ps} &
+% \fcolorbox{green}{white}{\includegraphics[width=0.15\textwidth]{interp/real_interp/pot/pot_sl}} &
+% \includegraphics[width=0.15\textwidth]{interp/real_interp/pot/pot_sc} \\
 
+\includegraphics[width=0.2\textwidth]{images/interp42.pdf} &
 \fcolorbox{green}{white}{\includegraphics[width=0.15\textwidth]{interp/real_interp/vase/vase_mvs}} &
 \fcolorbox{red}{white}{\includegraphics[width=0.15\textwidth]{interp/real_interp/vase/vase_ps}} &
 \includegraphics[width=0.15\textwidth]{interp/real_interp/vase/vase_sl} &
@@ -510,26 +490,31 @@ Objects meet the requirements of the four problem conditions.
 %------------------------------------------------
 \begin{frame}{Interpreter: inaccurate description, poor result}
 
+\setlength{\fboxrule}{2pt}
 \addtolength{\tabcolsep}{-3pt}
 \begin{figure}
 \centering
-\begin{tabular}{cccc}
+\begin{tabular}{ccccc}
 
+\includegraphics[width=0.2\textwidth]{images/interp13.pdf} &
 \includegraphics[width=0.15\textwidth]{interp/real_interp/statue/statue_mvs} &
 \includegraphics[width=0.15\textwidth]{interp/real_interp/statue/statue_ps} &
 \fcolorbox{green}{white}{\includegraphics[width=0.15\textwidth]{interp/real_interp/statue/statue_sl}} &
 \fcolorbox{red}{white}{\includegraphics[width=0.15\textwidth]{interp/real_interp/statue/statue_sc}} \\
 
-\fcolorbox{red}{white}{\includegraphics[width=0.15\textwidth]{interp/real_interp/cup/cup_mvs}} &
-\fcolorbox{green}{white}{\includegraphics[width=0.15\textwidth]{interp/real_interp/cup/cup_ps}} &
-\includegraphics[width=0.15\textwidth]{interp/real_interp/cup/cup_sl} &
-\includegraphics[width=0.15\textwidth]{interp/real_interp/cup/cup_sc} \\
+% \includegraphics[width=0.2\textwidth]{images/interp23.pdf} &
+% \fcolorbox{red}{white}{\includegraphics[width=0.15\textwidth]{interp/real_interp/cup/cup_mvs}} &
+% \fcolorbox{green}{white}{\includegraphics[width=0.15\textwidth]{interp/real_interp/cup/cup_ps}} &
+% \includegraphics[width=0.15\textwidth]{interp/real_interp/cup/cup_sl} &
+% \includegraphics[width=0.15\textwidth]{interp/real_interp/cup/cup_sc} \\
 
-\includegraphics[width=0.15\textwidth]{interp/real_interp/pot/pot_mvs} &
-\includegraphics[width=0.15\textwidth]{interp/real_interp/pot/pot_ps} &
-\fcolorbox{green}{white}{\includegraphics[width=0.15\textwidth]{interp/real_interp/pot/pot_sl}} &
-\fcolorbox{red}{white}{\includegraphics[width=0.15\textwidth]{interp/real_interp/pot/pot_sc}} \\
+% \includegraphics[width=0.2\textwidth]{images/interp33.pdf} &
+% \includegraphics[width=0.15\textwidth]{interp/real_interp/pot/pot_mvs} &
+% \includegraphics[width=0.15\textwidth]{interp/real_interp/pot/pot_ps} &
+% \fcolorbox{green}{white}{\includegraphics[width=0.15\textwidth]{interp/real_interp/pot/pot_sl}} &
+% \fcolorbox{red}{white}{\includegraphics[width=0.15\textwidth]{interp/real_interp/pot/pot_sc}} \\
 
+\includegraphics[width=0.2\textwidth]{images/interp43.pdf} &
 \fcolorbox{green}{white}{\includegraphics[width=0.15\textwidth]{interp/real_interp/vase/vase_mvs}} &
 \fcolorbox{red}{white}{\includegraphics[width=0.15\textwidth]{interp/real_interp/vase/vase_ps}} &
 \includegraphics[width=0.15\textwidth]{interp/real_interp/vase/vase_sl} &
@@ -538,6 +523,70 @@ Objects meet the requirements of the four problem conditions.
 \end{tabular}
 \end{figure}
 \addtolength{\tabcolsep}{3pt}
+
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}{Interpreter: demonstrative example}
+
+\setlength{\fboxrule}{2pt}
+\addtolength{\tabcolsep}{-3pt}
+\begin{figure}
+\centering
+\begin{tabular}{ccccc}
+
+\includegraphics[width=0.2\textwidth]{images/interp11.pdf} &
+\includegraphics[width=0.15\textwidth]{interp/real_interp/statue/statue_mvs} &
+\includegraphics[width=0.15\textwidth]{interp/real_interp/statue/statue_ps} &
+\fcolorbox{green}{white}{\includegraphics[width=0.15\textwidth]{interp/real_interp/statue/statue_sl}} &
+\includegraphics[width=0.15\textwidth]{interp/real_interp/statue/statue_sc} \\
+
+\includegraphics[width=0.2\textwidth]{images/interp12.pdf} &
+\includegraphics[width=0.15\textwidth]{interp/real_interp/statue/statue_mvs} &
+\includegraphics[width=0.15\textwidth]{interp/real_interp/statue/statue_ps} &
+\fcolorbox{green}{white}{\includegraphics[width=0.15\textwidth]{interp/real_interp/statue/statue_sl}} &
+\includegraphics[width=0.15\textwidth]{interp/real_interp/statue/statue_sc} \\
+
+\includegraphics[width=0.2\textwidth]{images/interp13.pdf} &
+\includegraphics[width=0.15\textwidth]{interp/real_interp/statue/statue_mvs} &
+\includegraphics[width=0.15\textwidth]{interp/real_interp/statue/statue_ps} &
+\fcolorbox{green}{white}{\includegraphics[width=0.15\textwidth]{interp/real_interp/statue/statue_sl}} &
+\fcolorbox{red}{white}{\includegraphics[width=0.15\textwidth]{interp/real_interp/statue/statue_sc}} \\
+
+\end{tabular}
+\end{figure}
+
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}{Interpreter: demonstrative example}
+
+\setlength{\fboxrule}{2pt}
+\addtolength{\tabcolsep}{-3pt}
+\begin{figure}
+\centering
+\begin{tabular}{ccccc}
+
+\includegraphics[width=0.2\textwidth]{images/interp21.pdf} &
+\includegraphics[width=0.15\textwidth]{interp/real_interp/cup/cup_mvs} &
+\fcolorbox{green}{white}{\includegraphics[width=0.15\textwidth]{interp/real_interp/cup/cup_ps}} &
+\includegraphics[width=0.15\textwidth]{interp/real_interp/cup/cup_sl} &
+\includegraphics[width=0.15\textwidth]{interp/real_interp/cup/cup_sc} \\
+
+\includegraphics[width=0.2\textwidth]{images/interp22.pdf} &
+\fcolorbox{red}{white}{\includegraphics[width=0.15\textwidth]{interp/real_interp/cup/cup_mvs}} &
+\fcolorbox{green}{white}{\includegraphics[width=0.15\textwidth]{interp/real_interp/cup/cup_ps}} &
+\includegraphics[width=0.15\textwidth]{interp/real_interp/cup/cup_sl} &
+\includegraphics[width=0.15\textwidth]{interp/real_interp/cup/cup_sc} \\
+
+\includegraphics[width=0.2\textwidth]{images/interp23.pdf} &
+\fcolorbox{red}{white}{\includegraphics[width=0.15\textwidth]{interp/real_interp/cup/cup_mvs}} &
+\fcolorbox{green}{white}{\includegraphics[width=0.15\textwidth]{interp/real_interp/cup/cup_ps}} &
+\includegraphics[width=0.15\textwidth]{interp/real_interp/cup/cup_sl} &
+\includegraphics[width=0.15\textwidth]{interp/real_interp/cup/cup_sc} \\
+
+\end{tabular}
+\end{figure}
 
 \end{frame}
 
@@ -562,7 +611,7 @@ Objects meet the requirements of the four problem conditions.
 
 \begin{figure}
 \centering
-\includegraphics[width=0.9\textwidth]{images/3d_recon_interface_2.pdf}
+\includegraphics[width=0.9\textwidth]{images/motivation1.pdf}
 \end{figure}
 
 \begin{exampleblock}{}
@@ -752,6 +801,34 @@ We use three-scale values to parameterize properties: \textit{low} (0.2), \texti
 % \end{figure}
 
 % \end{frame}
+
+%------------------------------------------------
+\begin{frame}{Interpretation: dataset}
+
+Objects meet the requirements of the four problem conditions.
+
+\begin{figure}[!htbp]
+\centering
+\begin{tabular}{*{4}{c}} % p{1.5cm}
+1 & 2 & 3 & 4\\
+\midrule 
+\includegraphics[width=0.15\textwidth]{interp/synth_data/bust} &
+\includegraphics[width=0.15\textwidth]{interp/synth_data/vase0} &
+\includegraphics[width=0.15\textwidth]{interp/synth_data/barrel} &
+\includegraphics[width=0.15\textwidth]{interp/synth_data/vase1}\\
+\includegraphics[width=0.15\textwidth]{interp/real_world_img/statue/statue} &
+\includegraphics[width=0.15\textwidth]{interp/real_world_img/cup/cup} &
+\includegraphics[width=0.15\textwidth]{interp/real_world_img/pot/pot} &
+\includegraphics[width=0.15\textwidth]{interp/real_world_img/vase/vase}
+% \\ \cline{1-5}
+% \multirow{3}{*}{\rotatebox[origin=c]{90}{appearance}}
+%   & textureless & textureless & textured & textured\\
+%   & diffuse & mixed d/s & diffuse & mixed d/s\\
+%   & bright & bright & bright/dark & bright/dark\\
+\end{tabular}
+\end{figure}
+
+\end{frame}
 
 %------------------------------------------------
 \begin{frame}{Interpretation: accurate description, successful result}
