@@ -628,7 +628,7 @@ Computer vision should focus on more than \\just algorithms, but easier accessib
 %------------------------------------------------
 \begin{frame}
 
-\begin{alertblock}{Do you have the right dataset to validate your claim?}
+\begin{alertblock}{Why did you pick those objects? Is it a right dataset to validate your claim?}
 \begin{itemize}
 \item This objects are random, everyday objects that do NOT favour any of the selected algorithms;
 \item We focus on four problem conditions and thus four representative objects. The claims are made solely for the proposed problem conditions.
@@ -656,7 +656,98 @@ Computer vision should focus on more than \\just algorithms, but easier accessib
 
 \begin{alertblock}{What if the number of properties is too large after dimensionality reduction?}
 \begin{itemize}
+\item This is definitely an issue that could happen, especially when the initial problem space is higher dimensional.
+\end{itemize}
+\end{alertblock}
+
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}
+
+\begin{alertblock}{Why use the synthetic dataset?}
+\begin{itemize}
+\item Synthetic datasets are created under controled conditions, thus they can be used as a benchmark for the proof of concept interpreter to ensure that it actually works;
+\item It is much more challenging to obtain appropriate real world datasets, thus synthetic dataset is a good alternative to gain insights into the problem.
+\end{itemize}
+\end{alertblock}
+
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}
+
+\begin{alertblock}{What algorithms are chosen, why those algorithms?}
+
+\begin{table}
+\centering
+\begin{tabular}{l|l}
+\toprule
+Technique & Summary\\
+\midrule
+PMVS & Patch-based, seed points propagation MVS.\\
+EPS & Example-based Photometric Stereo.\\
+GSL & Gray coded Structured Light technique.\\
+\midrule
+VH & Volumetric Visual Hull.\\
+LLS-PS & Linear least squares Photometric Stereo.\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{itemize}
+\item These algorithms are the classic, and top performers among their respective class;
+\item Three algorithms from three different categories are able to provide well rounded capability to the interface, which is sufficient for demonstrative purposes;
+\item Additional algorithms can be easily integrated into the interface by going through the same process discussed in the thesis.
+\end{itemize}
+\end{alertblock}
+
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}
+
+\begin{alertblock}{Is the problem space a bit over-simplified?}
+\begin{itemize}
+\item The problem space is heavily relied on the availability of existing algorithms, and the model of description. Thus properties such as translucency is omitted because they need very specialized algorithms, and many geometric properties are omitted since it is challenging to come up with semantically meaningful, and mathematic way to represent these properties;
+\item This is a proof of concept demonstration that it is achievable to produce a successful reconstruction result given an accurate description, thus being comprehensive is not the priority.
+\end{itemize}
+\end{alertblock}
+
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}
+
+\begin{alertblock}{The description is set manually, which is tedious and subjective, any thoughts on how to make it automated?}
+\begin{itemize}
 \item 
+\end{itemize}
+\end{alertblock}
+
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}
+
+\begin{alertblock}{Who are the potential users, what are their applications, and how will they use the proposed interface?}
+\begin{itemize}
+\item Users:
+\item Applications:
+\item Use:
+\end{itemize}
+\end{alertblock}
+
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}
+
+\begin{alertblock}{What are the next important steps?}
+\begin{itemize}
+\item \textbf{Description}: More sophisticated problem space and description to include objects with more complex visual and geometric properties;
+\item \textbf{Mapping}: Better methods to discover the mapping from problem conditions to algorithms;
+\item \textbf{Interpreter}: More sophisticated interpreter.
 \end{itemize}
 \end{alertblock}
 
