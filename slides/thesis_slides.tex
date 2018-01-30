@@ -11,6 +11,15 @@
 \newcommand{\tabitem}{~~\llap{\textbullet}~~}
 \usepackage[scale=2]{ccicons}
 
+% define table column colour
+\usepackage{xcolor,colortbl}
+\definecolor{color1}{rgb}{0.667, 0.357, 0.224}
+\definecolor{color2}{rgb}{0.96, 0.9, 0.635}
+\definecolor{color3}{rgb}{0.88,1,1}
+
+\newcolumntype{a}{>{\columncolor{color1}}p{3.5cm}}
+\newcolumntype{b}{>{\columncolor{color2}}p{4cm}}
+
 \usepackage{pgfplots}
 \usepgfplotslibrary{dateplot}
 
@@ -52,14 +61,32 @@ kaywu@ece.ubc.ca \\ % Your email address
   \tableofcontents[hideallsubsections]
 \end{frame}
 
-%----------------------------------------------------------------------------------------
+%------------------------------------------------
 % PRESENTATION SLIDES
-%----------------------------------------------------------------------------------------
+%------------------------------------------------
 
 %------------------------------------------------
 \section{Introduction}
 %------------------------------------------------
-\begin{frame}{Motivation: scenario}
+{ % all template changes are local to this group.
+    \setbeamertemplate{navigation symbols}{}
+    \begin{frame}[plain]
+        \begin{tikzpicture}[remember picture,overlay]
+            \node[at=(current page.center)] {
+                \includegraphics[width=\paperwidth]{images/scenario.pdf}
+            };
+        \end{tikzpicture}
+     \end{frame}
+  % what is needed in scenario
+  % who benefit from this: app developers and end users
+  % how do they benefit from this interface
+  % ben create this camera rig, and an interface that is, the app interface dosn't change, the app developers can create interfaces tune for visual parameters, as the hardwares and algorithms improves, the interface donest chnge
+  % daisy uses the interface to achieve the task by tuning parameters visually
+}
+
+%------------------------------------------------
+
+\begin{frame}{Motivation: traditional 3D reconstruction}
 
 \begin{figure}
 \centering
@@ -77,23 +104,20 @@ kaywu@ece.ubc.ca \\ % Your email address
 \end{frame}
 
 %------------------------------------------------
-\begin{frame}{Motivation: scenario}
+\begin{frame}{Motivation: interface for 3D reconstruction}
 
 \begin{figure}
 \centering
 \includegraphics[width=0.8\textwidth]{images/motivation1.pdf}
 \end{figure}
 
-\begin{table}
-\centering
-\begin{tabular}{lp{3.5cm}p{4cm}}
-& Traditional 3D Recon & Interface for 3D Recon\\
-\midrule
-Algorithm & vision knowledge & hidden \\
-Parameter & algorithm-specific params & a fixed set of params of visual\& geometric properties \\
-Approach & multiple trial-and-error & no trial-and-error \\
-\end{tabular}
-\end{table}
+\begin{exampleblock}{Goals}
+  \begin{itemize}
+    \item \textbf{Algorithms}: description of appearance, no vision background needed, embeding new algorithms is easy;
+    \item \textbf{Parameters}: property parameters are perceptually interpretable\& meaningful;
+    \item \textbf{Approach}: no \textit{trial-and-error}.
+  \end{itemize}
+\end{exampleblock}
 
 \end{frame}
 
@@ -101,9 +125,19 @@ Approach & multiple trial-and-error & no trial-and-error \\
 \section{Problem Statement} % Research question
 %------------------------------------------------
 
-\begin{frame}{Research question}
+\begin{frame}{Problem description}
 
-How to develop a description-based interface for 3D reconstruction so that a successful reconstruction result is obtained given an accurate description of problem condition?
+\begin{table}
+\centering
+\begin{tabular}{lab}
+\rowcolor{color3}
+& \textbf{Traditional 3D Recon} & \textbf{Interface for 3D Recon}\\
+\midrule
+\textit{Algorithm} & vision knowledge & hidden \\
+\textit{Parameter} & algorithm-specific params & a fixed set of params of visual\& geometric properties \\
+\textit{Approach} & multiple trial-and-error & no trial-and-error \\
+\end{tabular}
+\end{table}
 
 \end{frame}
 
@@ -369,18 +403,8 @@ Interpreter: selects an algorithm based on a description.
 \end{exampleblock}
 
 \begin{exampleblock}{Criteria}
-  Visual comparison.
+  Visual comparison to that of the BL result.
 \end{exampleblock}
-
-\begin{figure}
-\centering
-\begin{tabular}{ccc}
-\includegraphics[width=0.2\textwidth]{images/dino.png} &
-\includegraphics[width=0.2\textwidth]{interp/synth_interp/vase0_sl} &
-\includegraphics[width=0.2\textwidth]{interp/real_interp/vase/vase_spike} \\
-accuracy & completenss & angle diff \\
-\end{tabular}
-\end{figure}
 
 \end{frame}
 
@@ -390,15 +414,16 @@ accuracy & completenss & angle diff \\
 \begin{figure}
 \centering
 \begin{tabular}{ccc}
-\includegraphics[width=0.3\textwidth]{images/mvs_calib.PNG} &
-\includegraphics[width=0.3\textwidth]{images/sl_calib.png} &
-\includegraphics[width=0.3\textwidth]{images/sl_calib.png}\\
+\includegraphics[width=0.3\textwidth]{images/mvs_setup.PNG} &
+\includegraphics[width=0.3\textwidth]{images/ps_setup.JPG} &
+\includegraphics[width=0.3\textwidth]{images/sl_setup.png}\\
 MVS\& VH & PS & SL \\
 \end{tabular}
 \end{figure}
 
+\addtolength{\tabcolsep}{-3pt}
 \begin{table}
-  \begin{tabular}{p{1cm}p{2cm}p{2.5cm}p{4cm}}
+  \begin{tabular}{p{0.8cm}p{2cm}p{3cm}p{4cm}}
   Alg & Hardware & Config & Calibration \\
   \midrule
   MVS, VH & camera, turntable  & 3 heights, $30^\circ$ baseline angle & focal length from EXIF, extrinsics using SfM \\
@@ -406,6 +431,7 @@ MVS\& VH & PS & SL \\
   SL & camera, projector & $10^\circ$ baseline angle & camera-projector calibration using local homography\\
   \end{tabular}
 \end{table}
+\addtolength{\tabcolsep}{3pt}
 
 \end{frame}
 
@@ -564,24 +590,6 @@ MVS\& VH & PS & SL \\
 \end{frame}
 
 %------------------------------------------------
-\begin{frame}{Interpreter: summary}
-
-\begin{figure}
-\centering
-\includegraphics[width=0.9\textwidth]{images/motivation1.pdf}
-\end{figure}
-
-\begin{exampleblock}{}
-  \begin{itemize}
-    \item \textbf{Algorithms}: description of appearance, no vision background needed, embeding new algorithms is easy;
-    \item \textbf{Parameters}: property parameters are perceptually interpretable\& meaningful;
-    \item \textbf{Approach}: no \textit{trial-and-error}.
-  \end{itemize}
-\end{exampleblock}
-
-\end{frame}
-
-%------------------------------------------------
 \section{Conclusions}
 %------------------------------------------------
 \begin{frame}{Conclusions}
@@ -589,9 +597,9 @@ MVS\& VH & PS & SL \\
 \begin{exampleblock}{}
 
 \begin{itemize}
-\item The proposed interface is able to produce a correct reconstruction result given an accurate description of an object;
-\item The solution produced by the interface improves as the description becomes more accurate;
 \item Using the description and proof of concept interpreter, we demonstrate the possibility of using descriptive properties to hide algorithm details and providing a fixed set of parameters that can be perceptually estimated.
+\item The proposed interface is able to produce a correct reconstruction result given an accurate description of an object;
+% \item The solution produced by the interface improves as the description becomes more accurate;
 \end{itemize}
 
 \end{exampleblock}
@@ -605,13 +613,24 @@ MVS\& VH & PS & SL \\
 
 \begin{itemize}
 \item Develop automated approach to derive description from images;
-\item Develop more advanced techniques to discover the mapping from problem conditions to algorithms;
+\item Develop more advanced techniques to discover the mapping from problem conditions to algorithms and its parameter settings;
 \item Develop more sophisticated geometric model to incorporate objects with complex geometry.
-\item Investigate the more precise relation between description and performance, \emph{i.e.,} if better description can lead to better performance monotonically.
+\item Investigate the more precise relation between description and performance, \emph{i.e.,} if better description can lead to better performance monotonically;
+\item Create a way to characterize new algorithms to incorporate into the interface.
 % \item To deal with more complicated objects, we need more complicated properties, or ways to describe the objects, but the challenge is the easy mathematical representation might not be available.
 \end{itemize}
 
 \end{exampleblock}
+
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}{Online resources}
+
+\begin{itemize}
+\item Open source code is available on Github: github.com/imkaywu/3DReconKit;
+\item Project website: imkaywu.github.io/3drecon\_dataset
+\end{itemize}
 
 \end{frame}
 
@@ -720,10 +739,22 @@ LLS-PS & Linear least squares Photometric Stereo.\\
 \begin{frame}
 
 \begin{alertblock}{The description is set manually, which is tedious and subjective, any thoughts on how to make it automated?}
+
 \begin{itemize}
-\item 
+\item The comparison are based on visual phenomena such as surface roughness, holes, and spikes, which is indicator to quantitative measure such as accuracy, completeness, and angular error, respectively.
 \end{itemize}
+
 \end{alertblock}
+
+\begin{figure}
+\centering
+\begin{tabular}{ccc}
+\includegraphics[width=0.2\textwidth]{images/dino.png} &
+\includegraphics[width=0.2\textwidth]{interp/synth_interp/vase0_sl} &
+\includegraphics[width=0.2\textwidth]{interp/real_interp/vase/vase_spike} \\
+accuracy & completenss & angle diff \\
+\end{tabular}
+\end{figure}
 
 \end{frame}
 
@@ -736,6 +767,14 @@ LLS-PS & Linear least squares Photometric Stereo.\\
 \item Applications:
 \item Use:
 \end{itemize}
+\end{alertblock}
+
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}
+
+\begin{alertblock}{The success of the interface is determined by comparing the result to that of BL, is it objective or biased?}
 \end{alertblock}
 
 \end{frame}
