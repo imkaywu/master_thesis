@@ -51,6 +51,19 @@
 %% (And shouldn't you be writing? :-)
 %%
 
+%% copyright symbol
+\usepackage{textcomp}
+
+%% algorithm
+\usepackage{algorithm}
+\usepackage{algorithmicx}
+\usepackage{algpseudocode,amsmath}
+\newcommand{\var}{\texttt}
+\newcommand{\assign}{\leftarrow}
+\newcommand{\multilinestate}[1]{%
+  \parbox[t]{\linewidth}{\raggedright\hangindent=\algorithmicindent\hangafter=1
+    \strut#1\strut}}
+
 %% NFSS font specification (New Font Selection Scheme)
 \usepackage{times,mathptmx,courier}
 \usepackage[scaled=.92]{helvet}

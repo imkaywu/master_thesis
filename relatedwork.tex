@@ -17,32 +17,31 @@ This current situation motivates us to provide an description-based interface fo
 \label{sec:3DRecon_Tech}
 Image-based 3D reconstruction attempts to recover the geometry and material (optional) of the object from images under different viewpoints or illuminations. The end goal here can be described as ``given a set of images of an object or a scene, estimate the most likely 3D shape that explains those images, under the assumption of known materials, viewpoints, and lighting conditions''. This definition reveals that if these assumptions are violated, this becomes an ill-posed problem since multiple combinations of geometry, viewpoint and illumination can produce exactly the same images~\cite{poggio1985computational}. Thus this makes for an extremely challenging task.
 
-The 3D reconstruction technique exploits a variety of visual and geometric cues to extract geometry from images: stereo correspondence, shading, contour, texture, (de)focus, etc. This review of algorithms are structured based on these reconstruction cues. Please refer to Table~\ref{tab:cue_algo} for an overview, where the algorithms are organized based on the cue used for reconstruction.
-\begin{table}[h]
-  \centering
-  \begin{tabular}{l|r}
-  \toprule
-  \textbf{Cue} & \textbf{Algorithm}\\
-  \midrule
-  Stereo correspondence & Stereoscopy\\
-  & Trinocular Stereo\\
-  & Multi-view Stereo (MVS)\\
-  & Laser scanning\\
-  & Structured light (SL)\\
-  \hline
-  Shading & Shape from Shading (SfS)\\
-  & Photometric Stereo (PS)\\
-  \hline
-  Contour & Shape from Silhouette (SfS)\\
-  \hline
-  Texture & Shape from Texture\\
-  \hline
-  (De)focus & Shape from (De)focus\\
-  \bottomrule
-  \end{tabular}
-  \caption{Classes of algorithms that utilize each visual/geometric cue. Note that the abbreviations will be used extensively in the thesis.}
-  \label{tab:cue_algo}
-\end{table}
+The 3D reconstruction technique exploits a variety of visual and geometric cues to extract geometry from images: stereo correspondence, shading, contour, texture, (de)focus, etc. This review of algorithms is structured based on these reconstruction cues. Please refer to Figure~\ref{fig:algo_class} for an overview, where the algorithms are organized based on the cue used for reconstruction.
+\begin{figure}
+\centering
+\begin{tabular}{p{1.6cm}ccp{2cm}p{1.5cm}}
+Class & \multicolumn{2}{c}{Method} & Cue & Problem \\
+\midrule
+Shape from Stereo & 
+\raisebox{-0.75\height}{\includegraphics[width=0.2\textwidth]{relatedwork/mvs.png}} &
+\raisebox{-0.75\height}{\includegraphics[width=0.2\textwidth]{relatedwork/sl.jpg}} &
+Stereo correspondence &
+Texture, Albedo, Specular \\
+Shape from Intensity & 
+\raisebox{-.75\height}{\includegraphics[width=0.15\textwidth]{relatedwork/sfs.png}} &
+\raisebox{-.75\height}{\includegraphics[width=0.2\textwidth]{relatedwork/ps.png}} &
+Shading variation &
+Albedo, Specular, Geomtry \\
+Shape from Silhouette &
+\raisebox{-.75\height}{\includegraphics[width=0.2\textwidth]{relatedwork/vh.jpg}} &
+\raisebox{-.75\height}{\includegraphics[width=0.2\textwidth]{relatedwork/vh_1.png}} &
+Silhouette &
+Geoemtry\\
+\end{tabular}
+\caption{Classes of algorithms that utilize each visual/geometric cue. Note that the abbreviations will be used extensively in the thesis.}
+\label{fig:algo_class}
+\end{figure}
 
 \subsection{Stereo}
 Stereo correspondence is one of the most widely used visual cues in 3D vision. Passive methods, including stereoscopy, trinocular stereo, and MVS, identify correspondences across different views, and estimate the 3D point by triangulation. However these passive approaches suffer from uniform or periodic surfaces. Active techniques attempt to overcome the correspondence problem by replacing one of the cameras with a controllable illumination source, e.g., single-point laser, slit laser scanner, temporal or spatially modulated Structured Light (SL), etc. Here we refer readers to the survey article by \citeauthor{blais2004review} for recent developments of active methods. We classify one of the most widely used passive methods, MVS algorithms, based on the taxonomy proposed in~\cite{seitz2006comparison}, which divides the field into four classes based on reconstruction method, and categorize one of the active methods, Structured Light technique, by projection patterns.
@@ -62,7 +61,7 @@ $$
 E(\{k_p\})= \sum_p \Phi(k_p) + \sum_{(p,q)\in\mathcal{N}}\Psi(k_p, k_q)
 $$
 
-Though MVS algorithms have relatively minimum hardware requirements, and works reliably even in an unconstrained envirionment. However, it suffers under the following two conditions:
+MVS algorithms generally have a less strict requirement on the setup, and work relatively reliably in unconstrained envirionments. However, it suffers under the following two conditions:
 
 \textbf{Lack of texture}: Multi-View Stereo algorithms take advantage of textural information to establish point correspondences across different views. Thus homogeneous surfaces pose great challenges to MVS algorithms. We have witnessed surprisingly good results on a textureless object ``Dino'' in the Middlebury MVS benchmark~\cite{seitz2006comparison}. It turns out that MVS algorithms are able to exploit very weak and intricate image textures, most of which come from shading and/or shadowing effects. However, these texture are so weak that images have to have very high quality.
 
@@ -218,16 +217,6 @@ First the object space is split up into a 3D grid of voxels; each voxel is inter
 The marching intersection (MI) structure consists of 3 orthogonal sets of rays, parallel to the $X$, $Y$, and $Z$ axis, which are arranged in 2D regular arrays, called the $X-rayset$, $Y-rayset$, $Z-rayset$ respectively. Each ray in each rayset is projected to the image plane to find the intersections with the silhouette. These intersections are un-projected to compute the 3D intersection between the ray and the extended silhouette on this ray. This process is repeated for each silhouette, and the un-projected intersections on the same ray are merged by the boolean AND operation.
 
 Once the MI data structure representing the intersection of all extended silhouettes, a triangular mesh is extrated from it. This is done by the MI technique proposed in~\cite{rocchini2001marching} which traverses the ``virtual cells'' implicitly defined by the MI, builds a proper marching cube (MC) entry for them that in turn is used to index a MC's lookup table.
-\begin{figure}[h]
-\centering
-\begin{tabular}{cc}
-\includegraphics[width=0.5\textwidth]{relatedwork/scan_convert}&
-\includegraphics[width=0.5\textwidth]{relatedwork/mi_struct}\\
-(a) & (b)\\
-\end{tabular}
-\caption{Illustrations of MI-based VH. (a) shows one object (top left) and its silhouette with 2D lines traced over it to find intersections along rays in the X, Y and Z ray-set of the MI, respectively. (b) shows the MI data structure and conversion algorithm in a 2D example. Image courtesy of M. Tarini.}
-\label{fig:robust_pc}
-\end{figure}
 
 \textbf{Exact polyhedral methods} 
 The silhouette is converted into a set of convex or non-convex 2D polygons with holes allowed. The resulting visual hull with respect to those polygonal silouettes is a polyhedron. The faces of this polyhedron lie on the faces of the original cones. The faces of the original cones are defined by the center of projections and the edges in the input silhouettes. The idea of this method is: for each input silhouette $s_i$ we compute the face of the cone. Then we intersect this face with cones of all other input silhouettes, \ie a polygon-polyhedron intersection. The result of these intersections is a set of polygons that define the surface of the visual hull.

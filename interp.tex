@@ -3,9 +3,9 @@
 
 \chapter{An Interpretation of 3D Reconstruction}
 \label{ch:3DRecon_Interp}
-Now that we have proposed a well-defined problem space of 3D reconstruction problem, as well as a mapping from problem space to algorithms, the interpretation from the problem-centric description to reliable algorithms must be shown. There are many possible ways to interpret the description, our proof of concept interpreter is based on the direct evaluation of performance of each 3D reconstruction algorithm under different problem conditions presented in Chapter~\ref{ch:3DRecon_Mapping}. This mapping from problem space to algorithms and additional constraints allow an successful algorithm to be definitively selected.
+Now that we have proposed a well-defined problem space of 3D reconstruction problem, as well as a mapping from problem space to algorithms, the interpretation from the problem-centric description to reliable algorithms must be shown. There are many possible ways to interpret the description, our proof of concept interpreter is based on the direct evaluation of performance of each 3D reconstruction algorithm under different problem conditions presented in Chapter~\ref{ch:3DRecon_Mapping}. This mapping from problem space to algorithms and additional constraints allow a successful algorithm to be definitively selected.
 
-In this chapter, we first propose a proof of concept interpreter, which makes the three-layer description-based interface complete. By no means is the proposed interpreter the best possible interpreter, but it suffice to demonstrate the usage of the interface. The interpreter is responsible for receiving a description from the user, and selects an algorithm from a suite of algorithms. We are interested in evaluating the performance of the interpreter under the four problem conditions, which are summarized in Chapter~\ref{ch:3DRecon_ProbSpace}. More specifically, we are interested in finding out whether the interpreter is able to translate a user-specified description into an algorithm so that a successful reconstruction result can be achieved. Further, we are also interested in the performance of interpreter with less accurate, or inaccurate descriptions as inputs. It gives us insights into the sensitivity of the interpreter, and demonstrate cases where it is crucial to provide accurate descriptions.
+In this chapter, we first propose a proof of concept interpreter, which makes the three-layer description-based interface complete. By no means is the proposed interpreter the best possible interpreter, but it suffices to demonstrate the usage of the interface. The interpreter is responsible for receiving a description from the user, and selects an algorithm from a suite of algorithms. We are interested in evaluating the performance of the interpreter under the four problem conditions, which are summarized in Chapter~\ref{ch:3DRecon_ProbSpace}. More specifically, we are interested in finding out whether the interpreter is able to translate a user-specified description into an algorithm so that a successful reconstruction result can be achieved. Further, we are also interested in the performance of the interpreter with less accurate, or inaccurate descriptions as inputs. It gives us insights into the sensitivity of the interpreter, and demonstrates cases where it is crucial to provide accurate descriptions.
 
 Three algorithms and two baseline methods that are introduced in Chapter~\ref{ch:3DRecon_Mapping} have been implemented and integrated into the interpreter, providing basic but well rounded reconstruction capabilities. Although more algorithms can potentially be added, these methods are sufficient to validate the interface's ability to translate a description into a reconstruction solution. The integration of new algorithms that are more appropriate under particular situations requires only that they be evaluated by the same process discussed in Chapter~\ref{ch:3DRecon_Mapping}, as shown in Figure~\ref{fig:embed_algo}. This allows researchers to contribute novel algorithms to the interpretation of the interface easily.
 
@@ -80,13 +80,50 @@ The first constraint is metric-first or shape-first. There are generally two typ
 
 The second constraint is accuracy-first or completeness-first. Methods that achieve high accuracy do not necessary achieve high completeness. In light of this, the user can choose an algorithm based on the priority level of accuracy and completeness. If multiple algorithm with comparable accuracy or completeness exists, we use a simple ranking system: if one algorithm has the same accuracy but is more complete, or more complete and equally accurate, it is chosen over the others. The default is the accuracy-first constraint.
 
-Thus, the proposed proof of concept interpreter that consists of two components, mapping and constraints, as shown in Figure~\ref{fig:interpreter}. Note that there are many ways of using this mapping information to create an interpreter, and by no means is the proposed one the optimal interpreter. 
-\begin{figure}[!htbp]
-\centering
-\includegraphics[width=0.8\textwidth]{interp/interpreter.pdf}
-\caption{Two components of the Interpreter layer. The metric comparator compares the quantitative measures based on the constraints. If `acc-first' is selected, the comparator favours algorithms with lower accuracy value, whereas if `cmplt-first' is selected, the comparator favours algorithms with higher completeness. If `shape-first' is selected, the comparator favours algorithms with lower angular error.}
-\label{fig:interpreter}
-\end{figure}
+Thus, the proposed proof of concept interpreter that consists of two components, mapping and constraints, as shown in Figure~\ref{algo:interpreter}. Note that there are many ways of using this mapping information to create an interpreter, and by no means is the proposed one the optimal interpreter.
+\begin{algorithm}[!htbp]
+\caption{Proof-of-concept interpreter}
+\begin{algorithmic}
+  \Require Description \var{desc}
+  \Ensure A successful algorithm \var{bestAlgo} returned
+  \State $\var{\{algos\}} \assign{}$ \Call{Mapping}{\var{desc}}
+  \While{$\var{\{algos\}} \neq \emptyset$}
+    \State $\var{algo} \assign{}$ Pop($\var{\{algos\}}$)
+    \If{Euclidean-first}
+      \If{Accuracy-first}
+        \State $\var{score} \assign{}$ \Call{QuantScore}{\var{desc}, \var{algo}, \var{Accuracy}}
+      \ElsIf{Completeness-first}
+        \State $\var{score} \assign{}$ \Call{QuantScore}{\var{desc}, \var{algo}, \var{Completeness}}
+      \EndIf
+    \ElsIf{Shape-first}
+      \State $\var{score} \assign{}$ \Call{QuantScore}{\var{desc}, \var{algo}, \var{AngularError}}
+    \EndIf
+    \If{$\var{score}<\var{bestScore}$}
+      \State $\var{bestScore}\assign{}\var{score}, \var{bestAlgo}\assign{}\var{algo}$
+    \EndIf
+  \EndWhile
+  \Function{Mapping}{\var{description}}
+    \State\Return A list of successful algorithms $\{algorithms\}$.
+  \EndFunction
+  \Function{QuantScore}{\var{description}, \var{algorithm}, \var{type}}
+  	\If{$\var{type}==$ Accuracy}
+      \State\Return Accuracy score.
+    \ElsIf{$\var{type}==$ Completeness}
+      \State\Return Completeness score.
+    \EndIf
+    \State\Return Angular error.
+    \Comment{Current support three quantitative measures.}
+  \EndFunction
+\end{algorithmic}
+\label{algo:interpreter}
+\end{algorithm}
+
+% \begin{figure}[!htbp]
+% \centering
+% \includegraphics[width=0.8\textwidth]{interp/interpreter.pdf}
+% \caption{Two components of the Interpreter layer. The metric comparator compares the quantitative measures based on the constraints. If `acc-first' is selected, the comparator favours algorithms with lower accuracy value, whereas if `cmplt-first' is selected, the comparator favours algorithms with higher completeness. If `shape-first' is selected, the comparator favours algorithms with lower angular error.}
+% \label{fig:interpreter}
+% \end{figure}
 
 % !!!demonstrate with an example.
 
@@ -104,7 +141,7 @@ Thus, the proposed proof of concept interpreter that consists of two components,
 \label{sec:dataset}
 In this section, we introduce a synthetic and a real-world dataset to evaluate the performance of the interpreter under varied problem conditions. To the best of our knowledge, there is few publicly available dataset that capturing images for algorithms across different categories. Most existing datasets target a specific class of algorithms, such as the famous Middlebury dataset~\cite{seitz2006comparison}, DiLiGenT~\cite{shi2016benchmark}, DTU Robot Image Data Sets~\cite{jensen2014large}, and so on. 
 
-The synthetic dataset contains four objects, as shown in Figure~\ref{fig:synth_real_dataset}, and the real-world dataset contains nine objects, four of which are shown in Figure~\ref{fig:synth_real_dataset}. Please refer to Figure~\ref{fig:real_data_material} for the complete dataset. It covers materials that are representative of the four problem conditions proposed in Chapter~\ref{ch:3DRecon_ProbSpace}: textureless-diffuse-bright (bust, statue), textureless-mixed-bright (vase0, cup), textured-diffuse-bright (barrel, pot), textured-mixed-bright (vase1, vase). In terms of surface shapes, we have focused mainly on objects with simple geometric properties, namely, smoothly curved surfaces with shallow concavities, see descriptions and example images in Figure~\ref{fig:synth_real_dataset}.
+The synthetic dataset contains four objects, as shown in Figure~\ref{fig:synth_real_dataset}, and the real-world dataset contains nine objects, four of which are shown in Figure~\ref{fig:synth_real_dataset}. Please refer to Figure~\ref{fig:test_real_world_img_1},~\ref{fig:test_real_world_img_2} for the complete dataset. It covers materials that are representative of the four problem conditions proposed in Chapter~\ref{ch:3DRecon_ProbSpace}: textureless-diffuse-bright (bust, statue), textureless-mixed-bright (vase0, cup), textured-diffuse-bright (barrel, pot), textured-mixed-bright (vase1, vase). In terms of surface shapes, we have focused mainly on objects with simple geometric properties, namely, smoothly curved surfaces with shallow concavities, see descriptions and example images in Figure~\ref{fig:synth_real_dataset}.
 \begin{figure*}[!htbp]
 \centering
 \begin{tabular}{l*{4}{c}}
@@ -173,7 +210,7 @@ Each object in the synthetic dataset represents one of the four problem conditio
 & & & & \tabitem\tc{GSL} & \\
 \bottomrule
 \end{tabular}
-\caption{The repsentatives of the four classes of objects used for evaluation. Example images and problem conditions of synthetic objects are in the first two rows. The correct description of the problem condition of corresponding object is presented in third row. The last row shows the algorithms returned by the mapping, from which the interpreter selects one successful algorithm, which is coloured in red.}
+\caption{The representatives of the four classes of objects used for evaluation. Example images and problem conditions of synthetic objects are in the first two rows. The correct description of the problem condition of corresponding object is presented in third row. The last row shows the algorithms returned by the mapping, from which the interpreter selects one successful algorithm, which is coloured in red.}
 \label{fig:synth_data}
 \end{figure}
 
@@ -204,7 +241,7 @@ We select four real-world objects, each represents the one of the four problem c
 & & \tabitem\tc{GSL} & \tabitem & \tabitem\tc{GSL} \\
 \bottomrule
 \end{tabular}
-\caption{The repsentatives of the four classes of objects used for evaluation. Example images and problem conditions of real-world objects are in the first two rows. The correct description of the problem condition of corresponding object is presented in third row. The last row shows the algorithms returned by the mapping, from which the interpreter selects one successful algorithm, which is coloured in red.}
+\caption{The representatives of the four classes of objects used for evaluation. Example images and problem conditions of real-world objects are in the first two rows. The correct description of the problem condition of corresponding object is presented in third row. The last row shows the algorithms returned by the mapping, from which the interpreter selects one successful algorithm, which is coloured in red.}
 \label{fig:real_data}
 \end{figure}
 
@@ -595,7 +632,7 @@ Object & Statue & Cup & Pot & Vase \\
 & \includegraphics[width=0.1\textwidth]{interp/real_interp/vase/vase_mvs} \\
 \bottomrule
 \end{tabular}
-\caption{Evaluation 3: inaccurate description may lead to poor result. For each description, the first row represent the settins of properties. The algorithms determined by mapping are shown below with the algorithm selected by interpreter coloured in red (BL: baseline). The last row shows the corresponding reconstruction results. We can see that the results of inaccurate descriptions are poorer then those of accurate descriptions.}
+\caption{Evaluation 3: inaccurate description may lead to poor result. For each description, the first row represent the settins of properties. The algorithms determined by mapping are shown below with the algorithm selected by interpreter coloured in red (BL: baseline). The last row shows the corresponding reconstruction results. We can see that the results of inaccurate descriptions are poorer than those of accurate descriptions.}
 \label{fig:eval_3}
 \end{figure*}
 
