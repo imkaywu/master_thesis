@@ -72,9 +72,7 @@ The reason that qualitative comparison is sufficient is that we are less interes
 
 \section{Interpreter}
 \label{sec:interp}
-Our interface consists of three separate layers. The upper layer is the description of the problem condition. The middle layer is the interpreter which receives a description from the user and returns an acceptable result. The bottom layer is the actual implementation of the algorithms. The interpreter is responsible for choosing an appropriate 3D reconstruction algorithm based on the description of the problem domain and additional requirements. Thus, it requires an understanding of algorithm performance across difference ranges of problem space to create a suitable interpreter.
-
-However, if the interpreter relies solely on the mapping, it is possible that a user-specified description has more than one corresponding algorithm available. We propose to use two additional constraints so that only one appropriate algorithm is selected.
+Our interface consists of three separate layers. The upper layer is the description of the problem condition. The middle layer is the interpreter which receives a description from the user and returns an acceptable result. The bottom layer is the actual implementation of the algorithms. The interpreter is responsible for choosing an appropriate 3D reconstruction algorithm based on the description of the problem domain and additional requirements. Thus, it requires an understanding of algorithm performance across difference ranges of problem space. However, if the interpreter relies solely on the mapping, it is possible that a user-specified description leads to more than one successful algorithm. We propose to use two additional constraints so that only one appropriate algorithm is selected.
 
 The first constraint is metric-first or shape-first. There are generally two types of reconstruction results: euclidean/metric reconstruction, and shape reconstruction. The former reconstructs a scene with metric information, but generally gives noisier results. The latter can achieve quality that is only matched by laser scanners but lack the depth information. The default setting of this constraint is metric-first.
 
@@ -88,7 +86,7 @@ Thus, the proposed proof of concept interpreter that consists of two components,
   \Ensure A successful algorithm \var{bestAlgo} returned
   \State $\var{\{algos\}} \assign{}$ \Call{Mapping}{\var{desc}}
   \While{$\var{\{algos\}} \neq \emptyset$}
-    \State $\var{algo} \assign{}$ Pop($\var{\{algos\}}$)
+    \State $\var{algo} \assign{}$ Top($\var{\{algos\}}$), Pop($\var{\{algos\}}$)
     \If{Euclidean-first}
       \If{Accuracy-first}
         \State $\var{score} \assign{}$ \Call{QuantScore}{\var{desc}, \var{algo}, \var{Accuracy}}
@@ -102,9 +100,11 @@ Thus, the proposed proof of concept interpreter that consists of two components,
       \State $\var{bestScore}\assign{}\var{score}, \var{bestAlgo}\assign{}\var{algo}$
     \EndIf
   \EndWhile
+  \State 
   \Function{Mapping}{\var{description}}
     \State\Return A list of successful algorithms $\{algorithms\}$.
   \EndFunction
+  \State 
   \Function{QuantScore}{\var{description}, \var{algorithm}, \var{type}}
   	\If{$\var{type}==$ Accuracy}
       \State\Return Accuracy score.
