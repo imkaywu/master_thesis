@@ -22,7 +22,7 @@ In this chapter, we first propose a well-defined problem space consisting of vis
 We first give an overview of problem space, which consists of visual and geometric properties of real-world objects, as shown in Figure~\ref{fig:obj_class}. These properties can be conceptualized as dimensions/axes of the 3D reconstruction problem space. This approach allows us to think of algorithms as ``pointers'' to volumes within an $N-$dimensional problem space. Existing algorithms can be incorporated into the interface by evaluating the algorithm performance within the problem space, as shown in Figure~\ref{fig:embed_algo}. However, by no means is the presented problem space complete. There are many other properties not included that are commonly seen in the real world. For instance, properties such as metalness, emission, occlusion, discontinuity, among others, are not considered. However, the listed set of properties are broad enough to encompass a wide range of real-world objects. To help easy identification of a specific problem condition, we propose the following labels to differentiate object classes, as shown in Figure~\ref{fig:obj_class}.
 \begin{figure}[!htbp]
 \centering
-\includegraphics[width=\textwidth]{prob_space/obj_class}\\
+\includegraphics[width=\textwidth]{probspace/obj_class}\\
 \caption{A list of properties with labels of the proposed problem space.}
 \label{fig:obj_class}
 \end{figure}
@@ -64,8 +64,8 @@ Though 3D reconstruction of opaque surfaces with Lambertian reflectance has been
 We assume \textbf{local interaction model}, \ie global light transport such as transmission, refraction, cast shadow, inter-reflection are not considered. The rationale behind our choice is that most techniques that have been developed over the past few decades mainly tackle object with an opaque, diffuse or mixed surface~\cite{ihrke2010transparent}. Since the majority of reconstruciton techniques rely on observing light reflected off a surface, surfaces exhibit significant effect of global light tranport present a huge challenge to the reconstruction problem. For specular, refractive, and translucent or transparent objects, only very specialized algorithms are applicable for reconstruction~\cite{ihrke2010transparent}. This is a widely used and accepted model in varied areas of computer vision, including shape from stereo, shading, and so on. As more algorithms become available to tackle these types of objects, they can be embedded to the interface using the same approach that will be discussed in Chapter~\ref{ch:3DRecon_Mapping}, as shown in Figure~\ref{fig:embed_algo}.
 \begin{figure*}[!htbp]
 \centering
-\includegraphics[width=0.8\textwidth]{img/prob_space/embed_algo.pdf}
-\caption{Embed algorithms into the interface.}
+\includegraphics[width=0.8\textwidth]{img/probspace/mapping.pdf}
+\caption{Embed algorithms into the interface. The process is three-fold: 1) reduce problem space by discovering \textit{effective properties} denoted by red; 2) discover mapping from the lower-dimensional problem space to algorithm, denoted by green; 3) mapping from problem space to algorithms denoted by blue.}
 \label{fig:embed_algo}
 \end{figure*}
 
@@ -86,7 +86,7 @@ The configuration of capturing system determines the selection of algorithm in a
 Built upon the previously defined problem space, and additional assumptions, we define four classes of problem conditions that will be investigated in depth, as shown in Figure~\ref{fig:prob_cond}. We will demonstrate that it is achievable to design a descritpion-based interface that hides algorithm details and return solutions without knowing the underlying algorithms using objects that satisfy these conditions.
 \begin{figure*}[!htbp]
 \centering
-\includegraphics[width=0.9\textwidth]{prob_space/prob_cond}
+\includegraphics[width=0.9\textwidth]{probspace/prob_cond}
 % (a). Most real-world objects do no exhibit extreme properties, such as $0\%$ or $100\%$ brightness, thus we consider the end points as extremities, and represented in grey. The area represented by green is the range of property that we are interested in; (b). 
 \caption{Four problem conditions selected based on the definition of problem space and additional assumptions. The description-based interface will be evaluated using objects satisfying these conditions.}
 \label{fig:prob_cond}

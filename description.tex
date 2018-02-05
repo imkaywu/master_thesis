@@ -60,7 +60,7 @@ Based on the proposed model of the 3D reconstruction problem, we need to further
 % In the image plane, a pixel is a square of size $1\times 1$. In the matrix representation of an image $I$, a pixel is an entry of the matrix, $I(x, y)$. A voxel is a 3D regular cube, and the center of which is projected to the center of the pixel.
 % \begin{figure}[h]
 % \centering
-% \includegraphics[width=0.5\texturewidth]{model/pixel_voxel}
+% \includegraphics[width=0.5\texturewidth]{desc/pixel_voxel}
 % \caption{Pixel and voxel}
 % \end{figure}
 
@@ -71,7 +71,7 @@ Based on the proposed model of the 3D reconstruction problem, we need to further
 % A window area is contained in a $w\times w$ regular square, and the surface patch is a 3D point of $p\times p$ with a normal vector.
 % \begin{figure}[h]
 % \centering
-% \includegraphics[width=0.8\textwidth]{model/window_patch}
+% \includegraphics[width=0.8\textwidth]{desc/window_patch}
 % \caption{a window area and a surface patch}
 % \end{figure}
 
@@ -128,7 +128,7 @@ In conclusion, as long as the \textit{light-sensor interaction} is considered as
 % The reflectance of light also depends on the incident direction. Specifically, light that lands on a surface at a grazing angle will be much more likely to reflect, see Figure~\ref{fig:alb_ang}. We take into account the Fresnel effect in the synthetic stage, thus we consider the albedo with small incident angle.
 % \begin{figure}[h]
 % \centering
-% \includegraphics[width=0.5\textwidth]{model/reflectance_angle}
+% \includegraphics[width=0.5\textwidth]{desc/reflectance_angle}
 % \label{fig:alb_ang}
 % % \caption{Spectral reflectance curves for aluminium (Al), silver (Ag), and gold (Au) metal mirrors at normal incidence.}
 % \end{figure}
@@ -139,8 +139,8 @@ Specular surfaces reflect light in nearly a single direction when microscopic su
 \begin{figure}[!htbp]
 \centering
 \begin{tabular}{cc}
-\includegraphics[width=0.2\textwidth]{model/sphere_diffuse}&
-\includegraphics[width=0.2\textwidth]{model/sphere_specular}\\
+\includegraphics[width=0.2\textwidth]{desc/sphere_diffuse}&
+\includegraphics[width=0.2\textwidth]{desc/sphere_specular}\\
 (a) & (b)\\
 \end{tabular}
 \caption{(a). A \textbf{red} diffuse sphere; (b). a \textbf{red} specular sphere. The surface reflects light in a mirror-like way, showing a distorted environment. Since no diffuse reflection exists, the colour of the surface is no longer visible.}
@@ -150,7 +150,7 @@ Specular surfaces reflect light in nearly a single direction when microscopic su
 The Fresnel reflectance is the fraction of incoming light that is reflected (as opposed to refracted) from an optically flat surface of a given substance. It varies based on the light direction and the surface (in this case microfacet) normal. Fresnel reflectance tells us how much of the light hitting the relevant microfacets (the ones facing in the half-angle direction) is reflected. Fresnel reflectance depends on refraction index (in other words, what the object’s made of) and the incoming light angle (which is plotted here on the x-axis), as shown in Figure~\ref{fig:fresnel_reflectance}. As the angle increases, the Fresnel reflectance barely changes for the first 45 degrees; afterwards it starts changing, first slowly up to about 75 degrees, and then for very glancing angles, it rapidly goes to $100\%$ at all wavelengths. Since the Fresnel reflectance stays close to the value for $0^\circ$ over most of the range, we can think of this value $F(0^\circ)$ as the \textit{characteristic specular reflectance} of the material. This value has all the properties of what is typically thought of as a ``colour'' - it is composed of RGB values between 0 and 1, and it is a measure of selective reflectance of light. For this reason, we will also refer to this value as the \textit{specular colour} of the surface, denoted as $\mathbf{c}_{spec}$. We choose specular reflectance as the representation of specularity.
 \begin{figure*}[!htbp]
 \centering
-\includegraphics[width=0.55\textwidth]{model/fresnel_reflectance.png}
+\includegraphics[width=0.55\textwidth]{desc/fresnel_reflectance.png}
 \caption{Fresnel reflectance for external reflection from a variety of substances. Since copper and alumninum have significant variation in their reflectance over the visible spectrum, their reflectance is shown as three separate curves for R, G, and B. Copper's R curve is highest, followed by G, and finally B (thus its reddish color). Alumninum's B curve is highest, followed by G, and finally R. (Image from “Real-Time Rendering, 3rd edition”, \textcopyright 2008 A K Peters, by permission)}
 \label{fig:fresnel_reflectance}
 \end{figure*}
@@ -163,7 +163,7 @@ Possible surface models are divided into 2 categories: surfaces with exact known
 % \textit{Height Distribution Model} The height coordinate of the surface is expressed as random function of the coordinates $x$ and $y$.
 % \begin{figure}[h]
 % \centering
-% \includegraphics[width=0.5\textwidth]{model/surface_representation_1}
+% \includegraphics[width=0.5\textwidth]{desc/surface_representation_1}
 % \caption{Surface height distribution model}
 % \end{figure}
 
@@ -177,7 +177,7 @@ Possible surface models are divided into 2 categories: surfaces with exact known
 % The surfaces below have the same height distribution function, i.e., the same mean value and standard deviation. However, they don't resemble each other in appearance.
 % \begin{figure}[h]
 % \centering
-% \includegraphics[width=8cm]{model/same_mean_sd}
+% \includegraphics[width=8cm]{desc/same_mean_sd}
 % \caption{Surface height distribution model}
 % \end{figure}
 
@@ -192,7 +192,7 @@ Possible surface models are divided into 2 categories: surfaces with exact known
 % We can think of a surface as a collection of planar micro-facets. A large set of micro-facets constitutes an infinitesimal surface patch that has a mean surface orientation $\vec{n}$. Each micro-facet has its own orientation, which may deviate from the mean surface orientation by an angle $\alpha$.
 % \begin{figure}[h]
 % \centering
-% \includegraphics[width=0.7\textwidth]{model/surface_representation_2}
+% \includegraphics[width=0.7\textwidth]{desc/surface_representation_2}
 % \caption{Surface Slope Distribution Model}
 % \end{figure}
 
@@ -244,11 +244,11 @@ There have been some empirical studies focused on visual estimation of specific 
 Despite its subjective ease, material perception still poses the visual system with some unique and significant challenges, because a given material can take on many different appearances depending on the lighting, viewpoint and shape. Thus, we provide a \textit{generative} approach to visual perception: a simulation software is used to generate images of a synthetic object with varied property settings to aid the estimation of properties. The user can choose an illumination field and object shape that is closest to the real-world enviriontment and object. Then this ``trial-and-error'' approach is used to estimate parameters of properties. More specifically, the user would change the value of each property and see if the rendered result resembles the real object. A similar approach can be found in~\cite{Berkiten:2016:ARB} where \citeauthor{Berkiten:2016:ARB} used a synthetic dataset to find the contributing factors of various Photometric Stereo algorithms. We demonstrate this approach using the following example shown in Figure~\ref{fig:prop_estimate}:  the brightness of the object is controlled by the albedo value, which is determined by the value channel of HSV colour space. To determine the specularity and roughness of the object, we experiment with varying parameters to get the most realistic image.
 \begin{figure}[!htbp]
 \centering
-\begin{tabular}{cccc}
-  \includegraphics[width=0.25\textwidth]{model/desc_vase.pdf}&
+\begin{tabular}{*{4}{p{2.5cm}}}
+  \includegraphics[width=0.2\textwidth]{desc/desc_vase.pdf}&
   \includegraphics[width=0.2\textwidth]{interp/ui/ui_sphere.png}&
   \includegraphics[width=0.2\textwidth]{interp/ui/ui_vase.png}&
-  \includegraphics[width=0.2\textwidth]{img/interp/real_world_img/vase/vase.jpg}\\
+  \includegraphics[width=0.2\textwidth]{img/interp/real_data/vase/vase.jpg}\\
   (a). Property settings & (b). Synthetic sphere & (c). Synthetic vase & (d). Real-world vase\\
 \end{tabular}
 \caption{The UI for determining the property settings, including albedo, specular, and roughness of the surface. As shown in (a), the problem condition in this case is: texture (0.8), albedo (0.8), specular (0.2), roughness(0.2). (b) demonstrates the effect of the property settings on a sphere, (c) on a teapot, and (d) shows the real-world object.}

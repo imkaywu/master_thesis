@@ -150,10 +150,10 @@ The synthetic dataset contains four objects, as shown in Figure~\ref{fig:synth_r
 \includegraphics[width=0.2\textwidth]{interp/synth_data/barrel} &
 \includegraphics[width=0.2\textwidth]{interp/synth_data/vase1}\\
 & (a). bust & (b). vase0 & (c). barrel & (d). vase1\\
-& \includegraphics[width=0.2\textwidth]{interp/real_world_img/statue/statue} &
-\includegraphics[width=0.2\textwidth]{interp/real_world_img/cup/cup} &
-\includegraphics[width=0.2\textwidth]{interp/real_world_img/pot/pot} &
-\includegraphics[width=0.2\textwidth]{interp/real_world_img/vase/vase} \\
+& \includegraphics[width=0.2\textwidth]{interp/real_data/statue/statue} &
+\includegraphics[width=0.2\textwidth]{interp/real_data/cup/cup} &
+\includegraphics[width=0.2\textwidth]{interp/real_data/pot/pot} &
+\includegraphics[width=0.2\textwidth]{interp/real_data/vase/vase} \\
 & (e). statue & (f). cup & (g). pot & (h). vase\\ \cline{2-5}
 \parbox[t]{2mm}{\multirow{3}{*}{\rotatebox[origin=c]{90}{Appearance}}}
 & \tabitem textureless & \tabitem textureless & \tabitem textured & \tabitem textured\\
@@ -173,13 +173,26 @@ For most PS algorithms, \ie calibrated PS algorithms, it is necessary to estimat
 For SL, a opensource camera-projector calibration software developed by~\citeauthor{moreno2012simple} is used for calibration~\cite{moreno2012simple}. This technique works by projecting temporal patterns onto the calibration pattern, and uses local homography to individually translate each checkerboard corner from the camera plane to the projector plane. This technique can estimate both the intrinsic parameter and camera and projector, and the relative position and orientation.
 
 \subsection{Image capturing}
-The creation of the synthetic dataset is mostly the same as that discussed in Chapter~\ref{ch:3DRecon_Mapping}, thus is omitted in this section. The images of real-world dataset are captured using a Nikon D70S camera with a $18-70mm$ lens. The image resolution is $3004\times 2000$ pix.
+The creation of the synthetic dataset is mostly the same as that discussed in Chapter~\ref{ch:3DRecon_Mapping}, thus is omitted in this section. The images of real-world dataset are captured using a Nikon D70S camera with a $18-70mm$ lens. The image resolution is $3004\times 2000$ pix. The setup of the capturing systems are shown in Figure~\ref{fig:setup}.
 
 For MVS, we capture the dataset by positioning the camera in three different heights. The objects are about $30-50cm$ away from the camera, and stays fixed on a turntable. We have followed the following two steps to acquire data: 1) put the camera at a different height, adjust the orientation so that the object is at the center of the frame; 2) take pictures while rotating the table. The table rotates approximately $30^\circ$ every time. We rotate it 12 times and in total, we can obtain 36 images per object.
 
 For PS, a $70-200mm$ lens, a handheld lamp, and two reference objects (diffuse and glossy) are used. The objects are positioned about $3m$ from the camera to approximate orthographic projection. To avoid inter-reflection, all data are captured in a dark room with everying covered by black cloth except the target object. We use a hand-held lamp as the light source and choose close to frontal viewpoints to avoid severe self-shadowing effect. We take 20 images per object and select 15 plus images depending on the severity of the self-shadow effect.
 
 For SL, we use a Sanyo Pro xtraX Multiverse projector with a resolution of $1024\times 768$. The baseline angle of the camera projector pair is approximately $10^\circ$. To alleviate the effect of ambient light, all images are captured with room lights off. To counteract the effect of inter-reflection, additional images are captured by projecting an all-white and all-black patterns.
+
+\begin{figure}[!htbp]
+\centering
+\begin{tabular}{ccc}
+
+\includegraphics[width=0.3\textwidth]{img/interp/setup/mvs_setup.PNG} &
+\includegraphics[width=0.3\textwidth]{img/interp/setup/ps_setup.JPG} &
+\includegraphics[width=0.3\textwidth]{img/interp/setup/sl_setup.png}\\
+(a). MVS, VH & (b) PS & (c) SL \\
+\end{tabular}
+\caption{Image capturing systems for MVS/VH, PS, and SL.}
+\label{fig:setup}
+\end{figure}
 
 \subsection{Synthetic dataset}
 Each object in the synthetic dataset represents one of the four problem conditions discussed in Section~\ref{ch:3DRecon_ProbSpace}. The description of problem condition of each synthetic object is shown in Figure~\ref{fig:synth_data}, as well as the appropriate algorithm selected by the interpreter. Given a user specified description, the proof of concept interpreter will select an algorithm, and any object that matches this description should be well reconstructed by this selected algorithm.
@@ -223,10 +236,10 @@ We select four real-world objects, each represents the one of the four problem c
 \multicolumn{2}{c}{Class \#} & 1 & 2 & 3 & 4\\
 \midrule
 \parbox[t]{2mm}{\rotatebox[origin=c]{90}{Objects}} & &
-\raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/real_world_img/statue/statue}} &
-\raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/real_world_img/cup/cup}} &
-\raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/real_world_img/pot/pot}} &
-\raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/real_world_img/vase/vase}}\\ \cline{3-6}
+\raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/real_data/statue/statue}} &
+\raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/real_data/cup/cup}} &
+\raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/real_data/pot/pot}} &
+\raisebox{-.5\height}{\includegraphics[width=0.15\textwidth]{interp/real_data/vase/vase}}\\ \cline{3-6}
 \parbox[t]{2mm}{\multirow{3}{*}{\rotatebox[origin=c]{90}{Condition}}}
 & & \tabitem textureless & \tabitem textureless & \tabitem textured & \tabitem textured\\
 & & \tabitem diffuse & \tabitem mixed d/s & \tabitem diffuse & \tabitem mixed d/s\\
