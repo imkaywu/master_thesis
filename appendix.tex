@@ -3,13 +3,6 @@
 %%!TEX root = diss.tex
 \chapter{Supporting Materials}
 
-% This would be any supporting material not central to the dissertation.
-% For example:
-% \begin{itemize}
-% \item radiometry
-% \item technical details of MVS, PS, SL, SfS, etc
-% \end{itemize}
-
 \section{Definition of 3D Reconstruction}
 \label{sec:3DRecon_Def}
 We will first provide definitions of some basic concepts, which include general computer vision concepts such as scene, camera, and image. We then define a few other terms that are closely related to the reconstruction problem. We then provide reasonable approximations for a more practical definition of the problem as a whole.
@@ -74,7 +67,7 @@ where $seg_{(i, j)}$ is the corresponding segment of $sc_i$ in camera $C_j$. Alt
 \subsection{Applied Definition}
 While the definition presented above gives a formal definition of the problem of 3D reconstruction, it is not necessarily applicable in a practical setting. In this section, we extend this formal definition to an approximate, yet applied version.
 
-\noindent\textbf{Definition 12 (Consistency score)} The consistency score measures the similarity betweem a scell $sc$ and the corresponding segment $seg$.
+\noindent\textbf{Definition 12 (Consistency score)} The consistency score measures the similarity between a scell $sc$ and the corresponding segment $seg$.
 \begin{align*}
 consist(prop(sc), cue(seg)) &= x \text{, } x\in[0, 1]\\
 consist(prop(sc), cue(seg)) &= 1 \Rightarrow \textit{consistent}\\
@@ -130,7 +123,7 @@ The basis for most physically-based specular BRDF term is \textit{microfacet the
 
 The microfacet model postulates that if a surface reflection can occur between a given light vector $\mathbf{l}$ and view vector $\mathbf{v}$, then there must exist some portion of the surface, or microfacet, with a normal aligned halfway between the $\mathbf{l}$ and $\mathbf{v}$. This ``half vector'', sometimes referred to as the microsurface normal, is thus defined as $\mathbf{h}=\frac{\mathbf{l}+\mathbf{v}}{|\mathbf{l}+\mathbf{v}|}$. Not all microfacets for which $\mathbf{n}=\mathbf{h}$ will contribute to the reflection: some are blocked by other microfacets from the direction of $\mathbf{l}$ (shadowing), from the direction of $\mathbf{v}$ (masking), or from both. Microfacet theory assumes that all shadowed light is lost from the specular term; in reality, due to multiple surface reflections some of it will eventually be visible, but this is not accounted for in microfacet theory. This is not typically a major source of error in most cases (rough metal surfaces are a possible exception).
 
-With these assumptions (optically flat microfacets, no interreflection), the microfacet specular BRDF term has the following form:
+With these assumptions (optically flat microfacets, no inter-reflection), the microfacet specular BRDF term has the following form:
 $$
 f(\mathbf{l}, \mathbf{v}) = \frac{D(\theta_h)F(\theta_d)G(\theta_l, \theta_v)}{4\cos\theta_l\cos\theta_v}
 $$
@@ -145,7 +138,7 @@ $$
 Here $\mathbf{c}_{diff}$ is the fraction of light which is diffusely reflected. It is an RGB value with R, G, and B restricted to the 0 - 1 range, and corresponds closely to what most people think of as a ``surface colour''. This parameter is typically referred to as the \textit{diffuse colour}.
 
 Most physically plausible models not specifically described in microfacet form can still be interpreted as microfacet models in that they have a distribution function, a Fresnel factor, and some additional factor which could be considered a geometric shadowing factor. The only real difference
-between microfacet models and other models is whether they include the explicit $\frac{1}{4\cos\theta_l\cos\theta_v}$ factor that comes from the microfacet derivation. For models that don’t include this factor, an implied shadowing factor can be determined by multiplying the model by $4\cos\theta_l\cos\theta_v$ after factoring out the $D$ and $F$ factors.
+between microfacet models and other models is whether they include the explicit $\frac{1}{4\cos\theta_l\cos\theta_v}$ factor that comes from the microfacet derivation. For models that exclude this factor, an implied shadowing factor can be determined by multiplying the model by $4\cos\theta_l\cos\theta_v$ after factoring out the $D$ and $F$ factors.
 
 \subsection{Image formation: radiometric perspective}
 This section discusses the radiometric perspective of image formation. Specifically, we discuss the contributing factors that determine the pixel intensity of an image.
@@ -332,6 +325,6 @@ Image & PMVS & Example-based PS & Gray SL & VH(BL)\\
 \includegraphics[width=0.2\textwidth]{interp/real_interp/vase/vase_sc} \\
 \bottomrule
 \end{tabular}
-\caption{Reconstruction results of MVS, PS, SL, and the baseline method VH (cont'd).}
+\caption{Reconstruction results of MVS, PS, SL, and the baseline method VH (continued).}
 \label{fig:test_real_world_img_2}
 \end{figure}
