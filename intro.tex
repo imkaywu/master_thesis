@@ -29,7 +29,7 @@ The interface consists of the following three layers, see Figure~\ref{fig:interf
 
 % The mental model to our approach is similar to that of the game `name that object': one participant makes guesses of what the object is based solely on the descriptions of the appearance provided by the other participant. In our case, the key idea is to construct an algorithm-free interface above the algorithms themselves, so that one or multiple appropriate algorithms can be selected based on the `appearance' of the object described by the developers.
 
-\section{Motivating scenario}
+\section{Motivating Scenario}
 We propose a scenario to further emphasize and justify the motivation: Ben is an engineer for 3DSense, a company designing and manufacturing 3D capturing systems and software. It is Ben's job to design 3D camera rigs and related software for 3D capturing tasks. Ben has a background on software engineering while very limited computer vision knowledge. Daisy, a visual effects artist, wants a 3D modelling system that is able to reconstruct real world objects for her projects. She has little programming experience, but is highly skilled at 3D modelling tools. See Figure~\ref{fig:scenario_user} for more details of their backgrounds respectively.
 \begin{figure}[!htbp]
 \centering
@@ -73,7 +73,7 @@ The problem addressed in this thesis can be described as follows: construct an i
 \subsection{Related Work}
 We discuss the existing software and toolboxes for 3D reconstruction, and present the required vision background needed to fully take advantage of these toolboxes. A review of the 3D acquisition techniques is provided, organized by the visual and geometric cues used for reconstruction.
 
-\subsection{A Problem space of 3D Reconstruction}
+\subsection{A Problem Space of 3D Reconstruction}
 Existing approaches to 3D reconstruction focus more on providing algorithm solutions to problems, which we call an \textit{algorithm-centred approach}. This approach provides little insight to the problem conditions that a specific algorithm is applicable to. We proposed a \textit{problem-centred approach} that gives a well-defined problem space, which allows further investigation of the relation between problem conditions and algorithms (termed \textit{mapping} in this thesis). This mapping can be used to choose a best possible algorithm based on a described problem condition. The problem condition consists of a variety of visual and geometric properties of objects. The aggregate problem conditions is called \textit{problem space}.
 
 \subsection{A Description of 3D Reconstruction}

@@ -15,7 +15,7 @@ The chapter is organized as follows: section~\ref{sec:create_synth_dataset} disc
 \label{sec:create_synth_dataset}
 This section discusses the construction of a synthetic dataset that is used to evaluate between-class algorithms under varied problem conditions. First we choose three representative algorithms from three distinct algorithm classes, as well as two baseline methods. Then the synthetic capturing systems are presented with  synthetic images generated as examples. Lastly, quantitative measures used to evaluate the performance of algorithms are proposed.
 
-\subsection{Selected and baseline methods}
+\subsection{Selected and Baseline Methods}
 We have selected three representative algorithms, each from one of three major classes of algorithms presented in Chapter~\ref{ch:3DRecon_ProbSpace}: the PMVS proposed in~\cite{furukawa2010accurate}, the example-based Photometric Stereo proposed in~\cite{hertzmann2005example}, and the Gray-coded Structured Light technique. See Table~\ref{tab:selected_algos} for a summary of the selected algorithms. The current implementation of SL projects both column and row patterns, and depth values are computed using both patterns individually. A depth consistency step is performed to reject erroneous triangulation results.
 \begin{table}[!htbp]
 \centering
@@ -56,7 +56,7 @@ LLS-PS & Linear least squares Photometric Stereo.\\
 % \end{table}
 We use two baseline methods to compare our results: Visual Hull and a simple linear least squares based Photometric Stereo (LLS-PS). We use Visual Hull since it works relatively well as long as the silhouette of the object can be reliably extracted, thus being insensitive to material properties. In addition, the true scene is always enclosed by the reconstruction result, so the outcome is always predictable. We use LLS-PS to evaluate Photometric Stereo algorithms. However, there is currently no such PS algorithm that works reasonably well under a variety of conditions. Thus, we run this baseline algorithm under the optimal condition to ensure a best possible result.
 
-\subsection{Synthetic setups}
+\subsection{Synthetic Setups}
 We use the physical-based rendering engine of Blender, Cycles, to generate the synthetic datasets. For each technique, the configuration of the camera remains fixed. The image resolution is 1280$\times$720, with a focal length of $35mm$ or $1400pix$. The synthetic setups are shown in Table~\ref{tab:synth_setup}, and some example synthetic images generated using the setups are shown in Figure~\ref{fig:synth_example}.
 \begin{table}[!htbp]
 \centering
@@ -113,7 +113,7 @@ Roughness & \raisebox{-.5\height}{\includegraphics[width=0.8\textwidth]{img/mapp
 % \label{fig:dataset_structure}
 % \end{figure}
 
-\subsection{Quantitative measures}
+\subsection{Quantitative Measures}
 We use the metrics proposed in \cite{seitz2006comparison} to evaluate MVS and SL algorithms. More specifically, we compute the accuracy and completeness of the reconstruction. For accuracy, the distance between the points in the reconstruction $R$ and the nearest points on ground truth $G$ is computed, and the distance $d$ such that $X\%$ of the points on $R$ are within distance $d$ of $G$ is considered as accuracy. A reasonable $d$ value is between $[3, 5]mm$, and $X$ is set as $95$. The lower the accuracy value, the better the reconstruction result. For completeness, we compute the distance from $G$ to $R$. Intuitively, points on $G$ are not ``covered'' if no suitable nearest points on $R$ are found. A more practical approach computes the fraction of points of $G$ that are within an allowable distance $d$ of $R$. Note that as the accuracy improves, the ``accuracy value'' goes down, whereas as the completeness improves, the ``completeness value'' goes up.
 
 For photometric stereo, depth information is lost since only one viewpoint is used. Thus, the previous metrics are not applicable. Here we employ another evaluation criteria that is widely adopted, which is based on the statistics of angular error. For each pixel, the angular error is calculated as the angle between the estimated and ground truth normal, \ie $arccos$($n_g^T n$), where $n_g$ and $n$ are the ground truth and estimated normals respectively. In addition to the mean angular error, we also calculate the standard deviation, minimum, maximum, median, first quartile, and third quartile of angular errors for each estimated normal map.
@@ -134,7 +134,7 @@ For photometric stereo, depth information is lost since only one viewpoint is us
 % \subsubsection{Skewness (right/positive-skewness)}
 % The normal estimation becomes worse as the difference between mean and median increases. This can be explained as follows: assuming the angular error follows a Gaussian distrubtion, then mean and median are close when the normals are reliably estimated. However, if normals are poorly recovered, the mean would increase since larger angular errors exist, while the median would change far less since only a small amount of pixels are poorly estimated. Thus, the difference between mean and median is a good indicator of the quality of normal estimation.
 
-\section{Main effects and interactions of properties}
+\section{Reduction of Problem Space Dimension}
 \label{sec:prop_effect_interaction}
 The greatest challenge in constructing a mapping from problem space to algorithms is the large variations in shapes and material properties, which results in a problem space that is too large to cope with. Suppose there are $N$ properties, each with $L$ discrete levels, then there are in total $L^N$ different problem conditions. Thus, the first step, discussed in Section~\ref{sec:eval_prop_mvs},~\ref{sec:eval_prop_ps},~\ref{sec:eval_prop_sl}, is to reduce the dimensions of problem space by discovering the properties that have effects on performance of algorithms.
 
@@ -156,7 +156,7 @@ This study is a $3\times 3$ factorial design with two properties (factors), each
 \label{tab:pairwise_prob_cond}
 \end{table}
 
-\subsection{Main effects and interactions: PMVS}
+\subsection{Reduction of Problem Space Dimension: PMVS}
 \label{sec:eval_prop_mvs}
 We study the main effects and interaction effects of properties on the performance of PMVS in terms of accuracy and completeness. The performance of the algorithm is visualized in Figure~\ref{fig:mvs_pairwise}.
 \begin{figure}[!htbp]
@@ -229,7 +229,7 @@ For completeness, there is a significant main effect from texture, and no other 
 
 % The effective properties of PMVS are: texture, albedo, and specular, as shown in Table~\ref{tab:mvs_depend_prop}. Interestingly, we discovered that specularity has a more substantially negative impact on less textured, lower albedo surfaces. For instance, high specularity does not have a severely negative impact on highly textured surfaces.
 
-\subsection{Main effects and interactions: EPS}
+\subsection{Reduction of Problem Space Dimension: EPS}
 \label{sec:eval_prop_ps}
 We study the main effects and interaction effects of properties on the performance of EPS in terms of mean and standard deviation (SD) of angular error. The performance of the algorithm is visualized in Figure~\ref{fig:ps_pairwise}.
 \begin{figure}[!htbp]
@@ -371,7 +371,7 @@ Albedo, specularity, and roughness all have a main effect on angular error. More
 %   \label{tab:ps_depend_prop}
 % \end{table}
 
-\subsection{Main effects and interactions: GSL}
+\subsection{Reduction of Problem Space Dimension: GSL}
 \label{sec:eval_prop_sl}
 We interpret the main effects and interactions of properties on the performance of GSL in terms of accuracy and completeness. The performance of the algorithm is visualized in Figure~\ref{fig:sl_pairwise}.
 \begin{figure}[!htbp]

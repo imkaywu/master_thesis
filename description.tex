@@ -77,7 +77,7 @@ Based on the proposed model of the 3D reconstruction problem, we need to further
 
 % \subsection{Cues and properties}
 % As defined in Chapter~\ref{sec:3DRecon_Def}, cue is the characteristics of the segment while property is that of the scell. For each cue observed in a segment, we discuss the underlying properties that have an impact on it.
-\subsection{Setup of capturing system}
+\subsection{Setup of Capturing System}
 The model of the capturing system includes the lighting condition, the number of vantage points, and the nature of the object or scene. In this thesis, we use a fixed capturing system, thus the configurations of the capturing system is constant throughout the thesis, thus is omitted in the following discussions for the sake of brevity. The configuration of the capturing system is shown in Table~\ref{tab:capture_system_representation}.
 \begin{table}[!htbp]
     \centering
@@ -233,7 +233,7 @@ In conclusion, the proposed model and representation of 3D reconstruction can be
 \label{sec:3DRecon_Exp}
 In this section, we discuss the expression of 3D reconstruction problems using the proposed model and representations, as shown in Table~\ref{tab:3DRecon_model_repre}. There are two related issues that need to be addressed: 1) how intuitive is the proposed model for humans to describe problem conditions; 2) how can a user estimate the parameters of properties. We first address the issue of property perception in Section~\ref{sec:prop_percept}. We can show that it is intuitive for humans to perceptually identify materials and estimate material properties. Next, we will use the proposed description to express the four problem conditions proposed in Chapter~\ref{ch:3DRecon_ProbSpace}.
 
-\subsection{Perception of properties}
+\subsection{Perception of Properties}
 \label{sec:prop_percept}
 Different materials can be visually distinguished because they structure light in a particular, characteristic way. The way light is structured depends heavily on the shape of object, reflective and transmittive properties of material, and illumination field. This process is called the `forward optics' (image formation) process. The material perception problem is, in some sense, the `inverse optics' problem: determining what combination of surface geometry, surface material, and illumination field generated a given image~\cite{anderson2011visual}. Thus, in order to recover the reflectance properties of materials, the visual system must somehow disentangle the contributions of the illumination field and geometry. This is arguably the central problem of material perception, though the answer is currently far from clear~\cite{anderson2011visual}. But our intuition and many empirical studies support the view that humans are exceptional at material perception.
 

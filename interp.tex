@@ -172,7 +172,7 @@ For most PS algorithms, \ie calibrated PS algorithms, it is necessary to estimat
 
 For SL, a open source camera-projector calibration software developed by~\citeauthor{moreno2012simple} is used for calibration~\cite{moreno2012simple}. This technique works by projecting temporal patterns onto the calibration pattern, and uses local homography to individually translate each checker board corner from the camera plane to the projector plane. This technique can estimate both the intrinsic parameter and camera and projector, and the relative position and orientation.
 
-\subsection{Image capturing}
+\subsection{Image Capturing}
 The creation of the synthetic dataset is mostly the same as that discussed in Chapter~\ref{ch:3DRecon_Mapping}, thus is omitted in this section. The images of real-world dataset are captured using a Nikon D70S camera with a $18-70mm$ lens. The image resolution is $3004\times 2000$ pix. The setup of the capturing systems are shown in Figure~\ref{fig:setup}.
 
 For MVS, we capture the dataset by positioning the camera in three different heights. The objects are about $30-50cm$ away from the camera, and stays fixed on a turntable. We have followed the following two steps to acquire data: 1) put the camera at a different height, adjust the orientation so that the object is at the centre of the frame; 2) take pictures while rotating the table. The table rotates approximately $30^\circ$ every time. We rotate it 12 times and in total, we can obtain 36 images per object.
@@ -194,7 +194,7 @@ For SL, we use a Sanyo Pro xtraX Multiverse projector with a resolution of $1024
 \label{fig:setup}
 \end{figure}
 
-\subsection{Synthetic dataset}
+\subsection{Synthetic Dataset}
 Each object in the synthetic dataset represents one of the four problem conditions discussed in Section~\ref{ch:3DRecon_ProbSpace}. The description of problem condition of each synthetic object is shown in Figure~\ref{fig:synth_data}, as well as the appropriate algorithm selected by the interpreter. Given a user specified description, the proof of concept interpreter will select an algorithm, and any object that matches this description should be well reconstructed by this selected algorithm.
 % Since a description could be mapped to multiple algorithms, an object that does not match the description could potentially have a successful reconstruction result as well.
 \begin{figure}[!htbp]
@@ -227,7 +227,7 @@ Each object in the synthetic dataset represents one of the four problem conditio
 \label{fig:synth_data}
 \end{figure}
 
-\subsection{Real-world dataset}
+\subsection{Real-World Dataset}
 We select four real-world objects, each represents the one of the four problem conditions proposed in Chapter~\ref{ch:3DRecon_ProbSpace}, as shown in Figure~\ref{fig:real_data}. The descriptions of problem conditions of real-world objects are shown in Figure~\ref{fig:real_data}, as well as the appropriate algorithm selected by the interpreter. Given a user specified description, the proof of concept interpreter will select an algorithm, and any object that matches this description should be well reconstructed by this selected algorithm.
 \begin{figure}[!htbp]
 \centering
@@ -262,7 +262,7 @@ We select four real-world objects, each represents the one of the four problem c
 \label{sec:eval_interp}
 This section evaluates the proof of concept interpreter, which is three-fold: 1) given an accurate description, can the interpreter select an algorithm that achieves a successful reconstruction result; 2) given an less accurate description, would the interpreter perform poorer than given an accurate description; 3) given an inaccurate description, would the interpreter fail to achieve a successful reconstruction. We provide demonstrative results of the interpreter using the synthetic and real-world dataset, as shown in Figure~\ref{fig:synth_real_dataset}.
 
-\subsection{Evaluation 1: accurate description, successful result}
+\subsection{Evaluation 1: Accurate Description, Successful Result}
 In this section, we evaluate the performance of interpreter given a valid description, \ie whether the interpreter can return a successful reconstruction result given a valid description of problem condition. We provide the detailed process of reconstructing objects using the proposed interface with a example, and show the reconstruction results of the aforementioned datasets.
 
 Let's revisit the scenario proposed in Chapter~\ref{ch:Introduction} using the test objects `bust' and `statue' as an example. First, the user describes the problem condition based on visual and geometric properties. In the example, the description of object `bust' and `statue' is: 0.2 (texture), 0.8 (albedo), 0.2 (specularity), and 0.8 (roughness). The synthetic objects with the same problem condition are shown in Figure~\ref{fig:desc_interp_1}.
@@ -345,7 +345,7 @@ Note that the selected objects do no favour any algorithm. The significance of t
 \label{fig:eval_1}
 \end{figure*}
 
-\subsection{Evaluation 2: less accurate description, less successful result}
+\subsection{Evaluation 2: Less Accurate Description, Less Successful Result}
 We have demonstrated that the interpreter can achieve successful results given accurate description in last section. However, how would the interpreter perform given a less accurate description? There are two guesses: 1) the interpreter would return a poor result given a less accurate description; 2) the interpreter can still achieve successful results under some specific circumstances. In this section, we are interested to find out how sensitive the interpreter is given a less accurate description, and cases where it would succeed or fail. We provide four less accurate descriptions by iterating through four properties with one and only one property set incorrectly each time. For instance, $\text{prop}_i$ is incorrectly estimated for $\text{desc}_i$ while the rest of the properties are set correctly, $i\in \{1, 2, 3, 4\}$. Since a description could be mapped to multiple algorithms, a description that does not match the object could potentially result in a successful reconstruction result as well. We demonstrate the cases where less accurate descriptions lead to poor or successful results, and discuss the underlying rationale.
 
 Let's revisit the scenario proposed in Chapter~\ref{ch:Introduction} using the test object `vase0': the user (Daisy) first sets the parameters as follows: 0.2 (texture), 0.8 (albedo), 0.8 (specularity), and 0.8 (roughness). However, the interpreted algorithm in this case, GSL, fails to reconstruct the glossy area on the surface, resulting in an incomplete result, as shown in~\ref{fig:exmp_1_interp_2} (a). The user then observes that the surface is smooth enough that the highlighted area is not blurry at all, thus decides to tweak roughness from 0.8 to 0.2. The interpreter selects EPS as the reconstruction algorithm, and then proceeds to achieve a smooth and complete reconstruction result, see Figure~\ref{fig:exmp_1_interp_2} (b). We can see from this example that less accurate description could lead to less successful reconstruction result.
@@ -583,7 +583,7 @@ For more results, please refer to Figure~\ref{fig:eval_21},~\ref{fig:eval_22}. T
 
 % paraphrase this: We can see that inaccurate description can lead to poor reconstruction, and it leads to successful results only when the selected algorithm is in the mapping of the correct description.
 
-\subsection{Evaluation 3: inaccurate description, poor result}
+\subsection{Evaluation 3: Inaccurate Description, Poor Result}
 We have demonstrated that given a less accurate description, the results may or may not be poor. In cases where the algorithm interpreted from a less accurate description overlaps with the set of algorithms mapped from an accurate description, it is still possible to achieve a successful reconstruction. In this section, we are interested to see if this conclusion can also be applied to completely inaccurate description, \ie is it still possible to return a successful result. In this section, we evaluate whether the interpreter would return a poor reconstruction result given an inaccurate description of problem condition. We evaluate the performance of the interpreter using both synthetic and real-world objects.
 
 Let's revisit the scenario proposed in Chapter~\ref{ch:Introduction} using test object `vase0': the user (Daisy) is interested to test how sensitive the interpreter is by providing completely incorrect description, \ie 0.8 (texture), 0.2 (albedo), 0.2 (specularity), and 0.8 (roughness) in this case. The interpreter selects PMVS as the reconstruction algorithm, and then proceeds to achieve a noisy and incomplete reconstruction result, which is worse than that of the interpreted algorithm, see Figure~\ref{fig:exmp_1_interp_3}.
@@ -690,7 +690,7 @@ From the study of less accurate descriptions, we have already discovered that it
 % \section{Sensitivity analysis}
 % [some type of sensitivity analysis is expected here.]
 
-\section{Summary}
+\section{Discussions and Conclusions}
 In this chapter, we proposed a proof of concept interpreter, and provide demonstrative results of the performance of the interpreter. We are interested to see if the interpreter is able to handle conditions where accurate or inaccurate descriptions are provided. The findings can be further summarized into one graph, as shown in Figure~\ref{fig:real_synth_results}.
 \begin{figure*}[!htbp]
 \centering

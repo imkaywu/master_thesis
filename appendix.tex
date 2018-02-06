@@ -7,7 +7,7 @@
 \label{sec:3DRecon_Def}
 We will first provide definitions of some basic concepts, which include general computer vision concepts such as scene, camera, and image. We then define a few other terms that are closely related to the reconstruction problem. We then provide reasonable approximations for a more practical definition of the problem as a whole.
 
-\subsection{Basic notations}
+\subsection{Basic Notations}
 We will use the following notations: $\{C_n\}_{n=0}^{N-1}$ represents the camera set, which includes both intrinsic and extrinsic parameters; $\{I_n\}_{n=0}^{N-1}$ represents the set of all images; $\{L_n\}_{n=0}^{N-1}$ represents the set of light sources.
 
 \noindent\textbf{Definition 1 (Scene)} The scene $S$ is the four-dimensional joint spatio-temporal target of interest.
@@ -86,10 +86,10 @@ $$
 \mbox{maximize} \quad \sum_{j=0}^{N-1}\sum_{i=0}^{M-1} consist(prop(sc_i), cue(seg_{(i, j)}))
 $$
 
-\section{Physics-based Vision}
+\section{Physics-Based Vision}
 \label{sec:pbv}
 
-\subsection{Radiometric terms}
+\subsection{Radiometric Terms}
 \label{sec:radio_term}
 Below is a list of radiometry terms, see Figure~\ref{fig:radiometry_terms} for an illustration:
 \begin{itemize}
@@ -117,7 +117,7 @@ L^{surface}(\theta_r, \phi_r)&=f(\theta_i, \phi_i, \theta_r, \phi_r)E^{surface}(
 
 The phenomena described by the BRDF includes (at least for dielectrics) two distinct physical phenomena - surface reflection and subsurface scattering. Since each of these phenomena has different behaviour, BRDFs typically include a separate term for each one. The BRDF term describing surface reflection is usually called the \textit{specular term} and the term describing subsurface scattering is called the \textit{diffuse term}.
 
-\subsection{Reflectance model: microfacet model}
+\subsection{Reflectance Model: Microfacet Model}
 \label{sec:microfacet_model}
 The basis for most physically-based specular BRDF term is \textit{microfacet theory}. This theory was developed to describe surface reflection from general (non-optically flat) surfaces. The basic assumption underlying microfacet theory is that the surface is composed of many \textit{microfacet}, too small to be seen individually. Each microfacet is assumed to be optically flat, and splits light into exactly two directions - reflection and refraction.
 
@@ -140,10 +140,10 @@ Here $\mathbf{c}_{diff}$ is the fraction of light which is diffusely reflected. 
 Most physically plausible models not specifically described in microfacet form can still be interpreted as microfacet models in that they have a distribution function, a Fresnel factor, and some additional factor which could be considered a geometric shadowing factor. The only real difference
 between microfacet models and other models is whether they include the explicit $\frac{1}{4\cos\theta_l\cos\theta_v}$ factor that comes from the microfacet derivation. For models that exclude this factor, an implied shadowing factor can be determined by multiplying the model by $4\cos\theta_l\cos\theta_v$ after factoring out the $D$ and $F$ factors.
 
-\subsection{Image formation: radiometric perspective}
+\subsection{Image Formation: Radiometric Perspective}
 This section discusses the radiometric perspective of image formation. Specifically, we discuss the contributing factors that determine the pixel intensity of an image.
 
-\subsubsection{Light-matter interaction}
+\subsubsection{Light-Matter Interaction}
 The relation between the incoming illumination and reflected light is modelled using the \textit{bidirectional reflectance distribution function} (BRDF), refer to the Appendix~\ref{sec:radio_term} for definitions of radiometric terms.
 \begin{figure}[!htbp]
 \centering
@@ -161,7 +161,7 @@ The relation between the incoming illumination and reflected light is modelled u
 As we can see from the definition of BRDF, scene radiance is a function of BRDF given a fixed incident radiance. BRDF is a bidirectional function, which depends on both incoming and outgoing directions. It can be simplified under specific reflectance models. For instance, BRDF can be simplified as \textit{Diffuse albedo} or surface albedo when using Lambertian reflectance, which is the proportion of incident light that is reflected by the surface.
 % It should be noted that albedo is not an intrinsic property of a surface. Instead, for any surface, the albedo depends on the spectral and angular distributions of the incident light.
 
-\subsubsection{Light-lens interaction}
+\subsubsection{Light-Lens Interaction}
 A common assumption made in vision community is that radiance is constant as it propagates along a ray. Therefore, the scene radiance is the same as the radiance passing through the lens, which is the same as the radiance received by the sensor. Since image irradiance is the radiance accumulated on a unit surface area, it follows that image irradiance is linear related to the scene radiance. Thus, it can be shown that \textit{image irradiance} is proportional to \textit{scene radiance}~\cite{forsyth2011computer}.
 \begin{figure}[!ht]
 \centering
@@ -176,7 +176,7 @@ A common assumption made in vision community is that radiance is constant as it 
 \label{fig:light_lens_interact}
 \end{figure}
 
-\subsubsection{Light-sensor interaction}
+\subsubsection{Light-Sensor Interaction}
 The camera response function relating image irradiance at the image plane to measured pixel intensity values is a non-linear mapping. It is common to assume that intensity is linear related to image irradiance in many vision algorithms. A linear relation can be retrieved by radiometric calibration.
 \begin{figure}[!htbp]
 \centering
@@ -253,7 +253,7 @@ The camera response function relating image irradiance at the image plane to mea
 %   \label{tab:real_data_prop_list}
 % \end{table}
 
-\section{Results of real-world objects}
+\section{Results of Real-World Objects}
 \begin{figure}[!htbp]
 \centering
 \begin{tabular}{c|cccc}
