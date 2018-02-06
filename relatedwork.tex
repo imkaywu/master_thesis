@@ -9,7 +9,7 @@ In this chapter, we review the existing software and algorithms in the field of 
 \label{sec:Toolbox}
 There have been many attempts in developing computer vision or image processing frameworks that support rapid development of vision applications. There are multiple general vision libraries in this field including OpenCV~\cite{bradski2008learning}, VLFeat~\cite{vedaldi08vlfeat}, VXL~\cite{vxl17} and multiple Matlab libraries~\cite{KovesiMATLABCode, MariottiniPr_RAM05}. These libraries often provide tools for multiple image processing and computer vision problems, including low-vision tasks such as feature detection and matching, middle-level vision tasks such as segmentation and tracking, and high-level vision problems such as classification and recognition. All of these software frameworks and libraries provide vision components and algorithms without any context of how and when they should be applied. As a result, they often require expert vision knowledge for effective use. For example, many feature detectors and descriptors are provided by OpenCV but with no indication of under what conditions each works most effectively.
 
-We have witnessed many successful software in the field of image-based reconstruction, which is a sub-field of 3D reconstruction. One of the most widely used open source software is PMVS developed by Furukawa~\cite{furukawa2010accurate}, which is used not only by computer vision and graphics engineers, but also production companies like Industrial Light \& Magic, and Google, etc. It's often used together with Bundler, which is a Structure from Motion software that estimate camera parameters from images developed by Noah Snavely \cite{snavely2006photo}, and Poisson Surface Reconstruction developed by Michael Misha Kazhdan, which is a surface mesh software that estimate the triangulated surface from oriented point cloud~\cite{kazhdan2006poisson}. Some other notable open source software include VisualSfM~\cite{wu2011visualsfm}, CMP-MVS~\cite{Heller-etal-MVA-2015}, MVE~\cite{fuhrmann2014mve}, and openMVG~\cite{openMVG}. However, effective use of those software requires a basic understanding of the relevant domain, including feature detection, matching, camera calibration, dense correspondence search, etc.
+We have witnessed many successful software packages in the field of image-based reconstruction, which is a sub-field of 3D reconstruction. One of the most widely used open source software is PMVS developed by Furukawa~\cite{furukawa2010accurate}, which is used not only by computer vision and graphics engineers, but also production companies like Industrial Light \& Magic, and Google, etc. It's often used together with Bundler, which is a Structure from Motion software that estimate camera parameters from images developed by Noah Snavely \cite{snavely2006photo}, and Poisson Surface Reconstruction developed by Michael Misha Kazhdan, which is a surface mesh software that estimate the triangulated surface from oriented point cloud~\cite{kazhdan2006poisson}. Some other notable open source software include VisualSfM~\cite{wu2011visualsfm}, CMP-MVS~\cite{Heller-etal-MVA-2015}, MVE~\cite{fuhrmann2014mve}, and openMVG~\cite{openMVG}. However, effective use of those software requires a basic understanding of the relevant domain, including feature detection, matching, camera calibration, dense correspondence search, etc.
 
 This current situation motivates us to provide an description-based interface for non-vision users to access the state-of-the-art techniques in their own applications.
 
@@ -24,24 +24,25 @@ The 3D reconstruction technique exploits a variety of visual and geometric cues 
 Class & \multicolumn{2}{c}{Method} & Cue & Problem \\
 \midrule
 Shape from Stereo & 
-\raisebox{-0.75\height}{\includegraphics[width=0.2\textwidth]{relatedwork/mvs.png}} &
-\raisebox{-0.75\height}{\includegraphics[width=0.2\textwidth]{relatedwork/sl.jpg}} &
+\raisebox{-0.75\height}{\includegraphics[width=0.2\textwidth]{interp/setup/mvs_setup.PNG}} &
+\raisebox{-0.75\height}{\includegraphics[width=0.2\textwidth]{interp/setup/sl_setup.png}} &
 Stereo correspondence &
 Texture, Albedo, Specular \\
 Shape from Intensity & 
-\raisebox{-.75\height}{\includegraphics[width=0.15\textwidth]{relatedwork/sfs.png}} &
-\raisebox{-.75\height}{\includegraphics[width=0.2\textwidth]{relatedwork/ps.png}} &
+\raisebox{-.75\height}{\includegraphics[width=0.2\textwidth]{relatedwork/sfs.pdf}} &
+\raisebox{-.75\height}{\includegraphics[width=0.2\textwidth]{relatedwork/ps.pdf}} &
 Shading variation &
 Albedo, Specular, Geometry \\
 Shape from Silhouette &
 \raisebox{-.75\height}{\includegraphics[width=0.2\textwidth]{relatedwork/vh.jpg}} &
-\raisebox{-.75\height}{\includegraphics[width=0.2\textwidth]{relatedwork/vh_1.png}} &
+\raisebox{-.75\height}{\includegraphics[width=0.2\textwidth]{relatedwork/vh1.jpg}} &
 Silhouette &
 Geometry\\
 \end{tabular}
-\caption{Three classes of algorithms with examples, visual cues used for reconstruction, and potential problems.}
+\caption{Three classes of algorithms with examples, visual cues used for reconstruction, and potential problems. The bottom left image: Silhouette Cones, \textcopyright, CC BY-SA 3.0. The bottom right image: Visual Hull, \textcopyright, CC BY-SA 3.0.}
 \label{fig:algo_class}
 \end{figure}
+% Top left image is from ``Multi-View Stereo: A Tutorial'', \textcopyright 2015 Furukawa and Hernandez, by permission. Top right image from . 
 
 \subsection{Stereo}
 Stereo correspondence is one of the most widely used visual cues in 3D vision. Passive methods, including stereoscopy, trinocular stereo, and MVS, identify correspondences across different views, and estimate the 3D point by triangulation. However these passive approaches suffer from uniform or periodic surfaces. Active techniques attempt to overcome the correspondence problem by replacing one of the cameras with a controllable illumination source, e.g., single-point laser, slit laser scanner, temporal or spatially modulated Structured Light (SL), etc. Here we refer readers to the survey article by \citeauthor{blais2004review} for recent developments of active methods. We classify one of the most widely used passive methods, MVS algorithms, based on the taxonomy proposed in~\cite{seitz2006comparison}, which divides the field into four classes based on reconstruction method, and categorize one of the active methods, Structured Light technique, by projection patterns.
